@@ -1,5 +1,6 @@
 <resources>
-    <string name="app_name">KU-Alarmy</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="app_name">건국대학교 알라미</string>
+    <string name="prompt_username">아이디</string>
+    <string name="prompt_password">비밀번호</string>
+    <string name="prompt_log_in">로그인</string>
 </resources>
