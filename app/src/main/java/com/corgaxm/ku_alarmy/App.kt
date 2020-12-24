@@ -2,6 +2,8 @@ package com.corgaxm.ku_alarmy
 
 import android.app.Application
 import com.corgaxm.ku_alarmy.di.fragmentModule
+import com.corgaxm.ku_alarmy.di.networkModule
+import com.corgaxm.ku_alarmy.di.repositoryModule
 import com.corgaxm.ku_alarmy.di.viewModelModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidFileProperties
@@ -20,7 +22,9 @@ class App : Application() {
             modules(
                 listOf(
                     fragmentModule,
-                    viewModelModule
+                    viewModelModule,
+                    networkModule,
+                    repositoryModule
                 )
             )
         }
