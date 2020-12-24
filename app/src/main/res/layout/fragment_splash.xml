@@ -10,6 +10,7 @@
         android:layout_height="match_parent"
         android:paddingStart="20dp"
         android:paddingEnd="20dp"
-        android:src="@drawable/logo_ku" />
+        android:src="@drawable/logo_ku"
+        />
 
 </FrameLayout>

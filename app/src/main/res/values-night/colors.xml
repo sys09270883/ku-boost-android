@@ -1,25 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="purple_200">#FFB996FC</color>
-    <color name="purple_500">#FF6990EE</color>
-    <color name="purple_700">#FF3990B3</color>
-    <color name="teal_200">#FF03D995</color>
-    <color name="teal_700">#FF018996</color>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
-
-
-
-
-    <color name="primaryColor">#b2f999</color>
-    <color name="primaryLightColor">#99ff8c</color>
-    <color name="primaryDarkColor">#799b20</color>
-    <color name="secondaryColor">#ffa996</color>
-    <color name="secondaryLightColor">#f9995b</color>
-    <color name="secondaryDarkColor">#c79900</color>
-    <color name="primaryTextColor">#000990</color>
-    <color name="secondaryTextColor">#009900</color>
-    <color name="hintColorPrimary">#ff4081</color>
-    <color name="hintColorDark">#c60095</color>
-    <color name="hintColorLight">#ff79b0</color>
+    <color name="primaryColor">#1b5e20</color>
+    <color name="primaryLightColor">#4c8c4a</color>
+    <color name="primaryDarkColor">#003300</color>
+    <color name="secondaryColor">#880e4f</color>
+    <color name="secondaryLightColor">#bc477b</color>
+    <color name="secondaryDarkColor">#560027</color>
+    <color name="primaryTextColor">#ffffff</color>
+    <color name="secondaryTextColor">#ffffff</color>
+    <color name="hintColorPrimary">@color/secondaryColor</color>
+    <color name="hintColorDark">@color/secondaryDarkColor</color>
+    <color name="hintColorLight">@color/secondaryLightColor</color>
 </resources>

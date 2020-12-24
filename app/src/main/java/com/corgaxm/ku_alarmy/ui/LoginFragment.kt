@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import com.corgaxm.ku_alarmy.R
 import com.corgaxm.ku_alarmy.databinding.FragmentLoginBinding
 import com.corgaxm.ku_alarmy.viewmodels.LoginViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -23,6 +25,15 @@ class LoginFragment : Fragment() {
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // Test
+        binding.loginButton.setOnClickListener {
+            findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
+        }
     }
 
     override fun onDestroyView() {
