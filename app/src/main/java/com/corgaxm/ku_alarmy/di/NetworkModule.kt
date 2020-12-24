@@ -1,7 +1,7 @@
 package com.corgaxm.ku_alarmy.di
 
 import com.corgaxm.ku_alarmy.BuildConfig
-import com.corgaxm.ku_alarmy.api.AuthService
+import com.corgaxm.ku_alarmy.api.LoginService
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.dsl.module
@@ -25,8 +25,8 @@ val networkModule = module {
         .baseUrl(BuildConfig.LOGIN_URL).client(okHttpClient)
         .addConverterFactory(GsonConverterFactory.create()).build()
 
-    fun provideAuthService(retrofit: Retrofit): AuthService =
-        retrofit.create(AuthService::class.java)
+    fun provideAuthService(retrofit: Retrofit): LoginService =
+        retrofit.create(LoginService::class.java)
 
     single { provideHttpLoggingInterceptor() }
     single { provideOkHttpClient(get()) }
