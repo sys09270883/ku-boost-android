@@ -1,6 +1,7 @@
 package com.corgaxm.ku_alarmy.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,7 +9,9 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.corgaxm.ku_alarmy.R
 import com.corgaxm.ku_alarmy.databinding.FragmentLoginBinding
+import com.corgaxm.ku_alarmy.utils.Resource
 import com.corgaxm.ku_alarmy.viewmodels.LoginViewModel
+import com.google.android.material.snackbar.Snackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class LoginFragment : Fragment() {
@@ -30,9 +33,20 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Test
         binding.loginButton.setOnClickListener {
-            findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
+            viewModel.login()
+        }
+
+        viewModel.loginResource.observe(viewLifecycleOwner) {
+            when (it.status) {
+                Resource.Status.SUCCESS -> {
+                    findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
+                }
+                Resource.Status.ERROR -> {
+                    Snackbar.make(binding.container, "${it.message}", Snackbar.LENGTH_SHORT).show()
+                    Log.e("yoonseop", "${it.message}")
+                }
+            }
         }
     }
 
