@@ -4,4 +4,5 @@
     <string name="prompt_password">비밀번호</string>
     <string name="prompt_log_in">로그인</string>
     <string name="prompt_more">더보기</string>
+    <string name="prompt_graduation_simulation">졸업시뮬레이션</string>
 </resources>

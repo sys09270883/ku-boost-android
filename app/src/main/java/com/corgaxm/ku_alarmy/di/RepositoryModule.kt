@@ -74,8 +74,14 @@ val repositoryModule = module {
                 val username = settingsManager.usernameFlow.first()
                 val password = settingsManager.passwordFlow.first()
 
-                val graduationSimulationResponse =
-                    crawlService.fetchGraduationSimulation(username, password)
+                val graduationSimulationResponse: GraduationSimulationResponse
+
+                try {
+                    graduationSimulationResponse =
+                        crawlService.fetchGraduationSimulation(username, password)
+                } catch (exception: Exception) {
+                    return Resource.error("크롤링 중 에러 발생")
+                }
 
                 return when (graduationSimulationResponse.responseCode) {
                     201 -> Resource.success(graduationSimulationResponse)

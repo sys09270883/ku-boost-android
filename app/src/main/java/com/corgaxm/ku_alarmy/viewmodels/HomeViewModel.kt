@@ -16,10 +16,8 @@ class HomeViewModel(
     private val authRepository: AuthRepository,
     private val crawlRepository: CrawlRepository
 ) : ViewModel() {
-
-    init {
-        fetchGraduationSimulation()
-    }
+    private val _graduationSimulationLoading = MutableLiveData(false)
+    val graduationSimulationLoading get() = _graduationSimulationLoading
 
     var logoutResponse = MutableLiveData<Resource<Unit>>()
 
@@ -38,17 +36,18 @@ class HomeViewModel(
     }
 
     fun fetchGraduationSimulation() {
-        // 로딩 시작
+        _graduationSimulationLoading.value = true
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 graduationSimulationResponse.postValue(crawlRepository.makeGraduationSimulationRequest())
             }
             val standard = graduationSimulationResponse.value?.data?.graduationSimulation?.standard
             val acquired = graduationSimulationResponse.value?.data?.graduationSimulation?.acquired
+
             Log.d("yoonseop", "standard: $standard")
             Log.d("yoonseop", "acquired: $acquired")
 
-            // 로딩 완료
+            _graduationSimulationLoading.postValue(false)
         }
     }
 }

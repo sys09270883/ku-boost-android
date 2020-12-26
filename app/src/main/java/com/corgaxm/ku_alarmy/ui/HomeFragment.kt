@@ -31,7 +31,7 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.apply {
-//            toolbar.title = "건국대학교 알라미"
+            toolbar.title = getString(R.string.app_name)
             toolbar.inflateMenu(R.menu.menu_main)
             toolbar.setOnMenuItemClickListener {
                 when (it.itemId) {
@@ -45,11 +45,17 @@ class HomeFragment : Fragment() {
                     else -> false
                 }
             }
+
+            graduationSimulationRefreshButton.setOnClickListener {
+                viewModel?.fetchGraduationSimulation()
+            }
         }
 
         viewModel.logoutResponse.observe(viewLifecycleOwner) {
             viewModel.clearLogoutResource()
             findNavController().navigate(R.id.action_homeFragment_to_loginFragment)
         }
+
+        viewModel.fetchGraduationSimulation()
     }
 }
