@@ -69,4 +69,5 @@ dependencies {
     implementation 'org.koin:koin-androidx-viewmodel:2.2.0'
     implementation 'org.koin:koin-core:2.2.0'
     testImplementation 'org.koin:koin-test:2.2.0'
+    implementation "androidx.datastore:datastore-preferences:1.0.0-alpha05"
 }

@@ -40,6 +40,7 @@ class LoginFragment : Fragment() {
         viewModel.loginResource.observe(viewLifecycleOwner) {
             when (it.status) {
                 Resource.Status.SUCCESS -> {
+                    viewModel.clearLoginResource()
                     findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
                 }
                 Resource.Status.ERROR -> {

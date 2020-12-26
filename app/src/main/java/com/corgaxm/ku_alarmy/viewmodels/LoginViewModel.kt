@@ -30,16 +30,23 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
     }
     val loading get() = _loading
 
-    val loginResource = MutableLiveData<Resource<LoginResponse>>()
+    var loginResource = MutableLiveData<Resource<LoginResponse>>()
+
+    fun clearLoginResource() {
+        loginResource = MutableLiveData<Resource<LoginResponse>>()
+    }
 
     fun login() {
+        val username = username.value ?: return
+        val password = password.value ?: return
+
         _loading.value = true
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 loginResource.postValue(
                     loginRepository.makeLoginRequest(
-                        username.value ?: "",
-                        password.value ?: ""
+                        username,
+                        password
                     )
                 )
             }
