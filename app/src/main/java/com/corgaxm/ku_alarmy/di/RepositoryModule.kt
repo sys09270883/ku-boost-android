@@ -1,8 +1,8 @@
 package com.corgaxm.ku_alarmy.di
 
 import com.corgaxm.ku_alarmy.api.LoginService
-import com.corgaxm.ku_alarmy.data.login.LoginRepository
-import com.corgaxm.ku_alarmy.data.login.LoginResponse
+import com.corgaxm.ku_alarmy.data.auth.AuthRepository
+import com.corgaxm.ku_alarmy.data.auth.LoginResponse
 import com.corgaxm.ku_alarmy.utils.Resource
 import com.corgaxm.ku_alarmy.utils.SettingsManager
 import kotlinx.coroutines.flow.first
@@ -12,8 +12,8 @@ val repositoryModule = module {
     fun provideLoginRepository(
         loginService: LoginService,
         settingsManager: SettingsManager
-    ): LoginRepository {
-        return object : LoginRepository {
+    ): AuthRepository {
+        return object : AuthRepository {
             override suspend fun makeLoginRequest(
                 username: String,
                 password: String
@@ -53,6 +53,11 @@ val repositoryModule = module {
                         }
                     }
                 }
+            }
+
+            override suspend fun makeLogoutRequest(): Resource<Unit> {
+                settingsManager.setUserInfo("", "")
+                return Resource.success(Unit)
             }
         }
     }

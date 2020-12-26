@@ -1,6 +1,6 @@
 package com.corgaxm.ku_alarmy.api
 
-import com.corgaxm.ku_alarmy.data.login.LoginResponse
+import com.corgaxm.ku_alarmy.data.auth.LoginResponse
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.POST

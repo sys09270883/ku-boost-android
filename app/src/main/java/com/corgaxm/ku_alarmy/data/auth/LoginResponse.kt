@@ -1,4 +1,4 @@
-package com.corgaxm.ku_alarmy.data.login
+package com.corgaxm.ku_alarmy.data.auth
 
 import com.google.gson.annotations.SerializedName
 
