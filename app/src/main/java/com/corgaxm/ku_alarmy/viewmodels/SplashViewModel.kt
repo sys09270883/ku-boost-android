@@ -4,24 +4,25 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.corgaxm.ku_alarmy.data.auth.AuthRepository
+import com.corgaxm.ku_alarmy.data.auth.LoginResponse
 import com.corgaxm.ku_alarmy.utils.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class HomeViewModel(private val authRepository: AuthRepository): ViewModel() {
+class SplashViewModel(private val repository: AuthRepository) : ViewModel() {
 
-    var logoutResponse = MutableLiveData<Resource<Unit>>()
-
-    fun logout() {
+    init {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                logoutResponse.postValue(authRepository.makeLogoutRequest())
+                loginResource.postValue(repository.makeAutoLoginRequest())
             }
         }
     }
 
-    fun clearLogoutResource() {
-        logoutResponse = MutableLiveData<Resource<Unit>>()
+    var loginResource = MutableLiveData<Resource<LoginResponse>>()
+
+    fun clearLoginResource() {
+        loginResource = MutableLiveData<Resource<LoginResponse>>()
     }
 }
