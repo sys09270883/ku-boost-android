@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.corgaxm.ku_alarmy.R
 import com.corgaxm.ku_alarmy.databinding.FragmentHomeBinding
 import com.corgaxm.ku_alarmy.viewmodels.HomeViewModel
@@ -28,9 +29,27 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         binding.apply {
-            toolbar.title = "건국대학교 알라미"
+//            toolbar.title = "건국대학교 알라미"
             toolbar.inflateMenu(R.menu.menu_main)
+            toolbar.setOnMenuItemClickListener {
+                when (it.itemId) {
+                    R.id.moreIcon -> {
+                        true
+                    }
+                    R.id.logout -> {
+                        viewModel?.logout()
+                        true
+                    }
+                    else -> false
+                }
+            }
+        }
+
+        viewModel.logoutResponse.observe(viewLifecycleOwner) {
+            viewModel.clearLogoutResource()
+            findNavController().navigate(R.id.action_homeFragment_to_loginFragment)
         }
     }
 }

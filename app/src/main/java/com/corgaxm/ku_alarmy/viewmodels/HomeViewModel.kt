@@ -20,4 +20,8 @@ class HomeViewModel(private val authRepository: AuthRepository): ViewModel() {
             }
         }
     }
+
+    fun clearLogoutResource() {
+        logoutResponse = MutableLiveData<Resource<Unit>>()
+    }
 }
