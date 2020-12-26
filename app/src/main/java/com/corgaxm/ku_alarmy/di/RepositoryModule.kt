@@ -1,8 +1,11 @@
 package com.corgaxm.ku_alarmy.di
 
+import com.corgaxm.ku_alarmy.api.CrawlService
 import com.corgaxm.ku_alarmy.api.LoginService
 import com.corgaxm.ku_alarmy.data.auth.AuthRepository
 import com.corgaxm.ku_alarmy.data.auth.LoginResponse
+import com.corgaxm.ku_alarmy.data.crawl.CrawlRepository
+import com.corgaxm.ku_alarmy.data.crawl.GraduationSimulationResponse
 import com.corgaxm.ku_alarmy.utils.Resource
 import com.corgaxm.ku_alarmy.utils.SettingsManager
 import kotlinx.coroutines.flow.first
@@ -62,5 +65,26 @@ val repositoryModule = module {
         }
     }
 
+    fun provideCrawlRepository(
+        crawlService: CrawlService,
+        settingsManager: SettingsManager
+    ): CrawlRepository {
+        return object : CrawlRepository {
+            override suspend fun makeGraduationSimulationRequest(): Resource<GraduationSimulationResponse> {
+                val username = settingsManager.usernameFlow.first()
+                val password = settingsManager.passwordFlow.first()
+
+                val graduationSimulationResponse =
+                    crawlService.fetchGraduationSimulation(username, password)
+
+                return when (graduationSimulationResponse.responseCode) {
+                    201 -> Resource.success(graduationSimulationResponse)
+                    else -> Resource.error("졸업 시뮬레이션 크롤링 실패")
+                }
+            }
+        }
+    }
+
     single { provideLoginRepository(get(), get()) }
+    single { provideCrawlRepository(get(), get()) }
 }

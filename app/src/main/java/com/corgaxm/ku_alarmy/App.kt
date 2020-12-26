@@ -20,7 +20,8 @@ class App : Application() {
                 listOf(
                     fragmentModule,
                     viewModelModule,
-                    networkModule,
+                    loginApiModule,
+                    crawlApiModule,
                     repositoryModule,
                     utilityModule
                 )
