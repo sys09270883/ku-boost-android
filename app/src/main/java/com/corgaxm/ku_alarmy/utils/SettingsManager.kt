@@ -12,6 +12,7 @@ import java.io.IOException
 class SettingsManager(context: Context) {
 
     private val dataStore = context.createDataStore(name = "settings_pref")
+
     val usernameFlow = dataStore.data
         .catch {
             if (it is IOException) {
@@ -25,6 +26,7 @@ class SettingsManager(context: Context) {
             val username = it[USERNAME] ?: ""
             username
         }
+
     val passwordFlow = dataStore.data
         .catch {
             if (it is IOException) {

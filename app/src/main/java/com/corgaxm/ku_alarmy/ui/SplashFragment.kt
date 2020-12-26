@@ -31,8 +31,6 @@ class SplashFragment : Fragment() {
         viewModel.loginResource.observe(viewLifecycleOwner) {
             when (it.status) {
                 Resource.Status.SUCCESS -> {
-                    Log.d("yoonseop", "자동로그인 성공")
-                    coroutineScope.cancel()
                     viewModel.clearLoginResource()
                     findNavController().navigate(R.id.action_splashFragment_to_homeFragment)
                 }
