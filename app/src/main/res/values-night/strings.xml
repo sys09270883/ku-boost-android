@@ -1,4 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">건국대학교 알라미</string>
+    <string name="prompt_username">아이디</string>
+    <string name="prompt_password">비밀번호</string>
+    <string name="prompt_log_in">로그인</string>
+    <string name="prompt_more">더보기</string>
     <string name="prompt_graduation_simulation">졸업시뮬레이션</string>
+    <string name="prompt_classification">이수구분</string>
+    <string name="prompt_standard_grade">기준학점</string>
+    <string name="prompt_acquired_grade">취득학점</string>
+    <string name="prompt_rest_grade">잔여학점</string>
+    <string name="prompt_logout">로그아웃</string>
 </resources>

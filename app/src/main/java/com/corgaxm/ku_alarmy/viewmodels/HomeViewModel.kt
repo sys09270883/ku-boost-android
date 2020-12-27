@@ -1,6 +1,5 @@
 package com.corgaxm.ku_alarmy.viewmodels
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -45,7 +44,6 @@ class HomeViewModel(
             withContext(Dispatchers.IO) {
                 graduationSimulationData.postValue(gradeRepository.getGraduationSimulations())
             }
-            Log.d("yoonseop", "DB: ${graduationSimulationData.value}")
         }
     }
 
@@ -56,7 +54,6 @@ class HomeViewModel(
                 graduationSimulationResponse.postValue(crawlRepository.makeGraduationSimulationRequest())
                 graduationSimulationData.postValue(gradeRepository.getGraduationSimulations())
             }
-//            Log.d("yoonseop", "DB: ${graduationSimulationData.value}")
             _graduationSimulationLoading.postValue(false)
         }
     }

@@ -9,6 +9,7 @@ import java.util.*
 data class GraduationSimulationData(
     @ColumnInfo(name = GraduationSimulationEntry.USERNAME) val username: String = "",
     @ColumnInfo(name = GraduationSimulationEntry.BASIC_ELECTIVE) val basicElective: Int?,
+    @ColumnInfo(name = GraduationSimulationEntry.ADVANCED_ELECTIVE) val advancedElective: Int?,
     @ColumnInfo(name = GraduationSimulationEntry.GENERAL_ELECTIVE) val generalElective: Int?,
     @ColumnInfo(name = GraduationSimulationEntry.CORE_ELECTIVE) val coreElective: Int?,
     @ColumnInfo(name = GraduationSimulationEntry.NORMAL_ELECTIVE) val normalElective: Int?,

@@ -7,6 +7,7 @@ object GraduationSimulationContract {
         const val TABLE_NAME = "graduation_simulation"
         const val USERNAME = "username"
         const val BASIC_ELECTIVE = "basicElective"
+        const val ADVANCED_ELECTIVE = "advancedElective"
         const val GENERAL_ELECTIVE = "generalElective"
         const val CORE_ELECTIVE = "coreElective"
         const val NORMAL_ELECTIVE = "normalElective"

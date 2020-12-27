@@ -92,6 +92,7 @@ val repositoryModule = module {
                         GraduationSimulationData(
                             username = username,
                             basicElective = std.basicElective,
+                            advancedElective = std.advancedElective,
                             generalElective = std.generalElective,
                             coreElective = std.coreElective,
                             normalElective = std.normalElective,
@@ -110,6 +111,7 @@ val repositoryModule = module {
                         GraduationSimulationData(
                             username = username,
                             basicElective = acq.basicElective,
+                            advancedElective = acq.advancedElective,
                             generalElective = acq.generalElective,
                             coreElective = acq.coreElective,
                             normalElective = acq.normalElective,

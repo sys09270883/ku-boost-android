@@ -42,6 +42,6 @@ val crawlApiModule = module {
 
     single(override = true) { provideHttpLoggingInterceptor() }
     single(override = true) { provideOkHttpClient(get()) }
-    single(named("crawl")) { provideRetrofit(get(), "http://15e9a4df212d.ngrok.io/") }
+    single(named("crawl")) { provideRetrofit(get(), "http://e2229c6e05be.ngrok.io/") }
     single { provideCrawlService(get(named("crawl"))) }
 }
