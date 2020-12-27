@@ -47,7 +47,7 @@ class HomeFragment : Fragment() {
             }
 
             graduationSimulationRefreshButton.setOnClickListener {
-                viewModel?.fetchGraduationSimulation()
+                viewModel?.fetchGraduationSimulationFromServer()
             }
         }
 
@@ -56,6 +56,8 @@ class HomeFragment : Fragment() {
             findNavController().navigate(R.id.action_homeFragment_to_loginFragment)
         }
 
-        viewModel.fetchGraduationSimulation()
+        viewModel.fetchGraduationSimulationFromLocalDb()
+
+        viewModel.fetchGraduationSimulationFromServer()
     }
 }

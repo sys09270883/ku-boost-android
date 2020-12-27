@@ -2,11 +2,10 @@ package com.corgaxm.ku_alarmy.data.db
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import androidx.room.PrimaryKey
 import com.corgaxm.ku_alarmy.data.db.GraduationSimulationContract.GraduationSimulationEntry
 import java.util.*
 
-@Entity(tableName = GraduationSimulationEntry.TABLE_NAME)
+@Entity(tableName = GraduationSimulationEntry.TABLE_NAME, primaryKeys = ["username", "type"])
 data class GraduationSimulationData(
     @ColumnInfo(name = GraduationSimulationEntry.USERNAME) val username: String = "",
     @ColumnInfo(name = GraduationSimulationEntry.BASIC_ELECTIVE) val basicElective: Int?,
@@ -30,11 +29,10 @@ data class GraduationSimulationData(
         defaultValue = "CURRENT_TIMESTAMP"
     ) val modifiedAt: Long
 ) {
-    @PrimaryKey(autoGenerate = true) var id = 0
 
     override fun equals(other: Any?): Boolean {
         (other as? GraduationSimulationData)?.let {
-            return (this.username == other.username) && (this.type == other.type)
+            return (it.username == other.username) && (it.type == other.type)
         } ?: return super.equals(other)
     }
 

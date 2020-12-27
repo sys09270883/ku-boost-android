@@ -147,31 +147,31 @@ val repositoryModule = module {
         settingsManager: SettingsManager
     ): GradeRepository {
         return object : GradeRepository {
-            override suspend fun getGraduationSimulations(): Resource<List<GraduationSimulationData>> {
-                val username = settingsManager.usernameFlow.first()
-
-                val graduationSimulationList: List<GraduationSimulationData>
-                try {
-                    graduationSimulationList =
-                        graduationSimulationDao.loadGraduationSimulationByUsername(username)
-                } catch (exception: Exception) {
-                    return Resource.error("${exception.message}")
-                }
-
-                return Resource.success(graduationSimulationList)
-            }
-
-            override suspend fun saveGraduationSimulations(
+            override suspend fun setGraduationSimulations(
                 standard: GraduationSimulationData,
                 acquired: GraduationSimulationData
             ): Resource<Unit> {
                 try {
-                    graduationSimulationDao.insertGraduationSimulation(standard)
-                    graduationSimulationDao.insertGraduationSimulation(acquired)
+                    graduationSimulationDao.insertGraduationSimulation(standard, acquired)
                 } catch (exception: Exception) {
                     return Resource.error("졸업 시뮬레이션 저장 중 에러 발생")
                 }
                 return Resource.success(Unit)
+            }
+
+            override suspend fun getGraduationSimulations(): Resource<List<GraduationSimulationData>> {
+                val username = settingsManager.usernameFlow.first()
+                var graduationSimulationList: List<GraduationSimulationData> = emptyList()
+
+                try {
+                    graduationSimulationList =
+                        graduationSimulationDao.loadGraduationSimulationByUsername(username).first()
+                } catch (exception: Exception) {
+                    Log.d("yoonseop", "DB: 가져올 때 에러 발생")
+                    return Resource.error("${exception.message}")
+                }
+
+                return Resource.success(graduationSimulationList)
             }
 
         }

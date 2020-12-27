@@ -1,5 +1,6 @@
 package com.corgaxm.ku_alarmy.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -7,6 +8,7 @@ import com.corgaxm.ku_alarmy.data.auth.AuthRepository
 import com.corgaxm.ku_alarmy.data.crawl.CrawlRepository
 import com.corgaxm.ku_alarmy.data.crawl.GraduationSimulationResponse
 import com.corgaxm.ku_alarmy.data.db.GradeRepository
+import com.corgaxm.ku_alarmy.data.db.GraduationSimulationData
 import com.corgaxm.ku_alarmy.utils.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -24,6 +26,8 @@ class HomeViewModel(
 
     var graduationSimulationResponse = MutableLiveData<Resource<GraduationSimulationResponse>>()
 
+    var graduationSimulationData = MutableLiveData<Resource<List<GraduationSimulationData>>>()
+
     fun clearLogoutResource() {
         logoutResponse = MutableLiveData<Resource<Unit>>()
     }
@@ -36,12 +40,23 @@ class HomeViewModel(
         }
     }
 
-    fun fetchGraduationSimulation() {
+    fun fetchGraduationSimulationFromLocalDb() {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                graduationSimulationData.postValue(gradeRepository.getGraduationSimulations())
+            }
+            Log.d("yoonseop", "DB: ${graduationSimulationData.value}")
+        }
+    }
+
+    fun fetchGraduationSimulationFromServer() {
         _graduationSimulationLoading.value = true
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 graduationSimulationResponse.postValue(crawlRepository.makeGraduationSimulationRequest())
+                graduationSimulationData.postValue(gradeRepository.getGraduationSimulations())
             }
+//            Log.d("yoonseop", "DB: ${graduationSimulationData.value}")
             _graduationSimulationLoading.postValue(false)
         }
     }

@@ -6,6 +6,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.corgaxm.ku_alarmy.data.db.GraduationSimulationContract.GraduationSimulationEntry.TABLE_NAME
 import com.corgaxm.ku_alarmy.data.db.GraduationSimulationContract.GraduationSimulationEntry.USERNAME
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface GraduationSimulationDao {
@@ -13,5 +14,5 @@ interface GraduationSimulationDao {
     suspend fun insertGraduationSimulation(vararg graduationSimulationData: GraduationSimulationData)
 
     @Query("SELECT * FROM $TABLE_NAME WHERE $USERNAME = :username")
-    suspend fun loadGraduationSimulationByUsername(username: String): List<GraduationSimulationData>
+    fun loadGraduationSimulationByUsername(username: String): Flow<List<GraduationSimulationData>>
 }
