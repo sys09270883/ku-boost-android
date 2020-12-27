@@ -16,6 +16,15 @@ android {
         versionName "1.0"
         buildConfigField "String", "LOGIN_URL", "\"https://kuis.konkuk.ac.kr/\""
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments += [
+                        "room.schemaLocation"  : "$projectDir/schemas".toString(),
+                        "room.incremental"     : "true",
+                        "room.expandProjection": "true"]
+            }
+        }
     }
 
     buildTypes {
@@ -70,4 +79,7 @@ dependencies {
     implementation 'org.koin:koin-core:2.2.0'
     testImplementation 'org.koin:koin-test:2.2.0'
     implementation "androidx.datastore:datastore-preferences:1.0.0-alpha05"
+    implementation "androidx.room:room-runtime:2.2.6"
+    kapt "androidx.room:room-compiler:2.2.6"
+    implementation "androidx.room:room-ktx:2.2.6"
 }

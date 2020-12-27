@@ -23,7 +23,8 @@ class App : Application() {
                     loginApiModule,
                     crawlApiModule,
                     repositoryModule,
-                    utilityModule
+                    utilityModule,
+                    persistenceModule
                 )
             )
         }
