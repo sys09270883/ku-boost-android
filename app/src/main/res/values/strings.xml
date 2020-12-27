@@ -10,4 +10,6 @@
     <string name="prompt_acquired_grade">취득학점</string>
     <string name="prompt_rest_grade">잔여학점</string>
     <string name="prompt_logout">로그아웃</string>
+    <string name="prompt_overall_semester_grades">전체학기성적</string>
+    <string name="prompt_current_semester_grades">금학기성적</string>
 </resources>
