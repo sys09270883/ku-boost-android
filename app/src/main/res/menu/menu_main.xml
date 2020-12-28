@@ -13,7 +13,7 @@
         <menu>
             <item
                 android:id="@+id/logout"
-                android:title="로그아웃" />
+                android:title="@string/prompt_logout" />
         </menu>
 
     </item>

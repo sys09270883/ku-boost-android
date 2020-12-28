@@ -1,0 +1,133 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "5104800b637505c7642995a08b74cab1",
+    "entities": [
+      {
+        "tableName": "graduation_simulation",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`username` TEXT NOT NULL, `basicElective` INTEGER, `advancedElective` INTEGER, `generalElective` INTEGER, `coreElective` INTEGER, `normalElective` INTEGER, `generalRequirement` INTEGER, `majorRequirement` INTEGER, `majorElective` INTEGER, `dualElective` INTEGER, `dualRequirement` INTEGER, `dualMajorElective` INTEGER, `etc` INTEGER, `type` TEXT NOT NULL, `createdAt` INTEGER NOT NULL DEFAULT CURRENT_TIMESTAMP, `modifiedAt` INTEGER NOT NULL DEFAULT CURRENT_TIMESTAMP, `total` INTEGER, PRIMARY KEY(`username`, `type`))",
+        "fields": [
+          {
+            "fieldPath": "username",
+            "columnName": "username",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "basicElective",
+            "columnName": "basicElective",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "advancedElective",
+            "columnName": "advancedElective",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "generalElective",
+            "columnName": "generalElective",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "coreElective",
+            "columnName": "coreElective",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "normalElective",
+            "columnName": "normalElective",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "generalRequirement",
+            "columnName": "generalRequirement",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "majorRequirement",
+            "columnName": "majorRequirement",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "majorElective",
+            "columnName": "majorElective",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "dualElective",
+            "columnName": "dualElective",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "dualRequirement",
+            "columnName": "dualRequirement",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "dualMajorElective",
+            "columnName": "dualMajorElective",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "etc",
+            "columnName": "etc",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "type",
+            "columnName": "type",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "createdAt",
+            "columnName": "createdAt",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "CURRENT_TIMESTAMP"
+          },
+          {
+            "fieldPath": "modifiedAt",
+            "columnName": "modifiedAt",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "CURRENT_TIMESTAMP"
+          },
+          {
+            "fieldPath": "total",
+            "columnName": "total",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "username",
+            "type"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '5104800b637505c7642995a08b74cab1')"
+    ]
+  }
+}
