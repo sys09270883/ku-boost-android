@@ -105,9 +105,6 @@ class HomeFragment : Fragment() {
             // 최종 업데이트 시간 바인딩
             binding.lastModifiedTimeTextView.text = DateTimeConverter.convert(standard.modifiedAt)
 
-            var totalStandard = 0
-            var totalAcquired = 0
-
             // 테이블 동적으로 생성
             val tableLayout = binding.graduationSimulationContentLayout
             tableLayout.removeAllViewsInLayout()
@@ -123,8 +120,6 @@ class HomeFragment : Fragment() {
                     standardValue = standard.basicElective,
                     acquiredValue = acquired.basicElective
                 )
-                totalStandard += standard.basicElective
-                totalAcquired += acquired.basicElective
             }
 
             if (standard.advancedElective != null && acquired.advancedElective != null) {
@@ -134,8 +129,6 @@ class HomeFragment : Fragment() {
                     standardValue = standard.advancedElective,
                     acquiredValue = acquired.advancedElective
                 )
-                totalStandard += standard.advancedElective
-                totalAcquired += acquired.advancedElective
             }
 
             if (standard.generalElective != null && acquired.generalElective != null) {
@@ -145,8 +138,6 @@ class HomeFragment : Fragment() {
                     standardValue = standard.generalElective,
                     acquiredValue = acquired.generalElective
                 )
-                totalStandard += standard.generalElective
-                totalAcquired += acquired.generalElective
             }
 
             if (standard.coreElective != null && acquired.coreElective != null) {
@@ -156,8 +147,6 @@ class HomeFragment : Fragment() {
                     standardValue = standard.coreElective,
                     acquiredValue = acquired.coreElective
                 )
-                totalStandard += standard.coreElective
-                totalAcquired += acquired.coreElective
             }
 
             if (standard.normalElective != null && acquired.normalElective != null) {
@@ -167,8 +156,6 @@ class HomeFragment : Fragment() {
                     standardValue = standard.normalElective,
                     acquiredValue = acquired.normalElective
                 )
-                totalStandard += standard.normalElective
-                totalAcquired += acquired.normalElective
             }
 
             if (standard.generalRequirement != null && acquired.generalRequirement != null) {
@@ -178,8 +165,6 @@ class HomeFragment : Fragment() {
                     standardValue = standard.generalRequirement,
                     acquiredValue = acquired.generalRequirement
                 )
-                totalStandard += standard.generalRequirement
-                totalAcquired += acquired.generalRequirement
             }
 
             if (standard.majorRequirement != null && acquired.majorRequirement != null) {
@@ -189,8 +174,6 @@ class HomeFragment : Fragment() {
                     standardValue = standard.majorRequirement,
                     acquiredValue = acquired.majorRequirement
                 )
-                totalStandard += standard.majorRequirement
-                totalAcquired += acquired.majorRequirement
             }
 
             if (standard.majorElective != null && acquired.majorElective != null) {
@@ -200,8 +183,6 @@ class HomeFragment : Fragment() {
                     standardValue = standard.majorElective,
                     acquiredValue = acquired.majorElective
                 )
-                totalStandard += standard.majorElective
-                totalAcquired += acquired.majorElective
             }
 
             if (standard.dualElective != null && acquired.dualElective != null) {
@@ -211,8 +192,6 @@ class HomeFragment : Fragment() {
                     standardValue = standard.dualElective,
                     acquiredValue = acquired.dualElective
                 )
-                totalStandard += standard.dualElective
-                totalAcquired += acquired.dualElective
             }
 
             if (standard.dualRequirement != null && acquired.dualRequirement != null) {
@@ -222,8 +201,6 @@ class HomeFragment : Fragment() {
                     standardValue = standard.dualRequirement,
                     acquiredValue = acquired.dualRequirement
                 )
-                totalStandard += standard.dualRequirement
-                totalAcquired += acquired.dualRequirement
             }
 
             if (standard.dualMajorElective != null && acquired.dualMajorElective != null) {
@@ -233,8 +210,6 @@ class HomeFragment : Fragment() {
                     standardValue = standard.dualMajorElective,
                     acquiredValue = acquired.dualMajorElective
                 )
-                totalStandard += standard.dualMajorElective
-                totalAcquired += acquired.dualMajorElective
             }
 
             if (standard.etc != null && acquired.etc != null) {
@@ -244,17 +219,16 @@ class HomeFragment : Fragment() {
                     standardValue = standard.etc,
                     acquiredValue = acquired.etc
                 )
-                totalStandard += standard.etc
-                totalAcquired += acquired.etc
             }
 
-            makeTableRow(
-                tableLayout = tableLayout,
-                classification = GradeConverter.convert("total"),
-                standardValue = totalStandard,
-                acquiredValue = totalAcquired,
-            )
-
+            if (standard.total != null && acquired.total != null) {
+                makeTableRow(
+                    tableLayout = tableLayout,
+                    classification = GradeConverter.convert("total"),
+                    standardValue = standard.total,
+                    acquiredValue = acquired.total,
+                )
+            }
         }
     }
 

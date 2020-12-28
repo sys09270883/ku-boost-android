@@ -28,7 +28,8 @@ data class GraduationSimulationData(
     @ColumnInfo(
         name = GraduationSimulationEntry.MODIFIED_AT,
         defaultValue = "CURRENT_TIMESTAMP"
-    ) val modifiedAt: Long
+    ) val modifiedAt: Long,
+    @ColumnInfo(name = GraduationSimulationEntry.TOTAL) val total: Int?
 ) {
 
     override fun equals(other: Any?): Boolean {

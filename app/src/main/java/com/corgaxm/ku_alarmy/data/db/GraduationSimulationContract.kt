@@ -21,6 +21,7 @@ object GraduationSimulationContract {
         const val TYPE = "type"
         const val CREATED_AT = "createdAt"
         const val MODIFIED_AT = "modifiedAt"
+        const val TOTAL = "total"
     }
 
     private const val SQL_CREATE_ENTRIES =

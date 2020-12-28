@@ -106,6 +106,7 @@ val repositoryModule = module {
                             type = "standard",
                             createdAt = System.currentTimeMillis(),
                             modifiedAt = System.currentTimeMillis(),
+                            total = std.total
                         )
                     val acquired =
                         GraduationSimulationData(
@@ -125,6 +126,7 @@ val repositoryModule = module {
                             type = "acquired",
                             createdAt = System.currentTimeMillis(),
                             modifiedAt = System.currentTimeMillis(),
+                            total = acq.total
                         )
 
                     graduationSimulationDao.insertGraduationSimulation(standard, acquired)

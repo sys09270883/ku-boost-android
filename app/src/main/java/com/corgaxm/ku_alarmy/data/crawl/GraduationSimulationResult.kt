@@ -15,6 +15,7 @@ data class GraduationSimulationResult(
     @SerializedName("dual_elective") val dualElective: Int?,
     @SerializedName("dual_requirement") val dualRequirement: Int?,
     @SerializedName("dual_major_elective") val dualMajorElective: Int?,
-    @SerializedName("etc") val etc: Int?
+    @SerializedName("etc") val etc: Int?,
+    @SerializedName("total") val total: Int?
 )
 
