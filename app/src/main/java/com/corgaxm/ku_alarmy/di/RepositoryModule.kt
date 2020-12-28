@@ -130,9 +130,6 @@ val repositoryModule = module {
                         )
 
                     graduationSimulationDao.insertGraduationSimulation(standard, acquired)
-                    Log.d("yoonseop", "standard: $standard")
-                    Log.d("yoonseop", "acquired: $acquired")
-                    Log.d("yoonseop", "db 저장 성공")
 
                 } catch (exception: Exception) {
                     return Resource.error("크롤링 중 에러 발생")
