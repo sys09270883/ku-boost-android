@@ -9,6 +9,7 @@ object GraduationSimulationContract {
         const val BASIC_ELECTIVE = "basicElective"
         const val ADVANCED_ELECTIVE = "advancedElective"
         const val GENERAL_ELECTIVE = "generalElective"
+        const val GENERAL_SELECTIVE = "generalSelective"
         const val CORE_ELECTIVE = "coreElective"
         const val NORMAL_ELECTIVE = "normalElective"
         const val GENERAL_REQUIREMENT = "generalRequirement"

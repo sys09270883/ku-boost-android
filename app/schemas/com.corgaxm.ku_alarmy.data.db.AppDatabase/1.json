@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "5104800b637505c7642995a08b74cab1",
+    "identityHash": "3c7551380388d680b9fdf9d39798a47b",
     "entities": [
       {
         "tableName": "graduation_simulation",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`username` TEXT NOT NULL, `basicElective` INTEGER, `advancedElective` INTEGER, `generalElective` INTEGER, `coreElective` INTEGER, `normalElective` INTEGER, `generalRequirement` INTEGER, `majorRequirement` INTEGER, `majorElective` INTEGER, `dualElective` INTEGER, `dualRequirement` INTEGER, `dualMajorElective` INTEGER, `etc` INTEGER, `type` TEXT NOT NULL, `createdAt` INTEGER NOT NULL DEFAULT CURRENT_TIMESTAMP, `modifiedAt` INTEGER NOT NULL DEFAULT CURRENT_TIMESTAMP, `total` INTEGER, PRIMARY KEY(`username`, `type`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`username` TEXT NOT NULL, `basicElective` INTEGER, `advancedElective` INTEGER, `generalElective` INTEGER, `generalSelective` INTEGER, `coreElective` INTEGER, `normalElective` INTEGER, `generalRequirement` INTEGER, `majorRequirement` INTEGER, `majorElective` INTEGER, `dualElective` INTEGER, `dualRequirement` INTEGER, `dualMajorElective` INTEGER, `etc` INTEGER, `type` TEXT NOT NULL, `createdAt` INTEGER NOT NULL DEFAULT CURRENT_TIMESTAMP, `modifiedAt` INTEGER NOT NULL DEFAULT CURRENT_TIMESTAMP, `total` INTEGER, PRIMARY KEY(`username`, `type`))",
         "fields": [
           {
             "fieldPath": "username",
@@ -29,6 +29,12 @@
           {
             "fieldPath": "generalElective",
             "columnName": "generalElective",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "generalSelective",
+            "columnName": "generalSelective",
             "affinity": "INTEGER",
             "notNull": false
           },
@@ -127,7 +133,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '5104800b637505c7642995a08b74cab1')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '3c7551380388d680b9fdf9d39798a47b')"
     ]
   }
 }
