@@ -6,6 +6,7 @@ object GradeConverter {
         "generalElective" to "지교",
         "coreElective" to "핵교",
         "normalElective" to "일교",
+        "generalSelective" to "일선",
         "generalRequirement" to "지필",
         "majorRequirement" to "전필",
         "majorElective" to "전선",

@@ -167,6 +167,15 @@ class HomeFragment : Fragment() {
                 )
             }
 
+            if (standard.generalSelective != null && acquired.generalSelective != null) {
+                makeTableRow(
+                    tableLayout = tableLayout,
+                    classification = GradeConverter.convert("generalSelective"),
+                    standardValue = standard.generalSelective,
+                    acquiredValue = acquired.generalSelective
+                )
+            }
+
             if (standard.majorRequirement != null && acquired.majorRequirement != null) {
                 makeTableRow(
                     tableLayout = tableLayout,
