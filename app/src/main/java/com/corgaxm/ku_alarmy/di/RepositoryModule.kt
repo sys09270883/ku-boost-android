@@ -31,7 +31,6 @@ val repositoryModule = module {
                 val cookie = loginResponse.headers()["Set-Cookie"]?.split(";")?.first()
                     ?: return UseCase.error("쿠키 없음")
                 settingsManager.setCookie(cookie)
-                Log.d("yoonseop", "Cookie: $cookie")
 
                 val loginBody = loginResponse.body()
                 val loginSuccess = loginBody?.loginSuccess ?: return UseCase.error("로그인 실패")
@@ -50,7 +49,6 @@ val repositoryModule = module {
             override suspend fun makeAutoLoginRequest(): UseCase<LoginResponse> {
                 val username = settingsManager.usernameFlow.first()
                 val password = settingsManager.passwordFlow.first()
-                Log.d("yoonseop", "autoLogin: ($username, $password)")
 
                 return when {
                     username.isBlank() || password.isBlank() -> {
@@ -63,8 +61,6 @@ val repositoryModule = module {
                         val cookie = loginResponse.headers()["Set-Cookie"]?.split(";")?.first()
                             ?: return UseCase.error("쿠키 없음")
                         settingsManager.setCookie(cookie)
-
-                        Log.d("yoonseop", "Cookie: $cookie")
 
                         val loginBody = loginResponse.body()
                         val loginSuccess = loginBody?.loginSuccess ?: return UseCase.error("로그인 실패")
