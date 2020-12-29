@@ -97,6 +97,8 @@ val repositoryModule = module {
                 val graduationSimulationResponse: GraduationSimulationResponse
 
                 try {
+                    if (username == "") throw Exception("Username is empty.")
+
                     graduationSimulationResponse = gradeService.fetchGraduationSimulation(
                         stdNo = stdNo,
                         year = corsYy,
