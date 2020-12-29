@@ -3,14 +3,18 @@ package com.corgaxm.ku_alarmy.viewmodels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.corgaxm.ku_alarmy.data.UseCase
 import com.corgaxm.ku_alarmy.data.auth.AuthRepository
 import com.corgaxm.ku_alarmy.data.auth.LoginResponse
-import com.corgaxm.ku_alarmy.utils.Resource
+import com.corgaxm.ku_alarmy.data.grade.GradeRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class LoginViewModel(private val authRepository: AuthRepository) : ViewModel() {
+class LoginViewModel(
+    private val authRepository: AuthRepository,
+    private val gradeRepository: GradeRepository
+) : ViewModel() {
     val username: MutableLiveData<String> by lazy {
         MutableLiveData<String>().apply {
             postValue("")
@@ -30,10 +34,10 @@ class LoginViewModel(private val authRepository: AuthRepository) : ViewModel() {
     }
     val loading get() = _loading
 
-    var loginResource = MutableLiveData<Resource<LoginResponse>>()
+    var loginResource = MutableLiveData<UseCase<LoginResponse>>()
 
     fun clearLoginResource() {
-        loginResource = MutableLiveData<Resource<LoginResponse>>()
+        loginResource = MutableLiveData<UseCase<LoginResponse>>()
     }
 
     fun login() {
@@ -43,12 +47,8 @@ class LoginViewModel(private val authRepository: AuthRepository) : ViewModel() {
         _loading.value = true
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                loginResource.postValue(
-                    authRepository.makeLoginRequest(
-                        username,
-                        password
-                    )
-                )
+                loginResource.postValue(authRepository.makeLoginRequest(username, password))
+                gradeRepository.makeUserInformationRequest()
             }
             _loading.postValue(false)
         }

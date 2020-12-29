@@ -1,34 +1,32 @@
 package com.corgaxm.ku_alarmy.viewmodels
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
+import com.corgaxm.ku_alarmy.data.UseCase
 import com.corgaxm.ku_alarmy.data.auth.AuthRepository
-import com.corgaxm.ku_alarmy.data.crawl.CrawlRepository
-import com.corgaxm.ku_alarmy.data.crawl.GraduationSimulationResponse
-import com.corgaxm.ku_alarmy.data.db.GradeRepository
-import com.corgaxm.ku_alarmy.data.db.GraduationSimulationData
-import com.corgaxm.ku_alarmy.utils.Resource
+import com.corgaxm.ku_alarmy.data.grade.GradeRepository
+import com.corgaxm.ku_alarmy.data.grade.GraduationSimulationResponse
+import com.corgaxm.ku_alarmy.persistence.GraduationSimulationEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class HomeViewModel(
     private val authRepository: AuthRepository,
-    private val crawlRepository: CrawlRepository,
     private val gradeRepository: GradeRepository
 ) : ViewModel() {
     private val _graduationSimulationLoading = MutableLiveData(false)
     val graduationSimulationLoading get() = _graduationSimulationLoading
 
-    var logoutResponse = MutableLiveData<Resource<Unit>>()
+    var logoutResponse = MutableLiveData<UseCase<Unit>>()
 
-    var graduationSimulationResponse = MutableLiveData<Resource<GraduationSimulationResponse>>()
+    var graduationSimulationResponse = MutableLiveData<UseCase<GraduationSimulationResponse>>()
 
-    var graduationSimulationData = MutableLiveData<Resource<List<GraduationSimulationData>>>()
+    var graduationSimulationData = MutableLiveData<UseCase<List<GraduationSimulationEntity>>>()
+
+    val stdNo: LiveData<Int> = gradeRepository.getStdNoFlow().asLiveData()
 
     fun clearLogoutResource() {
-        logoutResponse = MutableLiveData<Resource<Unit>>()
+        logoutResponse = MutableLiveData<UseCase<Unit>>()
     }
 
     fun logout() {
@@ -51,7 +49,7 @@ class HomeViewModel(
         _graduationSimulationLoading.value = true
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                graduationSimulationResponse.postValue(crawlRepository.makeGraduationSimulationRequest())
+                graduationSimulationResponse.postValue(gradeRepository.makeGraduationSimulationRequest())
                 graduationSimulationData.postValue(gradeRepository.getGraduationSimulations())
             }
             _graduationSimulationLoading.postValue(false)

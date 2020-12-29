@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.corgaxm.ku_alarmy.R
-import com.corgaxm.ku_alarmy.utils.Resource
+import com.corgaxm.ku_alarmy.data.UseCase
 import com.corgaxm.ku_alarmy.viewmodels.SplashViewModel
 import kotlinx.coroutines.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -30,19 +30,21 @@ class SplashFragment : Fragment() {
 
         viewModel.loginResource.observe(viewLifecycleOwner) {
             when (it.status) {
-                Resource.Status.SUCCESS -> {
+                UseCase.Status.SUCCESS -> {
                     viewModel.clearLoginResource()
                     findNavController().navigate(R.id.action_splashFragment_to_homeFragment)
                 }
-                Resource.Status.ERROR -> {
+                UseCase.Status.ERROR -> {
                     Log.d("yoonseop", "${it.message}")
                     coroutineScope.launch {
-                        delay(2000L)
+                        delay(1500L)
                         findNavController().navigate(R.id.action_splashFragment_to_loginFragment)
                     }
                 }
             }
         }
+
+        viewModel.autoLogin()
     }
 
     override fun onPause() {

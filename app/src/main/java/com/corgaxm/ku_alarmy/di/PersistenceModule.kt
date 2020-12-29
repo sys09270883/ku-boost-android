@@ -1,8 +1,8 @@
 package com.corgaxm.ku_alarmy.di
 
 import androidx.room.Room
-import com.corgaxm.ku_alarmy.data.db.AppDatabase
-import com.corgaxm.ku_alarmy.utils.SettingsManager
+import com.corgaxm.ku_alarmy.persistence.AppDatabase
+import com.corgaxm.ku_alarmy.persistence.SettingsManager
 import org.koin.android.ext.koin.androidApplication
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module

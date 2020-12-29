@@ -12,13 +12,11 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.corgaxm.ku_alarmy.R
-import com.corgaxm.ku_alarmy.data.db.GraduationSimulationData
 import com.corgaxm.ku_alarmy.databinding.FragmentHomeBinding
+import com.corgaxm.ku_alarmy.persistence.GraduationSimulationEntity
 import com.corgaxm.ku_alarmy.utils.DateTimeConverter
-import com.corgaxm.ku_alarmy.utils.GradeConverter
 import com.corgaxm.ku_alarmy.viewmodels.HomeViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.lang.Integer.max
 
 class HomeFragment : Fragment() {
 
@@ -40,10 +38,17 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         makeToolbar()
         setGraduationSimulationRefreshButton()
-        observeLogout()
         fetchGraduationSimulationFromLocalDb()
         fetchGraduationSimulationFromServer()
+        observeLogout()
         observeGraduationSimulation()
+        observeStdNo()
+    }
+
+    private fun observeStdNo() {
+        viewModel.stdNo.observe(viewLifecycleOwner) {
+            viewModel.fetchGraduationSimulationFromServer()
+        }
     }
 
     private fun fetchGraduationSimulationFromServer() {
@@ -92,18 +97,20 @@ class HomeFragment : Fragment() {
             if (it.data == null)
                 return@observe
 
-            val standard: GraduationSimulationData
-            val acquired: GraduationSimulationData
+            val simulations: List<GraduationSimulationEntity>
 
             try {
-                standard = it.data.first { item -> item.type == "standard" }
-                acquired = it.data.first { item -> item.type == "acquired" }
-            } catch (exception: NoSuchElementException) {
+                simulations = it.data
+            } catch (exception: Exception) {
                 return@observe
             }
 
+            if (simulations.isEmpty())
+                return@observe
+
             // 최종 업데이트 시간 바인딩
-            binding.lastModifiedTimeTextView.text = DateTimeConverter.convert(standard.modifiedAt)
+            binding.lastModifiedTimeTextView.text =
+                DateTimeConverter.convert(simulations[0].modifiedAt)
 
             // 테이블 동적으로 생성
             val tableLayout = binding.graduationSimulationContentLayout
@@ -113,129 +120,13 @@ class HomeFragment : Fragment() {
             makeTableRow(tableLayout, "이수구분", "기준학점", "취득학점", "잔여학점")
 
             // 테이블 바디 생성
-            if (standard.basicElective != null && acquired.basicElective != null) {
+            for (simulation in simulations) {
                 makeTableRow(
-                    tableLayout = tableLayout,
-                    classification = GradeConverter.convert("basicElective"),
-                    standardValue = standard.basicElective,
-                    acquiredValue = acquired.basicElective
-                )
-            }
-
-            if (standard.advancedElective != null && acquired.advancedElective != null) {
-                makeTableRow(
-                    tableLayout = tableLayout,
-                    classification = GradeConverter.convert("advancedElective"),
-                    standardValue = standard.advancedElective,
-                    acquiredValue = acquired.advancedElective
-                )
-            }
-
-            if (standard.generalElective != null && acquired.generalElective != null) {
-                makeTableRow(
-                    tableLayout = tableLayout,
-                    classification = GradeConverter.convert("generalElective"),
-                    standardValue = standard.generalElective,
-                    acquiredValue = acquired.generalElective
-                )
-            }
-
-            if (standard.coreElective != null && acquired.coreElective != null) {
-                makeTableRow(
-                    tableLayout = tableLayout,
-                    classification = GradeConverter.convert("coreElective"),
-                    standardValue = standard.coreElective,
-                    acquiredValue = acquired.coreElective
-                )
-            }
-
-            if (standard.normalElective != null && acquired.normalElective != null) {
-                makeTableRow(
-                    tableLayout = tableLayout,
-                    classification = GradeConverter.convert("normalElective"),
-                    standardValue = standard.normalElective,
-                    acquiredValue = acquired.normalElective
-                )
-            }
-
-            if (standard.generalRequirement != null && acquired.generalRequirement != null) {
-                makeTableRow(
-                    tableLayout = tableLayout,
-                    classification = GradeConverter.convert("generalRequirement"),
-                    standardValue = standard.generalRequirement,
-                    acquiredValue = acquired.generalRequirement
-                )
-            }
-
-            if (standard.generalSelective != null && acquired.generalSelective != null) {
-                makeTableRow(
-                    tableLayout = tableLayout,
-                    classification = GradeConverter.convert("generalSelective"),
-                    standardValue = standard.generalSelective,
-                    acquiredValue = acquired.generalSelective
-                )
-            }
-
-            if (standard.majorRequirement != null && acquired.majorRequirement != null) {
-                makeTableRow(
-                    tableLayout = tableLayout,
-                    classification = GradeConverter.convert("majorRequirement"),
-                    standardValue = standard.majorRequirement,
-                    acquiredValue = acquired.majorRequirement
-                )
-            }
-
-            if (standard.majorElective != null && acquired.majorElective != null) {
-                makeTableRow(
-                    tableLayout = tableLayout,
-                    classification = GradeConverter.convert("majorElective"),
-                    standardValue = standard.majorElective,
-                    acquiredValue = acquired.majorElective
-                )
-            }
-
-            if (standard.dualElective != null && acquired.dualElective != null) {
-                makeTableRow(
-                    tableLayout = tableLayout,
-                    classification = GradeConverter.convert("dualElective"),
-                    standardValue = standard.dualElective,
-                    acquiredValue = acquired.dualElective
-                )
-            }
-
-            if (standard.dualRequirement != null && acquired.dualRequirement != null) {
-                makeTableRow(
-                    tableLayout = tableLayout,
-                    classification = GradeConverter.convert("dualRequirement"),
-                    standardValue = standard.dualRequirement,
-                    acquiredValue = acquired.dualRequirement
-                )
-            }
-
-            if (standard.dualMajorElective != null && acquired.dualMajorElective != null) {
-                makeTableRow(
-                    tableLayout = tableLayout,
-                    classification = GradeConverter.convert("dualMajorElective"),
-                    standardValue = standard.dualMajorElective,
-                    acquiredValue = acquired.dualMajorElective
-                )
-            }
-
-            if (standard.etc != null && acquired.etc != null) {
-                makeTableRow(
-                    tableLayout = tableLayout,
-                    classification = GradeConverter.convert("etc"),
-                    standardValue = standard.etc,
-                    acquiredValue = acquired.etc
-                )
-            }
-
-            if (standard.total != null && acquired.total != null) {
-                makeTableRow(
-                    tableLayout = tableLayout,
-                    classification = GradeConverter.convert("total"),
-                    standardValue = standard.total,
-                    acquiredValue = acquired.total,
+                    tableLayout,
+                    simulation.classification,
+                    simulation.standard,
+                    simulation.acquired,
+                    simulation.remainder
                 )
             }
         }
@@ -268,7 +159,8 @@ class HomeFragment : Fragment() {
         tableLayout: TableLayout,
         classification: String,
         standardValue: Int,
-        acquiredValue: Int
+        acquiredValue: Int,
+        remainderValue: Int
     ) {
         val context = requireContext()
         val row = TableRow(context)
@@ -276,7 +168,7 @@ class HomeFragment : Fragment() {
             classification,
             "$standardValue",
             "$acquiredValue",
-            "${max(0, standardValue - acquiredValue)}"
+            "$remainderValue"
         )
 
         for (text in textList) {
