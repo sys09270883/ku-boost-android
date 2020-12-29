@@ -14,7 +14,7 @@ android {
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
-        buildConfigField "String", "LOGIN_URL", "\"https://kuis.konkuk.ac.kr/\""
+        buildConfigField "String", "BASE_URL", "\"https://kuis.konkuk.ac.kr/\""
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         javaCompileOptions {

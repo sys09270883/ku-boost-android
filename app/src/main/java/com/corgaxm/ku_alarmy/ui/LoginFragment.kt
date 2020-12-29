@@ -8,8 +8,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.corgaxm.ku_alarmy.R
+import com.corgaxm.ku_alarmy.data.UseCase
 import com.corgaxm.ku_alarmy.databinding.FragmentLoginBinding
-import com.corgaxm.ku_alarmy.utils.Resource
 import com.corgaxm.ku_alarmy.viewmodels.LoginViewModel
 import com.google.android.material.snackbar.Snackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -39,11 +39,11 @@ class LoginFragment : Fragment() {
 
         viewModel.loginResource.observe(viewLifecycleOwner) {
             when (it.status) {
-                Resource.Status.SUCCESS -> {
+                UseCase.Status.SUCCESS -> {
                     viewModel.clearLoginResource()
                     findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
                 }
-                Resource.Status.ERROR -> {
+                UseCase.Status.ERROR -> {
                     Snackbar.make(binding.container, "${it.message}", Snackbar.LENGTH_SHORT).show()
                     Log.e("yoonseop", "${it.message}")
                 }
