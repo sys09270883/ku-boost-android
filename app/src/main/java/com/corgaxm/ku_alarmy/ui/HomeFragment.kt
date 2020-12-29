@@ -1,14 +1,9 @@
 package com.corgaxm.ku_alarmy.ui
 
-import android.graphics.Typeface
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TableLayout
-import android.widget.TableRow
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.corgaxm.ku_alarmy.R
@@ -16,6 +11,7 @@ import com.corgaxm.ku_alarmy.databinding.FragmentHomeBinding
 import com.corgaxm.ku_alarmy.persistence.GraduationSimulationEntity
 import com.corgaxm.ku_alarmy.utils.DateTimeConverter
 import com.corgaxm.ku_alarmy.viewmodels.HomeViewModel
+import com.corgaxm.ku_alarmy.views.CustomTableRow
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class HomeFragment : Fragment() {
@@ -117,68 +113,28 @@ class HomeFragment : Fragment() {
             tableLayout.removeAllViewsInLayout()
 
             // 테이블 헤더 생성
-            makeTableRow(tableLayout, "이수구분", "기준학점", "취득학점", "잔여학점")
+            val context = requireContext()
+            CustomTableRow(context).attach(
+                tableLayout,
+                getString(R.string.prompt_classification),
+                getString(R.string.prompt_standard_grade),
+                getString(R.string.prompt_acquired_grade),
+                getString(R.string.prompt_rest_grade)
+            )
 
             // 테이블 바디 생성
             for (simulation in simulations) {
-                makeTableRow(
-                    tableLayout,
-                    simulation.classification,
-                    simulation.standard,
-                    simulation.acquired,
-                    simulation.remainder
-                )
+                simulation.apply {
+                    CustomTableRow(context).attach(
+                        tableLayout,
+                        classification,
+                        standard,
+                        acquired,
+                        remainder
+                    )
+                }
             }
         }
     }
 
-    private fun makeTableRow(
-        tableLayout: TableLayout,
-        first: String,
-        second: String,
-        third: String,
-        fourth: String
-    ) {
-        val context = requireContext()
-        val row = TableRow(context)
-        val textList = listOf(first, second, third, fourth)
-
-        for (text in textList) {
-            val textView = TextView(context)
-            textView.text = text
-            textView.textAlignment = TextView.TEXT_ALIGNMENT_CENTER
-            textView.typeface = Typeface.DEFAULT_BOLD
-            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
-            row.addView(textView)
-        }
-
-        tableLayout.addView(row)
-    }
-
-    private fun makeTableRow(
-        tableLayout: TableLayout,
-        classification: String,
-        standardValue: Int,
-        acquiredValue: Int,
-        remainderValue: Int
-    ) {
-        val context = requireContext()
-        val row = TableRow(context)
-        val textList = listOf(
-            classification,
-            "$standardValue",
-            "$acquiredValue",
-            "$remainderValue"
-        )
-
-        for (text in textList) {
-            val textView = TextView(context)
-            textView.text = text
-            textView.textAlignment = TextView.TEXT_ALIGNMENT_CENTER
-            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
-            row.addView(textView)
-        }
-
-        tableLayout.addView(row)
-    }
 }
