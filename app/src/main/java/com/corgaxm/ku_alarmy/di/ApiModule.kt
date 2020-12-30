@@ -33,7 +33,7 @@ val apiModule = module {
         .addInterceptor(httpLoggingInterceptor)
         .addInterceptor {
             val original = it.request()
-            var cookie = ""
+            var cookie: String
 
             runBlocking {
                 cookie = settingsManager.cookieFlow.first()

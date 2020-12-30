@@ -36,9 +36,14 @@ class HomeFragment : Fragment() {
         setGraduationSimulationRefreshButton()
         fetchGraduationSimulationFromLocalDb()
         fetchGraduationSimulationFromServer()
+        fetchAllGradesFromServer()
         observeLogout()
         observeGraduationSimulation()
         observeStdNo()
+    }
+
+    private fun fetchAllGradesFromServer() {
+        viewModel.fetchAllGradesFromServer()
     }
 
     private fun observeStdNo() {

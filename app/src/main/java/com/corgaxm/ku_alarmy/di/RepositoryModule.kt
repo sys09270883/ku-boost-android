@@ -9,9 +9,9 @@ import com.corgaxm.ku_alarmy.data.auth.LoginResponse
 import com.corgaxm.ku_alarmy.data.grade.GradeRepository
 import com.corgaxm.ku_alarmy.data.grade.GraduationSimulationResponse
 import com.corgaxm.ku_alarmy.data.grade.UserInformationResponse
-import com.corgaxm.ku_alarmy.persistence.GraduationSimulationDao
-import com.corgaxm.ku_alarmy.persistence.GraduationSimulationEntity
-import com.corgaxm.ku_alarmy.persistence.SettingsManager
+import com.corgaxm.ku_alarmy.data.grade.ValidGradesResponse
+import com.corgaxm.ku_alarmy.persistence.*
+import com.corgaxm.ku_alarmy.utils.DateTimeConverter
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import org.koin.dsl.module
@@ -29,11 +29,11 @@ val repositoryModule = module {
                 val loginResponse = authService.login(username, password)
 
                 val cookie = loginResponse.headers()["Set-Cookie"]?.split(";")?.first()
-                    ?: return UseCase.error("쿠키 없음")
+                    ?: return UseCase.error("No cookie error occurs.")
                 settingsManager.setCookie(cookie)
 
                 val loginBody = loginResponse.body()
-                val loginSuccess = loginBody?.loginSuccess ?: return UseCase.error("로그인 실패")
+                val loginSuccess = loginBody?.loginSuccess ?: return UseCase.error("Fail to login")
                 val loginFailure = loginBody.loginFailure
 
                 return when {
@@ -42,7 +42,7 @@ val repositoryModule = module {
                         UseCase.success(loginBody)
                     }
                     loginFailure != null -> UseCase.error(loginFailure.errorMessage)
-                    else -> UseCase.error("서버 에러입니다.\n잠시 후 시도해주세요.")
+                    else -> UseCase.error("Error on server.")
                 }
             }
 
@@ -53,7 +53,7 @@ val repositoryModule = module {
                 return when {
                     username.isBlank() || password.isBlank() -> {
                         settingsManager.setAuthInfo("", "")
-                        UseCase.error("자동로그인 실패")
+                        UseCase.error("Fail to auto login.")
                     }
                     else -> {
                         val loginResponse = authService.login(username, password)
@@ -63,13 +63,14 @@ val repositoryModule = module {
                         settingsManager.setCookie(cookie)
 
                         val loginBody = loginResponse.body()
-                        val loginSuccess = loginBody?.loginSuccess ?: return UseCase.error("로그인 실패")
+                        val loginSuccess =
+                            loginBody?.loginSuccess ?: return UseCase.error("Fail to login")
                         val loginFailure = loginBody.loginFailure
 
                         when {
                             loginSuccess.isSucceeded -> UseCase.success(loginBody)
                             loginFailure != null -> UseCase.error(loginFailure.errorMessage)
-                            else -> UseCase.error("서버 에러입니다.\n잠시 후 시도해주세요.")
+                            else -> UseCase.error("Error on server.")
                         }
                     }
                 }
@@ -85,7 +86,8 @@ val repositoryModule = module {
     fun provideGradeRepository(
         gradeService: GradeService,
         graduationSimulationDao: GraduationSimulationDao,
-        settingsManager: SettingsManager
+        settingsManager: SettingsManager,
+        gradeDao: GradeDao
     ): GradeRepository {
         return object : GradeRepository {
             override suspend fun makeGraduationSimulationRequest(): UseCase<GraduationSimulationResponse> {
@@ -121,7 +123,7 @@ val repositoryModule = module {
 
                 } catch (exception: Exception) {
                     Log.e("yoonseop", "${exception.message}")
-                    return UseCase.error("졸업 시뮬레이션 API 에러 발생")
+                    return UseCase.error("${exception.message}")
                 }
 
                 return UseCase.success(graduationSimulationResponse)
@@ -141,8 +143,7 @@ val repositoryModule = module {
                         )
                     }
                 } catch (exception: Exception) {
-                    Log.e("yoonseop", "${exception.message}")
-                    return UseCase.error("유저 정보 API 에러 발생")
+                    return UseCase.error("${exception.message}")
                 }
 
                 return UseCase.success(userInfoResponse)
@@ -156,26 +157,88 @@ val repositoryModule = module {
                     graduationSimulationList =
                         graduationSimulationDao.loadGraduationSimulationByUsername(username).first()
                 } catch (exception: Exception) {
+                    Log.e("yoonseop", "${exception.message}")
                     return UseCase.error("${exception.message}")
                 }
 
                 return UseCase.success(graduationSimulationList)
             }
 
-            override suspend fun setGraduationSimulation(graduationSimulationEntity: GraduationSimulationEntity): UseCase<Unit> {
+            override fun getStdNoFlow(): Flow<Int> = settingsManager.stdNoFlow
+
+            override suspend fun makeAllGradesRequest(): UseCase<Unit> {
+                val allGrades = mutableListOf<GradeEntity>()
+
                 try {
-                    graduationSimulationDao.insertGraduationSimulation(graduationSimulationEntity)
+                    val stdNo = settingsManager.stdNoFlow.first()
+                    val username = settingsManager.usernameFlow.first()
+                    val startYear = stdNo.toString().substring(0, 4).toInt()
+                    val endYear = DateTimeConverter.currentYear().toInt()
+                    val semesters = intArrayOf(1, 4, 2, 5)
+
+                    for (year in startYear..endYear) {
+                        for (semester in semesters) {
+                            val gradeResponse = gradeService.fetchRegularGrade(
+                                stdNo = stdNo,
+                                year = year,
+                                semester = "B0101$semester",
+                                curDate = DateTimeConverter.today()
+                            )
+
+                            for (grade in gradeResponse.grades) {
+                                allGrades += GradeEntity(
+                                    username = username,
+                                    evaluationMethod = grade.evaluationMethod,
+                                    year = year,
+                                    semester = semester,
+                                    classification = grade.classification,
+                                    characterGrade = grade.characterGrade,
+                                    grade = grade.grade,
+                                    professor = grade.professor,
+                                    subjectId = grade.subjectId,
+                                    subjectName = grade.subjectName,
+                                    subjectNumber = grade.subjectNumber,
+                                    valid = false,
+                                    modifiedAt = System.currentTimeMillis()
+                                )
+                            }
+                        }
+                    }
+
+                    gradeDao.insertGrade(*allGrades.toTypedArray())
+
                 } catch (exception: Exception) {
-                    return UseCase.error("졸업 시뮬레이션 저장 중 에러 발생")
+                    Log.e("yoonseop", "${exception.message}")
+                    return UseCase.error("${exception.message}")
                 }
+
                 return UseCase.success(Unit)
             }
 
-            override fun getStdNoFlow(): Flow<Int> = settingsManager.stdNoFlow
+            override suspend fun makeAllValidGradesRequest(): UseCase<Unit> {
+                val stdNo = settingsManager.stdNoFlow.first()
+                val username = settingsManager.usernameFlow.first()
+                val validGradesResponse: ValidGradesResponse
+
+                try {
+                    validGradesResponse = gradeService.fetchValidGrades(stdNo = stdNo)
+                    val validGrades = validGradesResponse.validGrades
+                    for (validGrade in validGrades) {
+                        // username, subjectId로 DB 업데이트
+                        // 해당 과목들은 유효한 과목(학점삭제하지 않은 과목)
+                        Log.d("yoonseop", "${validGrade.subjectId}")
+                    }
+
+                } catch (exception: Exception) {
+                    Log.e("yoonseop", "${exception.message}")
+                    return UseCase.error("${exception.message}")
+                }
+                return UseCase.success(Unit)
+            }
 
         }
     }
 
     single { provideLoginRepository(get(), get()) }
-    single { provideGradeRepository(get(), get(), get()) }
+    single { provideGradeRepository(get(), get(), get(), get()) }
 }

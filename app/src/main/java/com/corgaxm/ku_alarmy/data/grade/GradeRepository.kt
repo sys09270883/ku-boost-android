@@ -13,5 +13,7 @@ interface GradeRepository {
 
     fun getStdNoFlow(): Flow<Int>
 
-    suspend fun makeAllGradesRequest(): UseCase<List<GradeResponse>>
+    suspend fun makeAllGradesRequest(): UseCase<Unit>
+
+    suspend fun makeAllValidGradesRequest(): UseCase<Unit>
 }
