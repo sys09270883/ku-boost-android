@@ -9,7 +9,7 @@ import java.util.*
     tableName = GradeEntry.TABLE_NAME,
     primaryKeys = ["username", "subjectId"]
 )
-class GradeEntity(
+data class GradeEntity(
     @ColumnInfo(name = GradeEntry.USERNAME) val username: String,
     @ColumnInfo(name = GradeEntry.EVALUATION_METHOD) val evaluationMethod: String,
     @ColumnInfo(name = GradeEntry.YEAR) val year: Int,
