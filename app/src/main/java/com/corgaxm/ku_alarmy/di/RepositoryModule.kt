@@ -1,6 +1,5 @@
 package com.corgaxm.ku_alarmy.di
 
-import android.util.Log
 import com.corgaxm.ku_alarmy.api.AuthService
 import com.corgaxm.ku_alarmy.api.GradeService
 import com.corgaxm.ku_alarmy.data.UseCase
@@ -122,7 +121,6 @@ val repositoryModule = module {
                     }
 
                 } catch (exception: Exception) {
-                    Log.e("yoonseop", "${exception.message}")
                     return UseCase.error("${exception.message}")
                 }
 
@@ -157,7 +155,6 @@ val repositoryModule = module {
                     graduationSimulationList =
                         graduationSimulationDao.loadGraduationSimulationByUsername(username).first()
                 } catch (exception: Exception) {
-                    Log.e("yoonseop", "${exception.message}")
                     return UseCase.error("${exception.message}")
                 }
 
@@ -208,7 +205,6 @@ val repositoryModule = module {
                     gradeDao.insertGrade(*allGrades.toTypedArray())
 
                 } catch (exception: Exception) {
-                    Log.e("yoonseop", "${exception.message}")
                     return UseCase.error("${exception.message}")
                 }
 
@@ -224,13 +220,9 @@ val repositoryModule = module {
                     validGradesResponse = gradeService.fetchValidGrades(stdNo = stdNo)
                     val validGrades = validGradesResponse.validGrades
                     for (validGrade in validGrades) {
-                        // username, subjectId로 DB 업데이트
-                        // 해당 과목들은 유효한 과목(학점삭제하지 않은 과목)
-                        Log.d("yoonseop", "${validGrade.subjectId}")
+                        gradeDao.updateValid(username, validGrade.subjectId, true)
                     }
-
                 } catch (exception: Exception) {
-                    Log.e("yoonseop", "${exception.message}")
                     return UseCase.error("${exception.message}")
                 }
                 return UseCase.success(Unit)
