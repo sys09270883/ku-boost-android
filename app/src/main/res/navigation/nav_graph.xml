@@ -48,7 +48,7 @@
         android:id="@+id/homeFragment"
         android:name="com.corgaxm.ku_alarmy.ui.HomeFragment"
         android:label="fragment_home"
-        tools:layout="@layout/fragment_home" >
+        tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_homeFragment_to_loginFragment"
             app:destination="@id/loginFragment"
@@ -61,10 +61,10 @@
         <action
             android:id="@+id/action_homeFragment_to_totalGradeDetailFragment"
             app:destination="@id/totalGradeDetailFragment"
-            app:enterAnim="@anim/fade_in"
-            app:exitAnim="@anim/fade_out"
-            app:popEnterAnim="@anim/fade_in"
-            app:popExitAnim="@anim/fade_out"
+            app:enterAnim="@anim/open_slide_enter"
+            app:exitAnim="@anim/open_slide_exit"
+            app:popEnterAnim="@anim/close_slide_enter"
+            app:popExitAnim="@anim/close_slide_exit"
             app:popUpTo="@id/homeFragment"
             app:popUpToInclusive="false" />
     </fragment>
@@ -72,10 +72,13 @@
         android:id="@+id/totalGradeDetailFragment"
         android:name="com.corgaxm.ku_alarmy.ui.TotalGradeDetailFragment"
         android:label="fragment_total_grade_detail"
-        tools:layout="@layout/fragment_total_grade_detail" >
+        tools:layout="@layout/fragment_total_grade_detail">
         <action
             android:id="@+id/action_totalGradeDetailFragment_to_gradeDetailFragment"
             app:destination="@id/gradeDetailFragment"
+            app:enterAnim="@anim/open_slide_enter"
+            app:exitAnim="@anim/open_slide_exit"
+            app:popEnterAnim="@anim/close_slide_enter"
             app:popUpTo="@id/totalGradeDetailFragment"
             app:popUpToInclusive="false" />
     </fragment>
