@@ -12,4 +12,18 @@ object DateTimeConverter {
         val date = LocalDateTime.ofInstant(instant, ZoneId.systemDefault())
         return formatter.format(date)
     }
+
+    fun currentYear(): String {
+        val formatter = DateTimeFormatter.ofPattern("yyyy")
+        val instant = Instant.ofEpochMilli(System.currentTimeMillis())
+        val date = LocalDateTime.ofInstant(instant, ZoneId.systemDefault())
+        return formatter.format(date)
+    }
+
+    fun today(): String {
+        val formatter = DateTimeFormatter.ofPattern("yyyyMMdd")
+        val instant = Instant.ofEpochMilli(System.currentTimeMillis())
+        val date = LocalDateTime.ofInstant(instant, ZoneId.systemDefault())
+        return formatter.format(date)
+    }
 }

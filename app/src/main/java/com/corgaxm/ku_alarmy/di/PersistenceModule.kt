@@ -12,5 +12,6 @@ val persistenceModule = module {
         Room.databaseBuilder(androidApplication(), AppDatabase::class.java, "alarmy-db").build()
     }
     single { get<AppDatabase>().graduationSimulationDao() }
+    single { get<AppDatabase>().gradeDao() }
     single { SettingsManager(androidContext()) }
 }
