@@ -12,4 +12,5 @@ data class Grade(
     @SerializedName("TYPL_KOR_NM") val subjectName: String,         // 과목명
     @SerializedName("HAKSU_ID") val subjectNumber: String,          // 학수번호
     @SerializedName("SBJT_ID") val subjectId: String,               // 과목 ID
+    @SerializedName("PNT") val subjectPoint: Int,                // 학점
 )

@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "eef2e0eb726e3c14ce5c4c2eb7db87c6",
+    "identityHash": "9ca4284a1521b1b52a85585f9f4f20a1",
     "entities": [
       {
         "tableName": "graduation_simulation",
@@ -58,7 +58,7 @@
       },
       {
         "tableName": "grades",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`username` TEXT NOT NULL, `evaluationMethod` TEXT NOT NULL, `year` INTEGER NOT NULL, `semester` INTEGER NOT NULL, `classification` TEXT NOT NULL, `characterGrade` TEXT NOT NULL, `grade` REAL NOT NULL, `professor` TEXT NOT NULL, `subjectId` TEXT NOT NULL, `subjectName` TEXT NOT NULL, `subjectNumber` TEXT NOT NULL, `valid` INTEGER NOT NULL, `modifiedAt` INTEGER NOT NULL DEFAULT CURRENT_TIMESTAMP, PRIMARY KEY(`username`, `subjectId`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`username` TEXT NOT NULL, `evaluationMethod` TEXT NOT NULL, `year` INTEGER NOT NULL, `semester` INTEGER NOT NULL, `classification` TEXT NOT NULL, `characterGrade` TEXT NOT NULL, `grade` REAL NOT NULL, `professor` TEXT NOT NULL, `subjectId` TEXT NOT NULL, `subjectName` TEXT NOT NULL, `subjectNumber` TEXT NOT NULL, `subjectPoint` INTEGER NOT NULL, `valid` INTEGER NOT NULL, `modifiedAt` INTEGER NOT NULL DEFAULT CURRENT_TIMESTAMP, PRIMARY KEY(`username`, `subjectId`))",
         "fields": [
           {
             "fieldPath": "username",
@@ -127,6 +127,12 @@
             "notNull": true
           },
           {
+            "fieldPath": "subjectPoint",
+            "columnName": "subjectPoint",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
             "fieldPath": "valid",
             "columnName": "valid",
             "affinity": "INTEGER",
@@ -154,7 +160,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'eef2e0eb726e3c14ce5c4c2eb7db87c6')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '9ca4284a1521b1b52a85585f9f4f20a1')"
     ]
   }
 }

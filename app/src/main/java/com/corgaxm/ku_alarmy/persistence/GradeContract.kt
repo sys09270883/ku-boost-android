@@ -16,6 +16,7 @@ object GradeContract {
         const val SUBJECT_ID = "subjectId"
         const val SUBJECT_NUMBER = "subjectNumber"
         const val SUBJECT_NAME = "subjectName"
+        const val SUBJECT_POINT = "subjectPoint"
         const val VALID = "valid"
         const val MODIFIED_AT = "modifiedAt"
     }
