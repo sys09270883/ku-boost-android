@@ -21,6 +21,7 @@ data class GradeEntity(
     @ColumnInfo(name = GradeEntry.SUBJECT_ID) val subjectId: String,
     @ColumnInfo(name = GradeEntry.SUBJECT_NAME) val subjectName: String,
     @ColumnInfo(name = GradeEntry.SUBJECT_NUMBER) val subjectNumber: String,
+    @ColumnInfo(name = GradeEntry.SUBJECT_POINT) val subjectPoint: Int,
     @ColumnInfo(name = GradeEntry.VALID) val valid: Boolean,
     @ColumnInfo(
         name = GradeEntry.MODIFIED_AT,
