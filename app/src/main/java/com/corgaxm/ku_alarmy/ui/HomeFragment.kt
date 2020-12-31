@@ -41,8 +41,6 @@ class HomeFragment : Fragment() {
         setAllGradesRefreshButton()
         setChartConfig()
         fetchGraduationSimulationFromLocalDb()
-        fetchGraduationSimulationFromServer()
-        fetchAllGradesFromServer()
         observeLogout()
         observeGraduationSimulation()
         observeStdNo()
@@ -87,19 +85,11 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun fetchAllGradesFromServer() {
-        viewModel.fetchAllGradesFromServer()
-    }
-
     private fun observeStdNo() {
         viewModel.stdNo.observe(viewLifecycleOwner) {
             viewModel.fetchGraduationSimulationFromServer()
             viewModel.fetchAllGradesFromServer()
         }
-    }
-
-    private fun fetchGraduationSimulationFromServer() {
-        viewModel.fetchGraduationSimulationFromServer()
     }
 
     private fun fetchGraduationSimulationFromLocalDb() {
@@ -156,8 +146,12 @@ class HomeFragment : Fragment() {
                 return@observe
 
             // 최종 업데이트 시간 바인딩
-            binding.lastModifiedTimeTextView.text =
-                DateTimeConverter.convert(simulations[0].modifiedAt)
+            try {
+                binding.lastModifiedTimeTextView.text =
+                    DateTimeConverter.convert(simulations[0].modifiedAt)
+            } catch (exception: Exception) {
+                return@observe
+            }
 
             // 테이블 동적으로 생성
             val tableLayout = binding.graduationSimulationContentLayout
@@ -198,8 +192,12 @@ class HomeFragment : Fragment() {
             val averages = GradeUtils.average(allGrades)
 
             // 1. 가져온 시간 표시
-            binding.allGradesLastModifiedTimeTextView.text =
-                DateTimeConverter.convert(allGrades[0].modifiedAt)
+            try {
+                binding.allGradesLastModifiedTimeTextView.text =
+                    DateTimeConverter.convert(allGrades[0].modifiedAt)
+            } catch (exception: Exception) {
+                return@observe
+            }
 
             // 2. 라인 차트 그리기
             val lineChart = binding.totalLineChart
