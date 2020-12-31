@@ -165,6 +165,8 @@ val repositoryModule = module {
 
             override suspend fun makeAllGradesRequest(): UseCase<Unit> {
                 val allGrades = mutableListOf<GradeEntity>()
+                // 1학기: 1, 여름학기: 2, 2학기: 3, 겨울학기: 4
+                val semesterConverter = hashMapOf(1 to 1, 4 to 2, 2 to 3, 5 to 4)
 
                 try {
                     val stdNo = settingsManager.stdNoFlow.first()
@@ -187,7 +189,7 @@ val repositoryModule = module {
                                     username = username,
                                     evaluationMethod = grade.evaluationMethod,
                                     year = year,
-                                    semester = semester,
+                                    semester = semesterConverter[semester]!!,
                                     classification = grade.classification,
                                     characterGrade = grade.characterGrade,
                                     grade = grade.grade,
@@ -195,6 +197,7 @@ val repositoryModule = module {
                                     subjectId = grade.subjectId,
                                     subjectName = grade.subjectName,
                                     subjectNumber = grade.subjectNumber,
+                                    subjectPoint = grade.subjectPoint,
                                     valid = false,
                                     modifiedAt = System.currentTimeMillis()
                                 )
@@ -226,6 +229,19 @@ val repositoryModule = module {
                     return UseCase.error("${exception.message}")
                 }
                 return UseCase.success(Unit)
+            }
+
+            override suspend fun getAllValidGrades(): UseCase<List<GradeEntity>> {
+                val username = settingsManager.usernameFlow.first()
+
+                val allValidGrades: List<GradeEntity>
+                try {
+                    allValidGrades = gradeDao.getAllGrades(username)
+                } catch (exception: Exception) {
+                    return UseCase.error("${exception.message}")
+                }
+
+                return UseCase.success(allValidGrades)
             }
 
         }

@@ -13,4 +13,5 @@
     <string name="prompt_logout">로그아웃</string>
     <string name="prompt_overall_semester_grades">전체학기성적</string>
     <string name="prompt_current_semester_grades">금학기성적</string>
+    <string name="prompt_chart_no_data">데이터 가져오는 중…</string>
 </resources>
