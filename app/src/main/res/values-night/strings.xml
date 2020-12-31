@@ -13,4 +13,13 @@
     <string name="prompt_logout">로그아웃</string>
     <string name="prompt_overall_semester_grades">전체학기성적</string>
     <string name="prompt_current_semester_grades">금학기성적</string>
+
+    <!--    inae-->
+    <string name="prompt_subject_name">과목명</string>
+    <string name="prompt_subject_number">학수번호</string>
+    <string name="prompt_subject_id">과목번호</string>
+    <string name="prompt_professor">담당교수</string>
+    <string name="prompt_grade">학점</string>
+    <string name="prompt_character_grade">성적</string>
+    <string name="prompt_evaluation_method">성적평가방식</string>
 </resources>
