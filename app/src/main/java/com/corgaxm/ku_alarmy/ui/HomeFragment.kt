@@ -45,6 +45,10 @@ class HomeFragment : Fragment() {
         observeGraduationSimulation()
         observeStdNo()
         observeAllValidGrades()
+        // Test
+        binding.summaryPieChart.setOnClickListener {
+            findNavController().navigate(R.id.action_homeFragment_to_totalGradeDetailFragment)
+        }
     }
 
     private fun setChartConfig() {

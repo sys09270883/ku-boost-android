@@ -48,4 +48,20 @@ object GradeUtils {
 
         return result.toList().sortedByDescending { (_, value) -> value }.toMap()
     }
+
+    fun semesters(allGrades: List<GradeEntity>): List<Pair<Int, Int>> {
+        val result = mutableListOf<Pair<Int, Int>>()
+        val isUsed = hashMapOf<Pair<Int, Int>, Boolean>()
+
+        for (grade in allGrades) {
+            val key = Pair(grade.year, grade.semester)
+            isUsed.putIfAbsent(key, false)
+            if (!isUsed[key]!!) {
+                result.add(Pair(grade.year, grade.semester))
+                isUsed[key] = true
+            }
+        }
+
+        return result.toList()
+    }
 }
