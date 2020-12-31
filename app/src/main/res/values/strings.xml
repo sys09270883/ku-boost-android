@@ -15,4 +15,13 @@
     <string name="prompt_chart_no_data">데이터 가져오는 중…</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    
+    <!--    inae-->
+    <string name="prompt_subject_name">과목명</string>
+    <string name="prompt_subject_number">학수번호</string>
+    <string name="prompt_subject_id">과목번호</string>
+    <string name="prompt_professor">담당교수</string>
+    <string name="prompt_grade">학점</string>
+    <string name="prompt_character_grade">성적</string>
+    <string name="prompt_evaluation_method">성적평가방식</string>
 </resources>
