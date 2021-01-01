@@ -54,7 +54,6 @@ class TotalGradeDetailFragment : Fragment() {
             val context = requireContext()
             val yearAndSemesters = GradeUtils.semesters(it.data)
             val translate = hashMapOf(1 to "1", 2 to "하계계절", 3 to "2", 4 to "동계계절")
-            val reverseTranslate = hashMapOf("1학기" to 1, "하계계절학기" to 2, "2학기" to 3, "동계계절학기" to 4)
 
             val semesterArray = Array(yearAndSemesters.size) { "" }
             for (i in yearAndSemesters.indices) {
@@ -74,11 +73,7 @@ class TotalGradeDetailFragment : Fragment() {
                     position: Int,
                     id: Long
                 ) {
-                    val selected = spinner.selectedItem.toString()
-                    val split = selected.split("년도", " ")
-                        .filter { item -> item.isNotBlank() }
-                    val year = split[0].toInt()
-                    val semester = reverseTranslate[split[1]]!!
+                    val (year, semester) = yearAndSemesters[spinner.selectedItemPosition]
 
                     val selectedItems = mutableListOf<GradeEntity>()
                     for (data in it.data) {
