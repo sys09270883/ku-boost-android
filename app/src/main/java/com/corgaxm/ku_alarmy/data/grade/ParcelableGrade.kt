@@ -6,7 +6,7 @@ import android.os.Parcelable
 data class ParcelableGrade(
     val evaluationMethod: String?,
     val year: Int,
-    val semester: Int,
+    val semester: String?,
     val classification: String?,
     val characterGrade: String?,
     val grade: Float,
@@ -20,7 +20,7 @@ data class ParcelableGrade(
     constructor(parcel: Parcel) : this(
         parcel.readString(),
         parcel.readInt(),
-        parcel.readInt(),
+        parcel.readString(),
         parcel.readString(),
         parcel.readString(),
         parcel.readFloat(),
@@ -35,7 +35,7 @@ data class ParcelableGrade(
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(evaluationMethod)
         parcel.writeInt(year)
-        parcel.writeInt(semester)
+        parcel.writeString(semester)
         parcel.writeString(classification)
         parcel.writeString(characterGrade)
         parcel.writeFloat(grade)

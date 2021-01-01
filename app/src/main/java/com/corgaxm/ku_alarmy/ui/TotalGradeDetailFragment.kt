@@ -55,12 +55,11 @@ class TotalGradeDetailFragment : Fragment() {
 
             val context = requireContext()
             val yearAndSemesters = GradeUtils.semesters(it.data)
-            val translate = hashMapOf(1 to "1", 2 to "하계계절", 3 to "2", 4 to "동계계절")
 
             val semesterArray = Array(yearAndSemesters.size) { "" }
             for (i in yearAndSemesters.indices) {
                 semesterArray[i] =
-                    "${yearAndSemesters[i].first}년도 ${translate[yearAndSemesters[i].second]}학기"
+                    "${yearAndSemesters[i].first}년도 ${GradeUtils.translate(yearAndSemesters[i].second)}학기"
             }
 
             val spinner = binding.semesterSpinner
@@ -106,11 +105,10 @@ class TotalGradeDetailFragment : Fragment() {
             adapter.itemClickListener = object : GradeAdapter.OnItemClickListener {
                 override fun onItemClick(gradeEntity: GradeEntity) {
                     // GradeEntity 정보를 가지고 fragment 전환
-                    // 데이터를 어떻게 가져갈지?
                     val grade = ParcelableGrade(
                         evaluationMethod = gradeEntity.evaluationMethod,
                         year = gradeEntity.year,
-                        semester = gradeEntity.semester,
+                        semester = GradeUtils.translate(gradeEntity.semester),
                         classification = gradeEntity.classification,
                         characterGrade = gradeEntity.characterGrade,
                         grade = gradeEntity.grade,

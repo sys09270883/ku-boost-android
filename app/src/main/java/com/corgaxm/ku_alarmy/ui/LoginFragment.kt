@@ -12,6 +12,8 @@ import com.corgaxm.ku_alarmy.data.UseCase
 import com.corgaxm.ku_alarmy.databinding.FragmentLoginBinding
 import com.corgaxm.ku_alarmy.viewmodels.LoginViewModel
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class LoginFragment : Fragment() {
@@ -40,8 +42,11 @@ class LoginFragment : Fragment() {
         viewModel.loginResource.observe(viewLifecycleOwner) {
             when (it.status) {
                 UseCase.Status.SUCCESS -> {
-                    viewModel.clearLoginResource()
-                    findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
+                    runBlocking {
+                        delay(1000L)
+                        viewModel.clearLoginResource()
+                        findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
+                    }
                 }
                 UseCase.Status.ERROR -> {
                     Snackbar.make(binding.container, "${it.message}", Snackbar.LENGTH_SHORT).show()

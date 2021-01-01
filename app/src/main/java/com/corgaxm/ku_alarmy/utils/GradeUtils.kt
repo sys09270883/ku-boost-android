@@ -101,4 +101,9 @@ object GradeUtils {
 
         return Pair(avr, majorAvr)
     }
+
+    fun translate(semester: Int): String {
+        val mapper = hashMapOf(1 to "1", 2 to "하계계절", 3 to "2", 4 to "동계계절")
+        return mapper[semester]!!
+    }
 }

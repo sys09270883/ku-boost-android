@@ -1,6 +1,5 @@
 package com.corgaxm.ku_alarmy.viewmodels
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,8 +10,8 @@ class GradeDetailViewModel : ViewModel() {
     private val _year = MutableLiveData<Int>()
     val year get(): LiveData<Int> = _year
 
-    private val _semester = MutableLiveData<Int>()
-    val semester: LiveData<Int> get() = _semester
+    private val _semester = MutableLiveData<String>()
+    val semester: LiveData<String> get() = _semester
 
     private val _characterGrade = MutableLiveData<String>()
     val characterGrade: LiveData<String> get() = _characterGrade
@@ -42,7 +41,6 @@ class GradeDetailViewModel : ViewModel() {
     val classification: LiveData<String> get() = _classification
 
     fun setGrade(grade: ParcelableGrade?) {
-        Log.d("yoonseop", "${grade}")
         grade?.let {
             _year.postValue(grade.year)
             _semester.postValue(grade.semester)
