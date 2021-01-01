@@ -75,9 +75,10 @@ class HomeViewModel(
                 // 서버에서 유효한 성적 정보를 가져와 로컬 DB 업데이트
                 gradeRepository.makeAllValidGradesRequest()
             }
-            // 로컬 DB에 있는 데이터를 가져와 LiveData 업데이트
-            allValidGrades.postValue(gradeRepository.getAllValidGrades())
-
+            withContext(Dispatchers.IO) {
+                // 로컬 DB에 있는 데이터를 가져와 LiveData 업데이트
+                allValidGrades.postValue(gradeRepository.getAllValidGrades())
+            }
             // 전체 성적조회 로딩 끝
             _allGradesLoading.postValue(false)
         }
