@@ -40,11 +40,26 @@ class HomeFragment : Fragment() {
         setGraduationSimulationRefreshButton()
         setAllGradesRefreshButton()
         setChartConfig()
+        setClickListenerToTotalGradeDetailFragment()
         fetchGraduationSimulationFromLocalDb()
         observeLogout()
         observeGraduationSimulation()
         observeStdNo()
         observeAllValidGrades()
+    }
+
+    private fun setClickListenerToTotalGradeDetailFragment() {
+        binding.apply {
+            summaryPieChart.setOnClickListener {
+                findNavController().navigate(R.id.action_homeFragment_to_totalGradeDetailFragment)
+            }
+            totalLineChart.setOnClickListener {
+                findNavController().navigate(R.id.action_homeFragment_to_totalGradeDetailFragment)
+            }
+            allGradesTitleTextView.setOnClickListener {
+                findNavController().navigate(R.id.action_homeFragment_to_totalGradeDetailFragment)
+            }
+        }
     }
 
     private fun setChartConfig() {
@@ -56,7 +71,7 @@ class HomeFragment : Fragment() {
             setScaleEnabled(false)
             setDrawGridBackground(false)
             isHighlightPerDragEnabled = false
-            setTouchEnabled(false)
+            isHighlightPerTapEnabled = false
             axisRight.isEnabled = false
             axisLeft.isEnabled = false
             legend.isEnabled = false
