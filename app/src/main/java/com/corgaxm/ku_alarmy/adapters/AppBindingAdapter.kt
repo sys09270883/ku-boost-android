@@ -26,7 +26,9 @@ fun ImageView.bindVisibility(loading: Boolean) {
 
 @SuppressLint("SetTextI18n")
 @BindingAdapter("year", "semester", requireAll = true)
-fun TextView.bindYearAndSemester(year: Int, semester: String) {
-    text = "${year}년 ${semester}학기"
+fun TextView.bindYearAndSemester(year: Int, semester: String?) {
+    semester?.let {
+        text = "${year}년도 ${semester}학기"
+    }
 }
 
