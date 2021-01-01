@@ -1,163 +1,181 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.GradeDetailFragment">
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.corgaxm.ku_alarmy.viewmodels.GradeDetailViewModel" />
+    </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="24dp">
-        <LinearLayout
-            android:id="@+id/titleLayout"
-            android:layout_width="match_parent"
+        tools:context=".ui.GradeDetailFragment">
+
+        <TextView
+            android:id="@+id/subjectNameTextView"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:paddingBottom="12dp"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:text="@{viewModel.subjectName}"
+            android:textColor="?android:attr/textColorPrimary"
+            android:textSize="22sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-            <LinearLayout
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-                <TextView
-                    android:id="@+id/subjectname"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/prompt_subject_name"
-                    android:textSize="22sp"
-                    android:textColor="?android:attr/textColorPrimary" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="18sp"
-                    android:text="2020년 2학기"/>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
-                android:background="@drawable/oval_stroke">
-                <TextView
-                    android:id="@+id/characterGrade"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:text="A+"
-                    android:textSize="24sp"
-                    android:textColor="?android:attr/textColorPrimary"/>
-            </LinearLayout>
-        </LinearLayout>
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/yearAndSemesterTextView"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:layout_marginBottom="12dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="4dp"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/subjectNameTextView"
+            app:semester="@{viewModel.semester}"
+            app:year="@{viewModel.year}" />
+
+        <TextView
+            android:id="@+id/characterGradeTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="24dp"
+            android:text="@{viewModel.characterGrade}"
+            android:textColor="@color/secondaryColor"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="40dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginBottom="20dp"
             app:cardCornerRadius="10dp"
             app:cardElevation="5dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/titleLayout">
+            app:layout_constraintTop_toBottomOf="@id/yearAndSemesterTextView">
+
             <TableLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="12dp"
-                >
+                android:padding="12dp">
+
                 <TableRow
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="6dp"
-                        android:text="@string/prompt_subject_number"/>
+                        android:text="@string/prompt_subject_number" />
+
                     <TextView
-                        android:id="@+id/subjectnumber"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="6dp"
-                        android:text="abcdefghijk"/>
+                        android:text="@{viewModel.subjectNumber}" />
                 </TableRow>
+
                 <TableRow
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="6dp"
-                        android:text="@string/prompt_subject_id"/>
+                        android:text="@string/prompt_subject_id" />
+
                     <TextView
-                        android:id="@+id/subjectid"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="6dp"
-                        android:text="1234"/>
+                        android:text="@{viewModel.subjectId}" />
                 </TableRow>
+
                 <TableRow
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="6dp"
-                        android:text="@string/prompt_professor"/>
+                        android:text="@string/prompt_professor" />
+
                     <TextView
-                        android:id="@+id/professor"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="6dp"
-                        android:text="김인애"/>
+                        android:text="@{viewModel.professor}" />
                 </TableRow>
+
                 <TableRow
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="6dp"
-                        android:text="@string/prompt_classification"/>
+                        android:text="@string/prompt_classification" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="6dp"
-                        android:text="전선"/>
+                        android:text="@{viewModel.classification}" />
                 </TableRow>
+
                 <TableRow
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="6dp"
-                        android:text="@string/prompt_grade"/>
+                        android:text="@string/prompt_grade" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="6dp"
-                        android:text="3.0"/>
+                        android:text="@{viewModel.subjectPoint.toString()}" />
                 </TableRow>
+
                 <TableRow
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="6dp"
-                        android:text="@string/prompt_evaluation_method"/>
+                        android:text="@string/prompt_evaluation_method" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="6dp"
-                        android:text="상대평가"/>
+                        android:text="@{viewModel.evaluationMethod}" />
                 </TableRow>
             </TableLayout>
         </com.google.android.material.card.MaterialCardView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-</FrameLayout>
+</layout>

@@ -1,18 +1,38 @@
 package com.corgaxm.ku_alarmy.ui
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.corgaxm.ku_alarmy.R
+import androidx.fragment.app.Fragment
+import com.corgaxm.ku_alarmy.data.grade.ParcelableGrade
+import com.corgaxm.ku_alarmy.databinding.FragmentGradeDetailBinding
+import com.corgaxm.ku_alarmy.viewmodels.GradeDetailViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class GradeDetailFragment : Fragment() {
+
+    private var _binding: FragmentGradeDetailBinding? = null
+    private val binding get() = _binding!!
+    val viewModel: GradeDetailViewModel by viewModel()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_grade_detail, container, false)
+    ): View {
+        _binding = FragmentGradeDetailBinding.inflate(inflater, container, false)
+        binding.lifecycleOwner = this
+        binding.viewModel = viewModel
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setGrade()
+    }
+
+    private fun setGrade() {
+        val grd = requireArguments().getParcelable<ParcelableGrade>("grade")
+        viewModel.setGrade(grd)
     }
 }
