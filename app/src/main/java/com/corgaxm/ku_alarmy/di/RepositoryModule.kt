@@ -133,7 +133,6 @@ val repositoryModule = module {
                 val userInfoResponse: UserInformationResponse
                 try {
                     userInfoResponse = gradeService.fetchUserInformation()
-                    Log.d("yoonseop", "UserInfo: $userInfoResponse")
                     userInfoResponse.userInformation.apply {
                         settingsManager.setUserInfo(
                             name = name,
@@ -188,14 +187,17 @@ val repositoryModule = module {
                                 curDate = DateTimeConverter.today()
                             )
 
+                            Log.d("yoonseop", "$gradeResponse")
+
                             for (grade in gradeResponse.grades) {
+                                Log.d("yoonseop", "${grade.subjectName}: ${grade.evaluationMethod}")
                                 allGrades += GradeEntity(
                                     username = username,
-                                    evaluationMethod = grade.evaluationMethod,
+                                    evaluationMethod = grade.evaluationMethod ?: "미정",
                                     year = year,
                                     semester = semesterConverter[semester]!!,
                                     classification = grade.classification,
-                                    characterGrade = grade.characterGrade,
+                                    characterGrade = grade.characterGrade ?: "",
                                     grade = grade.grade,
                                     professor = grade.professor,
                                     subjectId = grade.subjectId,
@@ -212,6 +214,7 @@ val repositoryModule = module {
                     gradeDao.insertGrade(*allGrades.toTypedArray())
 
                 } catch (exception: Exception) {
+                    Log.e("yoonseop", "${exception.message}")
                     return UseCase.error("${exception.message}")
                 }
 
