@@ -15,6 +15,9 @@ object GradeUtils {
         val isValid = hashMapOf<String, Boolean>()
 
         for (grade in allGrades) {
+            if (grade.characterGrade == "P" || grade.characterGrade == "NP")
+                continue
+
             val key = "${grade.year}${grade.semester}"
             val pnt = grade.subjectPoint
             val grd = grade.grade
@@ -27,8 +30,6 @@ object GradeUtils {
             point[key] = point[key]!! + pnt
 
             isValid.putIfAbsent(key, false)
-            if (grade.characterGrade == "P" || grade.characterGrade == "NP")
-                continue
             isValid[key] = true
         }
 
