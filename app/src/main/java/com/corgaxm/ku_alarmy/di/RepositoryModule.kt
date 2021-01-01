@@ -1,5 +1,6 @@
 package com.corgaxm.ku_alarmy.di
 
+import android.util.Log
 import com.corgaxm.ku_alarmy.api.AuthService
 import com.corgaxm.ku_alarmy.api.GradeService
 import com.corgaxm.ku_alarmy.data.UseCase
@@ -32,7 +33,8 @@ val repositoryModule = module {
                 settingsManager.setCookie(cookie)
 
                 val loginBody = loginResponse.body()
-                val loginSuccess = loginBody?.loginSuccess ?: return UseCase.error("Fail to login")
+                val loginSuccess =
+                    loginBody?.loginSuccess ?: return UseCase.error("아이디, 비밀번호를 확인하세요.")
                 val loginFailure = loginBody.loginFailure
 
                 return when {
@@ -41,7 +43,7 @@ val repositoryModule = module {
                         UseCase.success(loginBody)
                     }
                     loginFailure != null -> UseCase.error(loginFailure.errorMessage)
-                    else -> UseCase.error("Error on server.")
+                    else -> UseCase.error("서버 에러입니다.")
                 }
             }
 
@@ -131,6 +133,7 @@ val repositoryModule = module {
                 val userInfoResponse: UserInformationResponse
                 try {
                     userInfoResponse = gradeService.fetchUserInformation()
+                    Log.d("yoonseop", "UserInfo: $userInfoResponse")
                     userInfoResponse.userInformation.apply {
                         settingsManager.setUserInfo(
                             name = name,
@@ -141,6 +144,7 @@ val repositoryModule = module {
                         )
                     }
                 } catch (exception: Exception) {
+                    Log.e("yoonseop", "${exception.message}")
                     return UseCase.error("${exception.message}")
                 }
 

@@ -1,8 +1,10 @@
 package com.corgaxm.ku_alarmy.adapters
 
+import android.annotation.SuppressLint
 import android.view.View
 import android.widget.ImageView
 import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.databinding.BindingAdapter
 
 
@@ -21,3 +23,12 @@ fun ImageView.bindVisibility(loading: Boolean) {
         else -> View.VISIBLE
     }
 }
+
+@SuppressLint("SetTextI18n")
+@BindingAdapter("year", "semester", requireAll = true)
+fun TextView.bindYearAndSemester(year: Int, semester: String?) {
+    semester?.let {
+        text = "${year}년도 ${semester}학기"
+    }
+}
+

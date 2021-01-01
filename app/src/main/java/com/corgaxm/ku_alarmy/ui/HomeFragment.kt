@@ -214,33 +214,13 @@ class HomeFragment : Fragment() {
                 return@observe
             }
 
-            // 2. 라인 차트 그리기
-            val lineChart = binding.totalLineChart
-            lineChart.clear()
+            // 2. 평점 파이 차트 그리기
+            val (avr, majorAvr) = GradeUtils.totalAverages(allGrades)
+            val totalPieChart = binding.totalPieChart
+            totalPieChart.clear()
 
-            val dataSet = mutableListOf<Entry>()
 
-            for (i in averages.indices) {
-                dataSet += Entry(i.toFloat(), averages[i].toFloat())
-            }
-
-            val lineDataSet = LineDataSet(dataSet, null)
-            lineDataSet.color =
-                ContextCompat.getColor(context, R.color.secondaryColor)
-            lineDataSet.setCircleColor(R.color.secondaryDarkColor)
-            lineDataSet.lineWidth = 4f
-
-            val lineData = LineData()
-            lineData.addDataSet(lineDataSet)
-            lineData.setValueTextColor(
-                ContextCompat.getColor(
-                    context, R.color.secondaryTextColor
-                )
-            )
-            lineData.setValueTextSize(12f)
-            lineChart.data = lineData
-
-            // 3. 평점 파이 차트 그리기
+            // 3. 성적 분포 파이 차트 그리기
             val pieChart = binding.summaryPieChart
             pieChart.clear()
 
@@ -270,6 +250,32 @@ class HomeFragment : Fragment() {
 
             val pieData = PieData(pieDataSet)
             pieChart.data = pieData
+
+             // 4. 라인 차트 그리기
+            val lineChart = binding.totalLineChart
+            lineChart.clear()
+
+            val dataSet = mutableListOf<Entry>()
+
+            for (i in averages.indices) {
+                dataSet += Entry(i.toFloat(), averages[i].toFloat())
+            }
+
+            val lineDataSet = LineDataSet(dataSet, null)
+            lineDataSet.color =
+                ContextCompat.getColor(context, R.color.secondaryColor)
+            lineDataSet.setCircleColor(R.color.secondaryDarkColor)
+            lineDataSet.lineWidth = 4f
+
+            val lineData = LineData()
+            lineData.addDataSet(lineDataSet)
+            lineData.setValueTextColor(
+                ContextCompat.getColor(
+                    context, R.color.secondaryTextColor
+                )
+            )
+            lineData.setValueTextSize(12f)
+            lineChart.data = lineData
         }
     }
 

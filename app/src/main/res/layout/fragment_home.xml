@@ -139,6 +139,32 @@
                             tools:ignore="ContentDescription" />
 
                         <com.github.mikephil.charting.charts.PieChart
+                            android:id="@+id/totalPieChart"
+                            android:layout_width="140dp"
+                            android:layout_height="140dp"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginEnd="16dp"
+                            android:layout_marginBottom="16dp"
+                            android:clickable="false"
+                            app:layout_constraintEnd_toEndOf="@id/majorPieChart"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/allGradesTitleTextView" />
+
+                        <com.github.mikephil.charting.charts.PieChart
+                            android:id="@+id/majorPieChart"
+                            android:layout_width="140dp"
+                            android:layout_height="140dp"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginEnd="16dp"
+                            android:layout_marginBottom="16dp"
+                            android:clickable="false"
+                            app:layout_constraintEnd_toEndOf="@id/summaryPieChart"
+                            app:layout_constraintStart_toStartOf="@id/totalPieChart"
+                            app:layout_constraintTop_toBottomOf="@+id/allGradesTitleTextView" />
+
+                        <com.github.mikephil.charting.charts.PieChart
                             android:id="@+id/summaryPieChart"
                             android:layout_width="140dp"
                             android:layout_height="140dp"
@@ -148,7 +174,7 @@
                             android:layout_marginBottom="16dp"
                             android:clickable="false"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintStart_toStartOf="@id/majorPieChart"
                             app:layout_constraintTop_toBottomOf="@+id/allGradesTitleTextView" />
 
                         <com.github.mikephil.charting.charts.LineChart

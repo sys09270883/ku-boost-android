@@ -6,11 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.corgaxm.ku_alarmy.R
 import com.corgaxm.ku_alarmy.adapters.GradeAdapter
+import com.corgaxm.ku_alarmy.data.grade.ParcelableGrade
 import com.corgaxm.ku_alarmy.databinding.FragmentTotalGradeDetailBinding
 import com.corgaxm.ku_alarmy.persistence.GradeEntity
 import com.corgaxm.ku_alarmy.utils.GradeUtils
@@ -35,12 +38,13 @@ class TotalGradeDetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        fetchAllGradesFromLocal()
         observeAllValidGrades()
     }
 
     private fun fetchAllGradesFromLocal() {
+        if (viewModel.isFetched())
+            return
+
         viewModel.fetchAllGradesFromLocal()
     }
 
@@ -51,13 +55,11 @@ class TotalGradeDetailFragment : Fragment() {
 
             val context = requireContext()
             val yearAndSemesters = GradeUtils.semesters(it.data)
-            val translate = hashMapOf(1 to "1", 2 to "하계계절", 3 to "2", 4 to "동계계절")
-            val reverseTranslate = hashMapOf("1학기" to 1, "하계계절학기" to 2, "2학기" to 3, "동계계절학기" to 4)
 
             val semesterArray = Array(yearAndSemesters.size) { "" }
             for (i in yearAndSemesters.indices) {
                 semesterArray[i] =
-                    "${yearAndSemesters[i].first}년도 ${translate[yearAndSemesters[i].second]}학기"
+                    "${yearAndSemesters[i].first}년도 ${GradeUtils.translate(yearAndSemesters[i].second)}학기"
             }
 
             val spinner = binding.semesterSpinner
@@ -72,11 +74,7 @@ class TotalGradeDetailFragment : Fragment() {
                     position: Int,
                     id: Long
                 ) {
-                    val selected = spinner.selectedItem.toString()
-                    val split = selected.split("년도", " ")
-                        .filter { item -> item.isNotBlank() }
-                    val year = split[0].toInt()
-                    val semester = reverseTranslate[split[1]]!!
+                    val (year, semester) = yearAndSemesters[spinner.selectedItemPosition]
 
                     val selectedItems = mutableListOf<GradeEntity>()
                     for (data in it.data) {
@@ -104,6 +102,29 @@ class TotalGradeDetailFragment : Fragment() {
             val recyclerView = binding.gradeRecyclerview
             recyclerView.layoutManager = LinearLayoutManager(context)
             val adapter = GradeAdapter()
+            adapter.itemClickListener = object : GradeAdapter.OnItemClickListener {
+                override fun onItemClick(gradeEntity: GradeEntity) {
+                    // GradeEntity 정보를 가지고 fragment 전환
+                    val grade = ParcelableGrade(
+                        evaluationMethod = gradeEntity.evaluationMethod,
+                        year = gradeEntity.year,
+                        semester = GradeUtils.translate(gradeEntity.semester),
+                        classification = gradeEntity.classification,
+                        characterGrade = gradeEntity.characterGrade,
+                        grade = gradeEntity.grade,
+                        professor = gradeEntity.professor,
+                        subjectId = gradeEntity.subjectId,
+                        subjectName = gradeEntity.subjectName,
+                        subjectNumber = gradeEntity.subjectNumber,
+                        subjectPoint = gradeEntity.subjectPoint
+                    )
+                    val bundle = bundleOf("grade" to grade)
+                    findNavController().navigate(
+                        R.id.action_totalGradeDetailFragment_to_gradeDetailFragment,
+                        bundle
+                    )
+                }
+            }
             recyclerView.adapter = adapter
             recyclerView.addItemDecoration(
                 DividerItemDecoration(
@@ -112,5 +133,16 @@ class TotalGradeDetailFragment : Fragment() {
                 )
             )
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        fetchAllGradesFromLocal()
+        binding.semesterSpinner.setSelection(viewModel.getSelectedPosition())
+    }
+
+    override fun onPause() {
+        super.onPause()
+        viewModel.setSelectedPosition(binding.semesterSpinner.selectedItemPosition)
     }
 }
