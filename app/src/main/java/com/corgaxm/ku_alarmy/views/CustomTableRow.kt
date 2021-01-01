@@ -2,12 +2,13 @@ package com.corgaxm.ku_alarmy.views
 
 import android.content.Context
 import android.graphics.Typeface
+import android.util.Log
 import android.util.TypedValue
 import android.widget.TableLayout
 import android.widget.TableRow
 import android.widget.TextView
 
-class CustomTableRow(context: Context): TableRow(context) {
+class CustomTableRow(context: Context) : TableRow(context) {
 
     fun attach(
         tableLayout: TableLayout,
@@ -16,23 +17,34 @@ class CustomTableRow(context: Context): TableRow(context) {
         acquiredValue: Int,
         remainderValue: Int
     ) {
-        val row = TableRow(context)
-        val textList = listOf(
-            classification,
-            "$standardValue",
-            "$acquiredValue",
-            "$remainderValue"
-        )
+        try {
+            val row = TableRow(context)
+            val params = TableLayout.LayoutParams(
+                TableLayout.LayoutParams.WRAP_CONTENT,
+                TableLayout.LayoutParams.WRAP_CONTENT
+            )
+            params.setMargins(12, 12, 12, 12)
+            row.layoutParams = params
 
-        for (text in textList) {
-            val textView = TextView(context)
-            textView.text = text
-            textView.textAlignment = TextView.TEXT_ALIGNMENT_CENTER
-            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
-            row.addView(textView)
+            val textList = listOf(
+                classification,
+                "$standardValue",
+                "$acquiredValue",
+                "$remainderValue"
+            )
+
+            for (text in textList) {
+                val textView = TextView(context)
+                textView.text = text
+                textView.textAlignment = TextView.TEXT_ALIGNMENT_CENTER
+                textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
+                row.addView(textView)
+            }
+
+            tableLayout.addView(row)
+        } catch (exception: Exception) {
+            Log.e("yoonseop", "${exception.message}")
         }
-
-        tableLayout.addView(row)
     }
 
     fun attach(
@@ -42,18 +54,29 @@ class CustomTableRow(context: Context): TableRow(context) {
         third: String,
         fourth: String
     ) {
-        val row = TableRow(context)
-        val textList = listOf(first, second, third, fourth)
+        try {
+            val row = TableRow(context)
+            val params = TableLayout.LayoutParams(
+                TableLayout.LayoutParams.WRAP_CONTENT,
+                TableLayout.LayoutParams.WRAP_CONTENT
+            )
+            params.setMargins(12, 12, 12, 12)
+            row.layoutParams = params
 
-        for (text in textList) {
-            val textView = TextView(context)
-            textView.text = text
-            textView.textAlignment = TextView.TEXT_ALIGNMENT_CENTER
-            textView.typeface = Typeface.DEFAULT_BOLD
-            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
-            row.addView(textView)
+            val textList = listOf(first, second, third, fourth)
+
+            for (text in textList) {
+                val textView = TextView(context)
+                textView.text = text
+                textView.textAlignment = TextView.TEXT_ALIGNMENT_CENTER
+                textView.typeface = Typeface.DEFAULT_BOLD
+                textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
+                row.addView(textView)
+            }
+
+            tableLayout.addView(row)
+        } catch (exception: Exception) {
+            Log.e("yoonseop", "${exception.message}")
         }
-
-        tableLayout.addView(row)
     }
 }

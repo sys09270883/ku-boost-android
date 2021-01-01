@@ -54,7 +54,7 @@ val repositoryModule = module {
                 return when {
                     username.isBlank() || password.isBlank() -> {
                         settingsManager.setAuthInfo("", "")
-                        UseCase.error("Fail to auto login.")
+                        UseCase.error("아이디, 비밀번호를 확인하세요.")
                     }
                     else -> {
                         val loginResponse = authService.login(username, password)
@@ -65,7 +65,7 @@ val repositoryModule = module {
 
                         val loginBody = loginResponse.body()
                         val loginSuccess =
-                            loginBody?.loginSuccess ?: return UseCase.error("Fail to login")
+                            loginBody?.loginSuccess ?: return UseCase.error("아이디, 비밀번호를 확인하세요.")
                         val loginFailure = loginBody.loginFailure
 
                         when {
@@ -187,10 +187,7 @@ val repositoryModule = module {
                                 curDate = DateTimeConverter.today()
                             )
 
-                            Log.d("yoonseop", "$gradeResponse")
-
                             for (grade in gradeResponse.grades) {
-                                Log.d("yoonseop", "${grade.subjectName}: ${grade.evaluationMethod}")
                                 allGrades += GradeEntity(
                                     username = username,
                                     evaluationMethod = grade.evaluationMethod ?: "미정",
