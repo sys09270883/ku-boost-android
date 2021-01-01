@@ -1,6 +1,6 @@
-# 건국대학교 알라미
+# 건국대학교 부스트
 
-[![Android CI](https://github.com/sys09270883/ku-alarmy-app/workflows/CI%20workflow/badge.svg)](https://github.com/sys09270883/ku-alarmy-app/)
+[![Android CI](https://github.com/sys09270883/ku-boost-android/workflows/CI%20workflow/badge.svg)](https://github.com/sys09270883/ku-boost-android/)
 
 ## 라이브러리
 - AAC Databinding
@@ -12,3 +12,4 @@
 - Koin
 - Retrofit & OkHttp
 - Coroutines
+- MPAndroidChart
