@@ -248,6 +248,20 @@ val repositoryModule = module {
                 return UseCase.success(allValidGrades)
             }
 
+            override suspend fun getCurrentGrades(): UseCase<List<GradeEntity>> {
+                val username = settingsManager.usernameFlow.first()
+
+                val currentGrades: List<GradeEntity>
+                try {
+                    currentGrades = gradeDao.getCurrentSemesterGradesTransaction(username)
+                } catch (exception: Exception) {
+                    Log.e("yoonseop", "${exception.message}")
+                    return UseCase.error("${exception.message}")
+                }
+
+                return UseCase.success(currentGrades)
+            }
+
         }
     }
 

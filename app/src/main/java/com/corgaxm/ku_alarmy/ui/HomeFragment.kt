@@ -5,10 +5,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.corgaxm.ku_alarmy.R
+import com.corgaxm.ku_alarmy.adapters.GradeAdapter
+import com.corgaxm.ku_alarmy.data.grade.ParcelableGrade
 import com.corgaxm.ku_alarmy.databinding.FragmentHomeBinding
+import com.corgaxm.ku_alarmy.persistence.GradeEntity
 import com.corgaxm.ku_alarmy.persistence.GraduationSimulationEntity
 import com.corgaxm.ku_alarmy.utils.DateTimeConverter
 import com.corgaxm.ku_alarmy.utils.GradeUtils
@@ -46,6 +52,49 @@ class HomeFragment : Fragment() {
         observeGraduationSimulation()
         observeStdNo()
         observeAllValidGrades()
+        observeCurrentGrades()
+    }
+
+    private fun observeCurrentGrades() {
+        viewModel.currentGrades.observe(viewLifecycleOwner) {
+            if (it.data == null)
+                return@observe
+
+            val currentGrades = it.data
+            val recyclerView = binding.currentGradeRecyclerView
+            recyclerView.layoutManager = LinearLayoutManager(context)
+            val adapter = GradeAdapter()
+            adapter.submitList(currentGrades.toMutableList())
+            adapter.itemClickListener = object : GradeAdapter.OnItemClickListener {
+                override fun onItemClick(gradeEntity: GradeEntity) {
+                    val grade = ParcelableGrade(
+                        evaluationMethod = gradeEntity.evaluationMethod,
+                        year = gradeEntity.year,
+                        semester = GradeUtils.translate(gradeEntity.semester),
+                        classification = gradeEntity.classification,
+                        characterGrade = gradeEntity.characterGrade,
+                        grade = gradeEntity.grade,
+                        professor = gradeEntity.professor,
+                        subjectId = gradeEntity.subjectId,
+                        subjectName = gradeEntity.subjectName,
+                        subjectNumber = gradeEntity.subjectNumber,
+                        subjectPoint = gradeEntity.subjectPoint
+                    )
+                    val bundle = bundleOf("grade" to grade)
+                    findNavController().navigate(
+                        R.id.action_homeFragment_to_gradeDetailFragment,
+                        bundle
+                    )
+                }
+            }
+            recyclerView.adapter = adapter
+            recyclerView.addItemDecoration(
+                DividerItemDecoration(
+                    context,
+                    LinearLayoutManager.VERTICAL
+                )
+            )
+        }
     }
 
     private fun setClickListenerToTotalGradeDetailFragment() {
@@ -133,7 +182,6 @@ class HomeFragment : Fragment() {
                     else -> false
                 }
             }
-
         }
     }
 
@@ -251,7 +299,7 @@ class HomeFragment : Fragment() {
             val pieData = PieData(pieDataSet)
             pieChart.data = pieData
 
-             // 4. 라인 차트 그리기
+            // 4. 라인 차트 그리기
             val lineChart = binding.totalLineChart
             lineChart.clear()
 

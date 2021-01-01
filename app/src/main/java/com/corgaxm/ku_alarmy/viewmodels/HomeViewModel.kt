@@ -29,6 +29,8 @@ class HomeViewModel(
 
     var allValidGrades = MutableLiveData<UseCase<List<GradeEntity>>>()
 
+    var currentGrades = MutableLiveData<UseCase<List<GradeEntity>>>()
+
     val stdNo: LiveData<Int> = gradeRepository.getStdNoFlow().asLiveData()
 
     fun clearLogoutResource() {
@@ -78,9 +80,11 @@ class HomeViewModel(
             withContext(Dispatchers.IO) {
                 // 로컬 DB에 있는 데이터를 가져와 LiveData 업데이트
                 allValidGrades.postValue(gradeRepository.getAllValidGrades())
+                currentGrades.postValue(gradeRepository.getCurrentGrades())
             }
             // 전체 성적조회 로딩 끝
             _allGradesLoading.postValue(false)
         }
     }
+
 }
