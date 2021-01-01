@@ -127,13 +127,7 @@ class HomeFragment : Fragment() {
 
     private fun setClickListenerToTotalGradeDetailFragment() {
         binding.apply {
-            summaryPieChart.setOnClickListener {
-                findNavController().navigate(R.id.action_homeFragment_to_totalGradeDetailFragment)
-            }
-            totalLineChart.setOnClickListener {
-                findNavController().navigate(R.id.action_homeFragment_to_totalGradeDetailFragment)
-            }
-            allGradesTitleTextView.setOnClickListener {
+            readMoreButton.setOnClickListener {
                 findNavController().navigate(R.id.action_homeFragment_to_totalGradeDetailFragment)
             }
         }
