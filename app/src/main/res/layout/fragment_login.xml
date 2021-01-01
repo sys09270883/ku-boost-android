@@ -7,10 +7,11 @@
 
         <variable
             name="viewModel"
-            type="com.corgaxm.ku_alarmy.viewmodels.LoginViewModel" />
+            type="com.konkuk.boost.viewmodels.LoginViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".LoginFragment">

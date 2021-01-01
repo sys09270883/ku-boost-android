@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.corgaxm.ku_alarmy.viewmodels.HomeViewModel" />
+            type="com.konkuk.boost.viewmodels.HomeViewModel" />
 
     </data>
 
@@ -35,7 +35,8 @@
                     android:scaleType="centerCrop"
                     android:src="@drawable/logo_ku"
                     app:layout_collapseMode="parallax"
-                    app:layout_collapseParallaxMultiplier="0.25" />
+                    app:layout_collapseParallaxMultiplier="0.25"
+                    tools:ignore="ContentDescription" />
 
                 <com.google.android.material.appbar.MaterialToolbar
                     android:id="@+id/toolbar"
@@ -50,6 +51,7 @@
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:overScrollMode="never"
             app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
             <LinearLayout
@@ -59,49 +61,196 @@
 
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
-                    android:layout_height="300dp"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginBottom="10dp">
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginEnd="12dp"
+                    android:layout_marginBottom="12dp"
+                    android:minHeight="320dp"
+                    app:cardCornerRadius="10dp"
+                    app:cardElevation="5dp">
 
-                    <TextView
+                    <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="금학기성적"
-                        android:textSize="50sp" />
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/currentGradesTitleTextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="12dp"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginEnd="12dp"
+                            android:layout_marginBottom="24dp"
+                            android:text="@string/prompt_current_semester_grades"
+                            android:textSize="24sp"
+                            android:textStyle="bold"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/currentGradeRecyclerView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginEnd="16dp"
+                            android:layout_marginBottom="16dp"
+                            android:overScrollMode="never"
+                            android:paddingBottom="20dp"
+                            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/currentGradesTitleTextView" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
                 </com.google.android.material.card.MaterialCardView>
 
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
-                    android:layout_height="300dp"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginBottom="10dp">
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginEnd="12dp"
+                    android:layout_marginBottom="12dp"
+                    android:minHeight="320dp"
+                    app:cardCornerRadius="10dp"
+                    app:cardElevation="5dp">
 
-                    <TextView
+                    <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="전체학기성적"
-                        android:textSize="50sp" />
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/allGradesTitleTextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="12dp"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginEnd="12dp"
+                            android:layout_marginBottom="24dp"
+                            android:text="@string/prompt_overall_semester_grades"
+                            android:textSize="24sp"
+                            android:textStyle="bold"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <ImageView
+                            android:id="@+id/readMoreButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginEnd="16dp"
+                            android:layout_marginBottom="16dp"
+                            android:src="@drawable/ic_baseline_read_more_24"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            tools:ignore="ContentDescription" />
+
+                        <com.github.mikephil.charting.charts.PieChart
+                            android:id="@+id/totalPieChart"
+                            android:layout_width="140dp"
+                            android:layout_height="140dp"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginEnd="16dp"
+                            android:layout_marginBottom="16dp"
+                            android:clickable="false"
+                            app:layout_constraintEnd_toEndOf="@id/majorPieChart"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/allGradesTitleTextView" />
+
+                        <com.github.mikephil.charting.charts.PieChart
+                            android:id="@+id/majorPieChart"
+                            android:layout_width="140dp"
+                            android:layout_height="140dp"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginEnd="16dp"
+                            android:layout_marginBottom="16dp"
+                            android:clickable="false"
+                            app:layout_constraintEnd_toEndOf="@id/summaryPieChart"
+                            app:layout_constraintStart_toStartOf="@id/totalPieChart"
+                            app:layout_constraintTop_toBottomOf="@+id/allGradesTitleTextView" />
+
+                        <com.github.mikephil.charting.charts.PieChart
+                            android:id="@+id/summaryPieChart"
+                            android:layout_width="140dp"
+                            android:layout_height="140dp"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginEnd="16dp"
+                            android:layout_marginBottom="16dp"
+                            android:clickable="false"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="@id/majorPieChart"
+                            app:layout_constraintTop_toBottomOf="@+id/allGradesTitleTextView" />
+
+                        <com.github.mikephil.charting.charts.LineChart
+                            android:id="@+id/totalLineChart"
+                            android:layout_width="0dp"
+                            android:layout_height="160dp"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginEnd="16dp"
+                            android:layout_marginBottom="16dp"
+                            android:clickable="false"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/summaryPieChart" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
                 </com.google.android.material.card.MaterialCardView>
 
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
-                    android:layout_height="300dp"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginBottom="10dp">
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginEnd="12dp"
+                    android:layout_marginBottom="24dp"
+                    android:minHeight="320dp"
+                    app:cardCornerRadius="10dp"
+                    app:cardElevation="5dp">
 
-                    <TextView
+                    <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="졸업시뮬레이션"
-                        android:textSize="50sp" />
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/graduationSimulationTitleTextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="12dp"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginEnd="12dp"
+                            android:layout_marginBottom="24dp"
+                            android:text="@string/prompt_graduation_simulation"
+                            android:textSize="24sp"
+                            android:textStyle="bold"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TableLayout
+                            android:id="@+id/graduationSimulationContentLayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginEnd="16dp"
+                            android:layout_marginBottom="16dp"
+                            android:divider="@drawable/table_divider"
+                            android:paddingBottom="20dp"
+                            android:showDividers="beginning|middle|end"
+                            android:stretchColumns="0, 1, 2, 3"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/graduationSimulationTitleTextView" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
                 </com.google.android.material.card.MaterialCardView>
             </LinearLayout>

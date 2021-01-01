@@ -9,13 +9,22 @@ android {
     buildToolsVersion "29.0.3"
 
     defaultConfig {
-        applicationId "com.corgaxm.ku_alarmy"
+        applicationId "com.konkuk.boost"
         minSdkVersion 26
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
-
+        buildConfigField "String", "BASE_URL", "\"https://kuis.konkuk.ac.kr/\""
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments += [
+                        "room.schemaLocation"  : "$projectDir/schemas".toString(),
+                        "room.incremental"     : "true",
+                        "room.expandProjection": "true"]
+            }
+        }
     }
 
     buildTypes {
@@ -69,4 +78,9 @@ dependencies {
     implementation 'org.koin:koin-androidx-viewmodel:2.2.0'
     implementation 'org.koin:koin-core:2.2.0'
     testImplementation 'org.koin:koin-test:2.2.0'
+    implementation "androidx.datastore:datastore-preferences:1.0.0-alpha05"
+    implementation "androidx.room:room-runtime:2.2.6"
+    kapt "androidx.room:room-compiler:2.2.6"
+    implementation "androidx.room:room-ktx:2.2.6"
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 }
