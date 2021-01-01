@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.corgaxm.ku_alarmy.viewmodels.LoginViewModel" />
+            type="com.konkuk.boost.viewmodels.LoginViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

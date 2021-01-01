@@ -9,7 +9,7 @@ android {
     buildToolsVersion "29.0.3"
 
     defaultConfig {
-        applicationId "com.corgaxm.ku_alarmy"
+        applicationId "com.konkuk.boost"
         minSdkVersion 26
         targetSdkVersion 30
         versionCode 1

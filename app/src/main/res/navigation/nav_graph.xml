@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/splashFragment"
-        android:name="com.corgaxm.ku_alarmy.ui.SplashFragment"
+        android:name="com.konkuk.boost.ui.SplashFragment"
         android:label="fragment_splash"
         tools:layout="@layout/fragment_splash">
         <action
@@ -31,7 +31,7 @@
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.corgaxm.ku_alarmy.ui.LoginFragment"
+        android:name="com.konkuk.boost.ui.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login">
         <action
@@ -46,7 +46,7 @@
     </fragment>
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.corgaxm.ku_alarmy.ui.HomeFragment"
+        android:name="com.konkuk.boost.ui.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home">
         <action
@@ -78,7 +78,7 @@
     </fragment>
     <fragment
         android:id="@+id/totalGradeDetailFragment"
-        android:name="com.corgaxm.ku_alarmy.ui.TotalGradeDetailFragment"
+        android:name="com.konkuk.boost.ui.TotalGradeDetailFragment"
         android:label="fragment_total_grade_detail"
         tools:layout="@layout/fragment_total_grade_detail">
         <action
@@ -93,7 +93,7 @@
     </fragment>
     <fragment
         android:id="@+id/gradeDetailFragment"
-        android:name="com.corgaxm.ku_alarmy.ui.GradeDetailFragment"
+        android:name="com.konkuk.boost.ui.GradeDetailFragment"
         android:label="fragment_grade_detail"
         tools:layout="@layout/fragment_grade_detail" />
 </navigation>
