@@ -34,10 +34,6 @@ class TotalGradeViewModel(private val gradeRepository: GradeRepository): ViewMod
         }
     }
 
-    fun setFetched(isFetched: Boolean) {
-        fetched.postValue(isFetched)
-    }
-
     fun isFetched(): Boolean = fetched.value ?: true
 
     fun setSelectedPosition(position: Int) {

@@ -66,7 +66,7 @@
                     android:layout_marginTop="24dp"
                     android:layout_marginEnd="12dp"
                     android:layout_marginBottom="12dp"
-                    android:minHeight="300dp"
+                    android:minHeight="320dp"
                     app:cardCornerRadius="10dp"
                     app:cardElevation="5dp">
 
@@ -96,6 +96,7 @@
                             android:layout_marginTop="16dp"
                             android:layout_marginEnd="16dp"
                             android:layout_marginBottom="16dp"
+                            android:overScrollMode="never"
                             android:paddingBottom="20dp"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
@@ -112,7 +113,7 @@
                     android:layout_marginTop="12dp"
                     android:layout_marginEnd="12dp"
                     android:layout_marginBottom="12dp"
-                    android:minHeight="300dp"
+                    android:minHeight="320dp"
                     app:cardCornerRadius="10dp"
                     app:cardElevation="5dp">
 
@@ -133,32 +134,6 @@
                             android:textStyle="bold"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
-
-                        <ProgressBar
-                            android:id="@+id/allGradesLoading"
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:layout_marginStart="16dp"
-                            android:layout_marginTop="16dp"
-                            android:layout_marginEnd="16dp"
-                            android:layout_marginBottom="16dp"
-                            app:bind_visibility="@{viewModel.allGradesLoading}"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <ImageView
-                            android:id="@+id/allGradesRefreshButton"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="16dp"
-                            android:layout_marginTop="16dp"
-                            android:layout_marginEnd="16dp"
-                            android:layout_marginBottom="16dp"
-                            android:src="@drawable/ic_baseline_refresh_24"
-                            app:bind_visibility="@{viewModel.allGradesLoading}"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            tools:ignore="ContentDescription" />
 
                         <com.github.mikephil.charting.charts.PieChart
                             android:id="@+id/totalPieChart"
@@ -212,18 +187,6 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/summaryPieChart" />
 
-                        <TextView
-                            android:id="@+id/allGradesLastModifiedTimeTextView"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="16dp"
-                            android:layout_marginTop="16dp"
-                            android:layout_marginEnd="16dp"
-                            android:layout_marginBottom="16dp"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/totalLineChart" />
-
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                 </com.google.android.material.card.MaterialCardView>
@@ -234,8 +197,8 @@
                     android:layout_marginStart="12dp"
                     android:layout_marginTop="12dp"
                     android:layout_marginEnd="12dp"
-                    android:layout_marginBottom="12dp"
-                    android:minHeight="300dp"
+                    android:layout_marginBottom="24dp"
+                    android:minHeight="320"
                     app:cardCornerRadius="10dp"
                     app:cardElevation="5dp">
 
@@ -257,32 +220,6 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
-                        <ProgressBar
-                            android:id="@+id/graduationSimulationLoading"
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:layout_marginStart="16dp"
-                            android:layout_marginTop="16dp"
-                            android:layout_marginEnd="16dp"
-                            android:layout_marginBottom="16dp"
-                            app:bind_visibility="@{viewModel.graduationSimulationLoading}"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <ImageView
-                            android:id="@+id/graduationSimulationRefreshButton"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="16dp"
-                            android:layout_marginTop="16dp"
-                            android:layout_marginEnd="16dp"
-                            android:layout_marginBottom="16dp"
-                            android:src="@drawable/ic_baseline_refresh_24"
-                            app:bind_visibility="@{viewModel.graduationSimulationLoading}"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            tools:ignore="ContentDescription" />
-
                         <TableLayout
                             android:id="@+id/graduationSimulationContentLayout"
                             android:layout_width="match_parent"
@@ -292,23 +229,12 @@
                             android:layout_marginEnd="16dp"
                             android:layout_marginBottom="16dp"
                             android:divider="@drawable/table_divider"
+                            android:paddingBottom="20dp"
                             android:showDividers="beginning|middle|end"
                             android:stretchColumns="0, 1, 2, 3"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/graduationSimulationTitleTextView" />
-
-                        <TextView
-                            android:id="@+id/lastModifiedTimeTextView"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="16dp"
-                            android:layout_marginTop="16dp"
-                            android:layout_marginEnd="16dp"
-                            android:layout_marginBottom="16dp"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/graduationSimulationContentLayout" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 

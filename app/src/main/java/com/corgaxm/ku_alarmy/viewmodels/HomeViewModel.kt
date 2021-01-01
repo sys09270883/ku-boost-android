@@ -15,11 +15,10 @@ class HomeViewModel(
     private val authRepository: AuthRepository,
     private val gradeRepository: GradeRepository
 ) : ViewModel() {
-    private val _graduationSimulationLoading = MutableLiveData(false)
-    val graduationSimulationLoading get() = _graduationSimulationLoading
-
     private val _allGradesLoading = MutableLiveData(false)
     val allGradesLoading get() = _allGradesLoading
+
+    private val fetched = MutableLiveData(false)
 
     var logoutResponse = MutableLiveData<UseCase<Unit>>()
 
@@ -54,13 +53,11 @@ class HomeViewModel(
     }
 
     fun fetchGraduationSimulationFromServer() {
-        _graduationSimulationLoading.value = true
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 graduationSimulationResponse.postValue(gradeRepository.makeGraduationSimulationRequest())
                 graduationSimulation.postValue(gradeRepository.getGraduationSimulations())
             }
-            _graduationSimulationLoading.postValue(false)
         }
     }
 
@@ -84,7 +81,11 @@ class HomeViewModel(
             }
             // 전체 성적조회 로딩 끝
             _allGradesLoading.postValue(false)
+
+            fetched.postValue(true)
         }
     }
+
+    fun isFetched(): Boolean = fetched.value ?: true
 
 }

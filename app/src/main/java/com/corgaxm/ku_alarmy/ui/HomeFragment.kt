@@ -1,9 +1,13 @@
 package com.corgaxm.ku_alarmy.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
+import android.widget.ProgressBar
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -16,7 +20,6 @@ import com.corgaxm.ku_alarmy.data.grade.ParcelableGrade
 import com.corgaxm.ku_alarmy.databinding.FragmentHomeBinding
 import com.corgaxm.ku_alarmy.persistence.GradeEntity
 import com.corgaxm.ku_alarmy.persistence.GraduationSimulationEntity
-import com.corgaxm.ku_alarmy.utils.DateTimeConverter
 import com.corgaxm.ku_alarmy.utils.GradeUtils
 import com.corgaxm.ku_alarmy.viewmodels.HomeViewModel
 import com.corgaxm.ku_alarmy.views.CustomTableRow
@@ -29,6 +32,7 @@ class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
     private val viewModel: HomeViewModel by viewModel()
+    private lateinit var dialog: AlertDialog
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,8 +47,6 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         makeToolbar()
-        setGraduationSimulationRefreshButton()
-        setAllGradesRefreshButton()
         setChartConfig()
         setClickListenerToTotalGradeDetailFragment()
         fetchGraduationSimulationFromLocalDb()
@@ -53,6 +55,32 @@ class HomeFragment : Fragment() {
         observeStdNo()
         observeAllValidGrades()
         observeCurrentGrades()
+        observeLoading()
+    }
+
+    private fun observeLoading() {
+        viewModel.allGradesLoading.observe(viewLifecycleOwner) {
+            when (it) {
+                true -> {
+                    val context = requireContext()
+                    val builder = AlertDialog.Builder(context)
+                    dialog = builder
+                        .setTitle(getString(R.string.app_name))
+                        .setMessage(getString(R.string.prompt_chart_no_data))
+                        .setProgressBar(ProgressBar(context))
+                        .setCancelable(false)
+                        .create()
+                    dialog.show()
+                }
+                false -> {
+                    try {
+                        if (dialog.isShowing) dialog.dismiss()
+                    } catch (exception: Exception) {
+                        Log.e("yoonseop", "${exception.message}")
+                    }
+                }
+            }
+        }
     }
 
     private fun observeCurrentGrades() {
@@ -114,7 +142,6 @@ class HomeFragment : Fragment() {
     private fun setChartConfig() {
         binding.totalLineChart.apply {
             setNoDataText(getString(R.string.prompt_chart_no_data))
-            animateXY(1000, 1000)
             description = null
             isDragEnabled = false
             setScaleEnabled(false)
@@ -132,7 +159,6 @@ class HomeFragment : Fragment() {
 
         binding.summaryPieChart.apply {
             setNoDataText(getString(R.string.prompt_chart_no_data))
-            animateXY(1000, 1000)
             description = null
             setTouchEnabled(false)
             setDrawSlicesUnderHole(false)
@@ -143,27 +169,21 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun setAllGradesRefreshButton() {
-        binding.allGradesRefreshButton.setOnClickListener {
-            viewModel.fetchAllGradesFromServer()
-        }
-    }
-
     private fun observeStdNo() {
         viewModel.stdNo.observe(viewLifecycleOwner) {
+            if (viewModel.isFetched())
+                return@observe
+
             viewModel.fetchGraduationSimulationFromServer()
             viewModel.fetchAllGradesFromServer()
         }
     }
 
     private fun fetchGraduationSimulationFromLocalDb() {
-        viewModel.fetchGraduationSimulationFromLocalDb()
-    }
+        if (viewModel.isFetched())
+            return
 
-    private fun setGraduationSimulationRefreshButton() {
-        binding.graduationSimulationRefreshButton.setOnClickListener {
-            viewModel.fetchGraduationSimulationFromServer()
-        }
+        viewModel.fetchGraduationSimulationFromLocalDb()
     }
 
     private fun makeToolbar() {
@@ -208,14 +228,6 @@ class HomeFragment : Fragment() {
             if (simulations.isEmpty())
                 return@observe
 
-            // 최종 업데이트 시간 바인딩
-            try {
-                binding.lastModifiedTimeTextView.text =
-                    DateTimeConverter.convert(simulations[0].modifiedAt)
-            } catch (exception: Exception) {
-                return@observe
-            }
-
             // 테이블 동적으로 생성
             val tableLayout = binding.graduationSimulationContentLayout
             tableLayout.removeAllViewsInLayout()
@@ -254,19 +266,10 @@ class HomeFragment : Fragment() {
             val allGrades = it.data
             val averages = GradeUtils.average(allGrades)
 
-            // 1. 가져온 시간 표시
-            try {
-                binding.allGradesLastModifiedTimeTextView.text =
-                    DateTimeConverter.convert(allGrades[0].modifiedAt)
-            } catch (exception: Exception) {
-                return@observe
-            }
-
             // 2. 평점 파이 차트 그리기
             val (avr, majorAvr) = GradeUtils.totalAverages(allGrades)
             val totalPieChart = binding.totalPieChart
             totalPieChart.clear()
-
 
             // 3. 성적 분포 파이 차트 그리기
             val pieChart = binding.summaryPieChart
@@ -325,6 +328,26 @@ class HomeFragment : Fragment() {
             lineData.setValueTextSize(12f)
             lineChart.data = lineData
         }
+    }
+
+    private fun AlertDialog.Builder.setProgressBar(progressBar: ProgressBar): AlertDialog.Builder {
+        val activity = requireActivity()
+        val container = FrameLayout(activity)
+        container.addView(progressBar)
+        val containerParams = FrameLayout.LayoutParams(
+            FrameLayout.LayoutParams.MATCH_PARENT,
+            FrameLayout.LayoutParams.MATCH_PARENT
+        )
+        val marginHorizontal = 48f
+        val margin = 48f
+        containerParams.leftMargin = marginHorizontal.toInt()
+        containerParams.rightMargin = marginHorizontal.toInt()
+        containerParams.bottomMargin = margin.toInt()
+        container.layoutParams = containerParams
+        val superContainer = FrameLayout(requireContext())
+        superContainer.addView(container)
+        setView(superContainer)
+        return this
     }
 
 }
