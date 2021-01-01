@@ -12,6 +12,12 @@ import com.corgaxm.ku_alarmy.persistence.GradeEntity
 
 class GradeAdapter : ListAdapter<GradeEntity, GradeAdapter.GradeViewHolder>(DiffCallback) {
 
+    lateinit var itemClickListener: OnItemClickListener
+
+    interface OnItemClickListener {
+        fun onItemClick(gradeEntity: GradeEntity)
+    }
+
     object DiffCallback : DiffUtil.ItemCallback<GradeEntity>() {
         override fun areItemsTheSame(oldItem: GradeEntity, newItem: GradeEntity): Boolean {
             return oldItem == newItem
@@ -28,6 +34,12 @@ class GradeAdapter : ListAdapter<GradeEntity, GradeAdapter.GradeViewHolder>(Diff
         val subjectPointTextView: TextView = itemView.findViewById(R.id.subjectPointTextView)
         val classificationTextView: TextView = itemView.findViewById(R.id.classificationTextView)
         val characterGradeTextView: TextView = itemView.findViewById(R.id.characterGradeTextView)
+
+        init {
+            itemView.setOnClickListener {
+                itemClickListener.onItemClick(currentList[adapterPosition])
+            }
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GradeViewHolder {

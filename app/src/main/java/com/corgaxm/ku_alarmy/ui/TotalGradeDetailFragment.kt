@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.corgaxm.ku_alarmy.R
@@ -35,12 +36,13 @@ class TotalGradeDetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        fetchAllGradesFromLocal()
         observeAllValidGrades()
     }
 
     private fun fetchAllGradesFromLocal() {
+        if (viewModel.isFetched())
+            return
+
         viewModel.fetchAllGradesFromLocal()
     }
 
@@ -104,6 +106,13 @@ class TotalGradeDetailFragment : Fragment() {
             val recyclerView = binding.gradeRecyclerview
             recyclerView.layoutManager = LinearLayoutManager(context)
             val adapter = GradeAdapter()
+            adapter.itemClickListener = object : GradeAdapter.OnItemClickListener {
+                override fun onItemClick(gradeEntity: GradeEntity) {
+                    // GradeEntity 정보를 가지고 fragment 전환
+                    // 데이터를 어떻게 가져갈지?
+                    findNavController().navigate(R.id.action_totalGradeDetailFragment_to_gradeDetailFragment)
+                }
+            }
             recyclerView.adapter = adapter
             recyclerView.addItemDecoration(
                 DividerItemDecoration(
@@ -112,5 +121,16 @@ class TotalGradeDetailFragment : Fragment() {
                 )
             )
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        fetchAllGradesFromLocal()
+        binding.semesterSpinner.setSelection(viewModel.getSelectedPosition())
+    }
+
+    override fun onPause() {
+        super.onPause()
+        viewModel.setSelectedPosition(binding.semesterSpinner.selectedItemPosition)
     }
 }
