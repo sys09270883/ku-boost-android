@@ -9,7 +9,7 @@ import org.koin.dsl.module
 
 val persistenceModule = module {
     single {
-        Room.databaseBuilder(androidApplication(), AppDatabase::class.java, "alarmy-db").build()
+        Room.databaseBuilder(androidApplication(), AppDatabase::class.java, "boost-db").build()
     }
     single { get<AppDatabase>().graduationSimulationDao() }
     single { get<AppDatabase>().gradeDao() }
