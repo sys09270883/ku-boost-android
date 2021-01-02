@@ -27,7 +27,13 @@ val repositoryModule = module {
                 username: String,
                 password: String
             ): UseCase<LoginResponse> {
-                val loginResponse = authService.login(username, password)
+                val loginResponse: Response<LoginResponse>
+                try {
+                    loginResponse = authService.login(username, password)
+                } catch (exception: Exception) {
+                    Log.e("yoonseop", "${exception.message}")
+                    return UseCase.error("서버에 문제가 발생했습니다.")
+                }
 
                 val cookie = loginResponse.headers()["Set-Cookie"]?.split(";")?.first()
                     ?: return UseCase.error("다시 로그인하세요.")
@@ -44,7 +50,7 @@ val repositoryModule = module {
                         UseCase.success(loginBody)
                     }
                     loginFailure != null -> UseCase.error(loginFailure.errorMessage)
-                    else -> UseCase.error("서버 에러입니다.")
+                    else -> UseCase.error("서버에 문제가 발생했습니다.")
                 }
             }
 
@@ -66,7 +72,7 @@ val repositoryModule = module {
                 }
 
                 val cookie = loginResponse.headers()["Set-Cookie"]?.split(";")?.first()
-                    ?: return UseCase.error("쿠키 없음")
+                    ?: return UseCase.error("다시 로그인하세요.")
                 settingsManager.setCookie(cookie)
 
                 val loginBody = loginResponse.body()
@@ -77,7 +83,7 @@ val repositoryModule = module {
                 return when {
                     loginSuccess.isSucceeded -> UseCase.success(loginBody)
                     loginFailure != null -> UseCase.error(loginFailure.errorMessage)
-                    else -> UseCase.error("Error on server.")
+                    else -> UseCase.error("서버에 문제가 발생했습니다.")
                 }
             }
 
