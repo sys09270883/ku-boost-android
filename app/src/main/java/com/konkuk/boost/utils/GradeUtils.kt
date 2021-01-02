@@ -97,8 +97,10 @@ object GradeUtils {
             }
         }
 
-        val avr = "%.2f".format(floor((sum / point) * 100) / 100.0)
-        val majorAvr = "%.2f".format(floor((majorSum / majorPoint) * 100) / 100.0)
+        var avr = "%.2f".format(floor((sum / point) * 100) / 100.0)
+        var majorAvr = "%.2f".format(floor((majorSum / majorPoint) * 100) / 100.0)
+        if (avr == "NaN") avr = "0"
+        if (majorAvr == "NaN") majorAvr = "0"
 
         return Pair(avr, majorAvr)
     }

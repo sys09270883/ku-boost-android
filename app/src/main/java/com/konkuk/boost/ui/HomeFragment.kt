@@ -176,12 +176,12 @@ class HomeFragment : Fragment() {
     }
 
     private fun setChartConfig() {
-        ChartUtils.setSummaryConfig(binding.currentSummaryPieChart)
         ChartUtils.setGradeConfigWith(binding.currentTotalPieChart, "전체")
         ChartUtils.setGradeConfigWith(binding.currentMajorPieChart, "전공")
-        ChartUtils.setSummaryConfig(binding.summaryPieChart)
+        ChartUtils.setSummaryConfig(binding.currentSummaryPieChart)
         ChartUtils.setGradeConfigWith(binding.totalPieChart, "전체")
         ChartUtils.setGradeConfigWith(binding.majorPieChart, "전공")
+        ChartUtils.setSummaryConfig(binding.summaryPieChart)
         ChartUtils.setLineChartConfig(binding.totalLineChart)
     }
 

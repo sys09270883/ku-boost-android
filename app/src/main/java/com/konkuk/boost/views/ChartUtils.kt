@@ -30,7 +30,7 @@ object ChartUtils {
             holeRadius = 90f // 가운데 반지름
             transparentCircleRadius = 92f // 그래프 반지름
             setDrawCenterText(true)
-            centerText = "${classification}평점\n4.5/4.5"
+            centerText = "${classification}평점\n4.5"
             setCenterTextSize(18f)
             legend.setDrawInside(true)
             legend.isEnabled = false
@@ -83,7 +83,7 @@ object ChartUtils {
 
     fun makeGradeChart(pieChart: PieChart, classification: String, avr: String, mainColor: Int, subColor: Int) {
         pieChart.clear()
-        pieChart.centerText = "${classification}학점\n$avr/4.5"
+        pieChart.centerText = "${classification}학점\n$avr"
         val grades = mutableListOf<PieEntry>()
         grades.add(PieEntry(avr.toFloat(), "grade")) // 전체평점
         grades.add(PieEntry(4.5f - avr.toFloat(), "total")) // 기준평점-전체평점
