@@ -26,6 +26,39 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintWidth_percent="0.7" />
 
+        <com.github.mikephil.charting.charts.PieChart
+            android:id="@+id/totalPieChart"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:clickable="false"
+            app:layout_constraintEnd_toStartOf="@id/majorPieChart"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/semesterSpinner" />
+
+        <com.github.mikephil.charting.charts.PieChart
+            android:id="@+id/majorPieChart"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:clickable="false"
+            app:layout_constraintEnd_toStartOf="@id/summaryPieChart"
+            app:layout_constraintStart_toEndOf="@id/totalPieChart"
+            app:layout_constraintTop_toBottomOf="@+id/semesterSpinner" />
+
+        <com.github.mikephil.charting.charts.PieChart
+            android:id="@+id/summaryPieChart"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:clickable="false"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/majorPieChart"
+            app:layout_constraintTop_toBottomOf="@+id/semesterSpinner" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/gradeRecyclerview"
             android:layout_width="0dp"
@@ -35,19 +68,8 @@
             android:overScrollMode="never"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/semesterSpinner"
+            app:layout_constraintTop_toBottomOf="@id/totalPieChart"
             app:layout_constraintWidth_percent="0.9" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/gradeRecyclerview">
-
-            <!--            item-->
-
-        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
