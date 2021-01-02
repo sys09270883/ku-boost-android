@@ -1,6 +1,5 @@
 package com.konkuk.boost.ui
 
-import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -15,8 +14,6 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.github.mikephil.charting.animation.Easing
-import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.*
 import com.konkuk.boost.R
 import com.konkuk.boost.adapters.GradeAdapter
@@ -26,6 +23,7 @@ import com.konkuk.boost.persistence.GradeEntity
 import com.konkuk.boost.persistence.GraduationSimulationEntity
 import com.konkuk.boost.utils.GradeUtils
 import com.konkuk.boost.viewmodels.HomeViewModel
+import com.konkuk.boost.views.ChartUtils
 import com.konkuk.boost.views.CustomTableRow
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -137,72 +135,10 @@ class HomeFragment : Fragment() {
     }
 
     private fun setChartConfig() {
-        binding.totalLineChart.apply {
-            setNoDataText(getString(R.string.prompt_chart_no_data))
-            description = null
-            isDragEnabled = false
-            setScaleEnabled(false)
-            setDrawGridBackground(false)
-            isHighlightPerDragEnabled = false
-            isHighlightPerTapEnabled = false
-            axisRight.isEnabled = false
-            axisLeft.isEnabled = false
-            legend.isEnabled = false
-            xAxis.position = XAxis.XAxisPosition.BOTTOM
-            xAxis.setDrawAxisLine(false)
-            xAxis.setDrawGridLines(false)
-            xAxis.setDrawLabels(false)
-        }
-
-        binding.summaryPieChart.apply {
-            setNoDataText(getString(R.string.prompt_chart_no_data))
-            description = null
-            setTouchEnabled(false)
-            setDrawSlicesUnderHole(false)
-            holeRadius = 0f
-            legend.isEnabled = false
-            isDrawHoleEnabled = false
-            setEntryLabelColor(ContextCompat.getColor(context, R.color.primaryTextColor))
-        }
-
-        //inae
-        binding.totalPieChart.apply {
-            setNoDataText(getString(R.string.prompt_chart_no_data))
-            description = null
-            setTouchEnabled(false)
-            isDrawHoleEnabled = true
-            setHoleColor(Color.WHITE)
-            setTransparentCircleColor(Color.WHITE)
-            setTransparentCircleAlpha(0)
-            holeRadius = 90f // 가운데 반지름
-            transparentCircleRadius = 92f // 그래프 반지름
-            setDrawCenterText(true)
-            centerText = "전체평점\n4.5/4.5"
-            setCenterTextSize(18f)
-            animateY(1400, Easing.EaseInOutQuad)
-            legend.setDrawInside(true)
-            legend.isEnabled = false
-            setDrawEntryLabels(false)
-        }
-
-        binding.majorPieChart.apply {
-            setNoDataText(getString(R.string.prompt_chart_no_data))
-            description = null
-            setTouchEnabled(false)
-            isDrawHoleEnabled = true
-            setHoleColor(Color.WHITE)
-            setTransparentCircleColor(Color.WHITE)
-            setTransparentCircleAlpha(0)
-            holeRadius = 90f // 가운데 반지름
-            transparentCircleRadius = 92f // 그래프 반지름
-            setDrawCenterText(true)
-            centerText = "전공평점\n4.5/4.5"
-            setCenterTextSize(18f)
-            animateY(1400, Easing.EaseInOutQuad)
-            legend.setDrawInside(true)
-            legend.isEnabled = false
-            setDrawEntryLabels(false)
-        }
+        ChartUtils.setLineChartConfig(binding.totalLineChart)
+        ChartUtils.setSummaryConfig(binding.summaryPieChart)
+        ChartUtils.setGradeConfigWith(binding.totalPieChart, "전체")
+        ChartUtils.setGradeConfigWith(binding.majorPieChart, "전공")
     }
 
     private fun observeStdNo() {
