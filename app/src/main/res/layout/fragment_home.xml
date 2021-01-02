@@ -87,6 +87,39 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
+                        <com.github.mikephil.charting.charts.PieChart
+                            android:id="@+id/currentTotalPieChart"
+                            android:layout_width="120dp"
+                            android:layout_height="120dp"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginBottom="16dp"
+                            android:clickable="false"
+                            app:layout_constraintEnd_toStartOf="@id/currentMajorPieChart"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/currentGradesTitleTextView" />
+
+                        <com.github.mikephil.charting.charts.PieChart
+                            android:id="@+id/currentMajorPieChart"
+                            android:layout_width="120dp"
+                            android:layout_height="120dp"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginBottom="16dp"
+                            android:clickable="false"
+                            app:layout_constraintEnd_toStartOf="@id/currentSummaryPieChart"
+                            app:layout_constraintStart_toEndOf="@id/currentTotalPieChart"
+                            app:layout_constraintTop_toBottomOf="@+id/currentGradesTitleTextView" />
+
+                        <com.github.mikephil.charting.charts.PieChart
+                            android:id="@+id/currentSummaryPieChart"
+                            android:layout_width="120dp"
+                            android:layout_height="120dp"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginBottom="16dp"
+                            android:clickable="false"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@id/currentMajorPieChart"
+                            app:layout_constraintTop_toBottomOf="@+id/currentGradesTitleTextView" />
+
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/currentGradeRecyclerView"
                             android:layout_width="match_parent"
@@ -100,7 +133,7 @@
                             app:layout_behavior="@string/appbar_scrolling_view_behavior"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/currentGradesTitleTextView" />
+                            app:layout_constraintTop_toBottomOf="@+id/currentTotalPieChart" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 

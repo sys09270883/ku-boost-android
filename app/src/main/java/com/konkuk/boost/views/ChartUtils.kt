@@ -6,6 +6,9 @@ import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.components.XAxis
+import com.github.mikephil.charting.data.PieData
+import com.github.mikephil.charting.data.PieDataSet
+import com.github.mikephil.charting.data.PieEntry
 import com.konkuk.boost.R
 
 object ChartUtils {
@@ -76,5 +79,28 @@ object ChartUtils {
             xAxis.setDrawLabels(false)
             if (hasAnimation) animateY(1400, Easing.EaseInOutQuad)
         }
+    }
+
+    fun makeGradeChart(pieChart: PieChart, classification: String, avr: String, mainColor: Int, subColor: Int) {
+        pieChart.clear()
+        pieChart.centerText = "${classification}학점\n$avr/4.5"
+        val grades = mutableListOf<PieEntry>()
+        grades.add(PieEntry(avr.toFloat(), "grade")) // 전체평점
+        grades.add(PieEntry(4.5f - avr.toFloat(), "total")) // 기준평점-전체평점
+        val pieDataSet = PieDataSet(grades, null)
+        val colors = listOf(mainColor, subColor)
+        pieDataSet.colors = colors
+        pieDataSet.setDrawValues(false)
+        val pieData = PieData(pieDataSet)
+        pieChart.data = pieData
+    }
+
+    fun makeSummaryChart(pieChart: PieChart, colors: List<Int>, characterGrades: List<PieEntry>) {
+        pieChart.clear()
+        val pieDataSet = PieDataSet(characterGrades, null)
+        pieDataSet.colors = colors
+        pieDataSet.setDrawValues(false)
+        val pieData = PieData(pieDataSet)
+        pieChart.data = pieData
     }
 }
