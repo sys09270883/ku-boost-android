@@ -12,15 +12,12 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.*
-import com.github.mikephil.charting.formatter.PercentFormatter
-import com.github.mikephil.charting.utils.ColorTemplate
 import com.konkuk.boost.R
 import com.konkuk.boost.adapters.GradeAdapter
 import com.konkuk.boost.data.grade.ParcelableGrade
@@ -188,7 +185,7 @@ class HomeFragment : Fragment() {
             setDrawEntryLabels(false)
         }
 
-        binding.majorPieChart.apply{
+        binding.majorPieChart.apply {
             setNoDataText(getString(R.string.prompt_chart_no_data))
             description = null
             setTouchEnabled(false)
@@ -313,13 +310,13 @@ class HomeFragment : Fragment() {
             val totalPieChart = binding.totalPieChart
             totalPieChart.clear()
 
-            totalPieChart.centerText = "전체학점\n"+avr+"/4.5"
+            totalPieChart.centerText = "전체학점\n$avr/4.5"
 
             val totalGrades = mutableListOf<PieEntry>()
-            totalGrades.add(PieEntry(avr.toFloat(),"grade")) // 전체평점
-            totalGrades.add(PieEntry(4.5f-avr.toFloat(),"total")) // 기준평점-전체평점
+            totalGrades.add(PieEntry(avr.toFloat(), "grade")) // 전체평점
+            totalGrades.add(PieEntry(4.5f - avr.toFloat(), "total")) // 기준평점-전체평점
 
-            val totalPieDataSet = PieDataSet(totalGrades,null)
+            val totalPieDataSet = PieDataSet(totalGrades, null)
 
             val totalColors = listOf(
                 ContextCompat.getColor(context, R.color.pastelRed),
@@ -335,13 +332,13 @@ class HomeFragment : Fragment() {
             val majorPieChart = binding.majorPieChart
             majorPieChart.clear()
 
-            majorPieChart.centerText = "전공학점\n"+majorAvr+"/4.5"
+            majorPieChart.centerText = "전공학점\n$majorAvr/4.5"
 
             val majorGrades = mutableListOf<PieEntry>()
-            majorGrades.add(PieEntry(majorAvr.toFloat(),"grade")) // 전공평점
-            majorGrades.add(PieEntry(4.5f-majorAvr.toFloat(),"total")) // 기준평점-전공평점
+            majorGrades.add(PieEntry(majorAvr.toFloat(), "grade")) // 전공평점
+            majorGrades.add(PieEntry(4.5f - majorAvr.toFloat(), "total")) // 기준평점-전공평점
 
-            val majorPieDataSet = PieDataSet(majorGrades,null)
+            val majorPieDataSet = PieDataSet(majorGrades, null)
             majorPieDataSet.colors = totalColors // 전체평점 색 그대로 사용
             majorPieDataSet.setDrawValues(false)
 

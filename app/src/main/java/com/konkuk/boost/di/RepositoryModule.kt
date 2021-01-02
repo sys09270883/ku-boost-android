@@ -15,6 +15,7 @@ import com.konkuk.boost.utils.DateTimeConverter
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import org.koin.dsl.module
+import retrofit2.Response
 
 val repositoryModule = module {
     fun provideLoginRepository(
@@ -29,7 +30,7 @@ val repositoryModule = module {
                 val loginResponse = authService.login(username, password)
 
                 val cookie = loginResponse.headers()["Set-Cookie"]?.split(";")?.first()
-                    ?: return UseCase.error("No cookie error occurs.")
+                    ?: return UseCase.error("다시 로그인하세요.")
                 settingsManager.setCookie(cookie)
 
                 val loginBody = loginResponse.body()
@@ -51,29 +52,32 @@ val repositoryModule = module {
                 val username = settingsManager.usernameFlow.first()
                 val password = settingsManager.passwordFlow.first()
 
+                if (username.isBlank() || password.isBlank()) {
+                    settingsManager.setAuthInfo("", "")
+                    return UseCase.error("아이디, 비밀번호를 확인하세요.")
+                }
+
+                val loginResponse: Response<LoginResponse>
+                try {
+                    loginResponse = authService.login(username, password)
+                } catch (exception: Exception) {
+                    Log.e("yoonseop", "${exception.message}")
+                    return UseCase.error("네트워크를 확인하세요.")
+                }
+
+                val cookie = loginResponse.headers()["Set-Cookie"]?.split(";")?.first()
+                    ?: return UseCase.error("쿠키 없음")
+                settingsManager.setCookie(cookie)
+
+                val loginBody = loginResponse.body()
+                val loginSuccess =
+                    loginBody?.loginSuccess ?: return UseCase.error("아이디, 비밀번호를 확인하세요.")
+                val loginFailure = loginBody.loginFailure
+
                 return when {
-                    username.isBlank() || password.isBlank() -> {
-                        settingsManager.setAuthInfo("", "")
-                        UseCase.error("아이디, 비밀번호를 확인하세요.")
-                    }
-                    else -> {
-                        val loginResponse = authService.login(username, password)
-
-                        val cookie = loginResponse.headers()["Set-Cookie"]?.split(";")?.first()
-                            ?: return UseCase.error("쿠키 없음")
-                        settingsManager.setCookie(cookie)
-
-                        val loginBody = loginResponse.body()
-                        val loginSuccess =
-                            loginBody?.loginSuccess ?: return UseCase.error("아이디, 비밀번호를 확인하세요.")
-                        val loginFailure = loginBody.loginFailure
-
-                        when {
-                            loginSuccess.isSucceeded -> UseCase.success(loginBody)
-                            loginFailure != null -> UseCase.error(loginFailure.errorMessage)
-                            else -> UseCase.error("Error on server.")
-                        }
-                    }
+                    loginSuccess.isSucceeded -> UseCase.success(loginBody)
+                    loginFailure != null -> UseCase.error(loginFailure.errorMessage)
+                    else -> UseCase.error("Error on server.")
                 }
             }
 
