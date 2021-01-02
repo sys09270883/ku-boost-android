@@ -15,7 +15,7 @@ object GradeUtils {
         val isValid = hashMapOf<String, Boolean>()
 
         for (grade in allGrades) {
-            if (grade.characterGrade == "P" || grade.characterGrade == "NP")
+            if (grade.characterGrade == "P" || grade.characterGrade == "N")
                 continue
 
             val key = "${grade.year}${grade.semester}"
@@ -36,6 +36,7 @@ object GradeUtils {
         for (key in keys) {
             try {
                 result[key] = "%.2f".format(floor((sum[key]!! / point[key]!!) * 100) / 100.0)
+                if (result[key] == "NaN") result[key] = "0.00"
             } catch (exception: Exception) {
                 Log.e("yoonseop", "${exception.message}")
             }
@@ -82,7 +83,7 @@ object GradeUtils {
         var majorPoint = 0
 
         for (grade in allGrades) {
-            if (grade.characterGrade == "P" || grade.characterGrade == "NP")
+            if (grade.characterGrade == "P" || grade.characterGrade == "N")
                 continue
 
             val pnt = grade.subjectPoint
@@ -99,8 +100,8 @@ object GradeUtils {
 
         var avr = "%.2f".format(floor((sum / point) * 100) / 100.0)
         var majorAvr = "%.2f".format(floor((majorSum / majorPoint) * 100) / 100.0)
-        if (avr == "NaN") avr = "0"
-        if (majorAvr == "NaN") majorAvr = "0"
+        if (avr == "NaN") avr = "0.00"
+        if (majorAvr == "NaN") majorAvr = "0.00"
 
         return Pair(avr, majorAvr)
     }
