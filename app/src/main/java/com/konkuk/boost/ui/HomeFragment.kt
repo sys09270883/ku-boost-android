@@ -110,22 +110,25 @@ class HomeFragment : Fragment() {
             // 파이 차트
             val (avr, majorAvr) = GradeUtils.totalAverages(currentGrades)
 
+            // 전체평점
             ChartUtils.makeGradeChart(
-                binding.currentTotalPieChart,
-                "전체",
-                avr,
-                colors.first(),
-                colors.last()
+                binding.currentTotalPieChart, "전체", avr, colors.first(), colors.last()
             )
 
-            // 2-2. 전공 평점
+            // 전공평점
             ChartUtils.makeGradeChart(
-                binding.currentMajorPieChart,
-                "전공",
-                majorAvr,
-                colors.first(),
-                colors.last()
+                binding.currentMajorPieChart, "전공", majorAvr, colors.first(), colors.last()
             )
+
+            // 성적분포
+            val characterGradesMap = GradeUtils.characterGrades(currentGrades)
+            val characterGrades = mutableListOf<PieEntry>()
+
+            for (grade in characterGradesMap) {
+                characterGrades.add(PieEntry(grade.value, grade.key))
+            }
+
+            ChartUtils.makeSummaryChart(binding.currentSummaryPieChart, colors, characterGrades)
 
             // 금학기 성적
             val recyclerView = binding.currentGradeRecyclerView
