@@ -38,8 +38,9 @@ class SplashFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val isConnected = checkNetworkConnected()
+        val activity = requireActivity()
 
+        val isConnected = checkNetworkConnected()
         if (isConnected) {
             viewModel.loginResource.observe(viewLifecycleOwner) {
                 when (it.status) {
@@ -57,13 +58,7 @@ class SplashFragment : Fragment() {
                 }
             }
             viewModel.autoLogin()
-        }
-    }
-
-    private fun checkNetworkConnected(): Boolean {
-        val activity = requireActivity()
-        val isConnected = NetworkStatus.getConnectivityStatus(activity)
-        if (!isConnected) {
+        } else {    // 네트워크 미연결시
             val settingsManager: SettingsManager by inject()
             runBlocking {
                 val username = settingsManager.usernameFlow.first()
@@ -94,8 +89,10 @@ class SplashFragment : Fragment() {
                 }
             }
         }
-        return isConnected
     }
+
+    private fun checkNetworkConnected(): Boolean =
+        NetworkStatus.getConnectivityStatus(requireContext())
 
     override fun onPause() {
         super.onPause()
