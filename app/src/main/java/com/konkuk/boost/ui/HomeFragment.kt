@@ -377,8 +377,8 @@ class HomeFragment : Fragment() {
 
             val lineDataSet = LineDataSet(dataSet, null)
             lineDataSet.color =
-                ContextCompat.getColor(context, R.color.pastelIndigo)
-            lineDataSet.setCircleColor(R.color.pastelIndigo)
+                ContextCompat.getColor(context, R.color.pastelRed)
+            lineDataSet.setCircleColor(R.color.pastelRed)
             lineDataSet.circleHoleRadius = 4f
             lineDataSet.circleRadius = 6f
             lineDataSet.setDrawCircleHole(true)
