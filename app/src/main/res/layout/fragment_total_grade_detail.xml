@@ -25,12 +25,15 @@
                 android:id="@+id/semesterSpinner"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:background="@drawable/background_spinner"
+                android:popupBackground="@drawable/primary_outline_theme_background"
+                android:gravity="center"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="20dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintWidth_percent="0.7" />
+                app:layout_constraintWidth_percent="0.9" />
 
             <com.github.mikephil.charting.charts.PieChart
                 android:id="@+id/totalPieChart"
