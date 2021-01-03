@@ -1,5 +1,6 @@
 package com.konkuk.boost.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -15,6 +16,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.mikephil.charting.data.*
+import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.konkuk.boost.R
 import com.konkuk.boost.adapters.GradeAdapter
 import com.konkuk.boost.data.grade.ParcelableGrade
@@ -213,6 +215,11 @@ class HomeFragment : Fragment() {
                     }
                     R.id.logout -> {
                         viewModel?.logout()
+                        true
+                    }
+                    R.id.openSourceLicense -> {
+                        startActivity(Intent(requireContext(), OssLicensesMenuActivity::class.java))
+                        OssLicensesMenuActivity.setActivityTitle(getString(R.string.prompt_opensource_title))
                         true
                     }
                     else -> false
