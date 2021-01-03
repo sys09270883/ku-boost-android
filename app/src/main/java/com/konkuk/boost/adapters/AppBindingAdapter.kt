@@ -6,6 +6,10 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
+import com.github.mikephil.charting.charts.LineChart
+import com.github.mikephil.charting.charts.PieChart
+import com.konkuk.boost.data.UseCase
+import com.konkuk.boost.persistence.GradeEntity
 
 
 @BindingAdapter("bind_visibility")
@@ -32,3 +36,42 @@ fun TextView.bindYearAndSemester(year: Int, semester: String?) {
     }
 }
 
+@BindingAdapter("bind_visibility")
+fun TextView.bindGradesVisibility(grades: UseCase<List<GradeEntity>>?) {
+    visibility = if (grades == null)
+        View.VISIBLE
+    else {
+        val data = grades.data
+        if (data.isNullOrEmpty()) View.VISIBLE else View.GONE
+    }
+}
+
+@BindingAdapter("bind_visibility")
+fun PieChart.bindGradesVisibility(grades: UseCase<List<GradeEntity>>?) {
+    visibility = if (grades == null)
+        View.GONE
+    else {
+        val data = grades.data
+        if (data.isNullOrEmpty()) View.GONE else View.VISIBLE
+    }
+}
+
+@BindingAdapter("bind_visibility")
+fun LineChart.bindGradesVisibility(grades: UseCase<List<GradeEntity>>?) {
+    visibility = if (grades == null)
+        View.GONE
+    else {
+        val data = grades.data
+        if (data.isNullOrEmpty()) View.GONE else View.VISIBLE
+    }
+}
+
+@BindingAdapter("bind_visibility")
+fun ImageView.bindGradesVisibility(grades: UseCase<List<GradeEntity>>?) {
+    visibility = if (grades == null)
+        View.GONE
+    else {
+        val data = grades.data
+        if (data.isNullOrEmpty()) View.GONE else View.VISIBLE
+    }
+}

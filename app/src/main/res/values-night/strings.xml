@@ -24,4 +24,5 @@
     <string name="prompt_no_network">네트워크 연결 상태 확인 후 다시 실행하세요.</string>
     <string name="prompt_no_network_alert">네트워크 미연결 상태입니다.</string>
     <string name="prompt_opensource_license">오픈소스 라이선스</string>
+    <string name="prompt_grade_no_data">성적이 없습니다</string>
 </resources>
