@@ -361,4 +361,9 @@ class HomeFragment : Fragment() {
         return this
     }
 
+    override fun onPause() {
+        super.onPause()
+        _binding = null
+    }
+
 }

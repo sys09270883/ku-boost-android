@@ -97,5 +97,6 @@ class SplashFragment : Fragment() {
     override fun onPause() {
         super.onPause()
         coroutineScope.cancel()
+        _binding = null
     }
 }

@@ -195,5 +195,6 @@ class TotalGradeDetailFragment : Fragment() {
     override fun onPause() {
         super.onPause()
         viewModel.setSelectedPosition(binding.semesterSpinner.selectedItemPosition)
+        _binding = null
     }
 }
