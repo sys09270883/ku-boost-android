@@ -1,22 +1,33 @@
 package com.konkuk.boost.ui
 
+import android.Manifest
+import android.content.ContentValues
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.os.Build
 import android.os.Bundle
+import android.os.Environment
+import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ProgressBar
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.mikephil.charting.data.*
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
+import com.google.android.material.card.MaterialCardView
 import com.konkuk.boost.R
 import com.konkuk.boost.adapters.GradeAdapter
 import com.konkuk.boost.data.grade.ParcelableGrade
@@ -28,6 +39,8 @@ import com.konkuk.boost.viewmodels.HomeViewModel
 import com.konkuk.boost.views.ChartUtils
 import com.konkuk.boost.views.CustomTableRow
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.io.File
+import java.io.FileOutputStream
 
 
 class HomeFragment : Fragment() {
@@ -170,10 +183,45 @@ class HomeFragment : Fragment() {
     }
 
     private fun setClickListenerToTotalGradeDetailFragment() {
+        //card click listener
+        val cardClickListener = View.OnLongClickListener{
+            val builder = AlertDialog.Builder(requireContext())
+            var message = ""
+            var index = 0
+            when(it.id){
+                R.id.currentCardView->{
+                    message = "금학기 성적을 저장하시겠습니까?"
+                    index = 0
+                }
+                R.id.totalCardView-> {
+                    message = "전체 학기 성적을 저장하시겠습니까?"
+                    index = 1
+                }
+                else->{
+                    message = "졸업시뮬레이션을 저장하시겠습니까?"
+                    index = 2
+                }
+            }
+            builder.setMessage(message)
+            builder.setPositiveButton("예"){
+                    _,_->
+                screenCapture(index)
+            }
+            builder.setNegativeButton("아니오"){
+                    _,_->
+            }
+            val dlg = builder.create()
+            dlg.show()
+            true
+        }
+
         binding.apply {
             readMoreButton.setOnClickListener {
                 findNavController().navigate(R.id.action_homeFragment_to_totalGradeDetailFragment)
             }
+            currentCardView.setOnLongClickListener(cardClickListener)
+            totalCardView.setOnLongClickListener(cardClickListener)
+            simulationCardView.setOnLongClickListener(cardClickListener)
         }
     }
 
@@ -332,9 +380,12 @@ class HomeFragment : Fragment() {
 
             val lineDataSet = LineDataSet(dataSet, null)
             lineDataSet.color =
-                ContextCompat.getColor(context, R.color.secondaryColor)
-            lineDataSet.setCircleColor(R.color.secondaryDarkColor)
-            lineDataSet.lineWidth = 4f
+                ContextCompat.getColor(context, R.color.pastelIndigo)
+            lineDataSet.setCircleColor(R.color.pastelIndigo)
+            lineDataSet.circleHoleRadius = 4f
+            lineDataSet.circleRadius = 6f
+            lineDataSet.setDrawCircleHole(true)
+            lineDataSet.lineWidth = 2f
 
             val lineData = LineData()
             lineData.addDataSet(lineDataSet)
@@ -366,6 +417,77 @@ class HomeFragment : Fragment() {
         superContainer.addView(container)
         setView(superContainer)
         return this
+    }
+
+    private fun screenCapture(index:Int){
+
+        // 1: 금학기, 2. 전체학기, 3. 졸업시뮬레이션
+        lateinit var captureView:MaterialCardView
+        var filename = ""
+        if(index == 0){
+            captureView = binding.currentCardView
+            filename="currentCardView.jpg"
+        }
+        else if(index == 1){
+            captureView = binding.totalCardView
+            filename="currentCardView.jpg"
+        }
+        else{
+            captureView = binding.simulationCardView
+            filename="simulationCardView.jpg"
+        }
+
+        // Make Bitmap By Captured View
+        val permissionCheck = ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        if(permissionCheck != PackageManager.PERMISSION_GRANTED){
+            return
+        }
+        val bitmap = Bitmap.createBitmap(captureView.width, captureView.height, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        captureView.draw(canvas)
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
+            val values = ContentValues().apply{
+                put(MediaStore.Images.Media.DISPLAY_NAME, filename)
+                put(MediaStore.Images.Media.MIME_TYPE, "image/jpg")
+                put(MediaStore.Images.Media.IS_PENDING, 1)
+            }
+            val collection = MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
+            val item = requireContext().contentResolver.insert(collection, values)!!
+            requireContext().contentResolver.openAssetFileDescriptor(item, "w", null).use {
+                val out = FileOutputStream(it!!.fileDescriptor)
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out)
+                out.close()
+            }
+            values.clear()
+            values.put(MediaStore.Images.Media.IS_PENDING, 0)
+            requireContext().contentResolver.update(item, values, null, null)
+            Toast.makeText(requireContext(),"저장되었습니다",Toast.LENGTH_SHORT).show()
+        } else {
+            val dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).toString() +
+                    File.separator +
+                    "boost"
+            val file = File(dir)
+            if (!file.exists()) {
+                file.mkdirs()
+            }
+
+            val imgFile = File(file, filename)
+            val os = FileOutputStream(imgFile)
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, os)
+            os.flush()
+            os.close()
+            val values = ContentValues()
+            with(values) {
+                put(MediaStore.Images.Media.TITLE, filename)
+                put(MediaStore.Images.Media.DATA, imgFile.absolutePath)
+                put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
+            }
+            requireContext().contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
+            Toast.makeText(requireContext(),"저장되었습니다",Toast.LENGTH_SHORT).show()
+
+
+        }
     }
 
 }

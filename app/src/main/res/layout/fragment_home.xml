@@ -59,6 +59,7 @@
                 android:orientation="vertical">
 
                 <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/currentCardView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
@@ -84,6 +85,7 @@
                             android:text="@string/prompt_current_semester_grades"
                             android:textSize="24sp"
                             android:textStyle="bold"
+                            android:textColor="@color/primaryTextColor"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
@@ -143,6 +145,7 @@
                 </com.google.android.material.card.MaterialCardView>
 
                 <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/totalCardView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
@@ -167,6 +170,7 @@
                             android:layout_marginBottom="24dp"
                             android:text="@string/prompt_overall_semester_grades"
                             android:textSize="24sp"
+                            android:textColor="@color/primaryTextColor"
                             android:textStyle="bold"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
@@ -177,8 +181,9 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="8dp"
                             android:layout_marginTop="16dp"
-                            android:layout_marginEnd="8dp"
+                            android:layout_marginEnd="16dp"
                             android:layout_marginBottom="16dp"
+                            android:backgroundTint="@color/pastelLightGray"
                             android:src="@drawable/ic_baseline_read_more_24"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
@@ -238,6 +243,7 @@
                 </com.google.android.material.card.MaterialCardView>
 
                 <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/simulationCardView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
@@ -263,6 +269,7 @@
                             android:text="@string/prompt_graduation_simulation"
                             android:textSize="24sp"
                             android:textStyle="bold"
+                            android:textColor="@color/primaryTextColor"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 

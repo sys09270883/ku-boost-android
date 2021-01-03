@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -89,7 +90,7 @@ class TotalGradeDetailFragment : Fragment() {
 
             val spinner = binding.semesterSpinner
             spinner.adapter = ArrayAdapter(
-                context, R.layout.support_simple_spinner_dropdown_item, semesterArray
+                context, R.layout.spinner_item, semesterArray
             )
             spinner.onItemSelectedListener = object : AdapterView.OnItemClickListener,
                 AdapterView.OnItemSelectedListener {

@@ -17,9 +17,10 @@
         android:ellipsize="marquee"
         android:focusable="true"
         android:marqueeRepeatLimit="marquee_forever"
+        android:paddingEnd="4dp"
         android:singleLine="true"
         android:textSize="16sp"
-        android:textStyle="bold" />
+        android:textColor="@color/primaryTextColor" />
 
     <TextView
         android:id="@+id/professorTextView"
@@ -30,7 +31,7 @@
         android:focusable="true"
         android:singleLine="true"
         android:textSize="16sp"
-        android:textStyle="bold" />
+        android:textColor="@color/primaryTextColor" />
 
     <TextView
         android:id="@+id/subjectPointTextView"
@@ -40,7 +41,7 @@
         android:ellipsize="marquee"
         android:singleLine="true"
         android:textSize="16sp"
-        android:textStyle="bold" />
+        android:textColor="@color/primaryTextColor" />
 
     <TextView
         android:id="@+id/classificationTextView"
@@ -50,7 +51,7 @@
         android:ellipsize="marquee"
         android:singleLine="true"
         android:textSize="16sp"
-        android:textStyle="bold" />
+        android:textColor="@color/primaryTextColor" />
 
     <TextView
         android:id="@+id/characterGradeTextView"
@@ -62,6 +63,6 @@
         android:paddingStart="4dp"
         android:singleLine="true"
         android:textSize="16sp"
-        android:textStyle="bold" />
+        android:textColor="@color/primaryTextColor" />
 
 </LinearLayout>
