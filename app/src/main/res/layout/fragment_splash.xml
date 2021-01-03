@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/container"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.SplashFragment">
@@ -11,7 +11,6 @@
         android:layout_height="match_parent"
         android:paddingStart="20dp"
         android:paddingEnd="20dp"
-        android:src="@drawable/logo_ku"
-        />
+        android:src="@drawable/logo_ku" />
 
 </FrameLayout>

@@ -2,12 +2,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="12dp"
-    android:paddingBottom="12dp"
     android:background="?android:attr/selectableItemBackground"
     android:clickable="true"
     android:focusable="true"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:paddingTop="12dp"
+    android:paddingBottom="12dp">
 
     <TextView
         android:id="@+id/subjectNameTextView"
@@ -19,8 +19,8 @@
         android:marqueeRepeatLimit="marquee_forever"
         android:paddingEnd="4dp"
         android:singleLine="true"
-        android:textSize="16sp"
-        android:textColor="@color/primaryTextColor" />
+        android:textColor="@color/primaryTextColor"
+        android:textSize="16sp" />
 
     <TextView
         android:id="@+id/professorTextView"
@@ -30,8 +30,8 @@
         android:ellipsize="marquee"
         android:focusable="true"
         android:singleLine="true"
-        android:textSize="16sp"
-        android:textColor="@color/primaryTextColor" />
+        android:textColor="@color/primaryTextColor"
+        android:textSize="16sp" />
 
     <TextView
         android:id="@+id/subjectPointTextView"
@@ -40,8 +40,8 @@
         android:layout_weight="1"
         android:ellipsize="marquee"
         android:singleLine="true"
-        android:textSize="16sp"
-        android:textColor="@color/primaryTextColor" />
+        android:textColor="@color/primaryTextColor"
+        android:textSize="16sp" />
 
     <TextView
         android:id="@+id/classificationTextView"
@@ -50,8 +50,8 @@
         android:layout_weight="2"
         android:ellipsize="marquee"
         android:singleLine="true"
-        android:textSize="16sp"
-        android:textColor="@color/primaryTextColor" />
+        android:textColor="@color/primaryTextColor"
+        android:textSize="16sp" />
 
     <TextView
         android:id="@+id/characterGradeTextView"
@@ -59,10 +59,10 @@
         android:layout_height="wrap_content"
         android:layout_weight="2"
         android:ellipsize="marquee"
-        android:paddingEnd="4dp"
         android:paddingStart="4dp"
+        android:paddingEnd="4dp"
         android:singleLine="true"
-        android:textSize="16sp"
-        android:textColor="@color/primaryTextColor" />
+        android:textColor="@color/primaryTextColor"
+        android:textSize="16sp" />
 
 </LinearLayout>
