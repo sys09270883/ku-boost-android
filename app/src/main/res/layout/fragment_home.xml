@@ -25,7 +25,7 @@
                 android:layout_height="match_parent"
                 android:fitsSystemWindows="true"
                 app:contentScrim="?attr/colorPrimary"
-                app:layout_scrollFlags="scroll|exitUntilCollapsed">
+                app:layout_scrollFlags="scroll">
 
                 <ImageView
                     android:layout_width="match_parent"
@@ -34,7 +34,7 @@
                     android:scaleType="centerCrop"
                     android:src="@drawable/logo_ku"
                     app:layout_collapseMode="parallax"
-                    app:layout_collapseParallaxMultiplier="0.25"
+                    app:layout_collapseParallaxMultiplier="0.5"
                     tools:ignore="ContentDescription" />
 
                 <com.google.android.material.appbar.MaterialToolbar

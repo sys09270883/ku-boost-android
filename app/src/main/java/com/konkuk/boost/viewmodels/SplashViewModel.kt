@@ -15,6 +15,8 @@ class SplashViewModel(
 ) : ViewModel() {
     var loginResource = MutableLiveData<UseCase<LoginResponse>>()
 
+    val username = MutableLiveData("")
+
     fun autoLogin() {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
