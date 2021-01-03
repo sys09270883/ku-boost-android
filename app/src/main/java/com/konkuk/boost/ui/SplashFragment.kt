@@ -14,7 +14,7 @@ import com.konkuk.boost.R
 import com.konkuk.boost.data.UseCase
 import com.konkuk.boost.databinding.FragmentSplashBinding
 import com.konkuk.boost.persistence.SettingsManager
-import com.konkuk.boost.utils.NetworkStatus
+import com.konkuk.boost.utils.NetworkUtils
 import com.konkuk.boost.viewmodels.SplashViewModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.first
@@ -92,7 +92,7 @@ class SplashFragment : Fragment() {
     }
 
     private fun checkNetworkConnected(): Boolean =
-        NetworkStatus.getConnectivityStatus(requireContext())
+        NetworkUtils.getConnectivityStatus(requireContext())
 
     override fun onPause() {
         super.onPause()

@@ -5,11 +5,7 @@ import android.content.Context.CONNECTIVITY_SERVICE
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 
-object NetworkStatus {
-    const val TYPE_WIFI = 1
-    const val TYPE_MOBILE = 2
-    const val TYPE_NOT_CONNECTED = 3
-
+object NetworkUtils {
     fun getConnectivityStatus(context: Context): Boolean {
         val manager = context.getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
         val network = manager.activeNetwork ?: return false
