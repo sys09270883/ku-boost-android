@@ -35,9 +35,4 @@ class GradeDetailFragment : Fragment() {
         val grd = requireArguments().getParcelable<ParcelableGrade>("grade")
         viewModel.setGrade(grd)
     }
-
-    override fun onPause() {
-        super.onPause()
-        _binding = null
-    }
 }
