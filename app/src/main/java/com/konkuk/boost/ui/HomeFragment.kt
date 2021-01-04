@@ -81,13 +81,22 @@ class HomeFragment : Fragment() {
         makeToolbar()
         setChartConfig()
         setClickListenerToTotalGradeDetailFragment()
-        fetchGraduationSimulationFromLocalDb()
+        fetchFromLocalDb()
         observeLogout()
         observeGraduationSimulation()
         observeStdNo()
         observeAllValidGrades()
         observeCurrentGrades()
         observeLoading()
+        observeFetching()
+    }
+
+    private fun observeFetching() {
+        viewModel.fetched.observe(viewLifecycleOwner) {
+            when (it) {
+                true -> fetchFromLocalDb()
+            }
+        }
     }
 
     private fun observeLoading() {
@@ -244,11 +253,13 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun fetchGraduationSimulationFromLocalDb() {
+    private fun fetchFromLocalDb() {
         if (viewModel.isFetched())
             return
 
         viewModel.fetchGraduationSimulationFromLocalDb()
+        viewModel.fetchCurrentGradesFromLocalDb()
+        viewModel.fetchTotalGradesFromLocalDb()
     }
 
     private fun makeToolbar() {

@@ -20,7 +20,7 @@ class HomeViewModel(
     private val _allGradesLoading = MutableLiveData(false)
     val allGradesLoading get() = _allGradesLoading
 
-    private val fetched = MutableLiveData(false)
+    val fetched = MutableLiveData(false)
 
     var logoutResponse = MutableLiveData<UseCase<Unit>>()
 
@@ -62,7 +62,24 @@ class HomeViewModel(
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 graduationSimulationResponse.postValue(gradeRepository.makeGraduationSimulationRequest())
-                graduationSimulation.postValue(gradeRepository.getGraduationSimulations())
+            }
+        }
+    }
+
+    fun fetchCurrentGradesFromLocalDb() {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                // 로컬 DB에 있는 데이터를 가져와 LiveData 업데이트
+                currentGrades.postValue(gradeRepository.getCurrentGrades())
+            }
+        }
+    }
+
+    fun fetchTotalGradesFromLocalDb() {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                // 로컬 DB에 있는 데이터를 가져와 LiveData 업데이트
+                allValidGrades.postValue(gradeRepository.getAllValidGrades())
             }
         }
     }
@@ -77,11 +94,6 @@ class HomeViewModel(
                 gradeRepository.makeAllGradesRequest()
                 // 서버에서 유효한 성적 정보를 가져와 로컬 DB 업데이트
                 gradeRepository.makeAllValidGradesRequest()
-            }
-            withContext(Dispatchers.IO) {
-                // 로컬 DB에 있는 데이터를 가져와 LiveData 업데이트
-                allValidGrades.postValue(gradeRepository.getAllValidGrades())
-                currentGrades.postValue(gradeRepository.getCurrentGrades())
             }
             // 전체 성적조회 로딩 끝
             _allGradesLoading.postValue(false)
