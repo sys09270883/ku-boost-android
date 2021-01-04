@@ -104,7 +104,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
                 android:layout_marginEnd="24dp"
-                android:background="@drawable/radius_30"
+                android:background="@drawable/radius_10"
                 android:backgroundTint="@color/primaryColor"
                 android:text="@string/prompt_log_in"
                 android:textColor="?android:attr/textColorPrimary"
