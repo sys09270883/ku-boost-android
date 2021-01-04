@@ -12,7 +12,6 @@ import com.konkuk.boost.data.grade.UserInformationResponse
 import com.konkuk.boost.data.grade.ValidGradesResponse
 import com.konkuk.boost.persistence.*
 import com.konkuk.boost.utils.DateTimeConverter
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import org.koin.dsl.module
 import retrofit2.Response
@@ -20,7 +19,7 @@ import retrofit2.Response
 val repositoryModule = module {
     fun provideLoginRepository(
         authService: AuthService,
-        settingsManager: SettingsManager
+        preferenceManager: PreferenceManager
     ): AuthRepository {
         return object : AuthRepository {
             override suspend fun makeLoginRequest(
@@ -37,7 +36,7 @@ val repositoryModule = module {
 
                 val cookie = loginResponse.headers()["Set-Cookie"]?.split(";")?.first()
                     ?: return UseCase.error("다시 로그인하세요.")
-                settingsManager.setCookie(cookie)
+                preferenceManager.setCookie(cookie)
 
                 val loginBody = loginResponse.body()
                 val loginSuccess =
@@ -46,7 +45,7 @@ val repositoryModule = module {
 
                 return when {
                     loginSuccess.isSucceeded -> {
-                        settingsManager.setAuthInfo(username, password)
+                        preferenceManager.setAuthInfo(username, password)
                         UseCase.success(loginBody)
                     }
                     loginFailure != null -> UseCase.error(loginFailure.errorMessage)
@@ -55,11 +54,11 @@ val repositoryModule = module {
             }
 
             override suspend fun makeAutoLoginRequest(): UseCase<LoginResponse> {
-                val username = settingsManager.usernameFlow.first()
-                val password = settingsManager.passwordFlow.first()
+                val username = preferenceManager.getUsername()
+                val password = preferenceManager.getPassword()
 
                 if (username.isBlank() || password.isBlank()) {
-                    settingsManager.setAuthInfo("", "")
+                    preferenceManager.setAuthInfo("", "")
                     return UseCase.error("아이디, 비밀번호를 확인하세요.")
                 }
 
@@ -73,7 +72,7 @@ val repositoryModule = module {
 
                 val cookie = loginResponse.headers()["Set-Cookie"]?.split(";")?.first()
                     ?: return UseCase.error("다시 로그인하세요.")
-                settingsManager.setCookie(cookie)
+                preferenceManager.setCookie(cookie)
 
                 val loginBody = loginResponse.body()
                 val loginSuccess =
@@ -88,7 +87,7 @@ val repositoryModule = module {
             }
 
             override suspend fun makeLogoutRequest(): UseCase<Unit> {
-                settingsManager.setAuthInfo("", "")
+                preferenceManager.setAuthInfo("", "")
                 return UseCase.success(Unit)
             }
         }
@@ -97,20 +96,20 @@ val repositoryModule = module {
     fun provideGradeRepository(
         gradeService: GradeService,
         graduationSimulationDao: GraduationSimulationDao,
-        settingsManager: SettingsManager,
+        preferenceManager: PreferenceManager,
         gradeDao: GradeDao
     ): GradeRepository {
         return object : GradeRepository {
             override suspend fun makeGraduationSimulationRequest(): UseCase<GraduationSimulationResponse> {
-                val username = settingsManager.usernameFlow.first()
-                val stdNo = settingsManager.stdNoFlow.first()
+                val username = preferenceManager.getUsername()
+                val stdNo = preferenceManager.getStdNo()
                 val corsYy = stdNo.toString().substring(0, 4).toInt()
-                val shregCd = settingsManager.codeFlow.first()
+                val shregCd = preferenceManager.getCode()
 
                 val graduationSimulationResponse: GraduationSimulationResponse
 
                 try {
-                    if (username == "") throw Exception("Username is empty.")
+                    if (username.isEmpty()) throw Exception("Username is empty.")
 
                     graduationSimulationResponse = gradeService.fetchGraduationSimulation(
                         stdNo = stdNo,
@@ -144,7 +143,7 @@ val repositoryModule = module {
                 try {
                     userInfoResponse = gradeService.fetchUserInformation()
                     userInfoResponse.userInformation.apply {
-                        settingsManager.setUserInfo(
+                        preferenceManager.setUserInfo(
                             name = name,
                             stdNo = stdNo.toInt(),  // API stdNo는 String
                             state = state,
@@ -161,7 +160,7 @@ val repositoryModule = module {
             }
 
             override suspend fun getGraduationSimulations(): UseCase<List<GraduationSimulationEntity>> {
-                val username = settingsManager.usernameFlow.first()
+                val username = preferenceManager.getUsername()
                 val graduationSimulationList: List<GraduationSimulationEntity>
 
                 try {
@@ -174,7 +173,7 @@ val repositoryModule = module {
                 return UseCase.success(graduationSimulationList)
             }
 
-            override fun getStdNoFlow(): Flow<Int> = settingsManager.stdNoFlow
+            override fun getStdNo(): Int = preferenceManager.getStdNo()
 
             override suspend fun makeAllGradesRequest(): UseCase<Unit> {
                 val allGrades = mutableListOf<GradeEntity>()
@@ -182,8 +181,8 @@ val repositoryModule = module {
                 val semesterConverter = hashMapOf(1 to 1, 4 to 2, 2 to 3, 5 to 4)
 
                 try {
-                    val stdNo = settingsManager.stdNoFlow.first()
-                    val username = settingsManager.usernameFlow.first()
+                    val stdNo = preferenceManager.getStdNo()
+                    val username = preferenceManager.getUsername()
                     val startYear = stdNo.toString().substring(0, 4).toInt()
                     val endYear = DateTimeConverter.currentYear().toInt()
                     val semesters = intArrayOf(1, 4, 2, 5)
@@ -229,8 +228,8 @@ val repositoryModule = module {
             }
 
             override suspend fun makeAllValidGradesRequest(): UseCase<Unit> {
-                val stdNo = settingsManager.stdNoFlow.first()
-                val username = settingsManager.usernameFlow.first()
+                val stdNo = preferenceManager.getStdNo()
+                val username = preferenceManager.getUsername()
                 val validGradesResponse: ValidGradesResponse
 
                 try {
@@ -246,7 +245,7 @@ val repositoryModule = module {
             }
 
             override suspend fun getAllValidGrades(): UseCase<List<GradeEntity>> {
-                val username = settingsManager.usernameFlow.first()
+                val username = preferenceManager.getUsername()
 
                 val allValidGrades: List<GradeEntity>
                 try {
@@ -259,7 +258,7 @@ val repositoryModule = module {
             }
 
             override suspend fun getCurrentGrades(): UseCase<List<GradeEntity>> {
-                val username = settingsManager.usernameFlow.first()
+                val username = preferenceManager.getUsername()
 
                 val currentGrades: List<GradeEntity>
                 try {

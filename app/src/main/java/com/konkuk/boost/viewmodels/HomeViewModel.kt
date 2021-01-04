@@ -1,6 +1,8 @@
 package com.konkuk.boost.viewmodels
 
-import androidx.lifecycle.*
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.konkuk.boost.data.UseCase
 import com.konkuk.boost.data.auth.AuthRepository
 import com.konkuk.boost.data.grade.GradeRepository
@@ -30,7 +32,11 @@ class HomeViewModel(
 
     var currentGrades = MutableLiveData<UseCase<List<GradeEntity>>>()
 
-    val stdNo: LiveData<Int> = gradeRepository.getStdNoFlow().asLiveData()
+    val stdNo: MutableLiveData<Int> by lazy {
+        MutableLiveData<Int>().apply {
+            postValue(gradeRepository.getStdNo())
+        }
+    }
 
     fun clearLogoutResource() {
         logoutResponse = MutableLiveData<UseCase<Unit>>()
@@ -69,8 +75,6 @@ class HomeViewModel(
             withContext(Dispatchers.IO) {
                 // 서버에서 전체 성적 정보를 가져와 로컬 DB에 저장
                 gradeRepository.makeAllGradesRequest()
-            }
-            withContext(Dispatchers.IO) {
                 // 서버에서 유효한 성적 정보를 가져와 로컬 DB 업데이트
                 gradeRepository.makeAllValidGradesRequest()
             }

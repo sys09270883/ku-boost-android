@@ -3,9 +3,7 @@ package com.konkuk.boost.di
 import com.konkuk.boost.BuildConfig
 import com.konkuk.boost.api.AuthService
 import com.konkuk.boost.api.GradeService
-import com.konkuk.boost.persistence.SettingsManager
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.runBlocking
+import com.konkuk.boost.persistence.PreferenceManager
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.core.qualifier.named
@@ -28,16 +26,12 @@ val apiModule = module {
 
     fun provideCookieClient(
         httpLoggingInterceptor: HttpLoggingInterceptor,
-        settingsManager: SettingsManager
+        preferenceManager: PreferenceManager
     ) = OkHttpClient.Builder()
         .addInterceptor(httpLoggingInterceptor)
         .addInterceptor {
             val original = it.request()
-            var cookie: String
-
-            runBlocking {
-                cookie = settingsManager.cookieFlow.first()
-            }
+            val cookie = preferenceManager.getCookie()
 
             val authorized = original.newBuilder()
                 .addHeader("Cookie", cookie).build()

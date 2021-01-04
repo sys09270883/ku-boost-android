@@ -79,10 +79,10 @@ dependencies {
     implementation 'org.koin:koin-androidx-viewmodel:2.2.0'
     implementation 'org.koin:koin-core:2.2.0'
     testImplementation 'org.koin:koin-test:2.2.0'
-    implementation "androidx.datastore:datastore-preferences:1.0.0-alpha05"
     implementation "androidx.room:room-runtime:2.2.6"
     kapt "androidx.room:room-compiler:2.2.6"
     implementation "androidx.room:room-ktx:2.2.6"
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
     implementation 'com.google.android.gms:play-services-oss-licenses:17.0.0'
+    implementation "androidx.security:security-crypto:1.1.0-alpha03"
 }
