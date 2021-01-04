@@ -61,7 +61,7 @@ class SplashFragment : Fragment() {
             val preferenceManager: PreferenceManager by inject()
 
             val username = preferenceManager.getUsername()
-            val hasLoggedUser = username.isEmpty()
+            val hasLoggedUser = username.isNotBlank()
             if (hasLoggedUser) {    // 사용자 정보가 저장되어 있을 경우
                 Snackbar.make(
                     binding.container,
