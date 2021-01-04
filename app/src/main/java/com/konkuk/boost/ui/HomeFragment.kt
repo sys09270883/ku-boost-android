@@ -71,7 +71,9 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
-        return binding.root
+        val view = binding.root
+        view.postDelayed({ view.requestLayout() }, 0)
+        return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
