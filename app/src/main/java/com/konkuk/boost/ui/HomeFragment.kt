@@ -21,7 +21,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -72,7 +71,9 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
-        return binding.root
+        val view = binding.root
+        view.postDelayed({ view.requestLayout() }, 0)
+        return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -184,31 +185,29 @@ class HomeFragment : Fragment() {
 
     private fun setClickListenerToTotalGradeDetailFragment() {
         //card click listener
-        val cardClickListener = View.OnLongClickListener{
+        val cardClickListener = View.OnLongClickListener {
             val builder = AlertDialog.Builder(requireContext())
             var message = ""
             var index = 0
-            when(it.id){
-                R.id.currentCardView->{
+            when (it.id) {
+                R.id.currentCardView -> {
                     message = "금학기 성적을 저장하시겠습니까?"
                     index = 0
                 }
-                R.id.totalCardView-> {
+                R.id.totalCardView -> {
                     message = "전체 학기 성적을 저장하시겠습니까?"
                     index = 1
                 }
-                else->{
+                else -> {
                     message = "졸업시뮬레이션을 저장하시겠습니까?"
                     index = 2
                 }
             }
             builder.setMessage(message)
-            builder.setPositiveButton("예"){
-                    _,_->
+            builder.setPositiveButton("예") { _, _ ->
                 screenCapture(index)
             }
-            builder.setNegativeButton("아니오"){
-                    _,_->
+            builder.setNegativeButton("아니오") { _, _ ->
             }
             val dlg = builder.create()
             dlg.show()
@@ -380,8 +379,8 @@ class HomeFragment : Fragment() {
 
             val lineDataSet = LineDataSet(dataSet, null)
             lineDataSet.color =
-                ContextCompat.getColor(context, R.color.pastelIndigo)
-            lineDataSet.setCircleColor(R.color.pastelIndigo)
+                ContextCompat.getColor(context, R.color.pastelRed)
+            lineDataSet.setCircleColor(R.color.pastelRed)
             lineDataSet.circleHoleRadius = 4f
             lineDataSet.circleRadius = 6f
             lineDataSet.setDrawCircleHole(true)
@@ -419,40 +418,43 @@ class HomeFragment : Fragment() {
         return this
     }
 
-    private fun screenCapture(index:Int){
+    private fun screenCapture(index: Int) {
 
         // 1: 금학기, 2. 전체학기, 3. 졸업시뮬레이션
-        lateinit var captureView:MaterialCardView
+        lateinit var captureView: MaterialCardView
         var filename = ""
-        if(index == 0){
+        if (index == 0) {
             captureView = binding.currentCardView
-            filename="currentCardView.jpg"
-        }
-        else if(index == 1){
+            filename = "currentCardView.jpg"
+        } else if (index == 1) {
             captureView = binding.totalCardView
-            filename="currentCardView.jpg"
-        }
-        else{
+            filename = "currentCardView.jpg"
+        } else {
             captureView = binding.simulationCardView
-            filename="simulationCardView.jpg"
+            filename = "simulationCardView.jpg"
         }
 
         // Make Bitmap By Captured View
-        val permissionCheck = ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
-        if(permissionCheck != PackageManager.PERMISSION_GRANTED){
+        val permissionCheck = ContextCompat.checkSelfPermission(
+            requireContext(),
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+        )
+        if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
             return
         }
-        val bitmap = Bitmap.createBitmap(captureView.width, captureView.height, Bitmap.Config.ARGB_8888)
+        val bitmap =
+            Bitmap.createBitmap(captureView.width, captureView.height, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
         captureView.draw(canvas)
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
-            val values = ContentValues().apply{
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            val values = ContentValues().apply {
                 put(MediaStore.Images.Media.DISPLAY_NAME, filename)
                 put(MediaStore.Images.Media.MIME_TYPE, "image/jpg")
                 put(MediaStore.Images.Media.IS_PENDING, 1)
             }
-            val collection = MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
+            val collection =
+                MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
             val item = requireContext().contentResolver.insert(collection, values)!!
             requireContext().contentResolver.openAssetFileDescriptor(item, "w", null).use {
                 val out = FileOutputStream(it!!.fileDescriptor)
@@ -462,9 +464,10 @@ class HomeFragment : Fragment() {
             values.clear()
             values.put(MediaStore.Images.Media.IS_PENDING, 0)
             requireContext().contentResolver.update(item, values, null, null)
-            Toast.makeText(requireContext(),"저장되었습니다",Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "저장되었습니다", Toast.LENGTH_SHORT).show()
         } else {
-            val dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).toString() +
+            val dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
+                .toString() +
                     File.separator +
                     "boost"
             val file = File(dir)
@@ -483,10 +486,11 @@ class HomeFragment : Fragment() {
                 put(MediaStore.Images.Media.DATA, imgFile.absolutePath)
                 put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
             }
-            requireContext().contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
-            Toast.makeText(requireContext(),"저장되었습니다",Toast.LENGTH_SHORT).show()
-
-
+            requireContext().contentResolver.insert(
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                values
+            )
+            Toast.makeText(requireContext(), "저장되었습니다", Toast.LENGTH_SHORT).show()
         }
     }
 

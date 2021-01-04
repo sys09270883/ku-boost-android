@@ -7,6 +7,8 @@ import android.util.TypedValue
 import android.widget.TableLayout
 import android.widget.TableRow
 import android.widget.TextView
+import androidx.core.content.ContextCompat
+import com.konkuk.boost.R
 
 class CustomTableRow(context: Context) : TableRow(context) {
 
@@ -37,6 +39,7 @@ class CustomTableRow(context: Context) : TableRow(context) {
                 val textView = TextView(context)
                 textView.text = text
                 textView.textAlignment = TextView.TEXT_ALIGNMENT_CENTER
+                textView.setTextColor(ContextCompat.getColor(context, R.color.primaryTextColor))
                 textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
                 row.addView(textView)
             }
@@ -70,6 +73,7 @@ class CustomTableRow(context: Context) : TableRow(context) {
                 textView.text = text
                 textView.textAlignment = TextView.TEXT_ALIGNMENT_CENTER
                 textView.typeface = Typeface.DEFAULT_BOLD
+                textView.setTextColor(ContextCompat.getColor(context, R.color.primaryTextColor))
                 textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
                 row.addView(textView)
             }

@@ -24,8 +24,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:fitsSystemWindows="true"
-                app:contentScrim="?attr/colorPrimary"
-                app:layout_scrollFlags="scroll">
+                android:background="@color/themeColor"
+                app:contentScrim="@color/primaryColor"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
                 <ImageView
                     android:layout_width="match_parent"
@@ -67,7 +68,8 @@
                     android:layout_marginEnd="12dp"
                     android:layout_marginBottom="12dp"
                     app:cardCornerRadius="10dp"
-                    app:cardElevation="5dp">
+                    app:cardElevation="5dp"
+                    app:cardUseCompatPadding="true">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
@@ -83,9 +85,9 @@
                             android:layout_marginEnd="12dp"
                             android:layout_marginBottom="12dp"
                             android:text="@string/prompt_current_semester_grades"
+                            android:textColor="@color/primaryTextColor"
                             android:textSize="24sp"
                             android:textStyle="bold"
-                            android:textColor="@color/primaryTextColor"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
@@ -169,7 +171,8 @@
                     android:layout_marginEnd="12dp"
                     android:layout_marginBottom="12dp"
                     app:cardCornerRadius="10dp"
-                    app:cardElevation="5dp">
+                    app:cardElevation="5dp"
+                    app:cardUseCompatPadding="true">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
@@ -185,8 +188,8 @@
                             android:layout_marginEnd="12dp"
                             android:layout_marginBottom="12dp"
                             android:text="@string/prompt_overall_semester_grades"
-                            android:textSize="24sp"
                             android:textColor="@color/primaryTextColor"
+                            android:textSize="24sp"
                             android:textStyle="bold"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
@@ -286,7 +289,8 @@
                     android:layout_marginBottom="24dp"
                     android:minHeight="320dp"
                     app:cardCornerRadius="10dp"
-                    app:cardElevation="5dp">
+                    app:cardElevation="5dp"
+                    app:cardUseCompatPadding="true">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
@@ -301,9 +305,9 @@
                             android:layout_marginEnd="12dp"
                             android:layout_marginBottom="24dp"
                             android:text="@string/prompt_graduation_simulation"
+                            android:textColor="@color/primaryTextColor"
                             android:textSize="24sp"
                             android:textStyle="bold"
-                            android:textColor="@color/primaryTextColor"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 

@@ -31,10 +31,9 @@
                 android:textColor="@color/primaryTextColor"
                 android:textSize="22sp"
                 android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintRight_toLeftOf="@+id/characterGradeTextView"
-                />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/yearAndSemesterTextView"
@@ -44,8 +43,8 @@
                 android:layout_marginTop="4dp"
                 android:layout_marginEnd="20dp"
                 android:layout_marginBottom="4dp"
-                android:textSize="16sp"
                 android:textColor="@color/primaryTextColor"
+                android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/subjectNameTextView"
                 app:semester="@{viewModel.semester}"
@@ -59,12 +58,12 @@
                 android:layout_marginTop="24dp"
                 android:layout_marginEnd="30dp"
                 android:layout_marginBottom="24dp"
+                android:background="@drawable/oval_stroke"
                 android:gravity="center"
                 android:padding="10dp"
                 android:text="@{viewModel.characterGrade}"
                 android:textColor="@color/primaryTextColor"
                 android:textSize="24sp"
-                android:background="@drawable/oval_stroke"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -77,6 +76,7 @@
                 android:layout_marginBottom="12dp"
                 app:cardCornerRadius="10dp"
                 app:cardElevation="5dp"
+                app:cardUseCompatPadding="true"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/yearAndSemesterTextView">
@@ -95,17 +95,17 @@
                             android:layout_height="wrap_content"
                             android:padding="6dp"
                             android:text="@string/prompt_subject_number"
-                            android:textSize="16sp"
                             android:textColor="@color/primaryTextColor"
-                            android:textStyle="bold"/>
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:padding="6dp"
-                            android:textSize="16sp"
+                            android:text="@{viewModel.subjectNumber}"
                             android:textColor="@color/primaryTextColor"
-                            android:text="@{viewModel.subjectNumber}" />
+                            android:textSize="16sp" />
                     </TableRow>
 
                     <TableRow
@@ -116,18 +116,18 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:padding="6dp"
-                            android:textSize="16sp"
+                            android:text="@string/prompt_subject_id"
                             android:textColor="@color/primaryTextColor"
-                            android:textStyle="bold"
-                            android:text="@string/prompt_subject_id" />
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:padding="6dp"
-                            android:textSize="16sp"
+                            android:text="@{viewModel.subjectId}"
                             android:textColor="@color/primaryTextColor"
-                            android:text="@{viewModel.subjectId}" />
+                            android:textSize="16sp" />
                     </TableRow>
 
                     <TableRow
@@ -138,18 +138,18 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:padding="6dp"
-                            android:textSize="16sp"
+                            android:text="@string/prompt_professor"
                             android:textColor="@color/primaryTextColor"
-                            android:textStyle="bold"
-                            android:text="@string/prompt_professor" />
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:padding="6dp"
-                            android:textSize="16sp"
+                            android:text="@{viewModel.professor}"
                             android:textColor="@color/primaryTextColor"
-                            android:text="@{viewModel.professor}" />
+                            android:textSize="16sp" />
                     </TableRow>
 
                     <TableRow
@@ -160,18 +160,18 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:padding="6dp"
+                            android:text="@string/prompt_classification"
                             android:textColor="@color/primaryTextColor"
-                            android:textStyle="bold"
                             android:textSize="16sp"
-                            android:text="@string/prompt_classification" />
+                            android:textStyle="bold" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:padding="6dp"
-                            android:textSize="16sp"
+                            android:text="@{viewModel.classification}"
                             android:textColor="@color/primaryTextColor"
-                            android:text="@{viewModel.classification}" />
+                            android:textSize="16sp" />
                     </TableRow>
 
                     <TableRow
@@ -182,18 +182,18 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:padding="6dp"
+                            android:text="@string/prompt_grade"
                             android:textColor="@color/primaryTextColor"
-                            android:textStyle="bold"
                             android:textSize="16sp"
-                            android:text="@string/prompt_grade" />
+                            android:textStyle="bold" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:padding="6dp"
-                            android:textSize="16sp"
+                            android:text="@{viewModel.subjectPoint.toString()}"
                             android:textColor="@color/primaryTextColor"
-                            android:text="@{viewModel.subjectPoint.toString()}" />
+                            android:textSize="16sp" />
                     </TableRow>
 
                     <TableRow
@@ -204,18 +204,18 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:padding="6dp"
+                            android:text="@string/prompt_evaluation_method"
                             android:textColor="@color/primaryTextColor"
-                            android:textStyle="bold"
                             android:textSize="16sp"
-                            android:text="@string/prompt_evaluation_method" />
+                            android:textStyle="bold" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:padding="6dp"
-                            android:textSize="16sp"
+                            android:text="@{viewModel.evaluationMethod}"
                             android:textColor="@color/primaryTextColor"
-                            android:text="@{viewModel.evaluationMethod}" />
+                            android:textSize="16sp" />
                     </TableRow>
                 </TableLayout>
             </com.google.android.material.card.MaterialCardView>
