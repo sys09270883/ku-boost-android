@@ -23,13 +23,16 @@ object GradeUtils {
             val grd = grade.grade
             keys.add(key)
 
-            sum.putIfAbsent(key, 0.0f)
+            if (!sum.containsKey(key))
+                sum[key] = 0.0f
             sum[key] = sum[key]!! + pnt * grd
 
-            point.putIfAbsent(key, 0)
+            if (!point.containsKey(key))
+                point[key] = 0
             point[key] = point[key]!! + pnt
 
-            isValid.putIfAbsent(key, false)
+            if (!isValid.containsKey(key))
+                isValid[key] = false
             isValid[key] = true
         }
 
@@ -51,7 +54,9 @@ object GradeUtils {
 
         for (grade in allGrades) {
             val key = grade.characterGrade
-            result.putIfAbsent(key, 0.0f)
+            if (!result.containsKey(key))
+                result[key] = 0.0f
+
             result[key] = result[key]!! + 1
         }
 
@@ -64,7 +69,9 @@ object GradeUtils {
 
         for (grade in allGrades) {
             val key = Pair(grade.year, grade.semester)
-            isUsed.putIfAbsent(key, false)
+            if (!isUsed.containsKey(key))
+                isUsed[key] = false
+
             if (!isUsed[key]!!) {
                 result.add(Pair(grade.year, grade.semester))
                 isUsed[key] = true
