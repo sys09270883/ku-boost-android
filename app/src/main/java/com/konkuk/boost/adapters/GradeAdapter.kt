@@ -33,7 +33,7 @@ class GradeAdapter : ListAdapter<GradeEntity, GradeAdapter.GradeViewHolder>(Diff
         val professorTextView: TextView = itemView.findViewById(R.id.professorTextView)
         val subjectPointTextView: TextView = itemView.findViewById(R.id.subjectPointTextView)
         val classificationTextView: TextView = itemView.findViewById(R.id.classificationTextView)
-        val characterGradeTextView: TextView = itemView.findViewById(R.id.characterGradeTextView)
+        val characterGradeTextView: TextView = itemView.findViewById(R.id.characterGradeButton)
 
         init {
             itemView.setOnClickListener {

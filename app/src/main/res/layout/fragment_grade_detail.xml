@@ -31,7 +31,7 @@
                 android:textColor="@color/primaryTextColor"
                 android:textSize="22sp"
                 android:textStyle="bold"
-                app:layout_constraintRight_toLeftOf="@+id/characterGradeTextView"
+                app:layout_constraintRight_toLeftOf="@+id/characterGradeButton"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -50,22 +50,28 @@
                 app:semester="@{viewModel.semester}"
                 app:year="@{viewModel.year}" />
 
-            <TextView
-                android:id="@+id/characterGradeTextView"
-                android:layout_width="55dp"
-                android:layout_height="55dp"
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/characterGradeButton"
+                style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="24dp"
-                android:layout_marginEnd="30dp"
+                android:layout_marginEnd="24dp"
                 android:layout_marginBottom="24dp"
-                android:background="@drawable/oval_stroke"
+                android:backgroundTint="@color/secondaryLightColor"
+                android:enabled="false"
                 android:gravity="center"
                 android:padding="10dp"
                 android:text="@{viewModel.characterGrade}"
+                android:textAlignment="center"
                 android:textColor="@color/primaryTextColor"
-                android:textSize="24sp"
+                android:textSize="18sp"
+                android:theme="@style/Theme.KUBoost"
+                app:cornerRadius="60dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="ContentDescription" />
 
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
