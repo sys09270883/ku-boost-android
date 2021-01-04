@@ -13,11 +13,10 @@ import com.google.android.material.snackbar.Snackbar
 import com.konkuk.boost.R
 import com.konkuk.boost.data.UseCase
 import com.konkuk.boost.databinding.FragmentSplashBinding
-import com.konkuk.boost.persistence.SettingsManager
+import com.konkuk.boost.persistence.PreferenceManager
 import com.konkuk.boost.utils.NetworkUtils
 import com.konkuk.boost.viewmodels.SplashViewModel
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.first
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -59,34 +58,33 @@ class SplashFragment : Fragment() {
             }
             viewModel.autoLogin()
         } else {    // 네트워크 미연결시
-            val settingsManager: SettingsManager by inject()
-            runBlocking {
-                val username = settingsManager.usernameFlow.first()
-                val hasLoggedUser = username.isNotEmpty()
-                if (hasLoggedUser) {    // 사용자 정보가 저장되어 있을 경우
-                    Snackbar.make(
-                        binding.container,
-                        getString(R.string.prompt_no_network_alert),
-                        Snackbar.LENGTH_SHORT
-                    ).show()
-                    findNavController().navigate(R.id.action_splashFragment_to_homeFragment)
-                } else {                // 사용자 정보가 저장되어 있지 않을 경우
-                    val dialog = AlertDialog.Builder(activity)
-                        .setTitle(getString(R.string.app_name))
-                        .setIcon(R.drawable.ic_baseline_network_check_24)
-                        .setMessage(getString(R.string.prompt_no_network))
-                        .setCancelable(false)
-                        .setPositiveButton(
-                            "확인"
-                        ) { _, _ -> activity.finish() }
-                        .create()
-                    dialog.setOnShowListener {
-                        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(
-                            ContextCompat.getColor(activity, R.color.primaryTextColor)
-                        )
-                    }
-                    dialog.show()
+            val preferenceManager: PreferenceManager by inject()
+
+            val username = preferenceManager.getUsername()
+            val hasLoggedUser = username.isEmpty()
+            if (hasLoggedUser) {    // 사용자 정보가 저장되어 있을 경우
+                Snackbar.make(
+                    binding.container,
+                    getString(R.string.prompt_no_network_alert),
+                    Snackbar.LENGTH_SHORT
+                ).show()
+                findNavController().navigate(R.id.action_splashFragment_to_homeFragment)
+            } else {                // 사용자 정보가 저장되어 있지 않을 경우
+                val dialog = AlertDialog.Builder(activity)
+                    .setTitle(getString(R.string.app_name))
+                    .setIcon(R.drawable.ic_baseline_network_check_24)
+                    .setMessage(getString(R.string.prompt_no_network))
+                    .setCancelable(false)
+                    .setPositiveButton(
+                        "확인"
+                    ) { _, _ -> activity.finish() }
+                    .create()
+                dialog.setOnShowListener {
+                    dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(
+                        ContextCompat.getColor(activity, R.color.primaryTextColor)
+                    )
                 }
+                dialog.show()
             }
         }
     }

@@ -81,28 +81,80 @@ class HomeFragment : Fragment() {
         makeToolbar()
         setChartConfig()
         setClickListenerToTotalGradeDetailFragment()
-        fetchGraduationSimulationFromLocalDb()
+        setCurrentGradesRecyclerViewConfig()
+        fetchFromLocalDb()
         observeLogout()
         observeGraduationSimulation()
         observeStdNo()
         observeAllValidGrades()
         observeCurrentGrades()
         observeLoading()
+        observeFetching()
+    }
+
+    private fun setCurrentGradesRecyclerViewConfig() {
+        val recyclerView = binding.currentGradeRecyclerView
+        recyclerView.layoutManager = LinearLayoutManager(context)
+        val adapter = GradeAdapter()
+        adapter.itemClickListener = object : GradeAdapter.OnItemClickListener {
+            override fun onItemClick(gradeEntity: GradeEntity) {
+                val grade = ParcelableGrade(
+                    evaluationMethod = gradeEntity.evaluationMethod,
+                    year = gradeEntity.year,
+                    semester = GradeUtils.translate(gradeEntity.semester),
+                    classification = gradeEntity.classification,
+                    characterGrade = gradeEntity.characterGrade,
+                    grade = gradeEntity.grade,
+                    professor = gradeEntity.professor,
+                    subjectId = gradeEntity.subjectId,
+                    subjectName = gradeEntity.subjectName,
+                    subjectNumber = gradeEntity.subjectNumber,
+                    subjectPoint = gradeEntity.subjectPoint
+                )
+                val bundle = bundleOf("grade" to grade)
+                findNavController().navigate(
+                    R.id.action_homeFragment_to_gradeDetailFragment,
+                    bundle
+                )
+            }
+        }
+        recyclerView.adapter = adapter
+        recyclerView.addItemDecoration(
+            DividerItemDecoration(
+                context,
+                LinearLayoutManager.VERTICAL
+            )
+        )
+    }
+
+    private fun observeFetching() {
+        viewModel.fetched.observe(viewLifecycleOwner) {
+            when (it) {
+                true -> {
+                    viewModel.fetchGraduationSimulationFromLocalDb()
+                    viewModel.fetchCurrentGradesFromLocalDb()
+                    viewModel.fetchTotalGradesFromLocalDb()
+                }
+            }
+        }
     }
 
     private fun observeLoading() {
         viewModel.allGradesLoading.observe(viewLifecycleOwner) {
             when (it) {
                 true -> {
-                    val context = requireContext()
-                    val builder = AlertDialog.Builder(context)
-                    dialog = builder
-                        .setTitle(getString(R.string.app_name))
-                        .setMessage(getString(R.string.prompt_chart_no_data))
-                        .setProgressBar(ProgressBar(context))
-                        .setCancelable(false)
-                        .create()
-                    dialog.show()
+                    if (!viewModel.hasData()) {
+                        // 로컬 DB가 비어있으면 다이얼로그를 띄움
+                        val context = requireContext()
+                        val builder = AlertDialog.Builder(context)
+                        dialog = builder
+                            .setTitle(getString(R.string.app_name))
+                            .setMessage(getString(R.string.prompt_chart_no_data))
+                            .setProgressBar(ProgressBar(context))
+                            .setCancelable(false)
+                            .create()
+                        dialog.show()
+                    }
                 }
                 false -> {
                     try {
@@ -120,7 +172,6 @@ class HomeFragment : Fragment() {
             if (it.data == null)
                 return@observe
 
-            val context = requireContext()
             val currentGrades = it.data
 
             // 파이 차트
@@ -148,38 +199,8 @@ class HomeFragment : Fragment() {
 
             // 금학기 성적
             val recyclerView = binding.currentGradeRecyclerView
-            recyclerView.layoutManager = LinearLayoutManager(context)
-            val adapter = GradeAdapter()
+            val adapter = recyclerView.adapter as GradeAdapter
             adapter.submitList(currentGrades.toMutableList())
-            adapter.itemClickListener = object : GradeAdapter.OnItemClickListener {
-                override fun onItemClick(gradeEntity: GradeEntity) {
-                    val grade = ParcelableGrade(
-                        evaluationMethod = gradeEntity.evaluationMethod,
-                        year = gradeEntity.year,
-                        semester = GradeUtils.translate(gradeEntity.semester),
-                        classification = gradeEntity.classification,
-                        characterGrade = gradeEntity.characterGrade,
-                        grade = gradeEntity.grade,
-                        professor = gradeEntity.professor,
-                        subjectId = gradeEntity.subjectId,
-                        subjectName = gradeEntity.subjectName,
-                        subjectNumber = gradeEntity.subjectNumber,
-                        subjectPoint = gradeEntity.subjectPoint
-                    )
-                    val bundle = bundleOf("grade" to grade)
-                    findNavController().navigate(
-                        R.id.action_homeFragment_to_gradeDetailFragment,
-                        bundle
-                    )
-                }
-            }
-            recyclerView.adapter = adapter
-            recyclerView.addItemDecoration(
-                DividerItemDecoration(
-                    context,
-                    LinearLayoutManager.VERTICAL
-                )
-            )
         }
     }
 
@@ -244,11 +265,15 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun fetchGraduationSimulationFromLocalDb() {
+    private fun fetchFromLocalDb() {
         if (viewModel.isFetched())
+            return
+        if (!viewModel.hasData())
             return
 
         viewModel.fetchGraduationSimulationFromLocalDb()
+        viewModel.fetchCurrentGradesFromLocalDb()
+        viewModel.fetchTotalGradesFromLocalDb()
     }
 
     private fun makeToolbar() {
