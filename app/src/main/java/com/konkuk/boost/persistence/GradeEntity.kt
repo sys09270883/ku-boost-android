@@ -7,7 +7,7 @@ import java.util.*
 
 @Entity(
     tableName = GradeEntry.TABLE_NAME,
-    primaryKeys = ["username", "subjectId"]
+    primaryKeys = [GradeEntry.USERNAME, GradeEntry.SUBJECT_ID, GradeEntry.SEMESTER, GradeEntry.YEAR]
 )
 data class GradeEntity(
     @ColumnInfo(name = GradeEntry.USERNAME) val username: String,
