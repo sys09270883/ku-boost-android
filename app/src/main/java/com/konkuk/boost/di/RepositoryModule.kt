@@ -87,7 +87,7 @@ val repositoryModule = module {
             }
 
             override suspend fun makeLogoutRequest(): UseCase<Unit> {
-                preferenceManager.setAuthInfo("", "")
+                preferenceManager.clearAll()
                 return UseCase.success(Unit)
             }
         }
@@ -151,6 +151,7 @@ val repositoryModule = module {
                             code = code
                         )
                     }
+                    preferenceManager.setHasData(true)
                 } catch (exception: Exception) {
                     Log.e("yoonseop", "${exception.message}")
                     return UseCase.error("${exception.message}")
@@ -270,6 +271,8 @@ val repositoryModule = module {
 
                 return UseCase.success(currentGrades)
             }
+
+            override fun hasData() = preferenceManager.getHasData()
 
         }
     }

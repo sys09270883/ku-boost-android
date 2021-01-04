@@ -21,8 +21,10 @@ class PreferenceManager(private val context: Context) {
         private const val STATE = "state"
         private const val DEPT = "dept"
         private const val CODE = "code"
+        private const val HAS_DATA = "has_data"
         private const val DEFAULT = ""
-        private const val DEFAULT_NO = 2021
+        private const val DEFAULT_INT = 2021
+        private const val DEFAULT_BOOLEAN = false
     }
 
     private fun pref(): SharedPreferences {
@@ -66,6 +68,8 @@ class PreferenceManager(private val context: Context) {
             putString(CODE, code)
         }.apply()
 
+    fun setHasData(hasData: Boolean) = editor().putBoolean(HAS_DATA, hasData).apply()
+
     fun getUsername() = pref().getString(USERNAME, DEFAULT)!!
 
     fun getPassword() = pref().getString(PASSWORD, DEFAULT)!!
@@ -74,12 +78,21 @@ class PreferenceManager(private val context: Context) {
 
     fun getName() = pref().getString(NAME, DEFAULT)!!
 
-    fun getStdNo() = pref().getInt(STD_NO, DEFAULT_NO)
+    fun getStdNo() = pref().getInt(STD_NO, DEFAULT_INT)
 
     fun getState() = pref().getString(STATE, DEFAULT)!!
 
     fun getDept() = pref().getString(DEPT, DEFAULT)!!
 
     fun getCode() = pref().getString(CODE, DEFAULT)!!
+
+    fun getHasData() = pref().getBoolean(HAS_DATA, false)
+
+    fun clearAll() {
+        setAuthInfo(DEFAULT, DEFAULT)
+        setUserInfo(DEFAULT, DEFAULT_INT, DEFAULT, DEFAULT, DEFAULT)
+        setCookie(DEFAULT)
+        setHasData(DEFAULT_BOOLEAN)
+    }
 
 }

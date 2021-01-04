@@ -20,4 +20,6 @@ interface GradeRepository {
     suspend fun getAllValidGrades(): UseCase<List<GradeEntity>>
 
     suspend fun getCurrentGrades(): UseCase<List<GradeEntity>>
+
+    fun hasData(): Boolean
 }

@@ -104,4 +104,5 @@ class HomeViewModel(
 
     fun isFetched(): Boolean = fetched.value ?: true
 
+    fun hasData(): Boolean = gradeRepository.hasData()
 }
