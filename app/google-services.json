@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "629110777753",
+    "project_id": "ku-boost",
+    "storage_bucket": "ku-boost.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:629110777753:android:9e99f4dc738e472d69d508",
+        "android_client_info": {
+          "package_name": "com.konkuk.boost"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "629110777753-oi07sjb1m8qdiushd7u2sevm025fejt0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBCikSrJE8k8WqAazeYSFGvaaDIy4EZAPk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "629110777753-oi07sjb1m8qdiushd7u2sevm025fejt0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
