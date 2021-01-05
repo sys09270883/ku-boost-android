@@ -24,9 +24,9 @@ jobs:
         uses: zgosalvez/github-actions-decrypt-secrets@v1.1.3
         with:
           # The `gpg` file. For example, `.github/workflows/secrets.json.gpg`
-          secrets_file: services.tar.gpg
+          secrets_file: .github/workflows/services.tar.gpg
           # Describes the map between the environment variables and secret keys. For example, `SECRET_PASSWORD=PASSWORD,PASSPHRASE=passphrase`
-          map: PASSPHRASE=${{ secrets.FIREBASE_SECRET }}
+          map: PASSPHRASE="sys09270883@gmail.com"
 
       - name: Build debug APK
         run: bash ./gradlew assembleDebug --stacktrace
