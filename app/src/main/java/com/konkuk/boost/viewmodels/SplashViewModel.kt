@@ -28,4 +28,6 @@ class SplashViewModel(
     fun clearLoginResource() {
         loginResource = MutableLiveData<UseCase<LoginResponse>>()
     }
+
+    fun getUsername() = authRepository.getUsername()
 }
