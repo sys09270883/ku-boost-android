@@ -17,6 +17,14 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 1.8
+      
+      - name: Load secrets
+        run: 
+          gpg --quiet --batch --yes --decrypt --passphrase="$FIREBASE_SECRET" \
+          --output $HOME/services.tar services.tar.gpg
+          tar xvf $HOME/services.tar
+        env: 
+          FIREBASE_SECRET: ${{ secrets.FIREBASE_SECRET }}
 
       - name: Build debug APK
         run: bash ./gradlew assembleDebug --stacktrace
