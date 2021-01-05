@@ -23,8 +23,8 @@
                 android:id="@+id/collapsingToolbarLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:fitsSystemWindows="true"
                 android:background="@color/themeColor"
+                android:fitsSystemWindows="true"
                 app:contentScrim="@color/primaryColor"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
@@ -153,6 +153,7 @@
                             android:layout_marginBottom="16dp"
                             android:overScrollMode="never"
                             android:paddingBottom="20dp"
+                            app:bind_visibility="@{viewModel.currentGrades}"
                             app:layout_behavior="@string/appbar_scrolling_view_behavior"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"

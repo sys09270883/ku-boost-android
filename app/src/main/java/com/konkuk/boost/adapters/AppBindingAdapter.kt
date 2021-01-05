@@ -6,6 +6,7 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
+import androidx.recyclerview.widget.RecyclerView
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.charts.PieChart
 import com.konkuk.boost.data.UseCase
@@ -17,14 +18,6 @@ fun ProgressBar.bindVisibility(loading: Boolean) {
     visibility = when (loading) {
         true -> View.VISIBLE
         else -> View.GONE
-    }
-}
-
-@BindingAdapter("bind_visibility")
-fun ImageView.bindVisibility(loading: Boolean) {
-    visibility = when (loading) {
-        true -> View.GONE
-        else -> View.VISIBLE
     }
 }
 
@@ -68,6 +61,16 @@ fun LineChart.bindGradesVisibility(grades: UseCase<List<GradeEntity>>?) {
 
 @BindingAdapter("bind_visibility")
 fun ImageView.bindGradesVisibility(grades: UseCase<List<GradeEntity>>?) {
+    visibility = if (grades == null)
+        View.GONE
+    else {
+        val data = grades.data
+        if (data.isNullOrEmpty()) View.GONE else View.VISIBLE
+    }
+}
+
+@BindingAdapter("bind_visibility")
+fun RecyclerView.bindGradesVisibility(grades: UseCase<List<GradeEntity>>?) {
     visibility = if (grades == null)
         View.GONE
     else {

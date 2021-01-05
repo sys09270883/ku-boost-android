@@ -12,7 +12,6 @@ object GradeUtils {
         val sum = sortedMapOf<String, Float>()
         val point = sortedMapOf<String, Int>()
         val result = sortedMapOf<String, String>()
-        val isValid = hashMapOf<String, Boolean>()
 
         for (grade in allGrades) {
             if (grade.characterGrade == "P" || grade.characterGrade == "N")
@@ -30,10 +29,6 @@ object GradeUtils {
             if (!point.containsKey(key))
                 point[key] = 0
             point[key] = point[key]!! + pnt
-
-            if (!isValid.containsKey(key))
-                isValid[key] = false
-            isValid[key] = true
         }
 
         for (key in keys) {
@@ -45,7 +40,7 @@ object GradeUtils {
             }
         }
 
-        return result.filter { isValid[it.key]!! }.values.toList()
+        return result.values.toList()
     }
 
     // 취득 학점 분포(알파벳)
