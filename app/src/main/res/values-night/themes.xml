@@ -9,6 +9,8 @@
         <item name="colorOnSecondary">@color/secondaryTextColor</item>
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <item name="colorAccent">@color/secondaryColor</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowIsTranslucent">true</item>
     </style>
 
     <style name="TextInputLayoutTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
@@ -23,6 +25,8 @@
         <item name="colorControlHighlight">@color/hintColorDark</item>
         <item name="boxBackgroundColor">@android:color/transparent</item>
         <item name="passwordToggleTint">@color/hintColorLight</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowIsTranslucent">true</item>
     </style>
 
     <style name="TextInputEditTextStyle" parent="Widget.Design.TextInputLayout">
