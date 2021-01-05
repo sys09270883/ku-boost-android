@@ -1,29 +1,40 @@
 package com.konkuk.boost.utils
 
+import java.text.SimpleDateFormat
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import java.util.*
 
 object DateTimeConverter {
-    fun convert(time: Long): String {
-        val formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm")
-        val instant = Instant.ofEpochMilli(time)
-        val date = LocalDateTime.ofInstant(instant, ZoneId.systemDefault())
-        return formatter.format(date)
-    }
-
     fun currentYear(): String {
-        val formatter = DateTimeFormatter.ofPattern("yyyy")
-        val instant = Instant.ofEpochMilli(System.currentTimeMillis())
-        val date = LocalDateTime.ofInstant(instant, ZoneId.systemDefault())
-        return formatter.format(date)
+        val pattern = "yyyy"
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            val formatter = DateTimeFormatter.ofPattern(pattern)
+            val instant = Instant.ofEpochMilli(System.currentTimeMillis())
+            val date = LocalDateTime.ofInstant(instant, ZoneId.systemDefault())
+            return formatter.format(date)
+        }
+
+        val formatter = SimpleDateFormat(pattern, Locale.KOREA)
+        val calendar = Calendar.getInstance()
+        return formatter.format(calendar.time)
     }
 
     fun today(): String {
-        val formatter = DateTimeFormatter.ofPattern("yyyyMMdd")
-        val instant = Instant.ofEpochMilli(System.currentTimeMillis())
-        val date = LocalDateTime.ofInstant(instant, ZoneId.systemDefault())
-        return formatter.format(date)
+        val pattern = "yyyyMMdd"
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            val formatter = DateTimeFormatter.ofPattern(pattern)
+            val instant = Instant.ofEpochMilli(System.currentTimeMillis())
+            val date = LocalDateTime.ofInstant(instant, ZoneId.systemDefault())
+            return formatter.format(date)
+        }
+
+        val formatter = SimpleDateFormat(pattern, Locale.KOREA)
+        val calendar = Calendar.getInstance()
+        return formatter.format(calendar.time)
     }
 }
