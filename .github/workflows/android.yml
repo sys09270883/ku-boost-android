@@ -21,9 +21,14 @@ jobs:
       - name: Install gpg
         run: sudo apt-get install gnupg
       
+      - name: Echo secrets
+        run: 
+          echo "$FIREBASE_SECRET"
+        env: 
+          FIREBASE_SECRET: ${{ secrets.FIREBASE_SECRET }}
+      
       - name: Load secrets
         run: 
-          echo "$FIREBASE_sECRET"
           gpg --quiet --batch --yes --always-trust --decrypt --passphrase="$FIREBASE_SECRET" --output $HOME/private/services.tar services.tar.gpg
           tar xvf $HOME/private/services.tar
         env: 
