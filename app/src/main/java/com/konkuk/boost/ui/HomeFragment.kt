@@ -47,7 +47,7 @@ class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
     private val viewModel: HomeViewModel by viewModel()
-    private lateinit var dialog: AlertDialog
+    private var dialog: AlertDialog? = null
     private val colors: List<Int> by lazy {
         val context = requireContext()
         listOf(
@@ -153,12 +153,12 @@ class HomeFragment : Fragment() {
                             .setProgressBar(ProgressBar(context))
                             .setCancelable(false)
                             .create()
-                        dialog.show()
+                        dialog?.show()
                     }
                 }
                 false -> {
                     try {
-                        if (dialog.isShowing) dialog.dismiss()
+                        if (dialog?.isShowing == true) dialog?.dismiss()
                     } catch (exception: Exception) {
                         Log.e("yoonseop", "${exception.message}")
                     }
