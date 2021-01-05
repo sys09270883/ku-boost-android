@@ -8,4 +8,6 @@ interface AuthRepository {
     suspend fun makeAutoLoginRequest(): UseCase<LoginResponse>
 
     suspend fun makeLogoutRequest(): UseCase<Unit>
+
+    fun getUsername(): String
 }

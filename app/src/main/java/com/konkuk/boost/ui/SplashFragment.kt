@@ -13,11 +13,9 @@ import com.google.android.material.snackbar.Snackbar
 import com.konkuk.boost.R
 import com.konkuk.boost.data.UseCase
 import com.konkuk.boost.databinding.FragmentSplashBinding
-import com.konkuk.boost.persistence.PreferenceManager
 import com.konkuk.boost.utils.NetworkUtils
 import com.konkuk.boost.viewmodels.SplashViewModel
 import kotlinx.coroutines.*
-import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SplashFragment : Fragment() {
@@ -58,10 +56,8 @@ class SplashFragment : Fragment() {
             }
             viewModel.autoLogin()
         } else {    // 네트워크 미연결시
-            val preferenceManager: PreferenceManager by inject()
-
-            val username = preferenceManager.getUsername()
-            val hasLoggedUser = username.isEmpty()
+            val username = viewModel.getUsername()
+            val hasLoggedUser = username.isNotBlank()
             if (hasLoggedUser) {    // 사용자 정보가 저장되어 있을 경우
                 Snackbar.make(
                     binding.container,

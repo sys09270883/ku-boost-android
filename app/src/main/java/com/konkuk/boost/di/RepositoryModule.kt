@@ -90,6 +90,8 @@ val repositoryModule = module {
                 preferenceManager.clearAll()
                 return UseCase.success(Unit)
             }
+
+            override fun getUsername() = preferenceManager.getUsername()
         }
     }
 

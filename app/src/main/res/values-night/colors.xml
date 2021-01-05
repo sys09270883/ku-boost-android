@@ -23,4 +23,5 @@
     <color name="pastelBrown">#5d4037</color>
     <color name="pastelLightGray">#757575</color>
     <color name="themeColor">#000000</color>
+    <color name="themeBackgroundTextColor">#ffffff</color>
 </resources>
