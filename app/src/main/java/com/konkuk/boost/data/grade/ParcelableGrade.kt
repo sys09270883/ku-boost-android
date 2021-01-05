@@ -29,8 +29,7 @@ data class ParcelableGrade(
         parcel.readString(),
         parcel.readString(),
         parcel.readInt()
-    ) {
-    }
+    )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(evaluationMethod)

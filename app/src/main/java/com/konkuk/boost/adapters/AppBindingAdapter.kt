@@ -20,14 +20,6 @@ fun ProgressBar.bindVisibility(loading: Boolean) {
     }
 }
 
-@BindingAdapter("bind_visibility")
-fun ImageView.bindVisibility(loading: Boolean) {
-    visibility = when (loading) {
-        true -> View.GONE
-        else -> View.VISIBLE
-    }
-}
-
 @SuppressLint("SetTextI18n")
 @BindingAdapter("year", "semester", requireAll = true)
 fun TextView.bindYearAndSemester(year: Int, semester: String?) {
