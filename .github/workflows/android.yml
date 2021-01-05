@@ -20,8 +20,9 @@ jobs:
       
       - name: Load secrets
         run: 
-          gpg --quiet --batch --yes --decrypt --passphrase="$FIREBASE_SECRET" --output services.tar services.tar.gpg
-          tar xvf services.tar
+          sudo apt-get install gnupg
+          gpg --quiet --batch --yes --decrypt --passphrase="$FIREBASE_SECRET" --output $HOME/private/services.tar services.tar.gpg
+          tar xvf $HOME/private/services.tar
         env: 
           FIREBASE_SECRET: ${{ secrets.FIREBASE_SECRET }}
 
