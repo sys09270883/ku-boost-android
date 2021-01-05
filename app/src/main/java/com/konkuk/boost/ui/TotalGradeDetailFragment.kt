@@ -61,8 +61,8 @@ class TotalGradeDetailFragment : Fragment() {
     }
 
     private fun setChartConfig() {
-        ChartUtils.setGradeConfigWith(binding.totalPieChart, "전체", true)
-        ChartUtils.setGradeConfigWith(binding.majorPieChart, "전공", true)
+        ChartUtils.setGradeConfigWith(binding.totalPieChart, getString(R.string.prompt_total), true)
+        ChartUtils.setGradeConfigWith(binding.majorPieChart, getString(R.string.prompt_major), true)
         ChartUtils.setSummaryConfig(binding.summaryPieChart, true)
     }
 
@@ -112,7 +112,7 @@ class TotalGradeDetailFragment : Fragment() {
                     // 전체평점
                     ChartUtils.makeGradeChart(
                         binding.totalPieChart,
-                        "전체",
+                        getString(R.string.prompt_total),
                         avr,
                         colors.first(),
                         colors.last()
@@ -120,7 +120,11 @@ class TotalGradeDetailFragment : Fragment() {
 
                     // 전공평점
                     ChartUtils.makeGradeChart(
-                        binding.majorPieChart, "전공", majorAvr, colors.first(), colors.last()
+                        binding.majorPieChart,
+                        getString(R.string.prompt_major),
+                        majorAvr,
+                        colors.first(),
+                        colors.last()
                     )
 
                     // 성적분포

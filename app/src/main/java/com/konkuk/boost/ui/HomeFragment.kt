@@ -193,12 +193,12 @@ class HomeFragment : Fragment() {
 
             // 전체평점
             ChartUtils.makeGradeChart(
-                binding.currentTotalPieChart, "전체", avr, colors.first(), colors.last()
+                binding.currentTotalPieChart, getString(R.string.prompt_total), avr, colors.first(), colors.last()
             )
 
             // 전공평점
             ChartUtils.makeGradeChart(
-                binding.currentMajorPieChart, "전공", majorAvr, colors.first(), colors.last()
+                binding.currentMajorPieChart, getString(R.string.prompt_major), majorAvr, colors.first(), colors.last()
             )
 
             // 성적분포
@@ -224,11 +224,11 @@ class HomeFragment : Fragment() {
             val builder = AlertDialog.Builder(context)
             builder.setTitle(getString(R.string.app_name))
             builder.setMessage(cardMessages[it.id])
-            builder.setPositiveButton("예") { _, _ ->
+            builder.setPositiveButton(getString(R.string.prompt_yes)) { _, _ ->
                 if (checkStoragePermission())
                     screenCapture(it)
             }
-            builder.setNegativeButton("아니오") { _, _ ->
+            builder.setNegativeButton(getString(R.string.prompt_no)) { _, _ ->
             }
             val dlg = builder.create()
             dlg.setOnShowListener {
@@ -499,7 +499,7 @@ class HomeFragment : Fragment() {
             values.clear()
             values.put(MediaStore.Images.Media.IS_PENDING, 0)
             context.contentResolver.update(item, values, null, null)
-            Snackbar.make(binding.container, "저장되었습니다.", Snackbar.LENGTH_SHORT).show()
+            Snackbar.make(binding.container, getString(R.string.prompt_save), Snackbar.LENGTH_SHORT).show()
         } else {
             val dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
                 .toString() +
@@ -525,7 +525,7 @@ class HomeFragment : Fragment() {
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                 values
             )
-            Snackbar.make(binding.container, "저장되었습니다.", Snackbar.LENGTH_SHORT).show()
+            Snackbar.make(binding.container, getString(R.string.prompt_save), Snackbar.LENGTH_SHORT).show()
         }
     }
 }
