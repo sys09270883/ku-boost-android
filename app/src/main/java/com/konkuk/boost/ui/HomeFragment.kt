@@ -26,7 +26,6 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.mikephil.charting.data.*
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
-import com.google.android.material.card.MaterialCardView
 import com.google.android.material.snackbar.Snackbar
 import com.konkuk.boost.R
 import com.konkuk.boost.adapters.GradeAdapter
@@ -227,7 +226,7 @@ class HomeFragment : Fragment() {
             builder.setMessage(cardMessages[it.id])
             builder.setPositiveButton("예") { _, _ ->
                 if (checkStoragePermission())
-                    screenCapture(it as MaterialCardView)
+                    screenCapture(it)
             }
             builder.setNegativeButton("아니오") { _, _ ->
             }
@@ -473,7 +472,7 @@ class HomeFragment : Fragment() {
         return true
     }
 
-    private fun screenCapture(captureView: MaterialCardView) {
+    private fun screenCapture(captureView: View) {
         val context = requireContext()
         val filename = "card${DateTimeConverter.currentTime()}.jpg"
 
