@@ -18,9 +18,11 @@ import android.widget.FrameLayout
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -40,10 +42,12 @@ import com.konkuk.boost.views.CustomTableRow
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.File
 import java.io.FileOutputStream
+import java.util.*
 
 
 class HomeFragment : Fragment() {
 
+    private val STORAGE_CODE = 11
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
     private val viewModel: HomeViewModel by viewModel()
@@ -226,7 +230,8 @@ class HomeFragment : Fragment() {
             }
             builder.setMessage(message)
             builder.setPositiveButton("예") { _, _ ->
-                screenCapture(index)
+                if(checkStoragePermission())
+                    screenCapture(index)
             }
             builder.setNegativeButton("아니오") { _, _ ->
             }
@@ -443,30 +448,39 @@ class HomeFragment : Fragment() {
         return this
     }
 
-    private fun screenCapture(index: Int) {
-
-        // 1: 금학기, 2. 전체학기, 3. 졸업시뮬레이션
-        lateinit var captureView: MaterialCardView
-        var filename = ""
-        if (index == 0) {
-            captureView = binding.currentCardView
-            filename = "currentCardView.jpg"
-        } else if (index == 1) {
-            captureView = binding.totalCardView
-            filename = "currentCardView.jpg"
-        } else {
-            captureView = binding.simulationCardView
-            filename = "simulationCardView.jpg"
-        }
-
-        // Make Bitmap By Captured View
+    private fun checkStoragePermission():Boolean{
         val permissionCheck = ContextCompat.checkSelfPermission(
             requireContext(),
             Manifest.permission.WRITE_EXTERNAL_STORAGE
         )
         if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
-            return
+            ActivityCompat.requestPermissions(
+                requireActivity(),
+                arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                STORAGE_CODE
+            )
+            return false
         }
+        return true
+    }
+
+    private fun screenCapture(index: Int) {
+        // 1: 금학기, 2. 전체학기, 3. 졸업시뮬레이션
+        lateinit var captureView: MaterialCardView
+        if (index == 0) {
+            captureView = binding.currentCardView
+        } else if (index == 1) {
+            captureView = binding.totalCardView
+        } else {
+            captureView = binding.simulationCardView
+        }
+        val random = Random()
+        var filename = "card"
+        for(i in 1..10)
+            filename += random.nextInt(10).toString()
+        filename += ".jpg"
+
+        // Make Bitmap By Captured View
         val bitmap =
             Bitmap.createBitmap(captureView.width, captureView.height, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
@@ -518,5 +532,4 @@ class HomeFragment : Fragment() {
             Toast.makeText(requireContext(), "저장되었습니다", Toast.LENGTH_SHORT).show()
         }
     }
-
 }
