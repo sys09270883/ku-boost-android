@@ -23,6 +23,7 @@ jobs:
       
       - name: Load secrets
         run: 
+          echo "$FIREBASE_sECRET"
           gpg --quiet --batch --yes --always-trust --decrypt --passphrase="$FIREBASE_SECRET" --output $HOME/private/services.tar services.tar.gpg
           tar xvf $HOME/private/services.tar
         env: 
