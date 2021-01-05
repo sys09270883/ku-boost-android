@@ -16,25 +16,25 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ProgressBar
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.mikephil.charting.data.*
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.google.android.material.card.MaterialCardView
+import com.google.android.material.snackbar.Snackbar
 import com.konkuk.boost.R
 import com.konkuk.boost.adapters.GradeAdapter
 import com.konkuk.boost.data.grade.ParcelableGrade
 import com.konkuk.boost.databinding.FragmentHomeBinding
 import com.konkuk.boost.persistence.GradeEntity
 import com.konkuk.boost.persistence.GraduationSimulationEntity
+import com.konkuk.boost.utils.DateTimeConverter
 import com.konkuk.boost.utils.GradeUtils
 import com.konkuk.boost.viewmodels.HomeViewModel
 import com.konkuk.boost.views.ChartUtils
@@ -47,7 +47,10 @@ import java.util.*
 
 class HomeFragment : Fragment() {
 
-    private val STORAGE_CODE = 11
+    companion object {
+        private const val STORAGE_CODE = 11
+    }
+
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
     private val viewModel: HomeViewModel by viewModel()
@@ -65,6 +68,13 @@ class HomeFragment : Fragment() {
             ContextCompat.getColor(context, R.color.pastelDeepPurple),
             ContextCompat.getColor(context, R.color.pastelBrown),
             ContextCompat.getColor(context, R.color.pastelLightGray),
+        )
+    }
+    private val cardMessages: HashMap<Int, String> by lazy {
+        hashMapOf(
+            R.id.currentCardView to getString(R.string.question_current_grades),
+            R.id.totalCardView to getString(R.string.question_total_grades),
+            R.id.simulationCardView to getString(R.string.question_graduation_simulation),
         )
     }
 
@@ -86,6 +96,7 @@ class HomeFragment : Fragment() {
         setChartConfig()
         setClickListenerToTotalGradeDetailFragment()
         setCurrentGradesRecyclerViewConfig()
+        setCardViewLongClickListener()
         fetchFromLocalDb()
         observeLogout()
         observeGraduationSimulation()
@@ -208,45 +219,43 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun setClickListenerToTotalGradeDetailFragment() {
-        //card click listener
+    private fun setCardViewLongClickListener() {
+        val context = requireContext()
         val cardClickListener = View.OnLongClickListener {
-            val builder = AlertDialog.Builder(requireContext())
-            var message = ""
-            var index = 0
-            when (it.id) {
-                R.id.currentCardView -> {
-                    message = "금학기 성적을 저장하시겠습니까?"
-                    index = 0
-                }
-                R.id.totalCardView -> {
-                    message = "전체 학기 성적을 저장하시겠습니까?"
-                    index = 1
-                }
-                else -> {
-                    message = "졸업시뮬레이션을 저장하시겠습니까?"
-                    index = 2
-                }
-            }
-            builder.setMessage(message)
+            val builder = AlertDialog.Builder(context)
+            builder.setTitle(getString(R.string.app_name))
+            builder.setMessage(cardMessages[it.id])
             builder.setPositiveButton("예") { _, _ ->
-                if(checkStoragePermission())
-                    screenCapture(index)
+                if (checkStoragePermission())
+                    screenCapture(it as MaterialCardView)
             }
             builder.setNegativeButton("아니오") { _, _ ->
             }
             val dlg = builder.create()
+            dlg.setOnShowListener {
+                dlg.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(
+                    ContextCompat.getColor(context, R.color.primaryTextColor)
+                )
+                dlg.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(
+                    ContextCompat.getColor(context, R.color.primaryTextColor)
+                )
+            }
             dlg.show()
             true
         }
 
         binding.apply {
-            readMoreButton.setOnClickListener {
-                findNavController().navigate(R.id.action_homeFragment_to_totalGradeDetailFragment)
-            }
             currentCardView.setOnLongClickListener(cardClickListener)
             totalCardView.setOnLongClickListener(cardClickListener)
             simulationCardView.setOnLongClickListener(cardClickListener)
+        }
+    }
+
+    private fun setClickListenerToTotalGradeDetailFragment() {
+        binding.apply {
+            readMoreButton.setOnClickListener {
+                findNavController().navigate(R.id.action_homeFragment_to_totalGradeDetailFragment)
+            }
         }
     }
 
@@ -448,7 +457,7 @@ class HomeFragment : Fragment() {
         return this
     }
 
-    private fun checkStoragePermission():Boolean{
+    private fun checkStoragePermission(): Boolean {
         val permissionCheck = ContextCompat.checkSelfPermission(
             requireContext(),
             Manifest.permission.WRITE_EXTERNAL_STORAGE
@@ -464,21 +473,9 @@ class HomeFragment : Fragment() {
         return true
     }
 
-    private fun screenCapture(index: Int) {
-        // 1: 금학기, 2. 전체학기, 3. 졸업시뮬레이션
-        lateinit var captureView: MaterialCardView
-        if (index == 0) {
-            captureView = binding.currentCardView
-        } else if (index == 1) {
-            captureView = binding.totalCardView
-        } else {
-            captureView = binding.simulationCardView
-        }
-        val random = Random()
-        var filename = "card"
-        for(i in 1..10)
-            filename += random.nextInt(10).toString()
-        filename += ".jpg"
+    private fun screenCapture(captureView: MaterialCardView) {
+        val context = requireContext()
+        val filename = "card${DateTimeConverter.currentTime()}.jpg"
 
         // Make Bitmap By Captured View
         val bitmap =
@@ -494,16 +491,16 @@ class HomeFragment : Fragment() {
             }
             val collection =
                 MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
-            val item = requireContext().contentResolver.insert(collection, values)!!
-            requireContext().contentResolver.openAssetFileDescriptor(item, "w", null).use {
+            val item = context.contentResolver.insert(collection, values)!!
+            context.contentResolver.openAssetFileDescriptor(item, "w", null).use {
                 val out = FileOutputStream(it!!.fileDescriptor)
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out)
                 out.close()
             }
             values.clear()
             values.put(MediaStore.Images.Media.IS_PENDING, 0)
-            requireContext().contentResolver.update(item, values, null, null)
-            Toast.makeText(requireContext(), "저장되었습니다", Toast.LENGTH_SHORT).show()
+            context.contentResolver.update(item, values, null, null)
+            Snackbar.make(binding.container, "저장되었습니다.", Snackbar.LENGTH_SHORT).show()
         } else {
             val dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
                 .toString() +
@@ -525,11 +522,11 @@ class HomeFragment : Fragment() {
                 put(MediaStore.Images.Media.DATA, imgFile.absolutePath)
                 put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
             }
-            requireContext().contentResolver.insert(
+            context.contentResolver.insert(
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                 values
             )
-            Toast.makeText(requireContext(), "저장되었습니다", Toast.LENGTH_SHORT).show()
+            Snackbar.make(binding.container, "저장되었습니다.", Snackbar.LENGTH_SHORT).show()
         }
     }
 }

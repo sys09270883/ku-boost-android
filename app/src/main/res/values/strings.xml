@@ -27,4 +27,7 @@
     <string name="prompt_evaluation_method">성적평가방식</string>
     <string name="prompt_opensource_license">오픈소스 라이선스</string>
     <string name="prompt_grade_no_data">성적이 없습니다</string>
+    <string name="question_current_grades">금학기 성적을 저장하시겠습니까?</string>
+    <string name="question_total_grades">전체 학기 성적을 저장하시겠습니까?</string>
+    <string name="question_graduation_simulation">졸업시뮬레이션을 저장하시겠습니까?</string>
 </resources>
