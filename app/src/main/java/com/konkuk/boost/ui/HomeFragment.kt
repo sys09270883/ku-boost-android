@@ -293,7 +293,6 @@ class HomeFragment : Fragment() {
     private fun makeToolbar() {
         binding.apply {
             collapsingToolbarLayout.setExpandedTitleColor(Color.TRANSPARENT)
-            toolbar.title = getString(R.string.app_name)
             toolbar.inflateMenu(R.menu.menu_main)
             toolbar.setOnMenuItemClickListener {
                 when (it.itemId) {

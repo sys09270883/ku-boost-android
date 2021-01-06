@@ -59,7 +59,8 @@
                 android:layout_marginTop="24dp"
                 android:layout_marginEnd="24dp"
                 android:layout_marginBottom="24dp"
-                android:backgroundTint="@color/secondaryLightColor"
+                android:background="@drawable/oval"
+                app:backgroundTint="@color/secondaryLightColor"
                 android:enabled="false"
                 android:gravity="center"
                 android:padding="10dp"
@@ -68,7 +69,6 @@
                 android:textColor="@color/primaryTextColor"
                 android:textSize="18sp"
                 android:theme="@style/Theme.KUBoost"
-                app:cornerRadius="60dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:ignore="ContentDescription" />
