@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -13,13 +14,16 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.mikephil.charting.data.PieEntry
+import com.google.android.material.snackbar.Snackbar
 import com.konkuk.boost.R
 import com.konkuk.boost.adapters.GradeAdapter
 import com.konkuk.boost.data.grade.ParcelableGrade
 import com.konkuk.boost.databinding.FragmentTotalGradeDetailBinding
 import com.konkuk.boost.persistence.GradeEntity
 import com.konkuk.boost.utils.GradeUtils
+import com.konkuk.boost.utils.StorageUtils.checkStoragePermission
 import com.konkuk.boost.viewmodels.TotalGradeViewModel
+import com.konkuk.boost.views.CaptureUtils.capture
 import com.konkuk.boost.views.ChartUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -57,7 +61,36 @@ class TotalGradeDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setChartConfig()
+        setCardViewLongClickListener()
         observeAllValidGrades()
+    }
+
+    private fun setCardViewLongClickListener() {
+        val activity = requireActivity()
+        binding.cardView.setOnLongClickListener {
+           val builder = AlertDialog.Builder(activity)
+            builder.setTitle(getString(R.string.app_name))
+            builder.setMessage(getString(R.string.question_grades))
+            builder.setPositiveButton(getString(R.string.prompt_yes)) { _, _ ->
+                if (checkStoragePermission(activity)) {
+                    capture(activity, it)
+                    Snackbar.make(binding.container, getString(R.string.prompt_save), Snackbar.LENGTH_SHORT).show()
+                }
+            }
+            builder.setNegativeButton(getString(R.string.prompt_no)) { _, _ ->
+            }
+            val dlg = builder.create()
+            dlg.setOnShowListener {
+                dlg.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(
+                    ContextCompat.getColor(activity, R.color.primaryTextColor)
+                )
+                dlg.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(
+                    ContextCompat.getColor(activity, R.color.primaryTextColor)
+                )
+            }
+            dlg.show()
+            true
+        }
     }
 
     private fun setChartConfig() {

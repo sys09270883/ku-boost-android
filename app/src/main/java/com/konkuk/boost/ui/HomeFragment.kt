@@ -1,15 +1,7 @@
 package com.konkuk.boost.ui
 
-import android.Manifest
-import android.content.ContentValues
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.os.Build
 import android.os.Bundle
-import android.os.Environment
-import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -17,7 +9,6 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ProgressBar
 import androidx.appcompat.app.AlertDialog
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -33,22 +24,17 @@ import com.konkuk.boost.data.grade.ParcelableGrade
 import com.konkuk.boost.databinding.FragmentHomeBinding
 import com.konkuk.boost.persistence.GradeEntity
 import com.konkuk.boost.persistence.GraduationSimulationEntity
-import com.konkuk.boost.utils.DateTimeConverter
 import com.konkuk.boost.utils.GradeUtils
+import com.konkuk.boost.utils.StorageUtils.checkStoragePermission
 import com.konkuk.boost.viewmodels.HomeViewModel
+import com.konkuk.boost.views.CaptureUtils.capture
 import com.konkuk.boost.views.ChartUtils
 import com.konkuk.boost.views.CustomTableRow
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.io.File
-import java.io.FileOutputStream
 import java.util.*
 
 
 class HomeFragment : Fragment() {
-
-    companion object {
-        private const val STORAGE_CODE = 11
-    }
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
@@ -219,24 +205,26 @@ class HomeFragment : Fragment() {
     }
 
     private fun setCardViewLongClickListener() {
-        val context = requireContext()
+        val activity = requireActivity()
         val cardClickListener = View.OnLongClickListener {
-            val builder = AlertDialog.Builder(context)
+            val builder = AlertDialog.Builder(activity)
             builder.setTitle(getString(R.string.app_name))
             builder.setMessage(cardMessages[it.id])
             builder.setPositiveButton(getString(R.string.prompt_yes)) { _, _ ->
-                if (checkStoragePermission())
-                    screenCapture(it)
+                if (checkStoragePermission(activity)) {
+                    capture(activity, it)
+                    Snackbar.make(binding.container, getString(R.string.prompt_save), Snackbar.LENGTH_SHORT).show()
+                }
             }
             builder.setNegativeButton(getString(R.string.prompt_no)) { _, _ ->
             }
             val dlg = builder.create()
             dlg.setOnShowListener {
                 dlg.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(
-                    ContextCompat.getColor(context, R.color.primaryTextColor)
+                    ContextCompat.getColor(activity, R.color.primaryTextColor)
                 )
                 dlg.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(
-                    ContextCompat.getColor(context, R.color.primaryTextColor)
+                    ContextCompat.getColor(activity, R.color.primaryTextColor)
                 )
             }
             dlg.show()
@@ -456,76 +444,4 @@ class HomeFragment : Fragment() {
         return this
     }
 
-    private fun checkStoragePermission(): Boolean {
-        val permissionCheck = ContextCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
-        )
-        if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(
-                requireActivity(),
-                arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
-                STORAGE_CODE
-            )
-            return false
-        }
-        return true
-    }
-
-    private fun screenCapture(captureView: View) {
-        val context = requireContext()
-        val filename = "card${DateTimeConverter.currentTime()}.jpg"
-
-        // Make Bitmap By Captured View
-        val bitmap =
-            Bitmap.createBitmap(captureView.width, captureView.height, Bitmap.Config.ARGB_8888)
-        val canvas = Canvas(bitmap)
-        captureView.draw(canvas)
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            val values = ContentValues().apply {
-                put(MediaStore.Images.Media.DISPLAY_NAME, filename)
-                put(MediaStore.Images.Media.MIME_TYPE, "image/jpg")
-                put(MediaStore.Images.Media.IS_PENDING, 1)
-            }
-            val collection =
-                MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
-            val item = context.contentResolver.insert(collection, values)!!
-            context.contentResolver.openAssetFileDescriptor(item, "w", null).use {
-                val out = FileOutputStream(it!!.fileDescriptor)
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out)
-                out.close()
-            }
-            values.clear()
-            values.put(MediaStore.Images.Media.IS_PENDING, 0)
-            context.contentResolver.update(item, values, null, null)
-            Snackbar.make(binding.container, getString(R.string.prompt_save), Snackbar.LENGTH_SHORT).show()
-        } else {
-            val dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
-                .toString() +
-                    File.separator +
-                    "boost"
-            val file = File(dir)
-            if (!file.exists()) {
-                file.mkdirs()
-            }
-
-            val imgFile = File(file, filename)
-            val os = FileOutputStream(imgFile)
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, os)
-            os.flush()
-            os.close()
-            val values = ContentValues()
-            with(values) {
-                put(MediaStore.Images.Media.TITLE, filename)
-                put(MediaStore.Images.Media.DATA, imgFile.absolutePath)
-                put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
-            }
-            context.contentResolver.insert(
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                values
-            )
-            Snackbar.make(binding.container, getString(R.string.prompt_save), Snackbar.LENGTH_SHORT).show()
-        }
-    }
 }
