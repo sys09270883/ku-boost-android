@@ -1,11 +1,13 @@
 package com.konkuk.boost.ui
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
@@ -68,13 +70,17 @@ class TotalGradeDetailFragment : Fragment() {
     private fun setCardViewLongClickListener() {
         val activity = requireActivity()
         binding.cardView.setOnLongClickListener {
-           val builder = AlertDialog.Builder(activity)
+            val builder = AlertDialog.Builder(activity)
             builder.setTitle(getString(R.string.app_name))
             builder.setMessage(getString(R.string.question_grades))
             builder.setPositiveButton(getString(R.string.prompt_yes)) { _, _ ->
                 if (checkStoragePermission(activity)) {
                     capture(activity, it)
-                    Snackbar.make(binding.container, getString(R.string.prompt_save), Snackbar.LENGTH_SHORT).show()
+                    Snackbar.make(
+                        binding.container,
+                        getString(R.string.prompt_save),
+                        Snackbar.LENGTH_SHORT
+                    ).show()
                 }
             }
             builder.setNegativeButton(getString(R.string.prompt_no)) { _, _ ->
@@ -173,6 +179,9 @@ class TotalGradeDetailFragment : Fragment() {
                     // 학기 업데이트
                     val adapter = binding.gradeRecyclerview.adapter as GradeAdapter
                     adapter.submitList(selectedGrades)
+
+                    // 색상 업데이트
+                    (parent?.getChildAt(0) as? TextView)?.setTextColor(Color.WHITE)
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {}

@@ -24,4 +24,5 @@
     <color name="pastelLightGray">#757575</color>
     <color name="themeColor">#000000</color>
     <color name="themeBackgroundTextColor">#ffffff</color>
+    <color name="white">#ffffff</color>
 </resources>
