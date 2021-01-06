@@ -1,6 +1,7 @@
 package com.konkuk.boost.ui
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -179,12 +180,20 @@ class HomeFragment : Fragment() {
 
             // 전체평점
             ChartUtils.makeGradeChart(
-                binding.currentTotalPieChart, getString(R.string.prompt_total), avr, colors.first(), colors.last()
+                binding.currentTotalPieChart,
+                getString(R.string.prompt_total),
+                avr,
+                colors.first(),
+                colors.last()
             )
 
             // 전공평점
             ChartUtils.makeGradeChart(
-                binding.currentMajorPieChart, getString(R.string.prompt_major), majorAvr, colors.first(), colors.last()
+                binding.currentMajorPieChart,
+                getString(R.string.prompt_major),
+                majorAvr,
+                colors.first(),
+                colors.last()
             )
 
             // 성적분포
@@ -213,7 +222,11 @@ class HomeFragment : Fragment() {
             builder.setPositiveButton(getString(R.string.prompt_yes)) { _, _ ->
                 if (checkStoragePermission(activity)) {
                     capture(activity, it)
-                    Snackbar.make(binding.container, getString(R.string.prompt_save), Snackbar.LENGTH_SHORT).show()
+                    Snackbar.make(
+                        binding.container,
+                        getString(R.string.prompt_save),
+                        Snackbar.LENGTH_SHORT
+                    ).show()
                 }
             }
             builder.setNegativeButton(getString(R.string.prompt_no)) { _, _ ->
@@ -279,7 +292,8 @@ class HomeFragment : Fragment() {
 
     private fun makeToolbar() {
         binding.apply {
-//            toolbar.title = getString(R.string.app_name)
+            collapsingToolbarLayout.setExpandedTitleColor(Color.TRANSPARENT)
+            toolbar.title = getString(R.string.app_name)
             toolbar.inflateMenu(R.menu.menu_main)
             toolbar.setOnMenuItemClickListener {
                 when (it.itemId) {
