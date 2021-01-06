@@ -2,6 +2,7 @@ package com.konkuk.boost.ui
 
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.Typeface
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -292,6 +293,8 @@ class HomeFragment : Fragment() {
 
     private fun makeToolbar() {
         binding.apply {
+            val typeface = Typeface.createFromAsset(requireActivity().assets, "vermin_vibes_slant.ttf")
+            collapsingToolbarLayout.setExpandedTitleTypeface(typeface)
             collapsingToolbarLayout.setExpandedTitleColor(Color.TRANSPARENT)
             toolbar.inflateMenu(R.menu.menu_main)
             toolbar.setOnMenuItemClickListener {
