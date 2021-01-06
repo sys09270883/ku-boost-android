@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<font-family xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <font
+        android:font="@font/vermin_vibes_slant"
+        android:fontStyle="normal"
+        android:fontWeight="500"
+        app:font="@font/vermin_vibes_slant"
+        app:fontStyle="normal"
+        app:fontWeight="500" />
+</font-family>
