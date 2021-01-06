@@ -1,34 +1,23 @@
 package com.konkuk.boost.ui
 
-import android.Manifest
-import android.content.ContentValues
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.os.Build
 import android.os.Bundle
-import android.os.Environment
-import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ProgressBar
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.mikephil.charting.data.*
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
-import com.google.android.material.card.MaterialCardView
+import com.google.android.material.snackbar.Snackbar
 import com.konkuk.boost.R
 import com.konkuk.boost.adapters.GradeAdapter
 import com.konkuk.boost.data.grade.ParcelableGrade
@@ -36,18 +25,17 @@ import com.konkuk.boost.databinding.FragmentHomeBinding
 import com.konkuk.boost.persistence.GradeEntity
 import com.konkuk.boost.persistence.GraduationSimulationEntity
 import com.konkuk.boost.utils.GradeUtils
+import com.konkuk.boost.utils.StorageUtils.checkStoragePermission
 import com.konkuk.boost.viewmodels.HomeViewModel
+import com.konkuk.boost.views.CaptureUtils.capture
 import com.konkuk.boost.views.ChartUtils
 import com.konkuk.boost.views.CustomTableRow
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.io.File
-import java.io.FileOutputStream
 import java.util.*
 
 
 class HomeFragment : Fragment() {
 
-    private val STORAGE_CODE = 11
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
     private val viewModel: HomeViewModel by viewModel()
@@ -65,6 +53,13 @@ class HomeFragment : Fragment() {
             ContextCompat.getColor(context, R.color.pastelDeepPurple),
             ContextCompat.getColor(context, R.color.pastelBrown),
             ContextCompat.getColor(context, R.color.pastelLightGray),
+        )
+    }
+    private val cardMessages: HashMap<Int, String> by lazy {
+        hashMapOf(
+            R.id.currentCardView to getString(R.string.question_current_grades),
+            R.id.totalCardView to getString(R.string.question_total_grades),
+            R.id.simulationCardView to getString(R.string.question_graduation_simulation),
         )
     }
 
@@ -86,6 +81,7 @@ class HomeFragment : Fragment() {
         setChartConfig()
         setClickListenerToTotalGradeDetailFragment()
         setCurrentGradesRecyclerViewConfig()
+        setCardViewLongClickListener()
         fetchFromLocalDb()
         observeLogout()
         observeGraduationSimulation()
@@ -183,12 +179,12 @@ class HomeFragment : Fragment() {
 
             // 전체평점
             ChartUtils.makeGradeChart(
-                binding.currentTotalPieChart, "전체", avr, colors.first(), colors.last()
+                binding.currentTotalPieChart, getString(R.string.prompt_total), avr, colors.first(), colors.last()
             )
 
             // 전공평점
             ChartUtils.makeGradeChart(
-                binding.currentMajorPieChart, "전공", majorAvr, colors.first(), colors.last()
+                binding.currentMajorPieChart, getString(R.string.prompt_major), majorAvr, colors.first(), colors.last()
             )
 
             // 성적분포
@@ -208,45 +204,45 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun setClickListenerToTotalGradeDetailFragment() {
-        //card click listener
+    private fun setCardViewLongClickListener() {
+        val activity = requireActivity()
         val cardClickListener = View.OnLongClickListener {
-            val builder = AlertDialog.Builder(requireContext())
-            var message = ""
-            var index = 0
-            when (it.id) {
-                R.id.currentCardView -> {
-                    message = "금학기 성적을 저장하시겠습니까?"
-                    index = 0
-                }
-                R.id.totalCardView -> {
-                    message = "전체 학기 성적을 저장하시겠습니까?"
-                    index = 1
-                }
-                else -> {
-                    message = "졸업시뮬레이션을 저장하시겠습니까?"
-                    index = 2
+            val builder = AlertDialog.Builder(activity)
+            builder.setTitle(getString(R.string.app_name))
+            builder.setMessage(cardMessages[it.id])
+            builder.setPositiveButton(getString(R.string.prompt_yes)) { _, _ ->
+                if (checkStoragePermission(activity)) {
+                    capture(activity, it)
+                    Snackbar.make(binding.container, getString(R.string.prompt_save), Snackbar.LENGTH_SHORT).show()
                 }
             }
-            builder.setMessage(message)
-            builder.setPositiveButton("예") { _, _ ->
-                if(checkStoragePermission())
-                    screenCapture(index)
-            }
-            builder.setNegativeButton("아니오") { _, _ ->
+            builder.setNegativeButton(getString(R.string.prompt_no)) { _, _ ->
             }
             val dlg = builder.create()
+            dlg.setOnShowListener {
+                dlg.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(
+                    ContextCompat.getColor(activity, R.color.primaryTextColor)
+                )
+                dlg.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(
+                    ContextCompat.getColor(activity, R.color.primaryTextColor)
+                )
+            }
             dlg.show()
             true
         }
 
         binding.apply {
-            readMoreButton.setOnClickListener {
-                findNavController().navigate(R.id.action_homeFragment_to_totalGradeDetailFragment)
-            }
             currentCardView.setOnLongClickListener(cardClickListener)
             totalCardView.setOnLongClickListener(cardClickListener)
             simulationCardView.setOnLongClickListener(cardClickListener)
+        }
+    }
+
+    private fun setClickListenerToTotalGradeDetailFragment() {
+        binding.apply {
+            readMoreButton.setOnClickListener {
+                findNavController().navigate(R.id.action_homeFragment_to_totalGradeDetailFragment)
+            }
         }
     }
 
@@ -448,88 +444,4 @@ class HomeFragment : Fragment() {
         return this
     }
 
-    private fun checkStoragePermission():Boolean{
-        val permissionCheck = ContextCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
-        )
-        if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(
-                requireActivity(),
-                arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
-                STORAGE_CODE
-            )
-            return false
-        }
-        return true
-    }
-
-    private fun screenCapture(index: Int) {
-        // 1: 금학기, 2. 전체학기, 3. 졸업시뮬레이션
-        lateinit var captureView: MaterialCardView
-        if (index == 0) {
-            captureView = binding.currentCardView
-        } else if (index == 1) {
-            captureView = binding.totalCardView
-        } else {
-            captureView = binding.simulationCardView
-        }
-        val random = Random()
-        var filename = "card"
-        for(i in 1..10)
-            filename += random.nextInt(10).toString()
-        filename += ".jpg"
-
-        // Make Bitmap By Captured View
-        val bitmap =
-            Bitmap.createBitmap(captureView.width, captureView.height, Bitmap.Config.ARGB_8888)
-        val canvas = Canvas(bitmap)
-        captureView.draw(canvas)
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            val values = ContentValues().apply {
-                put(MediaStore.Images.Media.DISPLAY_NAME, filename)
-                put(MediaStore.Images.Media.MIME_TYPE, "image/jpg")
-                put(MediaStore.Images.Media.IS_PENDING, 1)
-            }
-            val collection =
-                MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
-            val item = requireContext().contentResolver.insert(collection, values)!!
-            requireContext().contentResolver.openAssetFileDescriptor(item, "w", null).use {
-                val out = FileOutputStream(it!!.fileDescriptor)
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out)
-                out.close()
-            }
-            values.clear()
-            values.put(MediaStore.Images.Media.IS_PENDING, 0)
-            requireContext().contentResolver.update(item, values, null, null)
-            Toast.makeText(requireContext(), "저장되었습니다", Toast.LENGTH_SHORT).show()
-        } else {
-            val dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
-                .toString() +
-                    File.separator +
-                    "boost"
-            val file = File(dir)
-            if (!file.exists()) {
-                file.mkdirs()
-            }
-
-            val imgFile = File(file, filename)
-            val os = FileOutputStream(imgFile)
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, os)
-            os.flush()
-            os.close()
-            val values = ContentValues()
-            with(values) {
-                put(MediaStore.Images.Media.TITLE, filename)
-                put(MediaStore.Images.Media.DATA, imgFile.absolutePath)
-                put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
-            }
-            requireContext().contentResolver.insert(
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                values
-            )
-            Toast.makeText(requireContext(), "저장되었습니다", Toast.LENGTH_SHORT).show()
-        }
-    }
 }

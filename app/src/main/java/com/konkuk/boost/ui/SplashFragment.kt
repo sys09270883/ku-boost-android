@@ -72,7 +72,7 @@ class SplashFragment : Fragment() {
                     .setMessage(getString(R.string.prompt_no_network))
                     .setCancelable(false)
                     .setPositiveButton(
-                        "확인"
+                        getString(R.string.prompt_yes)
                     ) { _, _ -> activity.finish() }
                     .create()
                 dialog.setOnShowListener {

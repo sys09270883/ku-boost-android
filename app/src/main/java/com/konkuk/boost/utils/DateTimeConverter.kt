@@ -8,24 +8,13 @@ import java.time.format.DateTimeFormatter
 import java.util.*
 
 object DateTimeConverter {
-    fun currentYear(): String {
-        val pattern = "yyyy"
+    fun currentTime(): String = formattedTime("yyyyMMddHHmmss")
 
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            val formatter = DateTimeFormatter.ofPattern(pattern)
-            val instant = Instant.ofEpochMilli(System.currentTimeMillis())
-            val date = LocalDateTime.ofInstant(instant, ZoneId.systemDefault())
-            return formatter.format(date)
-        }
+    fun currentYear(): String = formattedTime("yyyy")
 
-        val formatter = SimpleDateFormat(pattern, Locale.KOREA)
-        val calendar = Calendar.getInstance()
-        return formatter.format(calendar.time)
-    }
+    fun today(): String = formattedTime("yyyyMMdd")
 
-    fun today(): String {
-        val pattern = "yyyyMMdd"
-
+    private fun formattedTime(pattern: String): String {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             val formatter = DateTimeFormatter.ofPattern(pattern)
             val instant = Instant.ofEpochMilli(System.currentTimeMillis())

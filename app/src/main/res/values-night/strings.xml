@@ -25,4 +25,12 @@
     <string name="prompt_no_network_alert">네트워크 미연결 상태입니다.</string>
     <string name="prompt_opensource_license">오픈소스 라이선스</string>
     <string name="prompt_grade_no_data">성적이 없습니다</string>
+    <string name="question_current_grades">금학기 성적을 저장하시겠습니까?</string>
+    <string name="question_total_grades">전체 학기 성적을 저장하시겠습니까?</string>
+    <string name="question_graduation_simulation">졸업시뮬레이션을 저장하시겠습니까?</string>
+    <string name="prompt_save">저장되었습니다.</string>
+    <string name="prompt_yes">예</string>
+    <string name="prompt_no">아니오</string>
+    <string name="prompt_total">전체</string>
+    <string name="prompt_major">전공</string>
 </resources>
