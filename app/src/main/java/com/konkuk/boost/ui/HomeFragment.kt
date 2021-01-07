@@ -18,6 +18,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.mikephil.charting.data.*
+import com.github.mikephil.charting.formatter.ValueFormatter
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.google.android.material.snackbar.Snackbar
 import com.konkuk.boost.R
@@ -33,6 +34,7 @@ import com.konkuk.boost.views.CaptureUtils.capture
 import com.konkuk.boost.views.ChartUtils
 import com.konkuk.boost.views.CustomTableRow
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.text.DecimalFormat
 import java.util.*
 
 
@@ -427,7 +429,7 @@ class HomeFragment : Fragment() {
             lineDataSet.circleRadius = 6f
             lineDataSet.setDrawCircleHole(true)
             lineDataSet.lineWidth = 2f
-
+            lineDataSet.valueFormatter = MyValueFormatter()
             val lineData = LineData()
             lineData.addDataSet(lineDataSet)
             lineData.setValueTextColor(
@@ -460,4 +462,11 @@ class HomeFragment : Fragment() {
         return this
     }
 
+}
+
+class MyValueFormatter : ValueFormatter() {
+    private val mFormat = DecimalFormat("###,###,##0.00")
+    override fun getFormattedValue(value: Float): String {
+        return mFormat.format(value).toString()
+    }
 }
