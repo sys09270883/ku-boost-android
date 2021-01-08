@@ -18,7 +18,8 @@
 
         <activity
             android:name="com.konkuk.boost.ui.MainActivity"
-            android:theme="@style/Theme.KUBoost">
+            android:theme="@style/Theme.KUBoost"
+            android:screenOrientation="fullSensor">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
