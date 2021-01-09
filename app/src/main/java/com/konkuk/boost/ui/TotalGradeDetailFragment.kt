@@ -64,6 +64,10 @@ class TotalGradeDetailFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setChartConfig()
         setCardViewLongClickListener()
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
         observeAllValidGrades()
     }
 

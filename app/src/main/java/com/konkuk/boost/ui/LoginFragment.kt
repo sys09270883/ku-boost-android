@@ -47,7 +47,10 @@ class LoginFragment : Fragment() {
                 else -> false
             }
         }
+    }
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
         viewModel.loginResource.observe(viewLifecycleOwner) {
             when (it.status) {
                 UseCase.Status.SUCCESS -> {
@@ -61,6 +64,5 @@ class LoginFragment : Fragment() {
             }
         }
     }
-
 
 }

@@ -86,6 +86,10 @@ class HomeFragment : Fragment() {
         setCurrentGradesRecyclerViewConfig()
         setCardViewLongClickListener()
         fetchFromLocalDb()
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
         observeLogout()
         observeGraduationSimulation()
         observeStdNo()
