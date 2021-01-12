@@ -15,8 +15,8 @@ android {
         applicationId "com.konkuk.boost"
         minSdkVersion 23
         targetSdkVersion 30
-        versionCode 3
-        versionName "1.0"
+        versionCode 6
+        versionName "1.0.0"
         buildConfigField "String", "BASE_URL", "\"https://kuis.konkuk.ac.kr/\""
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
