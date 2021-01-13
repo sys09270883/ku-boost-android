@@ -166,8 +166,8 @@ class HomeFragment : Fragment() {
                 false -> {
                     try {
                         if (dialog?.isShowing == true) dialog?.dismiss()
-                    } catch (exception: Exception) {
-                        Log.e("yoonseop", "${exception.message}")
+                    } catch (e: Exception) {
+                        Log.e("ku-boost", "${e.message}")
                     }
                 }
             }
@@ -339,7 +339,7 @@ class HomeFragment : Fragment() {
 
             try {
                 simulations = it.data
-            } catch (exception: Exception) {
+            } catch (e: Exception) {
                 return@observe
             }
 

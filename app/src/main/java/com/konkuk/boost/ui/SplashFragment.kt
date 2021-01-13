@@ -11,9 +11,9 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.konkuk.boost.R
-import com.konkuk.boost.utils.UseCase
 import com.konkuk.boost.databinding.FragmentSplashBinding
 import com.konkuk.boost.utils.NetworkUtils
+import com.konkuk.boost.utils.UseCase
 import com.konkuk.boost.viewmodels.SplashViewModel
 import kotlinx.coroutines.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -46,7 +46,7 @@ class SplashFragment : Fragment() {
                         findNavController().navigate(R.id.action_splashFragment_to_homeFragment)
                     }
                     UseCase.Status.ERROR -> {
-                        Log.d("yoonseop", "${it.message}")
+                        Log.d("ku-boost", "${it.message}")
                         coroutineScope.launch {
                             delay(1500L)
                             findNavController().navigate(R.id.action_splashFragment_to_loginFragment)

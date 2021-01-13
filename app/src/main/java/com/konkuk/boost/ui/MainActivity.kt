@@ -49,8 +49,8 @@ class MainActivity : AppCompatActivity() {
                 this,
                 REQUEST_CODE
             )
-        } catch (exception: Exception) {
-            Log.e("yoonseop", "${exception.message}")
+        } catch (e: Exception) {
+            Log.e("ku-boost", "${e.message}")
         }
     }
 
@@ -58,7 +58,7 @@ class MainActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_CODE) {
             if (resultCode != RESULT_OK) {
-                Log.e("yoonseop", "Update failed. result code: $resultCode")
+                Log.e("ku-boost", "Update failed. result code: $resultCode")
                 appUpdateManager = AppUpdateManagerFactory.create(this)
                 val appUpdateInfo = appUpdateManager?.appUpdateInfo
                 appUpdateInfo?.addOnSuccessListener {
@@ -83,8 +83,8 @@ class MainActivity : AppCompatActivity() {
                         this,
                         REQUEST_CODE
                     )
-                } catch (exception: Exception) {
-                    Log.e("yoonseop", "${exception.message}")
+                } catch (e: Exception) {
+                    Log.e("ku-boost", "${e.message}")
                 }
             }
         }

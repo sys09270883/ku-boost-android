@@ -68,7 +68,7 @@ class GradeRepositoryImpl(
                 )
             }
         } catch (exception: Exception) {
-            Log.e("yoonseop", "${exception.message}")
+            Log.e("ku-boost", "${exception.message}")
             return UseCase.error("${exception.message}")
         }
 
@@ -137,7 +137,7 @@ class GradeRepositoryImpl(
             gradeDao.insertGrade(*allGrades.toTypedArray())
             preferenceManager.setHasData(true)
         } catch (exception: Exception) {
-            Log.e("yoonseop", "${exception.message}")
+            Log.e("ku-boost", "${exception.message}")
             return UseCase.error("${exception.message}")
         }
 
@@ -181,7 +181,7 @@ class GradeRepositoryImpl(
         try {
             currentGrades = gradeDao.getCurrentSemesterGradesTransaction(username)
         } catch (exception: Exception) {
-            Log.e("yoonseop", "${exception.message}")
+            Log.e("ku-boost", "${exception.message}")
             return UseCase.error("${exception.message}")
         }
 

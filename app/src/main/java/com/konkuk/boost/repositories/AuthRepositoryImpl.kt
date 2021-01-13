@@ -2,9 +2,9 @@ package com.konkuk.boost.repositories
 
 import android.util.Log
 import com.konkuk.boost.api.AuthService
-import com.konkuk.boost.utils.UseCase
 import com.konkuk.boost.data.auth.LoginResponse
 import com.konkuk.boost.persistence.PreferenceManager
+import com.konkuk.boost.utils.UseCase
 import retrofit2.Response
 
 class AuthRepositoryImpl(
@@ -18,8 +18,8 @@ class AuthRepositoryImpl(
         val loginResponse: Response<LoginResponse>
         try {
             loginResponse = authService.login(username, password)
-        } catch (exception: Exception) {
-            Log.e("yoonseop", "${exception.message}")
+        } catch (e: Exception) {
+            Log.e("ku-boost", "${e.message}")
             return UseCase.error("서버에 문제가 발생했습니다.")
         }
 
@@ -54,8 +54,8 @@ class AuthRepositoryImpl(
         val loginResponse: Response<LoginResponse>
         try {
             loginResponse = authService.login(username, password)
-        } catch (exception: Exception) {
-            Log.e("yoonseop", "${exception.message}")
+        } catch (e: Exception) {
+            Log.e("ku-boost", "${e.message}")
             return UseCase.error("네트워크를 확인하세요.")
         }
 
