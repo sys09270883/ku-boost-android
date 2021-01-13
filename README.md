@@ -3,7 +3,7 @@
 [![Android CI](https://github.com/sys09270883/ku-boost-android/workflows/CI%20workflow/badge.svg)](https://github.com/sys09270883/ku-boost-android/)
 
 ## 아키텍처
-<img src="https://user-images.githubusercontent.com/50787869/104447618-607ffa80-55df-11eb-83c3-038f261fb7fa.png" width="60%" height="60%"/>
+<img src="https://user-images.githubusercontent.com/50787869/104448423-7cd06700-55e0-11eb-832b-30b2ede45219.png" width="60%" height="60%"/>
 
 ## 사용한 라이브러리
 ### Jetpack
