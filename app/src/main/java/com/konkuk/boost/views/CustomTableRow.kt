@@ -45,8 +45,8 @@ class CustomTableRow(context: Context) : TableRow(context) {
             }
 
             tableLayout.addView(row)
-        } catch (exception: Exception) {
-            Log.e("yoonseop", "${exception.message}")
+        } catch (e: Exception) {
+            Log.e("ku-boost", "${e.message}")
         }
     }
 
@@ -79,8 +79,8 @@ class CustomTableRow(context: Context) : TableRow(context) {
             }
 
             tableLayout.addView(row)
-        } catch (exception: Exception) {
-            Log.e("yoonseop", "${exception.message}")
+        } catch (e: Exception) {
+            Log.e("ku-boost", "${e.message}")
         }
     }
 }

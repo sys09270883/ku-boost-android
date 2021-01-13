@@ -10,7 +10,6 @@ import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.util.concurrent.TimeUnit
 
 val apiModule = module {
     fun provideHttpLoggingInterceptor() =
@@ -20,8 +19,6 @@ val apiModule = module {
         httpLoggingInterceptor: HttpLoggingInterceptor
     ) = OkHttpClient.Builder()
         .addInterceptor(httpLoggingInterceptor)
-        .connectTimeout(1, TimeUnit.MINUTES)
-        .readTimeout(30, TimeUnit.SECONDS)
         .build()
 
     fun provideCookieClient(
@@ -43,9 +40,9 @@ val apiModule = module {
         .baseUrl(baseUrl).client(okHttpClient)
         .addConverterFactory(GsonConverterFactory.create()).build()
 
-    fun provideCookieRetrofit(okHttpClient: OkHttpClient, baseUrl: String): Retrofit =
+    fun provideCookieRetrofit(cookieClient: OkHttpClient, baseUrl: String): Retrofit =
         Retrofit.Builder()
-            .baseUrl(baseUrl).client(okHttpClient)
+            .baseUrl(baseUrl).client(cookieClient)
             .addConverterFactory(GsonConverterFactory.create()).build()
 
     fun provideAuthService(retrofit: Retrofit): AuthService =

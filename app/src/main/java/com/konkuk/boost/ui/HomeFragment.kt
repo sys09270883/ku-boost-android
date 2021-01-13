@@ -151,7 +151,7 @@ class HomeFragment : Fragment() {
             when (it) {
                 true -> {
                     if (!viewModel.hasData()) {
-                        // 로컬 DB가 비어있으면 다이얼로그를 띄움
+                        // 첫 로그인 시 로컬 데이터베이스가 비어있는 경우 다이얼로그를 띄움
                         val context = requireContext()
                         val builder = AlertDialog.Builder(context)
                         dialog = builder
@@ -166,8 +166,8 @@ class HomeFragment : Fragment() {
                 false -> {
                     try {
                         if (dialog?.isShowing == true) dialog?.dismiss()
-                    } catch (exception: Exception) {
-                        Log.e("yoonseop", "${exception.message}")
+                    } catch (e: Exception) {
+                        Log.e("ku-boost", "${e.message}")
                     }
                 }
             }
@@ -339,7 +339,7 @@ class HomeFragment : Fragment() {
 
             try {
                 simulations = it.data
-            } catch (exception: Exception) {
+            } catch (e: Exception) {
                 return@observe
             }
 
