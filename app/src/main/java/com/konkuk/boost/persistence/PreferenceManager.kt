@@ -17,7 +17,7 @@ class PreferenceManager(private val context: Context) {
         private const val PASSWORD = "password"
         private const val COOKIE = "cookie"
         private const val NAME = "name"
-        private const val STD_NO = "stdNo"
+        private const val STD_NO = "std_no"
         private const val STATE = "state"
         private const val DEPT = "dept"
         private const val CODE = "code"
@@ -86,7 +86,7 @@ class PreferenceManager(private val context: Context) {
 
     fun getCode() = pref().getString(CODE, DEFAULT)!!
 
-    fun getHasData() = pref().getBoolean(HAS_DATA, false)
+    fun getHasData() = pref().getBoolean(HAS_DATA, DEFAULT_BOOLEAN)
 
     fun clearAll() {
         setAuthInfo(DEFAULT, DEFAULT)
