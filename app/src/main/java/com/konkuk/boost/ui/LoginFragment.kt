@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.konkuk.boost.R
-import com.konkuk.boost.data.UseCase
+import com.konkuk.boost.utils.UseCase
 import com.konkuk.boost.databinding.FragmentLoginBinding
 import com.konkuk.boost.viewmodels.LoginViewModel
 import kotlinx.coroutines.delay

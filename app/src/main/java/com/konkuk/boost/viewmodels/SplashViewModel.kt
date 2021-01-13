@@ -3,7 +3,7 @@ package com.konkuk.boost.viewmodels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.konkuk.boost.data.UseCase
+import com.konkuk.boost.utils.UseCase
 import com.konkuk.boost.repositories.AuthRepository
 import com.konkuk.boost.data.auth.LoginResponse
 import kotlinx.coroutines.Dispatchers

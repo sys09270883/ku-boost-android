@@ -1,6 +1,6 @@
 package com.konkuk.boost.repositories
 
-import com.konkuk.boost.data.UseCase
+import com.konkuk.boost.utils.UseCase
 import com.konkuk.boost.data.auth.LoginResponse
 
 interface AuthRepository {

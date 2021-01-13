@@ -3,7 +3,7 @@ package com.konkuk.boost.viewmodels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.konkuk.boost.data.UseCase
+import com.konkuk.boost.utils.UseCase
 import com.konkuk.boost.repositories.GradeRepository
 import com.konkuk.boost.persistence.GradeEntity
 import kotlinx.coroutines.Dispatchers

@@ -2,7 +2,7 @@ package com.konkuk.boost.repositories
 
 import android.util.Log
 import com.konkuk.boost.api.GradeService
-import com.konkuk.boost.data.UseCase
+import com.konkuk.boost.utils.UseCase
 import com.konkuk.boost.data.grade.GraduationSimulationResponse
 import com.konkuk.boost.data.grade.UserInformationResponse
 import com.konkuk.boost.data.grade.ValidGradesResponse

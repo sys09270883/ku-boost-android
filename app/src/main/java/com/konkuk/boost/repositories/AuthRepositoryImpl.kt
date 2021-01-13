@@ -2,7 +2,7 @@ package com.konkuk.boost.repositories
 
 import android.util.Log
 import com.konkuk.boost.api.AuthService
-import com.konkuk.boost.data.UseCase
+import com.konkuk.boost.utils.UseCase
 import com.konkuk.boost.data.auth.LoginResponse
 import com.konkuk.boost.persistence.PreferenceManager
 import retrofit2.Response

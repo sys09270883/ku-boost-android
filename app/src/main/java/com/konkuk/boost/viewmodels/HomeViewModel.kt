@@ -3,7 +3,7 @@ package com.konkuk.boost.viewmodels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.konkuk.boost.data.UseCase
+import com.konkuk.boost.utils.UseCase
 import com.konkuk.boost.data.grade.GraduationSimulationResponse
 import com.konkuk.boost.persistence.GradeEntity
 import com.konkuk.boost.persistence.GraduationSimulationEntity
