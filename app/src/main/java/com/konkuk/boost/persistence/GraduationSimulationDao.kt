@@ -8,7 +8,6 @@ import com.konkuk.boost.persistence.GraduationSimulationContract.GraduationSimul
 import com.konkuk.boost.persistence.GraduationSimulationContract.GraduationSimulationEntry.STANDARD
 import com.konkuk.boost.persistence.GraduationSimulationContract.GraduationSimulationEntry.TABLE_NAME
 import com.konkuk.boost.persistence.GraduationSimulationContract.GraduationSimulationEntry.USERNAME
-import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface GraduationSimulationDao {
@@ -16,5 +15,5 @@ interface GraduationSimulationDao {
     suspend fun insertGraduationSimulation(vararg graduationSimulationData: GraduationSimulationEntity)
 
     @Query("SELECT * FROM $TABLE_NAME WHERE $USERNAME = :username ORDER BY $STANDARD ASC, $ACQUIRED ASC")
-    fun loadGraduationSimulationByUsername(username: String): Flow<List<GraduationSimulationEntity>>
+    fun loadGraduationSimulationByUsername(username: String): List<GraduationSimulationEntity>
 }

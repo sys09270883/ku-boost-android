@@ -8,7 +8,6 @@ import com.konkuk.boost.data.grade.ValidGradesResponse
 import com.konkuk.boost.persistence.*
 import com.konkuk.boost.utils.DateTimeConverter
 import com.konkuk.boost.utils.UseCase
-import kotlinx.coroutines.flow.first
 
 class GradeRepositoryImpl(
     private val gradeService: GradeService,
@@ -82,7 +81,6 @@ class GradeRepositoryImpl(
         try {
             graduationSimulationList =
                 graduationSimulationDao.loadGraduationSimulationByUsername(username)
-                    .first()
         } catch (exception: Exception) {
             return UseCase.error("${exception.message}")
         }
