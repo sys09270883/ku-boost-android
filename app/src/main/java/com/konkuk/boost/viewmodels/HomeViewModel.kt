@@ -3,12 +3,12 @@ package com.konkuk.boost.viewmodels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.konkuk.boost.utils.UseCase
 import com.konkuk.boost.data.grade.GraduationSimulationResponse
 import com.konkuk.boost.persistence.GradeEntity
 import com.konkuk.boost.persistence.GraduationSimulationEntity
 import com.konkuk.boost.repositories.AuthRepository
 import com.konkuk.boost.repositories.GradeRepository
+import com.konkuk.boost.utils.UseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -102,7 +102,7 @@ class HomeViewModel(
         }
     }
 
-    fun isFetched(): Boolean = fetched.value ?: true
+    fun isFetched(): Boolean = fetched.value ?: false
 
     fun hasData(): Boolean = gradeRepository.hasData()
 }

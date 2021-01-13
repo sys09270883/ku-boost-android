@@ -2,12 +2,12 @@ package com.konkuk.boost.repositories
 
 import android.util.Log
 import com.konkuk.boost.api.GradeService
-import com.konkuk.boost.utils.UseCase
 import com.konkuk.boost.data.grade.GraduationSimulationResponse
 import com.konkuk.boost.data.grade.UserInformationResponse
 import com.konkuk.boost.data.grade.ValidGradesResponse
 import com.konkuk.boost.persistence.*
 import com.konkuk.boost.utils.DateTimeConverter
+import com.konkuk.boost.utils.UseCase
 import kotlinx.coroutines.flow.first
 
 class GradeRepositoryImpl(
@@ -67,7 +67,6 @@ class GradeRepositoryImpl(
                     code = code
                 )
             }
-            preferenceManager.setHasData(true)
         } catch (exception: Exception) {
             Log.e("yoonseop", "${exception.message}")
             return UseCase.error("${exception.message}")
@@ -136,7 +135,7 @@ class GradeRepositoryImpl(
             }
 
             gradeDao.insertGrade(*allGrades.toTypedArray())
-
+            preferenceManager.setHasData(true)
         } catch (exception: Exception) {
             Log.e("yoonseop", "${exception.message}")
             return UseCase.error("${exception.message}")
