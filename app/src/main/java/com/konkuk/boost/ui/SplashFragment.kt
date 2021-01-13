@@ -57,7 +57,6 @@ class SplashFragment : Fragment() {
             } else {                // 사용자 정보가 저장되어 있지 않을 경우
                 val dialog = AlertDialog.Builder(activity)
                     .setTitle(getString(R.string.app_name))
-                    .setIcon(R.drawable.ic_baseline_network_check_24)
                     .setMessage(getString(R.string.prompt_no_network))
                     .setCancelable(false)
                     .setPositiveButton(
