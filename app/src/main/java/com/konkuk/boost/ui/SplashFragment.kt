@@ -35,25 +35,14 @@ class SplashFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        val activity = requireActivity()
+        observeLoginResource()
+        handleNetwork()
+    }
 
+    private fun handleNetwork() {
+        val activity = requireActivity()
         val isConnected = checkNetworkConnected()
         if (isConnected) {
-            viewModel.loginResource.observe(viewLifecycleOwner) {
-                when (it.status) {
-                    UseCase.Status.SUCCESS -> {
-                        viewModel.clearLoginResource()
-                        findNavController().navigate(R.id.action_splashFragment_to_homeFragment)
-                    }
-                    UseCase.Status.ERROR -> {
-                        Log.d("ku-boost", "${it.message}")
-                        coroutineScope.launch {
-                            delay(1500L)
-                            findNavController().navigate(R.id.action_splashFragment_to_loginFragment)
-                        }
-                    }
-                }
-            }
             viewModel.autoLogin()
         } else {    // 네트워크 미연결시
             val username = viewModel.getUsername()
@@ -81,6 +70,24 @@ class SplashFragment : Fragment() {
                     )
                 }
                 dialog.show()
+            }
+        }
+    }
+
+    private fun observeLoginResource() {
+        viewModel.loginResource.observe(viewLifecycleOwner) {
+            when (it.status) {
+                UseCase.Status.SUCCESS -> {
+                    viewModel.clearLoginResource()
+                    findNavController().navigate(R.id.action_splashFragment_to_homeFragment)
+                }
+                UseCase.Status.ERROR -> {
+                    Log.d("ku-boost", "${it.message}")
+                    coroutineScope.launch {
+                        delay(1500L)
+                        findNavController().navigate(R.id.action_splashFragment_to_loginFragment)
+                    }
+                }
             }
         }
     }
