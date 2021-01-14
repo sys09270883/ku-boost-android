@@ -18,18 +18,18 @@ class GradeRepositoryImpl(
     override suspend fun makeGraduationSimulationRequest(): UseCase<GraduationSimulationResponse> {
         val username = preferenceManager.username
         val stdNo = preferenceManager.stdNo
-        val corsYy = stdNo.toString().substring(0, 4).toInt()
-        val shregCd = preferenceManager.code
+        val courseYear = stdNo.toString().substring(0, 4).toInt()
+        val code = preferenceManager.code
 
         val graduationSimulationResponse: GraduationSimulationResponse
 
         try {
-            if (username.isEmpty()) throw Exception("Username is empty.")
+            if (username.isEmpty()) throw Exception("사용자 이름이 없습니다.")
 
             graduationSimulationResponse = gradeService.fetchGraduationSimulation(
                 stdNo = stdNo,
-                year = corsYy,
-                shregCd = shregCd
+                year = courseYear,
+                shregCd = code
             )
 
             val simulations = graduationSimulationResponse.simulations
