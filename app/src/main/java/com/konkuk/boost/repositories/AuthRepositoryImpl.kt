@@ -25,7 +25,7 @@ class AuthRepositoryImpl(
 
         val cookie = loginResponse.headers()["Set-Cookie"]?.split(";")?.first()
             ?: return UseCase.error("다시 로그인하세요.")
-        preferenceManager.setCookie(cookie)
+        preferenceManager.cookie = cookie
 
         val loginBody = loginResponse.body()
         val loginSuccess =
@@ -43,8 +43,8 @@ class AuthRepositoryImpl(
     }
 
     override suspend fun makeAutoLoginRequest(): UseCase<LoginResponse> {
-        val username = preferenceManager.getUsername()
-        val password = preferenceManager.getPassword()
+        val username = preferenceManager.username
+        val password = preferenceManager.password
         return makeLoginRequest(username, password)
     }
 
@@ -53,5 +53,5 @@ class AuthRepositoryImpl(
         return UseCase.success(Unit)
     }
 
-    override fun getUsername() = preferenceManager.getUsername()
+    override fun getUsername() = preferenceManager.username
 }

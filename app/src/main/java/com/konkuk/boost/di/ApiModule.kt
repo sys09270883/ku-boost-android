@@ -28,7 +28,7 @@ val apiModule = module {
         .addInterceptor(httpLoggingInterceptor)
         .addInterceptor {
             val original = it.request()
-            val cookie = preferenceManager.getCookie()
+            val cookie = preferenceManager.cookie
 
             val authorized = original.newBuilder()
                 .addHeader("Cookie", cookie).build()
