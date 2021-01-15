@@ -35,25 +35,14 @@ class SplashFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        val activity = requireActivity()
+        observeLoginResource()
+        handleNetwork()
+    }
 
+    private fun handleNetwork() {
+        val activity = requireActivity()
         val isConnected = checkNetworkConnected()
         if (isConnected) {
-            viewModel.loginResource.observe(viewLifecycleOwner) {
-                when (it.status) {
-                    UseCase.Status.SUCCESS -> {
-                        viewModel.clearLoginResource()
-                        findNavController().navigate(R.id.action_splashFragment_to_homeFragment)
-                    }
-                    UseCase.Status.ERROR -> {
-                        Log.d("ku-boost", "${it.message}")
-                        coroutineScope.launch {
-                            delay(1500L)
-                            findNavController().navigate(R.id.action_splashFragment_to_loginFragment)
-                        }
-                    }
-                }
-            }
             viewModel.autoLogin()
         } else {    // 네트워크 미연결시
             val username = viewModel.getUsername()
@@ -68,7 +57,6 @@ class SplashFragment : Fragment() {
             } else {                // 사용자 정보가 저장되어 있지 않을 경우
                 val dialog = AlertDialog.Builder(activity)
                     .setTitle(getString(R.string.app_name))
-                    .setIcon(R.drawable.ic_baseline_network_check_24)
                     .setMessage(getString(R.string.prompt_no_network))
                     .setCancelable(false)
                     .setPositiveButton(
@@ -81,6 +69,24 @@ class SplashFragment : Fragment() {
                     )
                 }
                 dialog.show()
+            }
+        }
+    }
+
+    private fun observeLoginResource() {
+        viewModel.loginResource.observe(viewLifecycleOwner) {
+            when (it.status) {
+                UseCase.Status.SUCCESS -> {
+                    viewModel.clearLoginResource()
+                    findNavController().navigate(R.id.action_splashFragment_to_homeFragment)
+                }
+                UseCase.Status.ERROR -> {
+                    Log.d("ku-boost", "${it.message}")
+                    coroutineScope.launch {
+                        delay(1500L)
+                        findNavController().navigate(R.id.action_splashFragment_to_loginFragment)
+                    }
+                }
             }
         }
     }

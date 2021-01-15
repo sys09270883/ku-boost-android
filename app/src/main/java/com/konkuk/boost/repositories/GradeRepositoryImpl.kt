@@ -16,20 +16,20 @@ class GradeRepositoryImpl(
     private val gradeDao: GradeDao
 ) : GradeRepository {
     override suspend fun makeGraduationSimulationRequest(): UseCase<GraduationSimulationResponse> {
-        val username = preferenceManager.getUsername()
-        val stdNo = preferenceManager.getStdNo()
-        val corsYy = stdNo.toString().substring(0, 4).toInt()
-        val shregCd = preferenceManager.getCode()
+        val username = preferenceManager.username
+        val stdNo = preferenceManager.stdNo
+        val courseYear = stdNo.toString().substring(0, 4).toInt()
+        val code = preferenceManager.code
 
         val graduationSimulationResponse: GraduationSimulationResponse
 
         try {
-            if (username.isEmpty()) throw Exception("Username is empty.")
+            if (username.isEmpty()) throw Exception("사용자 이름이 없습니다.")
 
             graduationSimulationResponse = gradeService.fetchGraduationSimulation(
                 stdNo = stdNo,
-                year = corsYy,
-                shregCd = shregCd
+                year = courseYear,
+                shregCd = code
             )
 
             val simulations = graduationSimulationResponse.simulations
@@ -75,7 +75,7 @@ class GradeRepositoryImpl(
     }
 
     override suspend fun getGraduationSimulations(): UseCase<List<GraduationSimulationEntity>> {
-        val username = preferenceManager.getUsername()
+        val username = preferenceManager.username
         val graduationSimulationList: List<GraduationSimulationEntity>
 
         try {
@@ -88,7 +88,7 @@ class GradeRepositoryImpl(
         return UseCase.success(graduationSimulationList)
     }
 
-    override fun getStdNo(): Int = preferenceManager.getStdNo()
+    override fun getStdNo(): Int = preferenceManager.stdNo
 
     override suspend fun makeAllGradesRequest(): UseCase<Unit> {
         val allGrades = mutableListOf<GradeEntity>()
@@ -96,8 +96,8 @@ class GradeRepositoryImpl(
         val semesterConverter = hashMapOf(1 to 1, 4 to 2, 2 to 3, 5 to 4)
 
         try {
-            val stdNo = preferenceManager.getStdNo()
-            val username = preferenceManager.getUsername()
+            val stdNo = preferenceManager.stdNo
+            val username = preferenceManager.username
             val startYear = stdNo.toString().substring(0, 4).toInt()
             val endYear = DateTimeConverter.currentYear().toInt()
             val semesters = intArrayOf(1, 4, 2, 5)
@@ -133,7 +133,7 @@ class GradeRepositoryImpl(
             }
 
             gradeDao.insertGrade(*allGrades.toTypedArray())
-            preferenceManager.setHasData(true)
+            preferenceManager.hasData = true
         } catch (exception: Exception) {
             Log.e("ku-boost", "${exception.message}")
             return UseCase.error("${exception.message}")
@@ -143,8 +143,8 @@ class GradeRepositoryImpl(
     }
 
     override suspend fun makeAllValidGradesRequest(): UseCase<Unit> {
-        val stdNo = preferenceManager.getStdNo()
-        val username = preferenceManager.getUsername()
+        val stdNo = preferenceManager.stdNo
+        val username = preferenceManager.username
         val validGradesResponse: ValidGradesResponse
 
         try {
@@ -160,7 +160,7 @@ class GradeRepositoryImpl(
     }
 
     override suspend fun getAllValidGrades(): UseCase<List<GradeEntity>> {
-        val username = preferenceManager.getUsername()
+        val username = preferenceManager.username
 
         val allValidGrades: List<GradeEntity>
         try {
@@ -173,7 +173,7 @@ class GradeRepositoryImpl(
     }
 
     override suspend fun getCurrentGrades(): UseCase<List<GradeEntity>> {
-        val username = preferenceManager.getUsername()
+        val username = preferenceManager.username
 
         val currentGrades: List<GradeEntity>
         try {
@@ -186,6 +186,6 @@ class GradeRepositoryImpl(
         return UseCase.success(currentGrades)
     }
 
-    override fun hasData() = preferenceManager.getHasData()
+    override fun hasData() = preferenceManager.hasData
 
 }

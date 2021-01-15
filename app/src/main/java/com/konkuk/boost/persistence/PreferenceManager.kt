@@ -6,6 +6,8 @@ import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
+import kotlin.properties.ReadWriteProperty
+import kotlin.reflect.KProperty
 
 class PreferenceManager(private val context: Context) {
 
@@ -22,12 +24,23 @@ class PreferenceManager(private val context: Context) {
         private const val DEPT = "dept"
         private const val CODE = "code"
         private const val HAS_DATA = "has_data"
-        private const val DEFAULT = ""
+        private const val DEFAULT_STRING = ""
         private const val DEFAULT_INT = 2021
         private const val DEFAULT_BOOLEAN = false
     }
 
-    private fun pref(): SharedPreferences {
+    private val pref: SharedPreferences by lazy { getEncryptedSharedPreference() }
+    var username: String by pref.stringPreference(USERNAME)
+    var password: String by pref.stringPreference(PASSWORD)
+    var cookie: String by pref.stringPreference(COOKIE)
+    var name: String by pref.stringPreference(NAME)
+    var stdNo: Int by pref.intPreference(STD_NO)
+    var state: String by pref.stringPreference(STATE)
+    var dept: String by pref.stringPreference(DEPT)
+    var code: String by pref.stringPreference(CODE)
+    var hasData: Boolean by pref.booleanPreference(HAS_DATA)
+
+    private fun getEncryptedSharedPreference(): SharedPreferences {
         val keyGenParameterSpec = KeyGenParameterSpec.Builder(
             MASTER_KEY_ALIAS,
             KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT
@@ -49,50 +62,57 @@ class PreferenceManager(private val context: Context) {
         )
     }
 
-    private fun editor() = pref().edit()
+    fun setAuthInfo(username: String, password: String) {
+        this.username = username
+        this.password = password
+    }
 
-    fun setAuthInfo(username: String, password: String) =
-        editor().apply {
-            putString(USERNAME, username)
-            putString(PASSWORD, password)
-        }.apply()
-
-    fun setCookie(cookie: String) = editor().putString(COOKIE, cookie).apply()
-
-    fun setUserInfo(name: String, stdNo: Int, state: String, dept: String, code: String) =
-        editor().apply {
-            putString(NAME, name)
-            putInt(STD_NO, stdNo)
-            putString(STATE, state)
-            putString(DEPT, dept)
-            putString(CODE, code)
-        }.apply()
-
-    fun setHasData(hasData: Boolean) = editor().putBoolean(HAS_DATA, hasData).apply()
-
-    fun getUsername() = pref().getString(USERNAME, DEFAULT)!!
-
-    fun getPassword() = pref().getString(PASSWORD, DEFAULT)!!
-
-    fun getCookie() = pref().getString(COOKIE, DEFAULT)!!
-
-    fun getName() = pref().getString(NAME, DEFAULT)!!
-
-    fun getStdNo() = pref().getInt(STD_NO, DEFAULT_INT)
-
-    fun getState() = pref().getString(STATE, DEFAULT)!!
-
-    fun getDept() = pref().getString(DEPT, DEFAULT)!!
-
-    fun getCode() = pref().getString(CODE, DEFAULT)!!
-
-    fun getHasData() = pref().getBoolean(HAS_DATA, DEFAULT_BOOLEAN)
+    fun setUserInfo(name: String, stdNo: Int, state: String, dept: String, code: String) {
+        this.name = name
+        this.stdNo = stdNo
+        this.state = state
+        this.dept = dept
+        this.code = code
+    }
 
     fun clearAll() {
-        setAuthInfo(DEFAULT, DEFAULT)
-        setUserInfo(DEFAULT, DEFAULT_INT, DEFAULT, DEFAULT, DEFAULT)
-        setCookie(DEFAULT)
-        setHasData(DEFAULT_BOOLEAN)
+        setAuthInfo(DEFAULT_STRING, DEFAULT_STRING)
+        setUserInfo(DEFAULT_STRING, DEFAULT_INT, DEFAULT_STRING, DEFAULT_STRING, DEFAULT_STRING)
+        cookie = DEFAULT_STRING
+        hasData = DEFAULT_BOOLEAN
+    }
+
+    private fun SharedPreferences.stringPreference(
+        key: String,
+        defaultValue: String = DEFAULT_STRING
+    ): ReadWriteProperty<Any, String> = object : ReadWriteProperty<Any, String> {
+        override fun getValue(thisRef: Any, property: KProperty<*>): String =
+            getString(key, defaultValue) ?: defaultValue
+
+        override fun setValue(thisRef: Any, property: KProperty<*>, value: String) =
+            edit().putString(key, value).apply()
+    }
+
+    private fun SharedPreferences.intPreference(
+        key: String,
+        defaultValue: Int = DEFAULT_INT
+    ): ReadWriteProperty<Any, Int> = object : ReadWriteProperty<Any, Int> {
+        override fun getValue(thisRef: Any, property: KProperty<*>): Int =
+            getInt(key, defaultValue)
+
+        override fun setValue(thisRef: Any, property: KProperty<*>, value: Int) =
+            edit().putInt(key, value).apply()
+    }
+
+    private fun SharedPreferences.booleanPreference(
+        key: String,
+        defaultValue: Boolean = DEFAULT_BOOLEAN
+    ): ReadWriteProperty<Any, Boolean> = object : ReadWriteProperty<Any, Boolean> {
+        override fun getValue(thisRef: Any, property: KProperty<*>): Boolean =
+            getBoolean(key, defaultValue)
+
+        override fun setValue(thisRef: Any, property: KProperty<*>, value: Boolean) =
+            edit().putBoolean(key, value).apply()
     }
 
 }
