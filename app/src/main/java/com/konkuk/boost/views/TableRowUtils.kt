@@ -10,22 +10,25 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import com.konkuk.boost.R
 
-class CustomTableRow(context: Context) : TableRow(context) {
+object TableRowUtils {
 
     fun attach(
+        context: Context,
         tableLayout: TableLayout,
         classification: String,
         standardValue: Int,
         acquiredValue: Int,
-        remainderValue: Int
-    ) {
+        remainderValue: Int,
+        horizontalMargin: Int = 12,
+        verticalMargin: Int = 12
+    ): TableRow {
+        val row = TableRow(context)
         try {
-            val row = TableRow(context)
             val params = TableLayout.LayoutParams(
                 TableLayout.LayoutParams.WRAP_CONTENT,
                 TableLayout.LayoutParams.WRAP_CONTENT
             )
-            params.setMargins(12, 12, 12, 12)
+            params.setMargins(horizontalMargin, verticalMargin, horizontalMargin, verticalMargin)
             row.layoutParams = params
 
             val textList = listOf(
@@ -47,23 +50,28 @@ class CustomTableRow(context: Context) : TableRow(context) {
             tableLayout.addView(row)
         } catch (e: Exception) {
             Log.e("ku-boost", "${e.message}")
+        } finally {
+            return row
         }
     }
 
     fun attach(
+        context: Context,
         tableLayout: TableLayout,
         first: String,
         second: String,
         third: String,
-        fourth: String
-    ) {
+        fourth: String,
+        horizontalMargin: Int = 12,
+        verticalMargin: Int = 12,
+    ): TableRow {
+        val row = TableRow(context)
         try {
-            val row = TableRow(context)
             val params = TableLayout.LayoutParams(
                 TableLayout.LayoutParams.WRAP_CONTENT,
                 TableLayout.LayoutParams.WRAP_CONTENT
             )
-            params.setMargins(12, 12, 12, 12)
+            params.setMargins(horizontalMargin, verticalMargin, horizontalMargin, verticalMargin)
             row.layoutParams = params
 
             val textList = listOf(first, second, third, fourth)
@@ -81,6 +89,8 @@ class CustomTableRow(context: Context) : TableRow(context) {
             tableLayout.addView(row)
         } catch (e: Exception) {
             Log.e("ku-boost", "${e.message}")
+        } finally {
+            return row
         }
     }
 }

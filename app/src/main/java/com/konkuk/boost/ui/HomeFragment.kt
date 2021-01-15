@@ -31,8 +31,8 @@ import com.konkuk.boost.utils.StorageUtils.checkStoragePermission
 import com.konkuk.boost.viewmodels.HomeViewModel
 import com.konkuk.boost.views.CaptureUtils.capture
 import com.konkuk.boost.views.ChartUtils
-import com.konkuk.boost.views.CustomTableRow
 import com.konkuk.boost.views.CustomValueFormatter
+import com.konkuk.boost.views.TableRowUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
 
@@ -356,7 +356,8 @@ class HomeFragment : Fragment() {
 
             // 테이블 헤더 생성
             val context = requireContext()
-            CustomTableRow(context).attach(
+            TableRowUtils.attach(
+                context,
                 tableLayout,
                 getString(R.string.prompt_classification),
                 getString(R.string.prompt_standard_grade),
@@ -367,7 +368,8 @@ class HomeFragment : Fragment() {
             // 테이블 바디 생성
             for (simulation in simulations) {
                 simulation.apply {
-                    CustomTableRow(context).attach(
+                    TableRowUtils.attach(
+                        context,
                         tableLayout,
                         classification,
                         standard,
