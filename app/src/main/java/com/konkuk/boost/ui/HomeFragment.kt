@@ -82,7 +82,7 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         makeToolbar()
         setChartConfig()
-        setClickListenerToTotalGradeDetailFragment()
+        setReadMoreClickListener()
         setCurrentGradesRecyclerViewConfig()
         setCardViewLongClickListener()
         fetchFromLocalDb()
@@ -257,10 +257,14 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun setClickListenerToTotalGradeDetailFragment() {
+    private fun setReadMoreClickListener() {
         binding.apply {
-            readMoreButton.setOnClickListener {
+            readGradeMoreButton.setOnClickListener {
                 findNavController().navigate(R.id.action_homeFragment_to_totalGradeDetailFragment)
+            }
+
+            readSimulationMoreButton.setOnClickListener {
+                findNavController().navigate(R.id.action_homeFragment_to_graduationSimulationDetailFragment)
             }
         }
     }

@@ -212,7 +212,7 @@
                             app:layout_constraintTop_toBottomOf="@id/allGradesTitleTextView" />
 
                         <ImageView
-                            android:id="@+id/readMoreButton"
+                            android:id="@+id/readGradeMoreButton"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="8dp"
@@ -221,7 +221,7 @@
                             android:layout_marginBottom="16dp"
                             android:backgroundTint="@color/pastelLightGray"
                             android:src="@drawable/ic_baseline_read_more_24"
-                            app:bind_visibility="@{viewModel.allValidGrades}"
+                            app:bind_grade_visibility="@{viewModel.allValidGrades}"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
                             tools:ignore="ContentDescription" />
@@ -314,6 +314,21 @@
                             android:textStyle="bold"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
+
+                        <ImageView
+                            android:id="@+id/readSimulationMoreButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginEnd="16dp"
+                            android:layout_marginBottom="16dp"
+                            android:backgroundTint="@color/pastelLightGray"
+                            android:src="@drawable/ic_baseline_read_more_24"
+                            app:bind_simul_visibility="@{viewModel.graduationSimulation}"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            tools:ignore="ContentDescription" />
 
                         <TableLayout
                             android:id="@+id/graduationSimulationContentLayout"
