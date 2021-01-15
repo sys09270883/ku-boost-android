@@ -38,4 +38,6 @@
     <string name="prompt_no">아니오</string>
     <string name="prompt_total">전체</string>
     <string name="prompt_major">전공</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
