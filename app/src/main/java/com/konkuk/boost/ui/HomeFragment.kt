@@ -264,7 +264,7 @@ class HomeFragment : Fragment() {
             }
 
             readSimulationMoreButton.setOnClickListener {
-                findNavController().navigate(R.id.action_homeFragment_to_graduationSimulationDetailFragment)
+                findNavController().navigate(R.id.action_homeFragment_to_totalGraduationSimulationDetailFragment)
             }
         }
     }

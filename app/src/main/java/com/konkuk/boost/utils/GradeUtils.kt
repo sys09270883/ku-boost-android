@@ -6,9 +6,6 @@ import kotlin.math.floor
 
 object GradeUtils {
 
-    val classifications =
-        hashSetOf("기타", "일선", "일교", "기교", "핵교", "지교", "전필", "전선", "다선", "다지", "다필", "지필")
-
     // 각 학기별 평균
     fun average(allGrades: List<GradeEntity>): List<String> {
         val keys = sortedSetOf<String>()
@@ -115,6 +112,4 @@ object GradeUtils {
         val mapper = hashMapOf(1 to "1", 2 to "하계계절", 3 to "2", 4 to "동계계절")
         return mapper[semester]!!
     }
-
-    fun isClassification(classification: String): Boolean = classifications.contains(classification)
 }

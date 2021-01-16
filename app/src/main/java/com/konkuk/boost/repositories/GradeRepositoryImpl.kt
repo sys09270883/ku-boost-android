@@ -188,4 +188,17 @@ class GradeRepositoryImpl(
 
     override fun hasData() = preferenceManager.hasData
 
+    override suspend fun getGradesByClassification(clf: String): UseCase<List<GradeEntity>> {
+        val username = preferenceManager.username
+
+        val gradesByClassification: List<GradeEntity>
+        try {
+            gradesByClassification = gradeDao.getGradesByClassification(username, clf)
+        } catch (exception: Exception) {
+            return UseCase.error("${exception.message}")
+        }
+
+        return UseCase.success(gradesByClassification)
+    }
+
 }
