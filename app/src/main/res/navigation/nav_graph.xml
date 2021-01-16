@@ -76,14 +76,13 @@
             app:popExitAnim="@anim/close_slide_exit"
             app:popUpToInclusive="false" />
         <action
-            android:id="@+id/action_homeFragment_to_graduationSimulationDetailFragment"
-            app:destination="@id/graduationSimulationDetailFragment"
+            android:id="@+id/action_homeFragment_to_totalGraduationSimulationDetailFragment"
+            app:destination="@id/totalGraduationSimulationDetailFragment"
             app:enterAnim="@anim/open_slide_enter"
             app:exitAnim="@anim/open_slide_exit"
             app:popEnterAnim="@anim/close_slide_enter"
             app:popExitAnim="@anim/close_slide_exit"
-            app:popUpTo="@id/homeFragment"
-            app:popUpToInclusive="false" />
+            app:popUpTo="@id/homeFragment" />
     </fragment>
     <fragment
         android:id="@+id/totalGradeDetailFragment"
@@ -106,7 +105,30 @@
         android:label="fragment_grade_detail"
         tools:layout="@layout/fragment_grade_detail" />
     <fragment
+        android:id="@+id/totalGraduationSimulationDetailFragment"
+        android:name="com.konkuk.boost.ui.TotalGraduationSimulationDetailFragment"
+        android:label="TotalGraduationSimulationDetailFragment" >
+        <action
+            android:id="@+id/action_totalGraduationSimulationDetailFragment_to_graduationSimulationDetailFragment"
+            app:destination="@id/graduationSimulationDetailFragment"
+            app:enterAnim="@anim/open_slide_enter"
+            app:exitAnim="@anim/open_slide_exit"
+            app:popEnterAnim="@anim/close_slide_enter"
+            app:popExitAnim="@anim/close_slide_exit"
+            app:popUpTo="@id/totalGraduationSimulationDetailFragment" />
+    </fragment>
+    <fragment
         android:id="@+id/graduationSimulationDetailFragment"
         android:name="com.konkuk.boost.ui.GraduationSimulationDetailFragment"
-        android:label="GraduationSimulationDetailFragment" />
+        android:label="GraduationSimulationDetailFragment"
+        >
+        <action
+            android:id="@+id/action_graduationSimulationDetailFragment_to_gradeDetailFragment"
+            app:destination="@id/gradeDetailFragment"
+            app:enterAnim="@anim/open_slide_enter"
+            app:exitAnim="@anim/open_slide_exit"
+            app:popEnterAnim="@anim/close_slide_enter"
+            app:popExitAnim="@anim/close_slide_exit"
+            app:popUpTo="@id/graduationSimulationDetailFragment" />
+    </fragment>
 </navigation>

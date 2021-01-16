@@ -11,4 +11,5 @@ val viewModelModule = module {
     viewModel { TotalGradeViewModel(get()) }
     viewModel { GradeDetailViewModel() }
     viewModel { GraduationSimulationViewModel(get()) }
+    viewModel { GraduationSimulationDetailViewModel(get()) }
 }

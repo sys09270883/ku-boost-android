@@ -1,10 +1,10 @@
 package com.konkuk.boost.repositories
 
-import com.konkuk.boost.utils.UseCase
 import com.konkuk.boost.data.grade.GraduationSimulationResponse
 import com.konkuk.boost.data.grade.UserInformationResponse
 import com.konkuk.boost.persistence.GradeEntity
 import com.konkuk.boost.persistence.GraduationSimulationEntity
+import com.konkuk.boost.utils.UseCase
 
 interface GradeRepository {
     suspend fun makeGraduationSimulationRequest(): UseCase<GraduationSimulationResponse>
@@ -24,4 +24,6 @@ interface GradeRepository {
     suspend fun getCurrentGrades(): UseCase<List<GradeEntity>>
 
     fun hasData(): Boolean
+
+    suspend fun getGradesByClassification(clf: String): UseCase<List<GradeEntity>>
 }

@@ -1,6 +1,7 @@
 package com.konkuk.boost.persistence
 
 import androidx.room.*
+import com.konkuk.boost.persistence.GradeContract.GradeEntry.CLASSIFICATION
 import com.konkuk.boost.persistence.GradeContract.GradeEntry.SEMESTER
 import com.konkuk.boost.persistence.GradeContract.GradeEntry.SUBJECT_ID
 import com.konkuk.boost.persistence.GradeContract.GradeEntry.TABLE_NAME
@@ -34,4 +35,11 @@ interface GradeDao {
         val gradeEntity = getCurrentSemester(username)
         return getCurrentSemesterGrades(username, gradeEntity.year, gradeEntity.semester)
     }
+
+    @Query("SELECT * FROM $TABLE_NAME WHERE $USERNAME = :username AND $CLASSIFICATION = :clf AND $VALID = :valid")
+    suspend fun getGradesByClassification(
+        username: String,
+        clf: String,
+        valid: Boolean = true
+    ): List<GradeEntity>
 }

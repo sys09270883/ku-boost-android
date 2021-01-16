@@ -1,23 +1,50 @@
 package com.konkuk.boost.ui
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.github.mikephil.charting.data.PieEntry
+import com.google.android.material.snackbar.Snackbar
 import com.konkuk.boost.R
+import com.konkuk.boost.adapters.GradeAdapter
+import com.konkuk.boost.data.grade.ParcelableGrade
 import com.konkuk.boost.databinding.FragmentGraduationSimulationDetailBinding
+import com.konkuk.boost.persistence.GradeEntity
 import com.konkuk.boost.utils.GradeUtils
-import com.konkuk.boost.viewmodels.GraduationSimulationViewModel
-import com.konkuk.boost.views.TableRowUtils
+import com.konkuk.boost.utils.StorageUtils
+import com.konkuk.boost.viewmodels.GraduationSimulationDetailViewModel
+import com.konkuk.boost.views.CaptureUtils
+import com.konkuk.boost.views.ChartUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class GraduationSimulationDetailFragment : Fragment() {
 
     private var _binding: FragmentGraduationSimulationDetailBinding? = null
     private val binding get() = _binding!!
-    val viewModel: GraduationSimulationViewModel by viewModel()
+    val viewModel: GraduationSimulationDetailViewModel by viewModel()
+    private val colors: List<Int> by lazy {
+        val context = requireContext()
+        listOf(
+            ContextCompat.getColor(context, R.color.pastelRed),
+            ContextCompat.getColor(context, R.color.pastelOrange),
+            ContextCompat.getColor(context, R.color.pastelYellow),
+            ContextCompat.getColor(context, R.color.pastelGreen),
+            ContextCompat.getColor(context, R.color.pastelBlue),
+            ContextCompat.getColor(context, R.color.pastelIndigo),
+            ContextCompat.getColor(context, R.color.pastelPurple),
+            ContextCompat.getColor(context, R.color.pastelDeepPurple),
+            ContextCompat.getColor(context, R.color.pastelBrown),
+            ContextCompat.getColor(context, R.color.pastelLightGray),
+        )
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,58 +58,127 @@ class GraduationSimulationDetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.fetchGraduationSimulationFromLocalDb()
+        setClassification()
+        setChartConfig()
+        setCardViewLongClickListener()
+    }
+
+    private fun setCardViewLongClickListener() {
+        val activity = requireActivity()
+        binding.cardView.setOnLongClickListener {
+            val builder = AlertDialog.Builder(activity)
+            builder.setTitle(getString(R.string.app_name))
+            builder.setMessage(getString(R.string.question_grades))
+            builder.setPositiveButton(getString(R.string.prompt_yes)) { _, _ ->
+                if (StorageUtils.checkStoragePermission(activity)) {
+                    CaptureUtils.capture(activity, it)
+                    Snackbar.make(
+                        binding.container,
+                        getString(R.string.prompt_save),
+                        Snackbar.LENGTH_SHORT
+                    ).show()
+                }
+            }
+            builder.setNegativeButton(getString(R.string.prompt_no)) { _, _ ->
+            }
+            val dlg = builder.create()
+            dlg.setOnShowListener {
+                dlg.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(
+                    ContextCompat.getColor(activity, R.color.primaryTextColor)
+                )
+                dlg.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(
+                    ContextCompat.getColor(activity, R.color.primaryTextColor)
+                )
+            }
+            dlg.show()
+            true
+        }
+    }
+
+    private fun setClassification() {
+        val clf = requireArguments().getString("classification") ?: return
+        viewModel.setClassification(clf)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (viewModel.isFetched())
+            return
+
+        viewModel.fetchGradesByClassification()
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel.graduationSimulation.observe(viewLifecycleOwner) {
+        val context = requireContext()
+
+        viewModel.gradesByClassification.observe(viewLifecycleOwner) {
             if (it.data == null)
                 return@observe
-            val simulations = it.data
-            if (simulations.isEmpty())
-                return@observe
 
-            // 테이블 동적으로 생성
-            val tableLayout = binding.graduationSimulationContentLayout
-            tableLayout.removeAllViewsInLayout()
+            val gradesByClassification = it.data
 
-            // 테이블 헤더 생성
-            val context = requireContext()
-            TableRowUtils.attach(
-                context,
-                tableLayout,
-                getString(R.string.prompt_classification),
-                getString(R.string.prompt_standard_grade),
-                getString(R.string.prompt_acquired_grade),
-                getString(R.string.prompt_rest_grade),
-                12,
-                24
+            val (avr, _) = GradeUtils.totalAverages(gradesByClassification)
+            // 전체평점
+            ChartUtils.makeGradeChart(
+                binding.totalPieChart,
+                getString(R.string.prompt_total),
+                avr,
+                colors.first(),
+                colors.last()
             )
 
-            // 테이블 바디 생성
-            for (simulation in simulations) {
-                simulation.apply {
-                    val row = TableRowUtils.attach(
-                        context,
-                        tableLayout,
-                        classification,
-                        standard,
-                        acquired,
-                        remainder,
-                        12,
-                        24
-                    )
+            // 성적분포
+            val characterGradesMap = GradeUtils.characterGrades(gradesByClassification)
+            val characterGrades = mutableListOf<PieEntry>()
 
-                    if (GradeUtils.isClassification(classification)) {
-                        row.setOnClickListener {
-                            // navigate
-                            Log.d("yoonseop", classification)
-                        }
-                    }
+            for (grade in characterGradesMap) {
+                characterGrades.add(PieEntry(grade.value, grade.key))
+            }
+
+            ChartUtils.makeSummaryChart(binding.summaryPieChart, colors, characterGrades)
+
+            // 리사이클러뷰
+            val recyclerView = binding.gradeRecyclerview
+            recyclerView.layoutManager = LinearLayoutManager(context)
+            val adapter = GradeAdapter()
+            adapter.submitList(gradesByClassification.toMutableList())
+            adapter.itemClickListener = object : GradeAdapter.OnItemClickListener {
+                override fun onItemClick(gradeEntity: GradeEntity) {
+                    // GradeEntity 정보를 가지고 fragment 전환
+                    val grade = ParcelableGrade(
+                        evaluationMethod = gradeEntity.evaluationMethod,
+                        year = gradeEntity.year,
+                        semester = GradeUtils.translate(gradeEntity.semester),
+                        classification = gradeEntity.classification,
+                        characterGrade = gradeEntity.characterGrade,
+                        grade = gradeEntity.grade,
+                        professor = gradeEntity.professor,
+                        subjectId = gradeEntity.subjectId,
+                        subjectName = gradeEntity.subjectName,
+                        subjectNumber = gradeEntity.subjectNumber,
+                        subjectPoint = gradeEntity.subjectPoint
+                    )
+                    val bundle = bundleOf("grade" to grade)
+                    findNavController().navigate(
+                        R.id.action_graduationSimulationDetailFragment_to_gradeDetailFragment,
+                        bundle
+                    )
                 }
             }
+            recyclerView.adapter = adapter
+            recyclerView.addItemDecoration(
+                DividerItemDecoration(
+                    context,
+                    LinearLayoutManager.VERTICAL
+                )
+            )
+
         }
     }
 
+    private fun setChartConfig() {
+        ChartUtils.setGradeConfigWith(binding.totalPieChart, getString(R.string.prompt_total), true)
+        ChartUtils.setSummaryConfig(binding.summaryPieChart, true)
+    }
 }
