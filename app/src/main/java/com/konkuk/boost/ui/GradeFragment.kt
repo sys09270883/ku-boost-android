@@ -1,8 +1,5 @@
 package com.konkuk.boost.ui
 
-import android.content.Intent
-import android.graphics.Color
-import android.graphics.Typeface
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -18,12 +15,11 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.mikephil.charting.data.*
-import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.google.android.material.snackbar.Snackbar
 import com.konkuk.boost.R
 import com.konkuk.boost.adapters.GradeAdapter
 import com.konkuk.boost.data.grade.ParcelableGrade
-import com.konkuk.boost.databinding.FragmentHomeBinding
+import com.konkuk.boost.databinding.FragmentGradeBinding
 import com.konkuk.boost.persistence.GradeEntity
 import com.konkuk.boost.persistence.GraduationSimulationEntity
 import com.konkuk.boost.utils.GradeUtils
@@ -36,10 +32,9 @@ import com.konkuk.boost.views.TableRowUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
 
+class GradeFragment : Fragment() {
 
-class HomeFragment : Fragment() {
-
-    private var _binding: FragmentHomeBinding? = null
+    private var _binding: FragmentGradeBinding? = null
     private val binding get() = _binding!!
     private val viewModel: HomeViewModel by viewModel()
     private var dialog: AlertDialog? = null
@@ -70,7 +65,7 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        _binding = FragmentGradeBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
         val view = binding.root
@@ -80,7 +75,6 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        makeToolbar()
         setChartConfig()
         setReadMoreClickListener()
         setCurrentGradesRecyclerViewConfig()
@@ -120,7 +114,7 @@ class HomeFragment : Fragment() {
                 )
                 val bundle = bundleOf("grade" to grade)
                 findNavController().navigate(
-                    R.id.action_homeFragment_to_gradeDetailFragment,
+                    R.id.action_mainFragment_to_gradeDetailFragment,
                     bundle
                 )
             }
@@ -260,11 +254,11 @@ class HomeFragment : Fragment() {
     private fun setReadMoreClickListener() {
         binding.apply {
             readGradeMoreButton.setOnClickListener {
-                findNavController().navigate(R.id.action_homeFragment_to_totalGradeDetailFragment)
+                findNavController().navigate(R.id.action_mainFragment_to_totalGradeDetailFragment)
             }
 
             readSimulationMoreButton.setOnClickListener {
-                findNavController().navigate(R.id.action_homeFragment_to_totalGraduationSimulationDetailFragment)
+                findNavController().navigate(R.id.action_mainFragment_to_totalGraduationSimulationDetailFragment)
             }
         }
     }
@@ -300,37 +294,10 @@ class HomeFragment : Fragment() {
         viewModel.fetchTotalGradesFromLocalDb()
     }
 
-    private fun makeToolbar() {
-        binding.apply {
-            val typeface =
-                Typeface.createFromAsset(requireActivity().assets, "vermin_vibes_slant.ttf")
-            collapsingToolbarLayout.setExpandedTitleTypeface(typeface)
-            collapsingToolbarLayout.setExpandedTitleColor(Color.TRANSPARENT)
-            toolbar.inflateMenu(R.menu.menu_main)
-            toolbar.setOnMenuItemClickListener {
-                when (it.itemId) {
-                    R.id.moreIcon -> {
-                        true
-                    }
-                    R.id.logout -> {
-                        viewModel?.logout()
-                        true
-                    }
-                    R.id.openSourceLicense -> {
-                        startActivity(Intent(requireContext(), OssLicensesMenuActivity::class.java))
-                        OssLicensesMenuActivity.setActivityTitle(getString(R.string.prompt_opensource_title))
-                        true
-                    }
-                    else -> false
-                }
-            }
-        }
-    }
-
     private fun observeLogout() {
         viewModel.logoutResponse.observe(viewLifecycleOwner) {
             viewModel.clearLogoutResource()
-            findNavController().navigate(R.id.action_homeFragment_to_loginFragment)
+            findNavController().navigate(R.id.action_mainFragment_to_loginFragment)
         }
     }
 

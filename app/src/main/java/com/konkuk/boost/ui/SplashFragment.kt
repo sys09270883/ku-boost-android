@@ -53,7 +53,7 @@ class SplashFragment : Fragment() {
                     getString(R.string.prompt_no_network_alert),
                     Snackbar.LENGTH_SHORT
                 ).show()
-                findNavController().navigate(R.id.action_splashFragment_to_homeFragment)
+                findNavController().navigate(R.id.action_splashFragment_to_mainFragment)
             } else {                // 사용자 정보가 저장되어 있지 않을 경우
                 val dialog = AlertDialog.Builder(activity)
                     .setTitle(getString(R.string.app_name))
@@ -78,7 +78,7 @@ class SplashFragment : Fragment() {
             when (it.status) {
                 UseCase.Status.SUCCESS -> {
                     viewModel.clearLoginResource()
-                    findNavController().navigate(R.id.action_splashFragment_to_homeFragment)
+                    findNavController().navigate(R.id.action_splashFragment_to_mainFragment)
                 }
                 UseCase.Status.ERROR -> {
                     Log.d("ku-boost", "${it.message}")

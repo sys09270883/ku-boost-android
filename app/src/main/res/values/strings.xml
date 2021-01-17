@@ -2,7 +2,7 @@
     <string name="app_name">건국대학교 부스트</string>
     <string name="app_name_eng">konkuk boost</string>
     <string name="app_name_boost_eng">boost</string>
-    <string name="prompt_username">아이디</string>
+    <string name="prompt_username">포탈 아이디</string>
     <string name="prompt_password">비밀번호</string>
     <string name="prompt_log_in">로그인</string>
     <string name="prompt_more">더보기</string>
@@ -37,4 +37,6 @@
     <string name="prompt_total">전체</string>
     <string name="prompt_major">전공</string>
     <string name="prompt_info_classification">이수구분 변경 과목은 졸업 시뮬레이션에만 적용됩니다.</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

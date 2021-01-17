@@ -59,7 +59,7 @@ class LoginFragment : Fragment() {
                     viewModel.clearLoginResource()
                     runBlocking {
                         delay(1000L)
-                        findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
+                        findNavController().navigate(R.id.action_loginFragment_to_mainFragment)
                     }
                 }
                 UseCase.Status.ERROR -> {

@@ -20,8 +20,8 @@
             app:popUpTo="@id/splashFragment"
             app:popUpToInclusive="true" />
         <action
-            android:id="@+id/action_splashFragment_to_homeFragment"
-            app:destination="@id/homeFragment"
+            android:id="@+id/action_splashFragment_to_mainFragment"
+            app:destination="@id/mainFragment"
             app:enterAnim="@anim/fade_in"
             app:exitAnim="@anim/fade_out"
             app:popEnterAnim="@anim/fade_in"
@@ -35,8 +35,8 @@
         android:label="fragment_login"
         tools:layout="@layout/fragment_login">
         <action
-            android:id="@+id/action_loginFragment_to_homeFragment"
-            app:destination="@id/homeFragment"
+            android:id="@+id/action_loginFragment_to_mainFragment"
+            app:destination="@id/mainFragment"
             app:enterAnim="@anim/fade_in"
             app:exitAnim="@anim/fade_out"
             app:popEnterAnim="@anim/fade_in"
@@ -45,30 +45,30 @@
             app:popUpToInclusive="true" />
     </fragment>
     <fragment
-        android:id="@+id/homeFragment"
-        android:name="com.konkuk.boost.ui.HomeFragment"
-        android:label="fragment_home"
-        tools:layout="@layout/fragment_home">
+        android:id="@+id/mainFragment"
+        android:name="com.konkuk.boost.ui.MainFragment"
+        android:label="fragment_main"
+        tools:layout="@layout/fragment_main">
         <action
-            android:id="@+id/action_homeFragment_to_loginFragment"
+            android:id="@+id/action_mainFragment_to_loginFragment"
             app:destination="@id/loginFragment"
             app:enterAnim="@anim/fade_in"
             app:exitAnim="@anim/fade_out"
             app:popEnterAnim="@anim/fade_in"
             app:popExitAnim="@anim/fade_out"
-            app:popUpTo="@id/homeFragment"
+            app:popUpTo="@id/mainFragment"
             app:popUpToInclusive="true" />
         <action
-            android:id="@+id/action_homeFragment_to_totalGradeDetailFragment"
+            android:id="@+id/action_mainFragment_to_totalGradeDetailFragment"
             app:destination="@id/totalGradeDetailFragment"
             app:enterAnim="@anim/open_slide_enter"
             app:exitAnim="@anim/open_slide_exit"
             app:popEnterAnim="@anim/close_slide_enter"
             app:popExitAnim="@anim/close_slide_exit"
-            app:popUpTo="@id/homeFragment"
+            app:popUpTo="@id/mainFragment"
             app:popUpToInclusive="false" />
         <action
-            android:id="@+id/action_homeFragment_to_gradeDetailFragment"
+            android:id="@+id/action_mainFragment_to_gradeDetailFragment"
             app:destination="@id/gradeDetailFragment"
             app:enterAnim="@anim/open_slide_enter"
             app:exitAnim="@anim/open_slide_exit"
@@ -76,13 +76,13 @@
             app:popExitAnim="@anim/close_slide_exit"
             app:popUpToInclusive="false" />
         <action
-            android:id="@+id/action_homeFragment_to_totalGraduationSimulationDetailFragment"
+            android:id="@+id/action_mainFragment_to_totalGraduationSimulationDetailFragment"
             app:destination="@id/totalGraduationSimulationDetailFragment"
             app:enterAnim="@anim/open_slide_enter"
             app:exitAnim="@anim/open_slide_exit"
             app:popEnterAnim="@anim/close_slide_enter"
             app:popExitAnim="@anim/close_slide_exit"
-            app:popUpTo="@id/homeFragment" />
+            app:popUpTo="@id/mainFragment" />
     </fragment>
     <fragment
         android:id="@+id/totalGradeDetailFragment"
@@ -132,4 +132,5 @@
             app:popExitAnim="@anim/close_slide_exit"
             app:popUpTo="@id/graduationSimulationDetailFragment" />
     </fragment>
+
 </navigation>
