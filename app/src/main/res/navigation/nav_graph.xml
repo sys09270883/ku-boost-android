@@ -107,7 +107,8 @@
     <fragment
         android:id="@+id/totalGraduationSimulationDetailFragment"
         android:name="com.konkuk.boost.ui.TotalGraduationSimulationDetailFragment"
-        android:label="TotalGraduationSimulationDetailFragment" >
+        android:label="TotalGraduationSimulationDetailFragment"
+        tools:layout="@layout/fragment_total_graduation_simulation_detail">
         <action
             android:id="@+id/action_totalGraduationSimulationDetailFragment_to_graduationSimulationDetailFragment"
             app:destination="@id/graduationSimulationDetailFragment"
@@ -121,7 +122,7 @@
         android:id="@+id/graduationSimulationDetailFragment"
         android:name="com.konkuk.boost.ui.GraduationSimulationDetailFragment"
         android:label="GraduationSimulationDetailFragment"
-        >
+        tools:layout="@layout/fragment_graduation_simulation_detail">
         <action
             android:id="@+id/action_graduationSimulationDetailFragment_to_gradeDetailFragment"
             app:destination="@id/gradeDetailFragment"
