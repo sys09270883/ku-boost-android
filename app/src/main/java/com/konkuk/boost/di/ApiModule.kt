@@ -2,6 +2,7 @@ package com.konkuk.boost.di
 
 import com.konkuk.boost.BuildConfig
 import com.konkuk.boost.api.AuthService
+import com.konkuk.boost.api.CourseService
 import com.konkuk.boost.api.GradeService
 import com.konkuk.boost.persistence.PreferenceManager
 import okhttp3.OkHttpClient
@@ -51,6 +52,9 @@ val apiModule = module {
     fun provideGradeService(retrofit: Retrofit): GradeService =
         retrofit.create(GradeService::class.java)
 
+    fun provideCourseService(retrofit: Retrofit): CourseService =
+        retrofit.create(CourseService::class.java)
+
     single { provideHttpLoggingInterceptor() }
     single(named("default")) { provideOkHttpClient(get()) }
     single(named("cookie")) { provideCookieClient(get(), get()) }
@@ -68,5 +72,6 @@ val apiModule = module {
     }
     single { provideAuthService(get(named("default-retrofit"))) }
     single { provideGradeService(get(named("cookie-retrofit"))) }
+    single { provideCourseService(get(named("cookie-retrofit"))) }
 }
 

@@ -39,4 +39,6 @@
     <string name="prompt_info_classification">이수구분 변경 과목은 졸업 시뮬레이션에만 적용됩니다.</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="prompt_syllabus">강의계획서</string>
+    <string name="hint_syllabus">과목번호, 과목명, 교수명</string>
 </resources>

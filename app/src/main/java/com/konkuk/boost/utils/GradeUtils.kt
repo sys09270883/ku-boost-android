@@ -112,4 +112,15 @@ object GradeUtils {
         val mapper = hashMapOf(1 to "1", 2 to "하계계절", 3 to "2", 4 to "동계계절")
         return mapper[semester]!!
     }
+
+    fun convertToSemesterCode(semester: Int): String {
+        val sem = when (semester) {
+            1 -> 1
+            2 -> 4
+            3 -> 2
+            4 -> 5
+            else -> throw Exception("Semester invalid error: $semester")
+        }
+        return "B0101$sem"
+    }
 }
