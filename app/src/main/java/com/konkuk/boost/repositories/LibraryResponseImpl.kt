@@ -1,8 +1,10 @@
 package com.konkuk.boost.repositories
 
+import android.util.Log
 import com.konkuk.boost.api.LibraryService
 import com.konkuk.boost.data.library.LoginRequest
 import com.konkuk.boost.data.library.LoginResponse
+import com.konkuk.boost.data.library.QRResponse
 import com.konkuk.boost.persistence.PreferenceManager
 import com.konkuk.boost.utils.UseCase
 
@@ -17,10 +19,28 @@ class LibraryResponseImpl(
         val loginResponse: LoginResponse
         try {
             loginResponse = libraryService.login(LoginRequest(username, password))
+            val token = loginResponse.data.accessToken
+            preferenceManager.accessToken = token
         } catch (e: Exception) {
             return UseCase.error("${e.message}")
         }
 
         return UseCase.success(loginResponse)
+    }
+
+    override suspend fun makeMobileQRCodeRequest(): UseCase<QRResponse> {
+        val accessToken = preferenceManager.accessToken
+
+        val qrResponse: QRResponse
+        try {
+            Log.d("yoonseop", "Access token: ${accessToken}")
+            qrResponse = libraryService.getMobileQRCode(accessToken)
+            Log.d("yoonseop", "QR Response: $qrResponse")
+        } catch (e: Exception) {
+            Log.e("yoonseop", "QR Response: ${e.message}")
+            return UseCase.error("${e.message}")
+        }
+
+        return UseCase.success(qrResponse)
     }
 }

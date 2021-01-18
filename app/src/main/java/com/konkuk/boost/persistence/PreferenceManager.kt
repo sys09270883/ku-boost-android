@@ -24,6 +24,7 @@ class PreferenceManager(private val context: Context) {
         private const val DEPT = "dept"
         private const val CODE = "code"
         private const val HAS_DATA = "has_data"
+        private const val ACCESS_TOKEN = "access_token"
         private const val DEFAULT_STRING = ""
         private const val DEFAULT_INT = 2021
         private const val DEFAULT_BOOLEAN = false
@@ -39,6 +40,7 @@ class PreferenceManager(private val context: Context) {
     var dept: String by pref.stringPreference(DEPT)
     var code: String by pref.stringPreference(CODE)
     var hasData: Boolean by pref.booleanPreference(HAS_DATA)
+    var accessToken: String by pref.stringPreference(ACCESS_TOKEN)
 
     private fun getEncryptedSharedPreference(): SharedPreferences {
         val keyGenParameterSpec = KeyGenParameterSpec.Builder(
