@@ -33,11 +33,9 @@ class LibraryResponseImpl(
 
         val qrResponse: QRResponse
         try {
-            Log.d("yoonseop", "Access token: ${accessToken}")
             qrResponse = libraryService.getMobileQRCode(accessToken)
-            Log.d("yoonseop", "QR Response: $qrResponse")
+            Log.d("ku-boost", "QR Response: $qrResponse")
         } catch (e: Exception) {
-            Log.e("yoonseop", "QR Response: ${e.message}")
             return UseCase.error("${e.message}")
         }
 
