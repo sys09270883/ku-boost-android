@@ -40,7 +40,7 @@ class CourseViewModel(
         val list = syllabusResponse.value?.data?.lectureInfoList ?: return emptyList()
         val filtered = list.filter {
             it.subjectName.toLowerCase(Locale.ENGLISH)
-                .contains(query.toLowerCase(Locale.ENGLISH)) || it.subjectId.contains(query) || it.professor?.toLowerCase(
+                .contains(query.toLowerCase(Locale.ENGLISH)) || it.subjectId == query || it.professor?.toLowerCase(
                 Locale.ENGLISH
             )?.contains(query.toLowerCase(Locale.ENGLISH)) ?: false
         }
