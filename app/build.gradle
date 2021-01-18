@@ -93,4 +93,5 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation 'com.google.firebase:firebase-crashlytics-ktx'
     implementation 'com.google.android.play:core:1.9.0'
+    implementation 'com.google.zxing:core:3.4.0'
 }

@@ -24,12 +24,24 @@
             app:layout_constraintGuide_percent="0.1" />
 
         <ImageView
+            android:id="@+id/thumbnailImageView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/guideline"
+            app:layout_constraintWidth_percent="0.5"
+            tools:ignore="ContentDescription" />
+
+        <ImageView
+            android:id="@+id/qrImageView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/thumbnailImageView"
             app:layout_constraintWidth_percent="0.5"
             tools:ignore="ContentDescription" />
 
