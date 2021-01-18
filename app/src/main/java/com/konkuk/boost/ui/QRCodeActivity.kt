@@ -1,8 +1,11 @@
 package com.konkuk.boost.ui
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.os.Bundle
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -50,6 +53,17 @@ class QRCodeActivity : AppCompatActivity() {
                     Snackbar.make(binding.container, "${it.message}", Snackbar.LENGTH_SHORT).show()
                 }
             }
+        }
+
+        makeVibrator()
+    }
+
+    private fun makeVibrator() {
+        val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            vibrator.vibrate(VibrationEffect.createOneShot(500L, 50))
+        } else {
+            vibrator.vibrate(500L)
         }
     }
 
