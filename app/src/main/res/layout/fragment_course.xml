@@ -79,12 +79,11 @@
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/syllabusRecyclerView"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="400dp"
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="16dp"
                         android:layout_marginEnd="16dp"
                         android:layout_marginBottom="16dp"
-                        android:maxHeight="400dp"
                         android:overScrollMode="never"
                         android:paddingBottom="20dp"
                         app:bind_syllabus_visibility="@{viewModel.syllabusLoading}"
