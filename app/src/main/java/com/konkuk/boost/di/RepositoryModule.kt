@@ -3,6 +3,7 @@ package com.konkuk.boost.di
 import com.konkuk.boost.api.AuthService
 import com.konkuk.boost.api.CourseService
 import com.konkuk.boost.api.GradeService
+import com.konkuk.boost.api.LibraryService
 import com.konkuk.boost.persistence.GradeDao
 import com.konkuk.boost.persistence.GraduationSimulationDao
 import com.konkuk.boost.persistence.PreferenceManager
@@ -26,7 +27,14 @@ val repositoryModule = module {
     fun provideGradeRepository(courseService: CourseService): CourseRepository =
         CourseRepositoryImpl(courseService)
 
+    fun provideLibraryRepository(
+        libraryService: LibraryService,
+        preferenceManager: PreferenceManager
+    ): LibraryRepository =
+        LibraryResponseImpl(libraryService, preferenceManager)
+
     single { provideLoginRepository(get(), get()) }
     single { provideGradeRepository(get(), get(), get(), get()) }
     single { provideGradeRepository(get()) }
+    single { provideLibraryRepository(get(), get()) }
 }

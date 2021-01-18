@@ -30,18 +30,6 @@ class CourseFragment : Fragment() {
         return binding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel.syllabusResponse.observe(viewLifecycleOwner) {
-            if (it.data == null)
-                return@observe
-
-            val allSyllabus = it.data.lectureInfoList
-//            val adapter = binding.syllabusRecyclerView.adapter as SyllabusAdapter
-//            adapter.modifyList(allSyllabus.toMutableList())
-        }
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setSyllabusRecyclerViewConfig()

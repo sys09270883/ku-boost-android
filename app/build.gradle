@@ -18,6 +18,7 @@ android {
         versionCode 10
         versionName "1.1.0"
         buildConfigField "String", "BASE_URL", "\"https://kuis.konkuk.ac.kr/\""
+        buildConfigField "String", "LIB_URL", "\"https://library.konkuk.ac.kr/\""
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         javaCompileOptions {

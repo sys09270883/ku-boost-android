@@ -13,7 +13,7 @@ import kotlinx.coroutines.withContext
 import java.util.*
 
 class CourseViewModel(
-    private val courseRepository: CourseRepository
+    private val courseRepository: CourseRepository,
 ) : ViewModel() {
 
     private val _syllabusLoading = MutableLiveData(false)
@@ -46,4 +46,5 @@ class CourseViewModel(
         }
         return if (filtered.size > 100) emptyList() else filtered
     }
+
 }
