@@ -10,12 +10,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.konkuk.boost.R
 import com.konkuk.boost.data.course.LectureInfo
 
+
 class SyllabusAdapter : ListAdapter<LectureInfo, SyllabusAdapter.SyllabusViewHolder>(DiffCallback) {
 
     lateinit var itemClickListener: OnItemClickListener
 
     interface OnItemClickListener {
-        fun onItemClick(gradeEntity: LectureInfo)
+        fun onItemClick(lectureInfo: LectureInfo)
     }
 
     object DiffCallback : DiffUtil.ItemCallback<LectureInfo>() {
@@ -32,8 +33,7 @@ class SyllabusAdapter : ListAdapter<LectureInfo, SyllabusAdapter.SyllabusViewHol
         val subjectIdTextView: TextView = itemView.findViewById(R.id.subjectIdTextView)
         val subjectNameTextView: TextView = itemView.findViewById(R.id.subjectNameTextView)
         val professorTextView: TextView = itemView.findViewById(R.id.professorTextView)
-        val subjectPointTextView: TextView = itemView.findViewById(R.id.subjectPointTextView)
-        val classificationTextView: TextView = itemView.findViewById(R.id.classificationTextView)
+        val lectureDayTimeTextView: TextView = itemView.findViewById(R.id.lectureDayTimeTextView)
 
         init {
             itemView.setOnClickListener {
@@ -50,8 +50,7 @@ class SyllabusAdapter : ListAdapter<LectureInfo, SyllabusAdapter.SyllabusViewHol
         holder.subjectIdTextView.isSelected = true
         holder.subjectNameTextView.isSelected = true
         holder.professorTextView.isSelected = true
-        holder.subjectPointTextView.isSelected = true
-        holder.classificationTextView.isSelected = true
+        holder.lectureDayTimeTextView.isSelected = true
 
         return holder
     }
@@ -64,8 +63,7 @@ class SyllabusAdapter : ListAdapter<LectureInfo, SyllabusAdapter.SyllabusViewHol
             var professor = lectureInfo.professor
             if (professor.isNullOrBlank()) professor = "미배정"
             professorTextView.text = professor
-            subjectPointTextView.text = "${lectureInfo.subjectPoint}"
-            classificationTextView.text = lectureInfo.classification
+            lectureDayTimeTextView.text = lectureInfo.lectureDayTime
         }
     }
 

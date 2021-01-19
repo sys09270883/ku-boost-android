@@ -24,8 +24,11 @@ val repositoryModule = module {
     ): GradeRepository =
         GradeRepositoryImpl(gradeService, graduationSimulationDao, preferenceManager, gradeDao)
 
-    fun provideGradeRepository(courseService: CourseService): CourseRepository =
-        CourseRepositoryImpl(courseService)
+    fun provideCourseRepository(
+        courseService: CourseService,
+        preferenceManager: PreferenceManager
+    ): CourseRepository =
+        CourseRepositoryImpl(courseService, preferenceManager)
 
     fun provideLibraryRepository(
         libraryService: LibraryService,
@@ -35,6 +38,6 @@ val repositoryModule = module {
 
     single { provideLoginRepository(get(), get()) }
     single { provideGradeRepository(get(), get(), get(), get()) }
-    single { provideGradeRepository(get()) }
+    single { provideCourseRepository(get(), get()) }
     single { provideLibraryRepository(get(), get()) }
 }

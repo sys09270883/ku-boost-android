@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?android:attr/selectableItemBackground"
@@ -11,23 +12,24 @@
 
     <TextView
         android:id="@+id/subjectIdTextView"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="3"
         android:ellipsize="marquee"
         android:focusable="true"
         android:marqueeRepeatLimit="marquee_forever"
-        android:paddingStart="4dp"
-        android:paddingEnd="4dp"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
         android:singleLine="true"
         android:textColor="@color/primaryTextColor"
-        android:textSize="15sp" />
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/subjectNameTextView"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="7"
         android:ellipsize="marquee"
         android:focusable="true"
         android:marqueeRepeatLimit="marquee_forever"
@@ -35,43 +37,37 @@
         android:paddingEnd="4dp"
         android:singleLine="true"
         android:textColor="@color/primaryTextColor"
-        android:textSize="15sp" />
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/professorTextView"
+        app:layout_constraintStart_toEndOf="@+id/subjectIdTextView"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/professorTextView"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="3"
         android:ellipsize="marquee"
         android:focusable="true"
         android:paddingStart="4dp"
         android:paddingEnd="4dp"
         android:singleLine="true"
         android:textColor="@color/primaryTextColor"
-        android:textSize="15sp" />
+        android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="@+id/lectureDayTimeTextView"
+        app:layout_constraintStart_toEndOf="@+id/subjectIdTextView"
+        app:layout_constraintTop_toBottomOf="@+id/subjectNameTextView" />
 
     <TextView
-        android:id="@+id/subjectPointTextView"
-        android:layout_width="0dp"
+        android:id="@+id/lectureDayTimeTextView"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="2"
         android:ellipsize="marquee"
-        android:paddingStart="4dp"
-        android:paddingEnd="4dp"
         android:singleLine="true"
         android:textColor="@color/primaryTextColor"
-        android:textSize="15sp" />
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/subjectIdTextView"
+        app:layout_constraintTop_toBottomOf="@+id/professorTextView" />
 
-    <TextView
-        android:id="@+id/classificationTextView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="2"
-        android:ellipsize="marquee"
-        android:paddingStart="4dp"
-        android:paddingEnd="4dp"
-        android:singleLine="true"
-        android:textColor="@color/primaryTextColor"
-        android:textSize="15sp" />
-
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
