@@ -89,3 +89,13 @@ fun RecyclerView.bindGradesVisibility(grades: UseCase<List<GradeEntity>>?) {
         if (data.isNullOrEmpty()) View.GONE else View.VISIBLE
     }
 }
+
+@BindingAdapter("bind_syllabus_visibility")
+fun RecyclerView.bindSyllabusVisibility(loading: Boolean) {
+    visibility = if (loading) View.GONE else View.VISIBLE
+}
+
+@BindingAdapter("bind_syllabus_search_view_visibility")
+fun androidx.appcompat.widget.SearchView.bindSyllabusVisibility(loading: Boolean) {
+    visibility = if (loading) View.GONE else View.VISIBLE
+}

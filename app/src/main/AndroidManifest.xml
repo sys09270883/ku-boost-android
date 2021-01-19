@@ -5,9 +5,10 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
-        android:name="com.konkuk.boost.App"
+        android:name=".App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -15,9 +16,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.App"
         android:usesCleartextTraffic="true">
-
         <activity
-            android:name="com.konkuk.boost.ui.MainActivity"
+            android:name=".ui.QRCodeActivity"
+            android:theme="@style/Theme.KUBoost">
+
+        </activity>
+        <activity
+            android:name=".ui.MainActivity"
             android:theme="@style/Theme.KUBoost">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

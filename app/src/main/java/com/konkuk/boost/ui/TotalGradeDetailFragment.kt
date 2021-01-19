@@ -239,7 +239,11 @@ class TotalGradeDetailFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         fetchAllGradesFromLocal()
-        binding.semesterSpinner.setSelection(viewModel.getSelectedPosition())
+        binding.semesterSpinner.apply {
+            setSelection(viewModel.getSelectedPosition())
+            (getChildAt(0) as? TextView)?.setTextColor(Color.WHITE)
+        }
+
     }
 
     override fun onPause() {
