@@ -1,7 +1,6 @@
 package com.konkuk.boost.ui
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -55,6 +54,8 @@ class CourseSearchFragment : Fragment() {
                 return@observe
 
             if (it.data.lectureInfoList.isEmpty()) {
+                val adapter = binding.syllabusRecyclerView.adapter as SyllabusAdapter
+                adapter.submitList(mutableListOf())
                 Snackbar.make(
                     binding.container,
                     getString(R.string.prompt_no_syllabus),

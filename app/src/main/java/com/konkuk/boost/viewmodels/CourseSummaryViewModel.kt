@@ -37,8 +37,11 @@ class CourseSummaryViewModel(
 
     val detailSyllabusResponse = MutableLiveData<UseCase<SyllabusDetailResponse>>()
 
-    fun fetchDetailSyllabus(year: Int, semester: Int) {
+    fun fetchDetailSyllabus() {
         val subjectId = subjectId.value ?: return
+        val year = _year.value ?: return
+        val semester = _semester.value ?: return
+
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 detailSyllabusResponse.postValue(
@@ -51,4 +54,6 @@ class CourseSummaryViewModel(
             }
         }
     }
+
+    fun getBookList() = detailSyllabusResponse.value?.data?.book ?: emptyList()
 }

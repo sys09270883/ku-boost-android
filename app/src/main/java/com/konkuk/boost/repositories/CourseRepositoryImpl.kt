@@ -1,5 +1,6 @@
 package com.konkuk.boost.repositories
 
+import android.util.Log
 import com.konkuk.boost.api.CourseService
 import com.konkuk.boost.data.course.SyllabusDetailResponse
 import com.konkuk.boost.data.course.SyllabusResponse
@@ -38,7 +39,9 @@ class CourseRepositoryImpl(
                 GradeUtils.convertToSemesterCode(semester),
                 subjectId
             )
+            Log.d("yoonseop", "Syllabus detail: $syllabusDetailResponse")
         } catch (e: Exception) {
+            Log.e("yoonseop", "${e.message}")
             return UseCase.error("${e.message}")
         }
 

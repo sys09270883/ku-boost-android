@@ -5,6 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.konkuk.boost.adapters.SyllabusBookAdapter
 import com.konkuk.boost.databinding.FragmentCourseSummaryBinding
 import com.konkuk.boost.viewmodels.CourseSummaryViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -28,7 +31,19 @@ class CourseSummaryFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setLectureData()
-        viewModel.fetchDetailSyllabus(2021, 1)
+        setBookRecyclerViewConfig()
+        viewModel.fetchDetailSyllabus()
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        viewModel.detailSyllabusResponse.observe(viewLifecycleOwner) {
+            if (it.data == null)
+                return@observe
+
+            val bookAdapter = binding.bookRecyclerView.adapter as SyllabusBookAdapter
+            bookAdapter.submitList(viewModel.getBookList())
+        }
     }
 
     private fun setLectureData() {
@@ -38,5 +53,19 @@ class CourseSummaryFragment : Fragment() {
         viewModel.setSubjectId(sbjtId)
         viewModel.setYear(year)
         viewModel.setSemester(semester)
+    }
+
+    private fun setBookRecyclerViewConfig() {
+        val context = requireContext()
+        val recyclerView = binding.bookRecyclerView
+        recyclerView.layoutManager = LinearLayoutManager(context)
+        val adapter = SyllabusBookAdapter()
+        recyclerView.adapter = adapter
+        recyclerView.addItemDecoration(
+            DividerItemDecoration(
+                context,
+                LinearLayoutManager.VERTICAL
+            )
+        )
     }
 }

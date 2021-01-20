@@ -2,8 +2,8 @@ package com.konkuk.boost.data.course
 
 import com.google.gson.annotations.SerializedName
 
-data class SyllabusPlan(
+data class SyllabusWeekPlan(
     @SerializedName("WEEK_NO") val weekNo: Int,
-    // TODO
-
+    @SerializedName("LT_CTNT") val lectureContent: String,
+    @SerializedName("THEME") val theme: String,
 )
