@@ -31,9 +31,13 @@ class SyllabusBookAdapter :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookViewHolder {
-        return BookViewHolder(
+        val holder = BookViewHolder(
             LayoutInflater.from(parent.context).inflate(R.layout.book_item, parent, false)
         )
+
+        holder.bookNameTextView.isSelected = true
+
+        return holder
     }
 
     override fun onBindViewHolder(holder: BookViewHolder, position: Int) {
