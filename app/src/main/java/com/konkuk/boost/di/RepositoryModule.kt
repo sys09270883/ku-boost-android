@@ -1,14 +1,13 @@
 package com.konkuk.boost.di
 
 import com.konkuk.boost.api.AuthService
+import com.konkuk.boost.api.CourseService
 import com.konkuk.boost.api.GradeService
+import com.konkuk.boost.api.LibraryService
 import com.konkuk.boost.persistence.GradeDao
 import com.konkuk.boost.persistence.GraduationSimulationDao
 import com.konkuk.boost.persistence.PreferenceManager
-import com.konkuk.boost.repositories.AuthRepository
-import com.konkuk.boost.repositories.AuthRepositoryImpl
-import com.konkuk.boost.repositories.GradeRepository
-import com.konkuk.boost.repositories.GradeRepositoryImpl
+import com.konkuk.boost.repositories.*
 import org.koin.dsl.module
 
 val repositoryModule = module {
@@ -25,6 +24,17 @@ val repositoryModule = module {
     ): GradeRepository =
         GradeRepositoryImpl(gradeService, graduationSimulationDao, preferenceManager, gradeDao)
 
+    fun provideGradeRepository(courseService: CourseService): CourseRepository =
+        CourseRepositoryImpl(courseService)
+
+    fun provideLibraryRepository(
+        libraryService: LibraryService,
+        preferenceManager: PreferenceManager
+    ): LibraryRepository =
+        LibraryResponseImpl(libraryService, preferenceManager)
+
     single { provideLoginRepository(get(), get()) }
     single { provideGradeRepository(get(), get(), get(), get()) }
+    single { provideGradeRepository(get()) }
+    single { provideLibraryRepository(get(), get()) }
 }

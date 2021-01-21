@@ -1,11 +1,13 @@
 package com.konkuk.boost.ui
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
@@ -33,17 +35,24 @@ class LoginFragment : Fragment() {
         return binding.root
     }
 
+    private fun login() {
+        val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(binding.username.windowToken, 0);
+        imm.hideSoftInputFromWindow(binding.password.windowToken, 0);
+        viewModel.login()
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         binding.loginButton.setOnClickListener {
-            viewModel.login()
+            login()
         }
 
         binding.password.setOnEditorActionListener { _, actionId, _ ->
             return@setOnEditorActionListener when (actionId) {
                 EditorInfo.IME_ACTION_DONE -> {
-                    viewModel.login()
+                    login()
                     true
                 }
                 else -> false

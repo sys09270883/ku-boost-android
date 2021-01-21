@@ -39,9 +39,12 @@
     <string name="prompt_info_classification">이수구분 변경 과목은 졸업 시뮬레이션에만 적용됩니다.</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-
+    <string name="prompt_syllabus">강의계획서</string>
+    <string name="hint_syllabus">과목번호, 과목명, 교수명</string>
+    <string name="prompt_mobile_qr_code">모바일 열람증</string>
     <string name="prompt_my_information">나의 정보</string>
     <string name="prompt_share_kakao_link">카카오톡 공유하기</string>
+    <!--kakao key-->
     <string name="kakao_app_key">eaa087d23730b3150d1cfa52f6ec2413</string>
     <string name="kakao_scheme">kakaoeaa087d23730b3150d1cfa52f6ec2413</string>
     <string name="kakaolink_host">kakaolink</string>
