@@ -30,10 +30,10 @@ class SettingsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setSettingsClickListner()
+        setSettingsClickListener()
     }
 
-    private fun setSettingsClickListner() {
+    private fun setSettingsClickListener() {
         binding.apply {
             shareKaKaoLinkTextView.setOnClickListener {
                 KaKaoUtils.share(requireContext())
