@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.konkuk.boost.adapters.SyllabusBookAdapter
+import com.konkuk.boost.adapters.SyllabusWorkAdapter
 import com.konkuk.boost.databinding.FragmentCourseSummaryBinding
 import com.konkuk.boost.viewmodels.CourseSummaryViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -32,6 +33,7 @@ class CourseSummaryFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setLectureData()
         setBookRecyclerViewConfig()
+        setWorkRecyclerViewConfig()
         viewModel.fetchDetailSyllabus()
     }
 
@@ -43,6 +45,9 @@ class CourseSummaryFragment : Fragment() {
 
             val bookAdapter = binding.bookRecyclerView.adapter as SyllabusBookAdapter
             bookAdapter.submitList(viewModel.getBookList())
+
+            val workAdapter = binding.workRecyclerView.adapter as SyllabusWorkAdapter
+            workAdapter.submitList(viewModel.getWorkList())
         }
     }
 
@@ -60,6 +65,20 @@ class CourseSummaryFragment : Fragment() {
         val recyclerView = binding.bookRecyclerView
         recyclerView.layoutManager = LinearLayoutManager(context)
         val adapter = SyllabusBookAdapter()
+        recyclerView.adapter = adapter
+        recyclerView.addItemDecoration(
+            DividerItemDecoration(
+                context,
+                LinearLayoutManager.VERTICAL
+            )
+        )
+    }
+
+    private fun setWorkRecyclerViewConfig() {
+        val context = requireContext()
+        val recyclerView = binding.workRecyclerView
+        recyclerView.layoutManager = LinearLayoutManager(context)
+        val adapter = SyllabusWorkAdapter()
         recyclerView.adapter = adapter
         recyclerView.addItemDecoration(
             DividerItemDecoration(
