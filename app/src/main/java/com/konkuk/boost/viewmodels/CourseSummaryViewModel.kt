@@ -58,4 +58,6 @@ class CourseSummaryViewModel(
     fun getBookList() = detailSyllabusResponse.value?.data?.book ?: emptyList()
 
     fun getWorkList() = detailSyllabusResponse.value?.data?.work ?: emptyList()
+
+    fun getWeekPlanList() = detailSyllabusResponse.value?.data?.weekPlan ?: emptyList()
 }

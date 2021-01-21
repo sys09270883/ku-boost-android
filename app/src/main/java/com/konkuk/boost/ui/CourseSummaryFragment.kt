@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.konkuk.boost.adapters.SyllabusBookAdapter
+import com.konkuk.boost.adapters.SyllabusWeekPlanAdapter
 import com.konkuk.boost.adapters.SyllabusWorkAdapter
 import com.konkuk.boost.databinding.FragmentCourseSummaryBinding
 import com.konkuk.boost.viewmodels.CourseSummaryViewModel
@@ -34,6 +35,7 @@ class CourseSummaryFragment : Fragment() {
         setLectureData()
         setBookRecyclerViewConfig()
         setWorkRecyclerViewConfig()
+        setWeekPlanRecyclerViewConfig()
         viewModel.fetchDetailSyllabus()
     }
 
@@ -48,6 +50,9 @@ class CourseSummaryFragment : Fragment() {
 
             val workAdapter = binding.workRecyclerView.adapter as SyllabusWorkAdapter
             workAdapter.submitList(viewModel.getWorkList())
+
+            val weekPlanAdapter = binding.weekRecyclerView.adapter as SyllabusWeekPlanAdapter
+            weekPlanAdapter.submitList(viewModel.getWeekPlanList())
         }
     }
 
@@ -84,6 +89,21 @@ class CourseSummaryFragment : Fragment() {
             DividerItemDecoration(
                 context,
                 LinearLayoutManager.VERTICAL
+            )
+        )
+    }
+
+    private fun setWeekPlanRecyclerViewConfig() {
+        val context = requireContext()
+        val recyclerView = binding.weekRecyclerView
+        recyclerView.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        val adapter = SyllabusWeekPlanAdapter()
+        recyclerView.adapter = adapter
+        recyclerView.addItemDecoration(
+            DividerItemDecoration(
+                context,
+                LinearLayoutManager.HORIZONTAL
             )
         )
     }
