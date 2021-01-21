@@ -39,9 +39,9 @@ class CourseRepositoryImpl(
                 GradeUtils.convertToSemesterCode(semester),
                 subjectId
             )
-            Log.d("yoonseop", "Syllabus detail: $syllabusDetailResponse")
+            Log.d("ku-boost", "Syllabus detail: $syllabusDetailResponse")
         } catch (e: Exception) {
-            Log.e("yoonseop", "${e.message}")
+            Log.e("ku-boost", "${e.message}")
             return UseCase.error("${e.message}")
         }
 

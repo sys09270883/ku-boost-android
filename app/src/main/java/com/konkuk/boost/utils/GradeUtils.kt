@@ -109,7 +109,6 @@ object GradeUtils {
     }
 
     fun translate(semester: Int): String {
-        Log.d("yoonseop", "$semester")
         return when (semester) {
             1 -> "1"
             2 -> "하계계절"
