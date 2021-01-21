@@ -22,13 +22,16 @@ import com.konkuk.boost.data.course.LectureInfo
 import com.konkuk.boost.databinding.FragmentCourseSearchBinding
 import com.konkuk.boost.utils.DateTimeConverter
 import com.konkuk.boost.viewmodels.CourseSearchViewModel
+import com.konkuk.boost.viewmodels.CourseViewModel
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class CourseSearchFragment : Fragment() {
 
     private var _binding: FragmentCourseSearchBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: CourseSearchViewModel by viewModel()
+    private val courseSearchViewModel: CourseSearchViewModel by viewModel()
+    private val courseViewModel: CourseViewModel by sharedViewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,7 +39,8 @@ class CourseSearchFragment : Fragment() {
     ): View {
         _binding = FragmentCourseSearchBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = this
-        binding.viewModel = viewModel
+        binding.courseViewModel = courseViewModel
+        binding.courseSearchViewModel = courseSearchViewModel
         return binding.root
     }
 
@@ -49,7 +53,7 @@ class CourseSearchFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel.syllabusResponse.observe(viewLifecycleOwner) {
+        courseViewModel.syllabusResponse.observe(viewLifecycleOwner) {
             if (it.data == null)
                 return@observe
 
@@ -78,8 +82,8 @@ class CourseSearchFragment : Fragment() {
                 .setMessage(getString(R.string.prompt_choose_semester))
                 .setSpinner(spinner)
                 .setPositiveButton(getString(R.string.prompt_yes)) { _, _ ->
-                    viewModel.setSemester(spinner.selectedItemPosition + 1)
-                    viewModel.fetchAllSyllabus()
+                    courseSearchViewModel.setSemester(spinner.selectedItemPosition + 1)
+                    fetchAllSyllabus()
                 }.setNegativeButton(getString(R.string.prompt_no)) { _, _ ->
                 }
             val dlg = builder.create()
@@ -96,13 +100,15 @@ class CourseSearchFragment : Fragment() {
     }
 
     private fun setYearAndSemester() {
-        viewModel.setYear(DateTimeConverter.currentYear())
-        viewModel.setSemester(viewModel.getSemester())
+        courseSearchViewModel.setYear(DateTimeConverter.currentYear())
+        courseSearchViewModel.setSemester(courseSearchViewModel.getSemester())
     }
 
     override fun onResume() {
         super.onResume()
-        fetchAllSyllabus()
+        if (!courseViewModel.isSyllabusFetched()) {
+            fetchAllSyllabus()
+        }
     }
 
     private fun setSyllabusRecyclerViewConfig() {
@@ -115,7 +121,8 @@ class CourseSearchFragment : Fragment() {
             override fun onItemClick(lectureInfo: LectureInfo) {
                 val bundle = bundleOf(
                     "subjectId" to lectureInfo.subjectId,
-                    "year" to viewModel.getYear(), "semester" to viewModel.getSemester()
+                    "year" to courseSearchViewModel.getYear(),
+                    "semester" to courseSearchViewModel.getSemester()
                 )
                 findNavController().navigate(
                     R.id.action_courseSearchFragment_to_courseSummaryFragment,
@@ -132,7 +139,10 @@ class CourseSearchFragment : Fragment() {
                 if (newText.isNullOrEmpty())
                     return false
 
-                adapter.submitList(viewModel.getFilteredList(newText).toMutableList())
+                val list = courseViewModel.getSyllabusList()
+                adapter.submitList(
+                    courseSearchViewModel.getFilteredList(list, newText).toMutableList()
+                )
                 return true
             }
         })
@@ -147,10 +157,10 @@ class CourseSearchFragment : Fragment() {
     }
 
     private fun fetchAllSyllabus() {
-        if (viewModel.isSyllabusFetched())
-            return
-
-        viewModel.fetchAllSyllabus()
+        courseViewModel.fetchAllSyllabus(
+            courseSearchViewModel.getYear(),
+            courseSearchViewModel.getSemester()
+        )
     }
 
     private fun AlertDialog.Builder.setSpinner(spinner: Spinner): AlertDialog.Builder {
