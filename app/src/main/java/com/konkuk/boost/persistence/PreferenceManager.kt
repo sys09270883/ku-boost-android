@@ -29,6 +29,7 @@ class PreferenceManager(private val context: Context) {
         private const val DEFAULT_STRING = ""
         private const val DEFAULT_INT = 2021
         private const val DEFAULT_BOOLEAN = false
+        private const val DEFAULT_SEMESTER = 1
     }
 
     private val pref: SharedPreferences by lazy { getEncryptedSharedPreference() }
@@ -42,7 +43,7 @@ class PreferenceManager(private val context: Context) {
     var code: String by pref.stringPreference(CODE)
     var hasData: Boolean by pref.booleanPreference(HAS_DATA)
     var accessToken: String by pref.stringPreference(ACCESS_TOKEN)
-    var selectedSemester: Int by pref.intPreference(SELECTED_SEMESTER)
+    var selectedSemester: Int by pref.intPreference(SELECTED_SEMESTER, DEFAULT_SEMESTER)
 
     private fun getEncryptedSharedPreference(): SharedPreferences {
         val keyGenParameterSpec = KeyGenParameterSpec.Builder(
@@ -77,6 +78,7 @@ class PreferenceManager(private val context: Context) {
         this.state = state
         this.dept = dept
         this.code = code
+        this.selectedSemester = DEFAULT_SEMESTER
     }
 
     fun clearAll() {
