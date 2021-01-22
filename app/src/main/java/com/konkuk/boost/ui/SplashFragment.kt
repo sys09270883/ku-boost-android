@@ -81,7 +81,6 @@ class SplashFragment : Fragment() {
                     findNavController().navigate(R.id.action_splashFragment_to_mainFragment)
                 }
                 UseCase.Status.ERROR -> {
-                    Log.d("ku-boost", "${it.message}")
                     coroutineScope.launch {
                         delay(1500L)
                         findNavController().navigate(R.id.action_splashFragment_to_loginFragment)

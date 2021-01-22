@@ -42,7 +42,6 @@ class CourseRepositoryImpl(
                 GradeUtils.convertToSemesterCode(semester),
                 subjectId
             )
-            Log.d("ku-boost", "Syllabus detail: $syllabusDetailResponse")
         } catch (e: Exception) {
             Log.e("ku-boost", "${e.message}")
             return UseCase.error("${e.message}")
