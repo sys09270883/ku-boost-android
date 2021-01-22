@@ -42,6 +42,8 @@
     <string name="prompt_syllabus">강의계획서</string>
     <string name="hint_syllabus">과목번호, 학과, 과목, 교수</string>
     <string name="prompt_mobile_qr_code">모바일 열람증</string>
+    <string name="prompt_my_information">나의 정보</string>
+    <string name="prompt_share_kakao_link">카카오톡 공유하기</string>
     <string name="prompt_search_course">과목 검색</string>
     <string name="prompt_interested_course">관심 과목</string>
     <string name="prompt_choose_semester">학기를 선택하세요.</string>
@@ -52,4 +54,8 @@
     <string name="prompt_book">교재</string>
     <string name="prompt_work">과제</string>
     <string name="prompt_week_plan">주별강의계획</string>
+    <!-- kakao -->
+    <string name="kakao_app_key">eaa087d23730b3150d1cfa52f6ec2413</string>
+    <string name="kakao_scheme">kakaoeaa087d23730b3150d1cfa52f6ec2413</string>
+    <string name="kakaolink_host">kakaolink</string>
 </resources>
