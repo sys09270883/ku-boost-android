@@ -10,5 +10,6 @@ object LikeCourseContract {
         const val SEMESTER = "semester"
         const val SUBJECT_ID = "subject_id"
         const val LIKE = "like"
+        const val PRIMARY_KEYS = "primary_keys"
     }
 }
