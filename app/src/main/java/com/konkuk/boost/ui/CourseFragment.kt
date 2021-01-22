@@ -15,13 +15,17 @@ import com.konkuk.boost.adapters.LikeCourseAdapter
 import com.konkuk.boost.databinding.FragmentCourseBinding
 import com.konkuk.boost.persistence.LikeCourseEntity
 import com.konkuk.boost.viewmodels.CourseViewModel
+import kotlinx.coroutines.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.util.*
+import kotlin.concurrent.timer
 
 class CourseFragment : Fragment() {
 
     private var _binding: FragmentCourseBinding? = null
     private val binding get() = _binding!!
     private val viewModel: CourseViewModel by viewModel()
+    private var timer: Timer? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,11 +35,6 @@ class CourseFragment : Fragment() {
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
         return binding.root
-    }
-
-    override fun onResume() {
-        super.onResume()
-        viewModel.fetchAllLikeCourses()
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -49,6 +48,19 @@ class CourseFragment : Fragment() {
             val adapter = binding.allLikeCoursesRecyclerView.adapter as LikeCourseAdapter
             adapter.submitList(allLikeCourses)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        timer = timer(period = 3000L) {
+            viewModel.fetchAllLikeCourses()
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        timer?.cancel()
+        timer = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
