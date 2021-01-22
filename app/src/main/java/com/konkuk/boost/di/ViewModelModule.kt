@@ -15,6 +15,7 @@ val viewModelModule = module {
     viewModel { CourseViewModel(get()) }
     viewModel { MainFragmentViewModel(get()) }
     viewModel { QRCodeViewModel(get()) }
+    viewModel { SettingsViewModel(get()) }
     viewModel { CourseSummaryViewModel(get()) }
     viewModel { CourseSearchViewModel(get()) }
 }
