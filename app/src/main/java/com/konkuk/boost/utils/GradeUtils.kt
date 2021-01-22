@@ -109,8 +109,13 @@ object GradeUtils {
     }
 
     fun translate(semester: Int): String {
-        val mapper = hashMapOf(1 to "1", 2 to "하계계절", 3 to "2", 4 to "동계계절")
-        return mapper[semester]!!
+        return when (semester) {
+            1 -> "1"
+            2 -> "하계계절"
+            3 -> "2"
+            4 -> "동계계절"
+            else -> throw Exception("Semester invalid error: $semester")
+        }
     }
 
     fun convertToSemesterCode(semester: Int): String {

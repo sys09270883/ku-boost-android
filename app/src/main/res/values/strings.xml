@@ -40,6 +40,16 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="prompt_syllabus">강의계획서</string>
-    <string name="hint_syllabus">과목번호, 과목명, 교수명</string>
+    <string name="hint_syllabus">과목번호, 학과, 과목, 교수</string>
     <string name="prompt_mobile_qr_code">모바일 열람증</string>
+    <string name="prompt_search_course">과목 검색</string>
+    <string name="prompt_interested_course">관심 과목</string>
+    <string name="prompt_choose_semester">학기를 선택하세요.</string>
+    <string name="prompt_no_syllabus">해당 학기의 강의계획서가 준비되지 않았습니다.</string>
+    <string name="prompt_email">이메일</string>
+    <string name="prompt_tellNo">연락처</string>
+    <string name="prompt_consulting_time">상담시간</string>
+    <string name="prompt_book">교재</string>
+    <string name="prompt_work">과제</string>
+    <string name="prompt_week_plan">주별강의계획</string>
 </resources>
