@@ -36,7 +36,6 @@ class CourseFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        Log.d("yoonseop", "helloworld!")
         viewModel.fetchAllLikeCourses()
     }
 
