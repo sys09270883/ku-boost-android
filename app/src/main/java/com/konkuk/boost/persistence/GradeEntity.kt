@@ -31,11 +31,14 @@ data class GradeEntity(
 
     override fun equals(other: Any?): Boolean {
         (other as? GradeEntity)?.let {
-            return (it.username == other.username) && (it.subjectId == other.subjectId)
+            return (it.username == other.username) &&
+                    (it.year == other.year) &&
+                    (it.semester == other.semester) &&
+                    (it.subjectId == other.subjectId)
         } ?: return super.equals(other)
     }
 
     override fun hashCode(): Int {
-        return Objects.hash(this.username, this.subjectId)
+        return Objects.hash(this.username, this.year, this.semester, this.subjectId)
     }
 }
