@@ -25,8 +25,18 @@
 ### 비동기
 - Coroutines
 
-### 시각화
+### UI
 - MPAndroidChart
+- CircleImageView
+
+### 이미지 로딩
+- Glide
+
+### 애니메이션
+- Lottie
+
+### QR 코드
+- ZXing
 
 ### 로깅 및 모니터링
 - Firebase Crashlytics
