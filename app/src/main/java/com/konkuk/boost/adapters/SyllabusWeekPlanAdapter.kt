@@ -1,6 +1,7 @@
 package com.konkuk.boost.adapters
 
 import android.annotation.SuppressLint
+import android.text.method.ScrollingMovementMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -38,9 +39,13 @@ class SyllabusWeekPlanAdapter :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlanViewHolder {
-        return PlanViewHolder(
+        val holder = PlanViewHolder(
             LayoutInflater.from(parent.context).inflate(R.layout.week_plan_item, parent, false)
         )
+
+        holder.contentTextView.movementMethod = ScrollingMovementMethod()
+
+        return holder
     }
 
     @SuppressLint("SetTextI18n")
