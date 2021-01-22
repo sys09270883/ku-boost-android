@@ -35,8 +35,14 @@ class SettingsFragment : Fragment() {
 
     private fun setSettingsClickListener() {
         binding.apply {
-            shareKaKaoLinkTextView.setOnClickListener {
+            shareKaKaoLinkBtn.setOnClickListener {
                 KaKaoUtils.share(requireContext())
+            }
+            showOpenSourceBtn.setOnClickListener {
+
+            }
+            logoutBtn.setOnClickListener {
+
             }
         }
     }
