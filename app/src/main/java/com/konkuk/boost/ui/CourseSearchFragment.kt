@@ -121,6 +121,8 @@ class CourseSearchFragment : Fragment() {
             override fun onItemClick(lectureInfo: LectureInfo) {
                 val bundle = bundleOf(
                     "subjectId" to lectureInfo.subjectId,
+                    "subjectName" to lectureInfo.subjectName,
+                    "professor" to lectureInfo.professor,
                     "year" to courseSearchViewModel.getYear(),
                     "semester" to courseSearchViewModel.getSemester()
                 )

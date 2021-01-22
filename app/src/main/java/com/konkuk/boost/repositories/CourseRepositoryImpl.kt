@@ -68,16 +68,32 @@ class CourseRepositoryImpl(
         year: Int,
         semester: Int,
         subjectId: String,
+        subjectName: String,
+        professor: String,
         like: Boolean
     ): UseCase<Unit> {
         val username = preferenceManager.username
 
         try {
-            val course = LikeCourseEntity(username, year, semester, subjectId, like)
+            val course = LikeCourseEntity(username, year, semester, subjectId, subjectName, professor, like)
             likeCourseDao.insertLikeCourse(course)
         } catch (e: Exception) {
             return UseCase.error("${e.message}")
         }
+
         return UseCase.success(Unit)
+    }
+
+    override suspend fun makeAllLikeCoursesRequest(): UseCase<List<LikeCourseEntity>> {
+        val username = preferenceManager.username
+        val allLikeCourses: List<LikeCourseEntity>
+
+        try {
+            allLikeCourses = likeCourseDao.getAllLikeCourses(username)
+        } catch (e: Exception) {
+            return UseCase.error("${e.message}")
+        }
+
+        return UseCase.success(allLikeCourses)
     }
 }

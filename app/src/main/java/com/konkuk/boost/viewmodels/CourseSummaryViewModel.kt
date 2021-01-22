@@ -21,6 +21,20 @@ class CourseSummaryViewModel(
         _subjectId.value = sbjtId
     }
 
+    private val _subjectName = MutableLiveData("")
+    val subjectName get() = _subjectName
+
+    fun setSubjectName(sbjtName: String) {
+        _subjectName.value = sbjtName
+    }
+
+    private val _professor = MutableLiveData("")
+    val professor get() = _professor
+
+    fun setProfessor(prof: String) {
+        _professor.value = prof
+    }
+
     private val _year = MutableLiveData(2021)
     val year get() = _year
 
@@ -65,11 +79,13 @@ class CourseSummaryViewModel(
         val year = _year.value ?: return
         val semester = _semester.value ?: return
         val subjectId = _subjectId.value ?: return
+        val subjectName = _subjectName.value ?: return
+        val professor = _professor.value ?: return
         val like = true
 
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                courseRepository.insertLikeCourse(year, semester, subjectId, like)
+                courseRepository.insertLikeCourse(year, semester, subjectId, subjectName, professor, like)
             }
         }
     }

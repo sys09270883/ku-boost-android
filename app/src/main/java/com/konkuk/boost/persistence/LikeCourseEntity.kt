@@ -14,6 +14,8 @@ data class LikeCourseEntity(
     @ColumnInfo(name = LikeCourseEntry.YEAR) val year: Int,
     @ColumnInfo(name = LikeCourseEntry.SEMESTER) val semester: Int,
     @ColumnInfo(name = LikeCourseEntry.SUBJECT_ID) val subjectId: String,
+    @ColumnInfo(name = LikeCourseEntry.SUBJECT_NAME) val subjectName: String,
+    @ColumnInfo(name = LikeCourseEntry.PROFESSOR) val professor: String,
     @ColumnInfo(name = LikeCourseEntry.LIKE) val like: Boolean,
 ) {
 

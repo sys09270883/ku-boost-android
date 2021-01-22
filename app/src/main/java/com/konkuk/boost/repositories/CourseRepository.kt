@@ -2,6 +2,7 @@ package com.konkuk.boost.repositories
 
 import com.konkuk.boost.data.course.SyllabusDetailResponse
 import com.konkuk.boost.data.course.SyllabusResponse
+import com.konkuk.boost.persistence.LikeCourseEntity
 import com.konkuk.boost.utils.UseCase
 
 interface CourseRepository {
@@ -17,5 +18,14 @@ interface CourseRepository {
 
     fun getSemester(): UseCase<Int>
 
-    suspend fun insertLikeCourse(year: Int, semester: Int, subjectId: String, like: Boolean): UseCase<Unit>
+    suspend fun insertLikeCourse(
+        year: Int,
+        semester: Int,
+        subjectId: String,
+        subjectName: String,
+        professor: String,
+        like: Boolean
+    ): UseCase<Unit>
+
+    suspend fun makeAllLikeCoursesRequest(): UseCase<List<LikeCourseEntity>>
 }

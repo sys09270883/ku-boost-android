@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.konkuk.boost.data.course.SyllabusResponse
+import com.konkuk.boost.persistence.LikeCourseEntity
 import com.konkuk.boost.repositories.CourseRepository
 import com.konkuk.boost.utils.UseCase
 import kotlinx.coroutines.Dispatchers
@@ -43,5 +44,15 @@ class CourseViewModel(
     }
 
     fun getSyllabusList() = syllabusResponse.value?.data?.lectureInfoList ?: emptyList()
+
+    val allLikeCoursesResponse = MutableLiveData<UseCase<List<LikeCourseEntity>>>()
+
+    fun fetchAllLikeCourses() {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                allLikeCoursesResponse.postValue(courseRepository.makeAllLikeCoursesRequest())
+            }
+        }
+    }
 
 }

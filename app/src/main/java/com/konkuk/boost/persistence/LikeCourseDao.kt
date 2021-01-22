@@ -3,9 +3,14 @@ package com.konkuk.boost.persistence
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import com.konkuk.boost.persistence.LikeCourseContract.LikeCourseEntry
 
 @Dao
 interface LikeCourseDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertLikeCourse(vararg likeCourse: LikeCourseEntity)
+
+    @Query("SELECT * FROM ${LikeCourseEntry.TABLE_NAME} WHERE ${LikeCourseEntry.USERNAME} = :username AND ${LikeCourseEntry.LIKE} = :like")
+    suspend fun getAllLikeCourses(username: String, like: Boolean = true): List<LikeCourseEntity>
 }

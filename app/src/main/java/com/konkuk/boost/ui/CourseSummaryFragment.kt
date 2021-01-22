@@ -13,13 +13,16 @@ import com.konkuk.boost.adapters.SyllabusWeekPlanAdapter
 import com.konkuk.boost.adapters.SyllabusWorkAdapter
 import com.konkuk.boost.databinding.FragmentCourseSummaryBinding
 import com.konkuk.boost.viewmodels.CourseSummaryViewModel
+import com.konkuk.boost.viewmodels.CourseViewModel
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class CourseSummaryFragment : Fragment() {
 
     private var _binding: FragmentCourseSummaryBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: CourseSummaryViewModel by viewModel()
+    private val courseSummaryViewModel: CourseSummaryViewModel by viewModel()
+    private val courseViewModel: CourseViewModel by sharedViewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -27,7 +30,7 @@ class CourseSummaryFragment : Fragment() {
     ): View {
         _binding = FragmentCourseSummaryBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = this
-        binding.viewModel = viewModel
+        binding.viewModel = courseSummaryViewModel
         return binding.root
     }
 
@@ -38,45 +41,53 @@ class CourseSummaryFragment : Fragment() {
         setWorkRecyclerViewConfig()
         setWeekPlanRecyclerViewConfig()
         setLikeListener()
-        viewModel.fetchDetailSyllabus()
+        courseSummaryViewModel.fetchDetailSyllabus()
     }
 
     private fun setLikeListener() {
         // 토글기능 추가해야 함.
         binding.likeButton.setOnClickListener { _ ->
-            viewModel.updateLikeCourse()
+            // test
+            courseSummaryViewModel.updateLikeCourse()
             val animator = ValueAnimator.ofFloat(0f, 0.5f).setDuration(1000L)
             animator.addUpdateListener {
                 binding.likeButton.progress = it.animatedValue as Float
             }
             animator.start()
+
+
+            courseViewModel.fetchAllLikeCourses()
         }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel.detailSyllabusResponse.observe(viewLifecycleOwner) {
+        courseSummaryViewModel.detailSyllabusResponse.observe(viewLifecycleOwner) {
             if (it.data == null)
                 return@observe
 
             val bookAdapter = binding.bookRecyclerView.adapter as SyllabusBookAdapter
-            bookAdapter.submitList(viewModel.getBookList())
+            bookAdapter.submitList(courseSummaryViewModel.getBookList())
 
             val workAdapter = binding.workRecyclerView.adapter as SyllabusWorkAdapter
-            workAdapter.submitList(viewModel.getWorkList())
+            workAdapter.submitList(courseSummaryViewModel.getWorkList())
 
             val weekPlanAdapter = binding.weekRecyclerView.adapter as SyllabusWeekPlanAdapter
-            weekPlanAdapter.submitList(viewModel.getWeekPlanList())
+            weekPlanAdapter.submitList(courseSummaryViewModel.getWeekPlanList())
         }
     }
 
     private fun setLectureData() {
         val sbjtId = requireArguments().getString("subjectId") ?: return
+        val sbjtName = requireArguments().getString("subjectName") ?: return
+        val prof = requireArguments().getString("professor") ?: return
         val year = requireArguments().getInt("year")
         val semester = requireArguments().getInt("semester")
-        viewModel.setSubjectId(sbjtId)
-        viewModel.setYear(year)
-        viewModel.setSemester(semester)
+        courseSummaryViewModel.setSubjectId(sbjtId)
+        courseSummaryViewModel.setSubjectName(sbjtName)
+        courseSummaryViewModel.setProfessor(prof)
+        courseSummaryViewModel.setYear(year)
+        courseSummaryViewModel.setSemester(semester)
     }
 
     private fun setBookRecyclerViewConfig() {
