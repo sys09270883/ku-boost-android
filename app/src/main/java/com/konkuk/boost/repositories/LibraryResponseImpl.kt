@@ -1,6 +1,5 @@
 package com.konkuk.boost.repositories
 
-import android.util.Log
 import com.konkuk.boost.api.LibraryService
 import com.konkuk.boost.data.library.LoginRequest
 import com.konkuk.boost.data.library.LoginResponse
@@ -34,7 +33,6 @@ class LibraryResponseImpl(
         val qrResponse: QRResponse
         try {
             qrResponse = libraryService.getMobileQRCode(accessToken)
-            Log.d("ku-boost", "QR Response: $qrResponse")
         } catch (e: Exception) {
             return UseCase.error("${e.message}")
         }

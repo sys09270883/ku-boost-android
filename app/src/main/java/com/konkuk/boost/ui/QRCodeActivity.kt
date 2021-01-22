@@ -82,7 +82,7 @@ class QRCodeActivity : AppCompatActivity() {
                 }
             }
         } catch (e: WriterException) {
-            Log.d("ku-boost", "generateQRCode: ${e.message}")
+            Log.e("ku-boost", "generateQRCode: ${e.message}")
         }
         return bitmap
     }

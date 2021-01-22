@@ -44,7 +44,7 @@ class SyllabusBookAdapter :
         val book = currentList[position]
         holder.apply {
             bookNameTextView.text = book.bookName
-            bookDivTextView.text = when (book.bookDiv) {
+            bookDivTextView.text = when (book.bookDiv ?: "") {
                 "B23231" -> "주교재"
                 "B23232" -> "부교재"
                 "B23233" -> "참고문헌"

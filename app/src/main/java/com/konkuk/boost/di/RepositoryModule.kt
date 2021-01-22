@@ -6,6 +6,7 @@ import com.konkuk.boost.api.GradeService
 import com.konkuk.boost.api.LibraryService
 import com.konkuk.boost.persistence.GradeDao
 import com.konkuk.boost.persistence.GraduationSimulationDao
+import com.konkuk.boost.persistence.LikeCourseDao
 import com.konkuk.boost.persistence.PreferenceManager
 import com.konkuk.boost.repositories.*
 import org.koin.dsl.module
@@ -26,9 +27,10 @@ val repositoryModule = module {
 
     fun provideCourseRepository(
         courseService: CourseService,
-        preferenceManager: PreferenceManager
+        preferenceManager: PreferenceManager,
+        likeCourseDao: LikeCourseDao
     ): CourseRepository =
-        CourseRepositoryImpl(courseService, preferenceManager)
+        CourseRepositoryImpl(courseService, preferenceManager, likeCourseDao)
 
     fun provideLibraryRepository(
         libraryService: LibraryService,
@@ -38,6 +40,6 @@ val repositoryModule = module {
 
     single { provideLoginRepository(get(), get()) }
     single { provideGradeRepository(get(), get(), get(), get()) }
-    single { provideCourseRepository(get(), get()) }
+    single { provideCourseRepository(get(), get(), get()) }
     single { provideLibraryRepository(get(), get()) }
 }

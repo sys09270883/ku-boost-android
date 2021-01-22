@@ -1,5 +1,6 @@
 package com.konkuk.boost.ui
 
+import android.animation.ValueAnimator
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -18,7 +19,7 @@ class CourseSummaryFragment : Fragment() {
 
     private var _binding: FragmentCourseSummaryBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: CourseSummaryViewModel by viewModel()
+    private val courseSummaryViewModel: CourseSummaryViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -26,7 +27,7 @@ class CourseSummaryFragment : Fragment() {
     ): View {
         _binding = FragmentCourseSummaryBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = this
-        binding.viewModel = viewModel
+        binding.viewModel = courseSummaryViewModel
         return binding.root
     }
 
@@ -36,33 +37,70 @@ class CourseSummaryFragment : Fragment() {
         setBookRecyclerViewConfig()
         setWorkRecyclerViewConfig()
         setWeekPlanRecyclerViewConfig()
-        viewModel.fetchDetailSyllabus()
+        setLikeListener()
+        courseSummaryViewModel.fetchLikeCourseExists()
+        courseSummaryViewModel.fetchDetailSyllabus()
+    }
+
+    private fun setLikeListener() {
+        binding.likeButton.setOnClickListener { _ ->
+            val isLike = courseSummaryViewModel.getLike()
+            if (isLike) unlikeAnimation() else likeAnimation()
+            courseSummaryViewModel.updateLikeCourse(!isLike)
+            courseSummaryViewModel.setLike(!isLike)
+        }
+    }
+
+    private fun likeAnimation() {
+        val animator = ValueAnimator.ofFloat(0f, 0.5f).setDuration(1000L)
+        animator.addUpdateListener {
+            binding.likeButton.progress = it.animatedValue as Float
+        }
+        animator.start()
+    }
+
+    private fun unlikeAnimation() {
+        val animator = ValueAnimator.ofFloat(0.5f, 1.0f).setDuration(1000L)
+        animator.addUpdateListener {
+            binding.likeButton.progress = it.animatedValue as Float
+        }
+        animator.start()
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel.detailSyllabusResponse.observe(viewLifecycleOwner) {
+        courseSummaryViewModel.detailSyllabusResponse.observe(viewLifecycleOwner) {
             if (it.data == null)
                 return@observe
 
             val bookAdapter = binding.bookRecyclerView.adapter as SyllabusBookAdapter
-            bookAdapter.submitList(viewModel.getBookList())
+            bookAdapter.submitList(courseSummaryViewModel.getBookList())
 
             val workAdapter = binding.workRecyclerView.adapter as SyllabusWorkAdapter
-            workAdapter.submitList(viewModel.getWorkList())
+            workAdapter.submitList(courseSummaryViewModel.getWorkList())
 
             val weekPlanAdapter = binding.weekRecyclerView.adapter as SyllabusWeekPlanAdapter
-            weekPlanAdapter.submitList(viewModel.getWeekPlanList())
+            weekPlanAdapter.submitList(courseSummaryViewModel.getWeekPlanList())
+        }
+
+        courseSummaryViewModel.isLikeResponse.observe(viewLifecycleOwner) {
+            val like = it.data?.like ?: false
+            courseSummaryViewModel.setLike(like)
+            if (like) likeAnimation() else unlikeAnimation()
         }
     }
 
     private fun setLectureData() {
         val sbjtId = requireArguments().getString("subjectId") ?: return
+        val sbjtName = requireArguments().getString("subjectName") ?: return
+        val prof = requireArguments().getString("professor") ?: return
         val year = requireArguments().getInt("year")
         val semester = requireArguments().getInt("semester")
-        viewModel.setSubjectId(sbjtId)
-        viewModel.setYear(year)
-        viewModel.setSemester(semester)
+        courseSummaryViewModel.setSubjectId(sbjtId)
+        courseSummaryViewModel.setSubjectName(sbjtName)
+        courseSummaryViewModel.setProfessor(prof)
+        courseSummaryViewModel.setYear(year)
+        courseSummaryViewModel.setSemester(semester)
     }
 
     private fun setBookRecyclerViewConfig() {
