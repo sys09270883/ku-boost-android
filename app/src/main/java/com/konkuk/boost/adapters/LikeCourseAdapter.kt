@@ -31,7 +31,7 @@ class LikeCourseAdapter :
             oldItem: LikeCourseEntity,
             newItem: LikeCourseEntity
         ): Boolean {
-            return areItemsTheSame(oldItem, newItem)
+            return oldItem.subjectId == newItem.subjectId
         }
     }
 
