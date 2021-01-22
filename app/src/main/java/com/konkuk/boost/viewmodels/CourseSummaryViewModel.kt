@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.konkuk.boost.data.course.SyllabusDetailResponse
+import com.konkuk.boost.persistence.LikeCourseEntity
 import com.konkuk.boost.repositories.CourseRepository
 import com.konkuk.boost.utils.UseCase
 import kotlinx.coroutines.Dispatchers
@@ -75,17 +76,45 @@ class CourseSummaryViewModel(
 
     fun getWeekPlanList() = detailSyllabusResponse.value?.data?.weekPlan ?: emptyList()
 
-    fun updateLikeCourse() {
+    fun updateLikeCourse(like: Boolean) {
         val year = _year.value ?: return
         val semester = _semester.value ?: return
         val subjectId = _subjectId.value ?: return
         val subjectName = _subjectName.value ?: return
         val professor = _professor.value ?: return
-        val like = true
 
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                courseRepository.insertLikeCourse(year, semester, subjectId, subjectName, professor, like)
+                courseRepository.insertLikeCourse(
+                    year,
+                    semester,
+                    subjectId,
+                    subjectName,
+                    professor,
+                    like
+                )
+            }
+        }
+    }
+
+    val like = MutableLiveData<Boolean>(false)
+
+    fun setLike(_like: Boolean) {
+        like.value = _like
+    }
+
+    fun getLike() = like.value ?: false
+
+    val isLikeResponse = MutableLiveData<UseCase<LikeCourseEntity?>>()
+
+    fun fetchLikeCourseExists() {
+        val year = _year.value ?: return
+        val semester = _semester.value ?: return
+        val subjectId = _subjectId.value ?: return
+
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                isLikeResponse.postValue(courseRepository.isExist(year, semester, subjectId))
             }
         }
     }

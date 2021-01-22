@@ -28,4 +28,6 @@ interface CourseRepository {
     ): UseCase<Unit>
 
     suspend fun makeAllLikeCoursesRequest(): UseCase<List<LikeCourseEntity>>
+
+    suspend fun isExist(year: Int, semester: Int, subjectId: String): UseCase<LikeCourseEntity?>
 }

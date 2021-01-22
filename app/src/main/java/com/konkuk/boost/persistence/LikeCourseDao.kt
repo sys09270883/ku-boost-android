@@ -11,6 +11,23 @@ interface LikeCourseDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertLikeCourse(vararg likeCourse: LikeCourseEntity)
 
-    @Query("SELECT * FROM ${LikeCourseEntry.TABLE_NAME} WHERE ${LikeCourseEntry.USERNAME} = :username AND ${LikeCourseEntry.LIKE} = :like")
+    @Query(
+        """
+        SELECT * FROM ${LikeCourseEntry.TABLE_NAME} 
+        WHERE ${LikeCourseEntry.USERNAME} = :username
+        AND ${LikeCourseEntry.LIKE} = :like
+        """
+    )
     suspend fun getAllLikeCourses(username: String, like: Boolean = true): List<LikeCourseEntity>
+
+    @Query(
+        """
+        SELECT * FROM ${LikeCourseEntry.TABLE_NAME}
+        WHERE ${LikeCourseEntry.USERNAME} = :username 
+        AND ${LikeCourseEntry.YEAR} = :year 
+        AND ${LikeCourseEntry.SEMESTER} = :semester
+        AND ${LikeCourseEntry.SUBJECT_ID} = :subjectId
+        """
+    )
+    suspend fun isExist(username: String, year: Int, semester: Int, subjectId: String): LikeCourseEntity?
 }

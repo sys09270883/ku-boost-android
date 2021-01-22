@@ -95,4 +95,17 @@ class CourseRepositoryImpl(
 
         return UseCase.success(allLikeCourses)
     }
+
+    override suspend fun isExist(year: Int, semester: Int, subjectId: String): UseCase<LikeCourseEntity?> {
+        val username = preferenceManager.username
+
+        val likeCourse: LikeCourseEntity?
+        try {
+            likeCourse = likeCourseDao.isExist(username, year, semester, subjectId)
+        } catch (e: Exception) {
+            return UseCase.error("${e.message}")
+        }
+
+        return UseCase.success(likeCourse)
+    }
 }

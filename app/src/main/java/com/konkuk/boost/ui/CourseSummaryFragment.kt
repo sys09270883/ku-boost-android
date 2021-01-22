@@ -38,20 +38,33 @@ class CourseSummaryFragment : Fragment() {
         setWorkRecyclerViewConfig()
         setWeekPlanRecyclerViewConfig()
         setLikeListener()
+        courseSummaryViewModel.fetchLikeCourseExists()
         courseSummaryViewModel.fetchDetailSyllabus()
     }
 
     private fun setLikeListener() {
-        // 토글기능 추가해야 함.
         binding.likeButton.setOnClickListener { _ ->
-            // test
-            courseSummaryViewModel.updateLikeCourse()
-            val animator = ValueAnimator.ofFloat(0f, 0.5f).setDuration(1000L)
-            animator.addUpdateListener {
-                binding.likeButton.progress = it.animatedValue as Float
-            }
-            animator.start()
+            val isLike = courseSummaryViewModel.getLike()
+            if (isLike) unlikeAnimation() else likeAnimation()
+            courseSummaryViewModel.updateLikeCourse(!isLike)
+            courseSummaryViewModel.setLike(!isLike)
         }
+    }
+
+    private fun likeAnimation() {
+        val animator = ValueAnimator.ofFloat(0f, 0.5f).setDuration(1000L)
+        animator.addUpdateListener {
+            binding.likeButton.progress = it.animatedValue as Float
+        }
+        animator.start()
+    }
+
+    private fun unlikeAnimation() {
+        val animator = ValueAnimator.ofFloat(0.5f, 1.0f).setDuration(1000L)
+        animator.addUpdateListener {
+            binding.likeButton.progress = it.animatedValue as Float
+        }
+        animator.start()
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -68,6 +81,12 @@ class CourseSummaryFragment : Fragment() {
 
             val weekPlanAdapter = binding.weekRecyclerView.adapter as SyllabusWeekPlanAdapter
             weekPlanAdapter.submitList(courseSummaryViewModel.getWeekPlanList())
+        }
+
+        courseSummaryViewModel.isLikeResponse.observe(viewLifecycleOwner) {
+            val like = it.data?.like ?: false
+            courseSummaryViewModel.setLike(like)
+            if (like) likeAnimation() else unlikeAnimation()
         }
     }
 
