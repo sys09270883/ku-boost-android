@@ -96,6 +96,8 @@ dependencies {
     implementation 'com.google.zxing:core:3.4.0'
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
-     //KAKAO SDK
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
+    implementation 'com.airbnb.android:lottie:3.6.0'
+    //KAKAO SDK
     implementation group: 'com.kakao.sdk', name: 'kakaolink', version: project.KAKAO_SDK_VERSION
 }

@@ -4,12 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.widget.SearchView
+import android.view.animation.AnimationUtils
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.konkuk.boost.adapters.SyllabusAdapter
-import com.konkuk.boost.data.course.LectureInfo
+import androidx.navigation.fragment.findNavController
+import com.konkuk.boost.R
 import com.konkuk.boost.databinding.FragmentCourseBinding
 import com.konkuk.boost.viewmodels.CourseViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -32,52 +30,34 @@ class CourseFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setSyllabusRecyclerViewConfig()
+        setFabListener()
     }
 
-    override fun onResume() {
-        super.onResume()
-        fetchAllSyllabus()
-    }
-
-    private fun setSyllabusRecyclerViewConfig() {
+    private fun setFabListener() {
         val context = requireContext()
-        val recyclerView = binding.syllabusRecyclerView
-        recyclerView.layoutManager = LinearLayoutManager(context)
+        val fabOpen = AnimationUtils.loadAnimation(context, R.anim.fab_open)
+        val fabClose = AnimationUtils.loadAnimation(context, R.anim.fab_close)
 
-        val adapter = SyllabusAdapter()
-        adapter.itemClickListener = object : SyllabusAdapter.OnItemClickListener {
-            override fun onItemClick(lectureInfo: LectureInfo) {
-                // 내비게이션 제어
+        binding.fab.setOnClickListener {
+            if (viewModel.isFabOpened()) {
+                binding.searchFab.apply {
+                    startAnimation(fabClose)
+                    isClickable = false
+                }
+                viewModel.setFabOpened(false)
+            } else {
+                binding.searchFab.apply {
+                    startAnimation(fabOpen)
+                    isClickable = true
+                }
+                viewModel.setFabOpened(true)
             }
         }
 
-        val searchView = binding.syllabusSearchView
-        searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean = false
-
-            override fun onQueryTextChange(newText: String?): Boolean {
-                if (newText.isNullOrEmpty())
-                    return false
-
-                adapter.submitList(viewModel.getFilteredList(newText).toMutableList())
-                return true
-            }
-        })
-
-        recyclerView.adapter = adapter
-        recyclerView.addItemDecoration(
-            DividerItemDecoration(
-                context,
-                LinearLayoutManager.VERTICAL
-            )
-        )
+        binding.searchFab.setOnClickListener {
+            viewModel.setFabOpened(false)
+            findNavController().navigate(R.id.action_mainFragment_to_courseSearchFragment)
+        }
     }
 
-    private fun fetchAllSyllabus() {
-        if (viewModel.isSyllabusFetched())
-            return
-
-        viewModel.fetchAllSyllabus(2021, 1)
-    }
 }

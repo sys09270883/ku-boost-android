@@ -10,96 +10,49 @@
             type="com.konkuk.boost.viewmodels.CourseViewModel" />
     </data>
 
-    <androidx.core.widget.NestedScrollView
-        android:id="@+id/container"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:overScrollMode="never"
-        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+        android:layout_height="match_parent">
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/courseTitleView"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="12dp"
+            android:text="@string/prompt_interested_course"
+            android:textColor="@color/primaryTextColor"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/syllabusCardView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
-                android:layout_marginTop="24dp"
-                android:layout_marginEnd="12dp"
-                android:layout_marginBottom="12dp"
-                app:cardCornerRadius="10dp"
-                app:cardElevation="5dp"
-                app:cardUseCompatPadding="true">
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="20dp"
+            android:elevation="5dp"
+            android:src="@{viewModel.fabOpened ? @drawable/ic_baseline_close_24 : @drawable/ic_baseline_add_24}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:ignore="ContentDescription" />
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <TextView
-                        android:id="@+id/syllabusTitleTextView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginEnd="12dp"
-                        android:layout_marginBottom="12dp"
-                        android:text="@string/prompt_syllabus"
-                        android:textColor="@color/primaryTextColor"
-                        android:textSize="24sp"
-                        android:textStyle="bold"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <ProgressBar
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="20dp"
-                        app:bind_visibility="@{viewModel.syllabusLoading}"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/syllabusTitleTextView" />
-
-                    <androidx.appcompat.widget.SearchView
-                        android:id="@+id/syllabusSearchView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginBottom="8dp"
-                        app:bind_syllabus_search_view_visibility="@{viewModel.syllabusLoading}"
-                        app:iconifiedByDefault="false"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/syllabusTitleTextView"
-                        app:queryHint="@string/hint_syllabus" />
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/syllabusRecyclerView"
-                        android:layout_width="match_parent"
-                        android:layout_height="400dp"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginEnd="16dp"
-                        android:layout_marginBottom="16dp"
-                        android:overScrollMode="never"
-                        android:paddingBottom="20dp"
-                        app:bind_syllabus_visibility="@{viewModel.syllabusLoading}"
-                        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHeight_max="300dp"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/syllabusSearchView" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-            </com.google.android.material.card.MaterialCardView>
-
-
-        </LinearLayout>
-
-    </androidx.core.widget.NestedScrollView>
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/searchFab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="20dp"
+            android:backgroundTint="@color/secondaryLightColor"
+            android:elevation="5dp"
+            android:src="@drawable/ic_baseline_search_24"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toTopOf="@+id/fab"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:ignore="ContentDescription" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>
