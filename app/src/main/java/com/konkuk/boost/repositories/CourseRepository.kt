@@ -16,4 +16,6 @@ interface CourseRepository {
     fun setSemester(semester: Int): UseCase<Unit>
 
     fun getSemester(): UseCase<Int>
+
+    suspend fun insertLikeCourse(year: Int, semester: Int, subjectId: String, like: Boolean): UseCase<Unit>
 }

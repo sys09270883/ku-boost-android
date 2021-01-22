@@ -60,4 +60,17 @@ class CourseSummaryViewModel(
     fun getWorkList() = detailSyllabusResponse.value?.data?.work ?: emptyList()
 
     fun getWeekPlanList() = detailSyllabusResponse.value?.data?.weekPlan ?: emptyList()
+
+    fun updateLikeCourse() {
+        val year = _year.value ?: return
+        val semester = _semester.value ?: return
+        val subjectId = _subjectId.value ?: return
+        val like = true
+
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                courseRepository.insertLikeCourse(year, semester, subjectId, like)
+            }
+        }
+    }
 }

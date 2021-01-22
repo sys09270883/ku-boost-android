@@ -1,5 +1,6 @@
 package com.konkuk.boost.ui
 
+import android.animation.ValueAnimator
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -36,7 +37,20 @@ class CourseSummaryFragment : Fragment() {
         setBookRecyclerViewConfig()
         setWorkRecyclerViewConfig()
         setWeekPlanRecyclerViewConfig()
+        setLikeListener()
         viewModel.fetchDetailSyllabus()
+    }
+
+    private fun setLikeListener() {
+        // 토글기능 추가해야 함.
+        binding.likeButton.setOnClickListener { _ ->
+            viewModel.updateLikeCourse()
+            val animator = ValueAnimator.ofFloat(0f, 0.5f).setDuration(1000L)
+            animator.addUpdateListener {
+                binding.likeButton.progress = it.animatedValue as Float
+            }
+            animator.start()
+        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
