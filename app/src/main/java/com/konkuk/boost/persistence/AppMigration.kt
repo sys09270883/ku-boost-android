@@ -12,6 +12,8 @@ object AppMigration {
                     "${LikeCourseEntry.YEAR} INTEGER NOT NULL DEFAULT null," +
                     "${LikeCourseEntry.SEMESTER} INTEGER NOT NULL DEFAULT null," +
                     "${LikeCourseEntry.SUBJECT_ID} TEXT NOT NULL DEFAULT null," +
+                    "${LikeCourseEntry.SUBJECT_NAME} TEXT NOT NULL DEFAULT null," +
+                    "${LikeCourseEntry.PROFESSOR} TEXT NOT NULL DEFAULT null," +
                     "${LikeCourseEntry.LIKE} INTEGER NOT NULL DEFAULT null," +
                     "CONSTRAINT ${LikeCourseEntry.PRIMARY_KEYS} PRIMARY KEY (" +
                     "${LikeCourseEntry.USERNAME}, ${LikeCourseEntry.YEAR}, ${LikeCourseEntry.SEMESTER}, ${LikeCourseEntry.SUBJECT_ID})" +
