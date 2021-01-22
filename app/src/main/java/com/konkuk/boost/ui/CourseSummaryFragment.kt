@@ -13,8 +13,6 @@ import com.konkuk.boost.adapters.SyllabusWeekPlanAdapter
 import com.konkuk.boost.adapters.SyllabusWorkAdapter
 import com.konkuk.boost.databinding.FragmentCourseSummaryBinding
 import com.konkuk.boost.viewmodels.CourseSummaryViewModel
-import com.konkuk.boost.viewmodels.CourseViewModel
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class CourseSummaryFragment : Fragment() {
@@ -22,7 +20,6 @@ class CourseSummaryFragment : Fragment() {
     private var _binding: FragmentCourseSummaryBinding? = null
     private val binding get() = _binding!!
     private val courseSummaryViewModel: CourseSummaryViewModel by viewModel()
-    private val courseViewModel: CourseViewModel by sharedViewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -54,9 +51,6 @@ class CourseSummaryFragment : Fragment() {
                 binding.likeButton.progress = it.animatedValue as Float
             }
             animator.start()
-
-
-            courseViewModel.fetchAllLikeCourses()
         }
     }
 
