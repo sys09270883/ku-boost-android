@@ -82,7 +82,9 @@ class CourseSearchFragment : Fragment() {
                 .setMessage(getString(R.string.prompt_choose_semester))
                 .setSpinner(spinner)
                 .setPositiveButton(getString(R.string.prompt_yes)) { _, _ ->
-                    courseSearchViewModel.setSemester(spinner.selectedItemPosition + 1)
+                    val semester = spinner.selectedItemPosition + 1
+                    courseSearchViewModel.setSemester(semester)
+                    courseViewModel.setSemester(semester)
                     fetchAllSyllabus()
                 }.setNegativeButton(getString(R.string.prompt_no)) { _, _ ->
                 }
@@ -159,10 +161,7 @@ class CourseSearchFragment : Fragment() {
     }
 
     private fun fetchAllSyllabus() {
-        courseViewModel.fetchAllSyllabus(
-            courseSearchViewModel.getYear(),
-            courseSearchViewModel.getSemester()
-        )
+        courseViewModel.fetchAllSyllabus()
     }
 
     private fun AlertDialog.Builder.setSpinner(spinner: Spinner): AlertDialog.Builder {

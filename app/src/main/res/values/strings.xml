@@ -58,4 +58,10 @@
     <string name="kakao_app_key">eaa087d23730b3150d1cfa52f6ec2413</string>
     <string name="kakao_scheme">kakaoeaa087d23730b3150d1cfa52f6ec2413</string>
     <string name="kakaolink_host">kakaolink</string>
+    <string name="prompt_grade_1">1학년</string>
+    <string name="prompt_grade_2">2학년</string>
+    <string name="prompt_grade_3">3학년</string>
+    <string name="prompt_grade_4">4학년</string>
+    <string name="course_info_with_emoji">🔴  수강바구니담은인원\n🟡  수강인원\n🟢  제한인원</string>
+    <string name="prompt_info">도움말</string>
 </resources>

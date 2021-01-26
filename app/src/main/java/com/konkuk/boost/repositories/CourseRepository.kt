@@ -1,5 +1,6 @@
 package com.konkuk.boost.repositories
 
+import com.konkuk.boost.data.course.RegistrationStatus
 import com.konkuk.boost.data.course.SyllabusDetailResponse
 import com.konkuk.boost.data.course.SyllabusResponse
 import com.konkuk.boost.persistence.LikeCourseEntity
@@ -27,7 +28,13 @@ interface CourseRepository {
         like: Boolean
     ): UseCase<Unit>
 
-    suspend fun makeAllLikeCoursesRequest(): UseCase<List<LikeCourseEntity>>
+    suspend fun makeAllLikeCoursesRequest(year: Int, semester: Int): UseCase<List<LikeCourseEntity>>
 
     suspend fun isExist(year: Int, semester: Int, subjectId: String): UseCase<LikeCourseEntity?>
+
+    suspend fun makeCourseRegistrationStatusRequest(
+        year: Int,
+        semester: Int,
+        subjectIdList: List<String>
+    ): UseCase<List<List<RegistrationStatus>>>
 }

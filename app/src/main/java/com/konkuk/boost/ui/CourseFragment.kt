@@ -1,6 +1,7 @@
 package com.konkuk.boost.ui
 
 import android.os.Bundle
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,11 +11,13 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.konkuk.boost.R
 import com.konkuk.boost.adapters.LikeCourseAdapter
+import com.konkuk.boost.data.course.RegistrationStatusData
 import com.konkuk.boost.databinding.FragmentCourseBinding
-import com.konkuk.boost.persistence.LikeCourseEntity
 import com.konkuk.boost.viewmodels.CourseViewModel
+import com.skydoves.balloon.*
 import kotlinx.coroutines.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
@@ -26,6 +29,24 @@ class CourseFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel: CourseViewModel by viewModel()
     private var timer: Timer? = null
+    private val infoBalloon: Balloon by lazy {
+        val context = requireContext()
+        createBalloon(context) {
+            setArrowSize(10)
+            setWidth(BalloonSizeSpec.WRAP)
+            setHeight(BalloonSizeSpec.WRAP)
+            setPadding(16)
+            setArrowPosition(0.3f)
+            setArrowOrientation(ArrowOrientation.TOP)
+            setCornerRadius(4f)
+            setTextGravity(Gravity.START)
+            setTextSize(14f)
+            setAlpha(0.9f)
+            setText(getString(R.string.course_info_with_emoji))
+            setBalloonAnimation(BalloonAnimation.FADE)
+            setLifecycleOwner(lifecycleOwner)
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,21 +60,21 @@ class CourseFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel.allLikeCoursesResponse.observe(viewLifecycleOwner) {
-            if (it.data == null)
+        viewModel.courseAndRegistrationStatus.observe(viewLifecycleOwner) {
+            if (it == null)
                 return@observe
 
-            val allLikeCourses = it.data
-
             val adapter = binding.allLikeCoursesRecyclerView.adapter as LikeCourseAdapter
-            adapter.submitList(allLikeCourses)
+            adapter.submitList(it)
         }
     }
 
     override fun onResume() {
         super.onResume()
         timer = timer(period = 3000L) {
+            viewModel.fetchSelectedSemester()
             viewModel.fetchAllLikeCourses()
+            viewModel.fetchRegistrationStatus()
         }
     }
 
@@ -67,6 +88,16 @@ class CourseFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setFabListener()
         setLikeCourseRecyclerViewConfig()
+        setInfoConfig()
+    }
+
+    private fun setInfoConfig() {
+        binding.infoTextView.setOnClickListener {
+            when (infoBalloon.isShowing) {
+                true -> infoBalloon.dismiss()
+                false -> infoBalloon.showAlignBottom(it)
+            }
+        }
     }
 
     private fun setFabListener() {
@@ -103,13 +134,13 @@ class CourseFragment : Fragment() {
         val adapter = LikeCourseAdapter()
 
         adapter.itemClickListener = object : LikeCourseAdapter.OnItemClickListener {
-            override fun onItemClick(likeCourse: LikeCourseEntity) {
+            override fun onItemClick(registrationStatusData: RegistrationStatusData) {
                 val bundle = bundleOf(
-                    "subjectId" to likeCourse.subjectId,
-                    "subjectName" to likeCourse.subjectName,
-                    "professor" to likeCourse.professor,
-                    "year" to likeCourse.year,
-                    "semester" to likeCourse.semester
+                    "subjectId" to registrationStatusData.likeCourseEntity.subjectId,
+                    "subjectName" to registrationStatusData.likeCourseEntity.subjectName,
+                    "professor" to registrationStatusData.likeCourseEntity.professor,
+                    "year" to registrationStatusData.likeCourseEntity.year,
+                    "semester" to registrationStatusData.likeCourseEntity.semester
                 )
                 findNavController().navigate(
                     R.id.action_mainFragment_to_courseSummaryFragment,
@@ -125,5 +156,13 @@ class CourseFragment : Fragment() {
                 LinearLayoutManager.VERTICAL
             )
         )
+        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                if (dy > 0)
+                    binding.fab.hide()
+                else if (dy < 0)
+                    binding.fab.show()
+            }
+        })
     }
 }

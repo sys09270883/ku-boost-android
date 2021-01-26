@@ -15,10 +15,12 @@ interface LikeCourseDao {
         """
         SELECT * FROM ${LikeCourseEntry.TABLE_NAME} 
         WHERE ${LikeCourseEntry.USERNAME} = :username
+        AND ${LikeCourseEntry.YEAR} = :year
+        AND ${LikeCourseEntry.SEMESTER} = :semester
         AND ${LikeCourseEntry.LIKE} = :like
         """
     )
-    suspend fun getAllLikeCourses(username: String, like: Boolean = true): List<LikeCourseEntity>
+    suspend fun getAllLikeCourses(username: String, year: Int, semester: Int, like: Boolean = true): List<LikeCourseEntity>
 
     @Query(
         """
