@@ -161,10 +161,18 @@ class CourseFragment : Fragment() {
         )
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                if (dy > 0)
+                if (dy > 0) {
+                    if (viewModel.isFabOpened()) {
+                        binding.searchFab.apply {
+                            startAnimation(AnimationUtils.loadAnimation(context, R.anim.fab_close))
+                            isClickable = false
+                        }
+                        viewModel.setFabOpened(false)
+                    }
                     binding.fab.hide()
-                else if (dy < 0)
+                } else if (dy < 0) {
                     binding.fab.show()
+                }
             }
         })
     }
