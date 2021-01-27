@@ -30,4 +30,5 @@
     <color name="emoji_green">#009500</color>
     <color name="info_background">#494949</color>
     <color name="info_text_color">#ffffff</color>
+    <color name="reverse_theme_color">#ffffff</color>
 </resources>

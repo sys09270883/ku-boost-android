@@ -37,8 +37,6 @@
     <string name="prompt_total">전체</string>
     <string name="prompt_major">전공</string>
     <string name="prompt_info_classification">이수구분 변경 과목은 졸업 시뮬레이션에만 적용됩니다.</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="prompt_syllabus">강의계획서</string>
     <string name="hint_syllabus">과목번호, 학과, 과목, 교수</string>
     <string name="prompt_mobile_qr_code">모바일 열람증</string>
@@ -64,4 +62,6 @@
     <string name="prompt_grade_4">4학년</string>
     <string name="course_info_with_emoji">🔴  수강바구니담은인원\n🟡  수강인원\n🟢  제한인원</string>
     <string name="prompt_info">도움말</string>
+    <string name="prompt_settings">설정</string>
+    <string name="prompt_auth_info_detail">학력 조회</string>
 </resources>
