@@ -19,7 +19,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainFragment : Fragment() {
 
-    private val tabTextList = arrayListOf("수강", "성적", "설정")
+    private val tabTextList = arrayListOf("성적", "수강", "설정")
     private var _binding: FragmentMainBinding? = null
     private val binding get() = _binding!!
     private val viewModel: MainFragmentViewModel by viewModel()
