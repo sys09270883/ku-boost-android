@@ -1,7 +1,7 @@
 package com.konkuk.boost.repositories
 
-import com.konkuk.boost.utils.UseCase
 import com.konkuk.boost.data.auth.LoginResponse
+import com.konkuk.boost.utils.UseCase
 
 interface AuthRepository {
     suspend fun makeLoginRequest(username: String, password: String): UseCase<LoginResponse>
@@ -11,4 +11,10 @@ interface AuthRepository {
     suspend fun makeLogoutRequest(): UseCase<Unit>
 
     fun getUsername(): String
+
+    fun getName(): String
+
+    fun getDept(): String
+
+    fun getStdNo(): Int
 }

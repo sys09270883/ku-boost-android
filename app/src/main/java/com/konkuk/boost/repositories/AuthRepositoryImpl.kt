@@ -54,4 +54,10 @@ class AuthRepositoryImpl(
     }
 
     override fun getUsername() = preferenceManager.username
+
+    override fun getName() = preferenceManager.name
+
+    override fun getDept() = preferenceManager.dept
+
+    override fun getStdNo() = preferenceManager.stdNo
 }

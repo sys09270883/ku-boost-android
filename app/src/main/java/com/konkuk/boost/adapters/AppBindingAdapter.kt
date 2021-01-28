@@ -7,6 +7,7 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.charts.PieChart
 import com.konkuk.boost.persistence.GradeEntity
@@ -14,6 +15,7 @@ import com.konkuk.boost.persistence.GraduationSimulationEntity
 import com.konkuk.boost.utils.DateTimeConverter
 import com.konkuk.boost.utils.GradeUtils
 import com.konkuk.boost.utils.UseCase
+import de.hdodenhof.circleimageview.CircleImageView
 
 
 @BindingAdapter("bind_visibility")
@@ -108,4 +110,10 @@ fun TextView.bindDateText(semester: Int) {
     val year = DateTimeConverter.currentYear()
     val sem = GradeUtils.translate(semester)
     text = "${year}년 ${sem}학기"
+}
+
+@BindingAdapter("bind_img_res")
+fun CircleImageView.bindImageResource(stdNo: Int) {
+    val url = "http://kupis.konkuk.ac.kr/ImageFile/schaff/regi/stud/photo/${stdNo}.jpg"
+    Glide.with(context).load(url).into(this)
 }

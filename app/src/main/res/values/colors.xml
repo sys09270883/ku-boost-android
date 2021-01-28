@@ -25,4 +25,10 @@
     <color name="themeColor">#ffffff</color>
     <color name="themeBackgroundTextColor">#ffffff</color>
     <color name="white">#ffffff</color>
+    <color name="emoji_red">#e9111e</color>
+    <color name="emoji_yellow">#fceb00</color>
+    <color name="emoji_green">#17c704</color>
+    <color name="info_background">#efefef</color>
+    <color name="info_text_color">#000000</color>
+    <color name="reverse_theme_color">#000000</color>
 </resources>
