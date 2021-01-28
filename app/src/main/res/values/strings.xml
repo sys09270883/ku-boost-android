@@ -60,7 +60,7 @@
     <string name="prompt_grade_2">2학년</string>
     <string name="prompt_grade_3">3학년</string>
     <string name="prompt_grade_4">4학년</string>
-    <string name="course_info_with_emoji">🔴  수강바구니담은인원\n🟡  수강인원\n🟢  제한인원</string>
+    <string name="course_info_with_emoji">❤  수강바구니담은인원\n💛  수강인원\n💚  제한인원</string>
     <string name="prompt_info">도움말</string>
     <string name="prompt_settings">설정</string>
     <string name="prompt_auth_info_detail">학력 조회</string>
