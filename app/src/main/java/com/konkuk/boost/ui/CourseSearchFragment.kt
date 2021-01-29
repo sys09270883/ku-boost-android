@@ -57,7 +57,7 @@ class CourseSearchFragment : Fragment() {
             if (it.data == null)
                 return@observe
 
-            if (it.data.lectureInfoList.isEmpty()) {
+            if (it.data.lectureInfoList.isNullOrEmpty()) {
                 val adapter = binding.syllabusRecyclerView.adapter as SyllabusAdapter
                 adapter.submitList(mutableListOf())
                 Snackbar.make(
