@@ -27,38 +27,36 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.1" />
+                app:layout_constraintGuide_percent="0.2" />
 
             <ImageView
                 android:id="@+id/logoImage"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
                 android:adjustViewBounds="true"
-                android:src="@drawable/logo_ku"
+                android:background="@drawable/logo_boost"
+                android:backgroundTint="@color/primaryColor"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/guideline"
-                app:layout_constraintVertical_weight="20"
-                app:layout_constraintWidth_percent="0.5"
                 tools:ignore="ContentDescription" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/usernameLayout"
-                style="@style/TextInputLayoutStyle"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
-                android:layout_marginTop="48dp"
+                android:layout_marginTop="68dp"
                 android:layout_marginEnd="24dp"
                 android:layout_marginBottom="12dp"
-                android:theme="@style/TextInputLayoutTheme"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/logoImage">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/username"
-                    style="@style/TextInputEditTextStyle"
+                    style="@style/Widget.Design.TextInputLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
@@ -70,17 +68,15 @@
                     android:text="@={viewModel.username}" />
             </com.google.android.material.textfield.TextInputLayout>
 
-
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/passwordLayout"
-                style="@style/TextInputLayoutStyle"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="12dp"
                 android:layout_marginEnd="24dp"
                 android:layout_marginBottom="12dp"
-                android:theme="@style/TextInputLayoutTheme"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/usernameLayout"
@@ -88,7 +84,7 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/password"
-                    style="@style/TextInputEditTextStyle"
+                    style="@style/Widget.Design.TextInputLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
@@ -105,14 +101,12 @@
                 android:id="@+id/loginButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="24dp"
-                android:layout_marginEnd="24dp"
-                android:layout_marginBottom="24dp"
-                android:backgroundTint="@color/primaryLightColor"
+                android:layout_margin="24dp"
+                android:backgroundTint="@color/primaryColor"
+                android:padding="16dp"
                 android:text="@string/prompt_log_in"
                 android:textColor="@color/white"
-                app:cornerRadius="10dp"
+                app:cornerRadius="5dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/passwordLayout" />
