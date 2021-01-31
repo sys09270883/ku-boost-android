@@ -35,7 +35,7 @@ class TotalGraduationSimulationDetailFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel.fetchGraduationSimulationFromLocalDb()
 
-        binding.certificateTextView.setOnClickListener {
+        binding.certificateButton.setOnClickListener {
             findNavController().navigate(R.id.action_totalGraduationSimulationDetailFragment_to_certificateOfAcquiredFragment)
         }
     }

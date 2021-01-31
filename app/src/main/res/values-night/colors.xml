@@ -25,11 +25,12 @@
     <color name="themeColor">#000000</color>
     <color name="themeBackgroundTextColor">#ffffff</color>
     <color name="white">#ffffff</color>
-    <color name="emoji_red">#ae0000</color>
-    <color name="emoji_yellow">#c5b900</color>
-    <color name="emoji_green">#009500</color>
-    <color name="info_background">#494949</color>
-    <color name="info_text_color">#ffffff</color>
-    <color name="reverse_theme_color">#ffffff</color>
-    <color name="login_loco_color">@color/white</color>
+    <color name="emojiRed">#ae0000</color>
+    <color name="emojiYellow">#c5b900</color>
+    <color name="emojiGreen">#009500</color>
+    <color name="infoBackground">#494949</color>
+    <color name="infoTextColor">@color/white</color>
+    <color name="reverseThemeColor">@color/white</color>
+    <color name="loginLocoColor">@color/white</color>
+    <color name="settingsIconColor">@color/white</color>
 </resources>

@@ -63,17 +63,20 @@
 
             </com.google.android.material.card.MaterialCardView>
 
-            <TextView
-                android:id="@+id/certificateTextView"
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/certificateButton"
+                style="@style/KUBoost.TextButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginEnd="24dp"
-                android:layout_marginBottom="12dp"
+                android:padding="12dp"
                 android:text="@string/prompt_certificate_of_acquired"
+                android:textAlignment="textStart"
                 android:textColor="@color/primaryTextColor"
                 android:textSize="18sp"
+                app:icon="@drawable/ic_outline_article_24"
+                app:iconPadding="8dp"
+                app:iconSize="32dp"
+                app:iconTint="@color/settingsIconColor"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cardView" />

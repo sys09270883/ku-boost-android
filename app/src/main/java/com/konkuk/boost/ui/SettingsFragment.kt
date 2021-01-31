@@ -54,7 +54,7 @@ class SettingsFragment : Fragment() {
                 KaKaoUtils.share(requireContext())
             }
 
-            showOpenSourceBtn.setOnClickListener {
+            openSourceBtn.setOnClickListener {
                 startActivity(Intent(requireContext(), OssLicensesMenuActivity::class.java))
                 OssLicensesMenuActivity.setActivityTitle(getString(R.string.prompt_opensource_title))
             }
