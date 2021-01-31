@@ -64,4 +64,7 @@
     <string name="prompt_info">도움말</string>
     <string name="prompt_settings">설정</string>
     <string name="prompt_auth_info_detail">학력 조회</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="prompt_certificate_of_acquired">취득학점확인원</string>
 </resources>

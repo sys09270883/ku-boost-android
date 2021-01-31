@@ -1,0 +1,48 @@
+<html style="height: 100%">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <script src="https://kureport1.konkuk.ac.kr:8443/oz70/ozhviewer/js/jquery-2.0.3.min.js"></script>
+    <link rel="stylesheet" href="https://kureport1.konkuk.ac.kr:8443/oz70/ozhviewer/js/jquery-ui.css" type="text/css" />
+    <script src="https://kureport1.konkuk.ac.kr:8443/oz70/ozhviewer/js/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="https://kureport1.konkuk.ac.kr:8443/oz70/ozhviewer/ui.dynatree.css" type="text/css" />
+    <script type="text/javascript" src="https://kureport1.konkuk.ac.kr:8443/oz70/ozhviewer/jquery.dynatree.js" charset="utf-8"></script>
+    <script type="text/javascript" src="https://kureport1.konkuk.ac.kr:8443/oz70/ozhviewer/OZJSViewer.js" charset="utf-8"></script>
+    <script type="text/javascript">
+            function close_rtn() {
+                window.open("about:blank", "_self").close();
+            }
+        </script>
+</head>
+
+<div id="OZViewer" style="width: 98%; height: 98%"></div>
+<script type="text/javascript">
+        function SetOZParamters_OZViewer() {
+            var oz;
+            oz = document.getElementById("OZViewer");
+            oz.sendToActionScript("connection.servlet","[encryptedforviewer].[utf-8].4d3f9ac4038e304348726244a8fee16d2638ad36a8bbe54e843f0cbc953176484c6fdc9b33c8b6166f8534fbb0764f");
+            oz.sendToActionScript("connection.reportname", "[encryptedforviewer].[utf-8].0a2cbfd88a68620ade6f9b486e3b68b0ab42d8388409841a277e39d3a573c85d09adec8562da231045195f9e");
+            oz.sendToActionScript("odi.odinames","[encryptedforviewer].[utf-8].62ae2968307f2c4d32277a9f12beab1251ee98a82e");
+            oz.sendToActionScript("odi.GrdtAcqPntDetmStudRpt.pcount","[encryptedforviewer].[utf-8].13");
+            oz.sendToActionScript("odi.GrdtAcqPntDetmStudRpt.args1", "[encryptedforviewer].[utf-8].44456fa065f8c7");
+            oz.sendToActionScript("odi.GrdtAcqPntDetmStudRpt.args2", "ast_std_no=");
+            oz.sendToActionScript("odi.GrdtAcqPntDetmStudRpt.args3", "[encryptedforviewer].[utf-8].568304b4788cef6972dc483cefc9d7");
+            oz.sendToActionScript("toolbar.addmemo", "false");
+            oz.sendToActionScript("toolbar.savedm", "false");
+            oz.sendToActionScript("toolbar.save", "false");
+            oz.sendToActionScript("toolbar.print", "false");
+            oz.sendToActionScript("excel.largebundle", "true");
+            oz.sendToActionScript("xlsx.largebundle", "true");
+            oz.sendToActionScript("excel.removeblank", "true");
+            oz.sendToActionScript("odi.GrdtAcqPntDetmStudRpt.fetchtype","[encryptedforviewer].[utf-8].666db591ce1fb081d7b5");
+            return true;
+        }
+
+        var opt = [];
+        opt["url_encode_utf8"] = true;
+
+        start_ozjs("OZViewer", "https://kureport1.konkuk.ac.kr:8443/oz70/ozhviewer/", opt);
+    </script>
+
+<body></body>
+</html>

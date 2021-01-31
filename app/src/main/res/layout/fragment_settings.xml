@@ -54,7 +54,7 @@
                         android:layout_marginEnd="16dp"
                         android:layout_marginBottom="16dp"
                         app:bind_img_res="@{viewModel.stdNo}"
-                        app:civ_border_color="@color/reverse_theme_color"
+                        app:civ_border_color="@color/reverseThemeColor"
                         app:civ_border_width="2dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -99,6 +99,7 @@
                         android:layout_marginTop="16dp"
                         android:layout_marginEnd="16dp"
                         android:layout_marginBottom="16dp"
+                        android:visibility="invisible"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         app:lottie_autoPlay="true"
@@ -110,53 +111,74 @@
 
             </com.google.android.material.card.MaterialCardView>
 
-            <TextView
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/mobileQrCodeBtn"
+                style="@style/KUBoost.TextButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginEnd="24dp"
-                android:layout_marginBottom="12dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:padding="12dp"
                 android:text="@string/prompt_mobile_qr_code"
+                android:textAlignment="textStart"
                 android:textColor="@color/primaryTextColor"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                app:icon="@drawable/ic_baseline_qr_code_24"
+                app:iconPadding="8dp"
+                app:iconSize="32dp"
+                app:iconTint="@color/settingsIconColor" />
 
-            <TextView
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/shareKaKaoLinkBtn"
+                style="@style/KUBoost.TextButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginEnd="24dp"
-                android:layout_marginBottom="12dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:padding="12dp"
                 android:text="@string/prompt_share_kakao_link"
+                android:textAlignment="textStart"
                 android:textColor="@color/primaryTextColor"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                app:icon="@drawable/ic_baseline_share_24"
+                app:iconPadding="8dp"
+                app:iconSize="32dp"
+                app:iconTint="@color/settingsIconColor" />
 
-            <TextView
-                android:id="@+id/showOpenSourceBtn"
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/openSourceBtn"
+                style="@style/KUBoost.TextButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginEnd="24dp"
-                android:layout_marginBottom="12dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:padding="12dp"
                 android:text="@string/prompt_opensource_license"
+                android:textAlignment="textStart"
                 android:textColor="@color/primaryTextColor"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                app:icon="@drawable/ic_outline_article_24"
+                app:iconPadding="8dp"
+                app:iconSize="32dp"
+                app:iconTint="@color/settingsIconColor" />
 
-            <TextView
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/logoutBtn"
+                style="@style/KUBoost.TextButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginEnd="24dp"
-                android:layout_marginBottom="12dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:padding="12dp"
                 android:text="@string/prompt_logout"
+                android:textAlignment="textStart"
                 android:textColor="@color/primaryTextColor"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                app:icon="@drawable/ic_baseline_logout_24"
+                app:iconPadding="8dp"
+                app:iconSize="32dp"
+                app:iconTint="@color/settingsIconColor" />
+
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 </layout>
