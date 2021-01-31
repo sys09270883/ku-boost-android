@@ -3,7 +3,6 @@ package com.konkuk.boost.ui
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -72,8 +71,6 @@ class ChangePasswordFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val username = requireArguments().getString("username", "")
         val beforePassword = requireArguments().getString("password", "")
-        Log.d("yoonseop", username)
-        Log.d("yoonseop", beforePassword)
         viewModel.setUsername(username)
         viewModel.setBeforePassword(beforePassword)
 
