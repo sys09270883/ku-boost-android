@@ -31,4 +31,5 @@
     <color name="info_background">#efefef</color>
     <color name="info_text_color">#000000</color>
     <color name="reverse_theme_color">#000000</color>
+    <color name="login_loco_color">@color/primaryColor</color>
 </resources>
