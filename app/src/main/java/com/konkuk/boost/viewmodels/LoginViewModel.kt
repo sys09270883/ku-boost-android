@@ -73,9 +73,4 @@ class LoginViewModel(
         }
     }
 
-    fun changePassword() {
-        val username = username.value ?: return
-        val password = password.value ?: return
-    }
-
 }
