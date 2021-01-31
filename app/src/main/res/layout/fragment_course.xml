@@ -38,6 +38,7 @@
             android:textColor="@color/primaryTextColor"
             android:textSize="16sp"
             app:bind_date_text="@{viewModel.selectedSemester}"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/allLikeCoursesRecyclerView"
             app:layout_constraintEnd_toEndOf="parent" />
 
@@ -45,7 +46,7 @@
             android:id="@+id/infoTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="28dp"
+            android:layout_marginStart="22dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:drawablePadding="4dp"
