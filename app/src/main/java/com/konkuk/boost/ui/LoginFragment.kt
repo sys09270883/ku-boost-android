@@ -110,10 +110,8 @@ class LoginFragment : Fragment() {
                             }
                             dialog.show()
                         }
-                    } else {
-                        Snackbar.make(binding.container, "${it.message}", Snackbar.LENGTH_SHORT)
-                            .show()
                     }
+                    Snackbar.make(binding.container, "${it.message}", Snackbar.LENGTH_SHORT).show()
                     Log.e("ku-boost", "${it.message}")
                 }
             }
