@@ -18,4 +18,12 @@
         <item name="android:textColor">@color/white</item>
         <item name="android:fontFamily">@font/vermin_vibes_slant</item>
     </style>
+
+    <style name="KUBoost.TextButtonStyle" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="rippleColor">@color/ku_boost_text_button_ripple_color</item>
+    </style>
+
+    <style name="KUBoost.StateButtonStyle" parent="Widget.MaterialComponents.Button.UnelevatedButton">
+        <item name="backgroundTint">@color/ku_boost_state_button_color</item>
+    </style>
 </resources>

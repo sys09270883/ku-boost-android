@@ -8,6 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
@@ -36,9 +39,10 @@ class LoginFragment : Fragment() {
     }
 
     private fun login() {
-        val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.hideSoftInputFromWindow(binding.username.windowToken, 0);
-        imm.hideSoftInputFromWindow(binding.password.windowToken, 0);
+        val imm =
+            requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(binding.username.windowToken, 0)
+        imm.hideSoftInputFromWindow(binding.password.windowToken, 0)
         viewModel.login()
     }
 
@@ -72,10 +76,61 @@ class LoginFragment : Fragment() {
                     }
                 }
                 UseCase.Status.ERROR -> {
-                    Snackbar.make(binding.container, "${it.message}", Snackbar.LENGTH_SHORT).show()
+                    if (it.data != null) {
+                        if (it.data.loginFailure?.errorCode == "SYS.CMMN@CMMN018") {
+                            viewModel.clearLoginResource()
+                            val context = requireContext()
+                            val builder = AlertDialog.Builder(context)
+                            val dialog = builder
+                                .setTitle(getString(R.string.app_name))
+                                .setMessage("비밀번호 변경 후 90일이 지났습니다. 비밀번호를 변경해주세요.")
+                                .setCancelable(false)
+                                .setPositiveButton("90일 뒤 변경") { _, _ ->
+                                    viewModel.changePasswordAfter90Days()
+                                }
+                                .setNegativeButton("비밀번호 변경") { _, _ ->
+                                    val bundle = bundleOf(
+                                        "username" to binding.username.text.toString(),
+                                        "password" to binding.password.text.toString()
+                                    )
+                                    findNavController().navigate(
+                                        R.id.action_loginFragment_to_changePasswordFragment,
+                                        bundle
+                                    )
+                                }
+                                .create()
+                            dialog.setOnShowListener {
+                                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(
+                                    ContextCompat.getColor(context, R.color.primaryTextColor)
+                                )
+                                dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(
+                                    ContextCompat.getColor(context, R.color.primaryTextColor)
+                                )
+                            }
+                            dialog.show()
+                        }
+                    } else {
+                        Snackbar.make(binding.container, "${it.message}", Snackbar.LENGTH_SHORT)
+                            .show()
+                    }
                     Log.e("ku-boost", "${it.message}")
                 }
             }
+        }
+
+        viewModel.changePasswordResponse.observe(viewLifecycleOwner) {
+            when (it.status) {
+                UseCase.Status.SUCCESS -> {
+                    val flag = it.data?.response?.flag
+                    if (flag == "PASS") {
+                        viewModel.login()
+                    }
+                }
+                UseCase.Status.ERROR -> {
+                    Snackbar.make(binding.container, "${it.message}", Snackbar.LENGTH_SHORT).show()
+                }
+            }
+
         }
     }
 

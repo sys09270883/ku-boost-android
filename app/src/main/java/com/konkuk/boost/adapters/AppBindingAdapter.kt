@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.charts.PieChart
+import com.google.android.material.button.MaterialButton
 import com.konkuk.boost.persistence.GradeEntity
 import com.konkuk.boost.persistence.GraduationSimulationEntity
 import com.konkuk.boost.utils.DateTimeConverter
@@ -116,4 +117,9 @@ fun TextView.bindDateText(semester: Int) {
 fun CircleImageView.bindImageResource(stdNo: Int) {
     val url = "http://kupis.konkuk.ac.kr/ImageFile/schaff/regi/stud/photo/${stdNo}.jpg"
     Glide.with(context).load(url).into(this)
+}
+
+@BindingAdapter("update_if_enable")
+fun MaterialButton.updateState(isOk: Int) {
+    isEnabled = isOk == 0b11
 }
