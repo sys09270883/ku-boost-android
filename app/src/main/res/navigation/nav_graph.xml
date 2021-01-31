@@ -131,6 +131,13 @@
             app:popEnterAnim="@anim/close_slide_enter"
             app:popExitAnim="@anim/close_slide_exit"
             app:popUpTo="@id/totalGraduationSimulationDetailFragment" />
+        <action
+            android:id="@+id/action_totalGraduationSimulationDetailFragment_to_certificateOfAcquiredFragment"
+            app:destination="@id/certificateOfAcquiredFragment"
+            app:enterAnim="@anim/open_slide_enter"
+            app:exitAnim="@anim/open_slide_exit"
+            app:popEnterAnim="@anim/close_slide_enter"
+            app:popExitAnim="@anim/close_slide_exit" />
     </fragment>
     <fragment
         android:id="@+id/graduationSimulationDetailFragment"
@@ -164,5 +171,10 @@
             app:popEnterAnim="@anim/close_slide_enter"
             app:popExitAnim="@anim/close_slide_exit" />
     </fragment>
+    <fragment
+        android:id="@+id/certificateOfAcquiredFragment"
+        android:name="com.konkuk.boost.ui.CertificateOfAcquiredFragment"
+        android:label="CertificateOfAcquiredFragment"
+        tools:layout="@layout/fragment_certificate_of_acquired" />
 
 </navigation>
