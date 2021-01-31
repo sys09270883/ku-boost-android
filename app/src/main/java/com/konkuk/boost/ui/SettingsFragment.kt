@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
@@ -52,6 +53,18 @@ class SettingsFragment : Fragment() {
 
             shareKaKaoLinkBtn.setOnClickListener {
                 KaKaoUtils.share(requireContext())
+            }
+
+            changePasswordBtn.setOnClickListener {
+                val bundle = bundleOf(
+                    "username" to viewModel?.getUsername(),
+                    "password" to viewModel?.getPassword(),
+                    "isLoggedIn" to true
+                )
+                findNavController().navigate(
+                    R.id.action_mainFragment_to_changePasswordFragment,
+                    bundle
+                )
             }
 
             openSourceBtn.setOnClickListener {

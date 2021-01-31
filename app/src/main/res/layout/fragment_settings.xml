@@ -146,6 +146,23 @@
                 app:iconTint="@color/settingsIconColor" />
 
             <com.google.android.material.button.MaterialButton
+                android:id="@+id/changePasswordBtn"
+                style="@style/KUBoost.TextButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:padding="12dp"
+                android:text="@string/prompt_change_password"
+                android:textAlignment="textStart"
+                android:textColor="@color/primaryTextColor"
+                android:textSize="18sp"
+                app:icon="@drawable/ic_outline_password_24"
+                app:iconPadding="8dp"
+                app:iconSize="32dp"
+                app:iconTint="@color/settingsIconColor" />
+
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/openSourceBtn"
                 style="@style/KUBoost.TextButtonStyle"
                 android:layout_width="match_parent"

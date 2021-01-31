@@ -35,6 +35,14 @@ class ChangePasswordViewModel(private val authRepository: AuthRepository) : View
         beforePassword.value = pwd
     }
 
+    val isLoggedIn = MutableLiveData(false)
+
+    fun setLoggedIn(loggedIn: Boolean) {
+        isLoggedIn.value = loggedIn
+    }
+
+    fun isLoggedIn() = isLoggedIn.value ?: false
+
     val password = MutableLiveData("")
 
     val password2 = MutableLiveData("")
@@ -101,6 +109,16 @@ class ChangePasswordViewModel(private val authRepository: AuthRepository) : View
                 )
             }
             _loading.postValue(false)
+        }
+    }
+
+    fun savePassword() {
+        val password = password.value ?: return
+
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                authRepository.setPassword(password)
+            }
         }
     }
 }

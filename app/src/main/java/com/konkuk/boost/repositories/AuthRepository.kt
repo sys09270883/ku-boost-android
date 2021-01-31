@@ -13,11 +13,15 @@ interface AuthRepository {
 
     fun getUsername(): String
 
+    fun getPassword(): String
+
     fun getName(): String
 
     fun getDept(): String
 
     fun getStdNo(): Int
+
+    suspend fun setPassword(password: String): Unit
 
     suspend fun makeChangePasswordRequest(
         username: String,

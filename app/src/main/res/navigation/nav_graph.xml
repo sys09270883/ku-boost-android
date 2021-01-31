@@ -106,6 +106,13 @@
             app:exitAnim="@anim/open_slide_exit"
             app:popEnterAnim="@anim/close_slide_enter"
             app:popExitAnim="@anim/close_slide_exit" />
+        <action
+            android:id="@+id/action_mainFragment_to_changePasswordFragment"
+            app:destination="@id/changePasswordFragment"
+            app:enterAnim="@anim/open_slide_enter"
+            app:exitAnim="@anim/open_slide_exit"
+            app:popEnterAnim="@anim/close_slide_enter"
+            app:popExitAnim="@anim/close_slide_exit" />
     </fragment>
     <fragment
         android:id="@+id/totalGradeDetailFragment"

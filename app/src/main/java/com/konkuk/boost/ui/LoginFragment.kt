@@ -91,7 +91,8 @@ class LoginFragment : Fragment() {
                                 .setNegativeButton("비밀번호 변경") { _, _ ->
                                     val bundle = bundleOf(
                                         "username" to binding.username.text.toString(),
-                                        "password" to binding.password.text.toString()
+                                        "password" to binding.password.text.toString(),
+                                        "isLoggedIn" to false
                                     )
                                     findNavController().navigate(
                                         R.id.action_loginFragment_to_changePasswordFragment,
@@ -130,7 +131,6 @@ class LoginFragment : Fragment() {
                     Snackbar.make(binding.container, "${it.message}", Snackbar.LENGTH_SHORT).show()
                 }
             }
-
         }
     }
 

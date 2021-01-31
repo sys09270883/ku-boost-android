@@ -1,11 +1,14 @@
 package com.konkuk.boost.ui
 
+import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
@@ -58,7 +61,22 @@ class ChangePasswordFragment : Fragment() {
         viewModel.changePasswordResponse.observe(viewLifecycleOwner) {
             when (it.status) {
                 UseCase.Status.SUCCESS -> {
-                    findNavController().navigate(R.id.action_changePasswordFragment_to_loginFragment)
+                    val activity = requireActivity()
+
+                    val imm =
+                        requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    imm.hideSoftInputFromWindow(
+                        activity.currentFocus?.windowToken,
+                        InputMethodManager.HIDE_NOT_ALWAYS
+                    )
+
+                    Snackbar.make(binding.container, "${it.message}", Snackbar.LENGTH_SHORT).show()
+                    if (viewModel.isLoggedIn()) {
+                        viewModel.savePassword()
+                        activity.onBackPressed()
+                    } else {
+                        findNavController().navigate(R.id.action_changePasswordFragment_to_loginFragment)
+                    }
                 }
                 UseCase.Status.ERROR -> {
                     Snackbar.make(binding.container, "${it.message}", Snackbar.LENGTH_SHORT).show()
@@ -71,8 +89,11 @@ class ChangePasswordFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val username = requireArguments().getString("username", "")
         val beforePassword = requireArguments().getString("password", "")
+        val isLoggedIn = requireArguments().getBoolean("isLoggedIn", false)
+
         viewModel.setUsername(username)
         viewModel.setBeforePassword(beforePassword)
+        viewModel.setLoggedIn(isLoggedIn)
 
         binding.apply {
             confirmButton.setOnClickListener {
@@ -114,6 +135,18 @@ class ChangePasswordFragment : Fragment() {
                 override fun afterTextChanged(s: Editable?) {}
 
             })
+
+            password2.setOnEditorActionListener { _, actionId, _ ->
+                return@setOnEditorActionListener when (actionId) {
+                    EditorInfo.IME_ACTION_DONE -> {
+                        if (confirmButton.isEnabled) {
+                            viewModel?.changePassword()
+                            true
+                        } else false
+                    }
+                    else -> false
+                }
+            }
         }
     }
 }
