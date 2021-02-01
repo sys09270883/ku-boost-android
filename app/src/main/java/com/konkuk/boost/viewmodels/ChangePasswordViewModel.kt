@@ -47,7 +47,7 @@ class ChangePasswordViewModel(private val authRepository: AuthRepository) : View
 
     val password2 = MutableLiveData("")
 
-    val isPasswordValid = MutableLiveData(false)
+    val isPasswordValid = MutableLiveData(2) // 0: Valid, 1: Same with before, 2: notValid
 
     val isPasswordSame = MutableLiveData(false)
 
@@ -57,17 +57,20 @@ class ChangePasswordViewModel(private val authRepository: AuthRepository) : View
 
     fun checkPasswordValid(pwd: String) {
         val state = isOk.value ?: 0
-        if (pwd.matches(PASSWORD_REGEX)) {
-            isOk.postValue(0b01)
-            isPasswordValid.postValue(true)
-        } else {
+        if (!pwd.matches(PASSWORD_REGEX)) {
             isOk.postValue(state and ((1 shl 0).inv()))
-            isPasswordValid.postValue(false)
+            isPasswordValid.postValue(2)
+        } else if (pwd == beforePassword.value) {
+            isOk.postValue(state and ((1 shl 0).inv()))
+            isPasswordValid.postValue(1)
+        } else {
+            isOk.postValue(0b01)
+            isPasswordValid.postValue(0)
         }
     }
 
     fun updatePasswordState(password: String, password2: String) {
-        if (isPasswordValid.value != true) {
+        if (isPasswordValid.value != 0) {
             return
         }
 

@@ -41,8 +41,9 @@ class ChangePasswordFragment : Fragment() {
                 binding.passwordLayout.error = null
             } else {
                 when (it) {
-                    true -> binding.passwordLayout.error = null
-                    else -> binding.passwordLayout.error = "8~20자 이내, 하나 이상의 문자, 숫자, 특수 문자를 입력하세요."
+                    0 -> binding.passwordLayout.error = null
+                    1 -> binding.passwordLayout.error = "현재 비밀번호와 다른 비밀번호를 입력하세요"
+                    2 -> binding.passwordLayout.error = "8~20자 이내, 하나 이상의 문자, 숫자, 특수 문자를 입력하세요."
                 }
             }
         }
