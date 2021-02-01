@@ -6,10 +6,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
+import com.konkuk.boost.R
 import com.konkuk.boost.adapters.MainFragmentStateAdapter
 import com.konkuk.boost.databinding.FragmentMainBinding
 import com.konkuk.boost.utils.UseCase
@@ -20,6 +24,8 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class MainFragment : Fragment() {
 
     private val tabTextList = arrayListOf("성적", "수강", "설정")
+    private val tabIconList =
+        arrayListOf(R.drawable.tab_grade, R.drawable.tab_course, R.drawable.tab_setting)
     private var _binding: FragmentMainBinding? = null
     private val binding get() = _binding!!
     private val viewModel: MainFragmentViewModel by viewModel()
@@ -42,7 +48,11 @@ class MainFragment : Fragment() {
         binding.apply {
             viewPager.adapter = MainFragmentStateAdapter(activity)
             TabLayoutMediator(tabLayout, viewPager) { tab, position ->
-                tab.text = tabTextList[position]
+                val tabView = layoutInflater.inflate(R.layout.custom_tab, null)
+                tabView.findViewById<ImageView>(R.id.tabIcon)
+                    .setImageDrawable(ContextCompat.getDrawable(activity, tabIconList[position]))
+                tabView.findViewById<TextView>(R.id.tabText).text = tabTextList[position]
+                tab.customView = tabView
             }.attach()
         }
 
