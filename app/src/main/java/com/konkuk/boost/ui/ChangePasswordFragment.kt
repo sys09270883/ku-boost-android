@@ -89,11 +89,9 @@ class ChangePasswordFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val username = requireArguments().getString("username", "")
-        val beforePassword = requireArguments().getString("password", "")
         val isLoggedIn = requireArguments().getBoolean("isLoggedIn", false)
 
         viewModel.setUsername(username)
-        viewModel.setBeforePassword(beforePassword)
         viewModel.setLoggedIn(isLoggedIn)
 
         binding.apply {

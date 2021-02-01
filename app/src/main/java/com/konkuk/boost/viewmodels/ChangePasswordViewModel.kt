@@ -31,10 +31,6 @@ class ChangePasswordViewModel(private val authRepository: AuthRepository) : View
 
     val beforePassword = MutableLiveData("")
 
-    fun setBeforePassword(pwd: String) {
-        beforePassword.value = pwd
-    }
-
     val isLoggedIn = MutableLiveData(false)
 
     fun setLoggedIn(loggedIn: Boolean) {
