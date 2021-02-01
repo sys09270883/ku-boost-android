@@ -71,10 +71,10 @@
                         android:text="@{viewModel.dept}"
                         android:textColor="@color/primaryTextColor"
                         android:textSize="16sp"
-                        app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toTopOf="@id/userNameTextView"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/userImage" />
+                        app:layout_constraintStart_toEndOf="@id/userImage"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
                         android:id="@+id/userNameTextView"
@@ -88,12 +88,12 @@
                         android:textColor="@color/primaryTextColor"
                         android:textSize="18sp"
                         android:textStyle="bold"
-                        app:layout_constraintTop_toBottomOf="@id/userDept"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/userImage" />
+                        app:layout_constraintStart_toEndOf="@id/userImage"
+                        app:layout_constraintTop_toBottomOf="@id/userDept" />
 
-                    <com.airbnb.lottie.LottieAnimationView
+                    <ImageView
                         android:id="@+id/readInfoMoreButton"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
@@ -101,12 +101,10 @@
                         android:layout_marginTop="16dp"
                         android:layout_marginEnd="16dp"
                         android:layout_marginBottom="16dp"
+                        android:src="@drawable/arrow_right_icon"
                         android:visibility="invisible"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:lottie_autoPlay="true"
-                        app:lottie_fileName="read_more.json"
-                        app:lottie_loop="true"
                         tools:ignore="ContentDescription" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
