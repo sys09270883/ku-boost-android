@@ -37,14 +37,14 @@
             android:id="@+id/dateTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="24dp"
             android:layout_marginTop="12dp"
+            android:layout_marginEnd="24dp"
             android:textColor="@color/primaryTextColor"
             android:textSize="16sp"
             app:bind_date_text="@{courseSearchViewModel.semester}"
+            app:layout_constraintBottom_toTopOf="@+id/syllabusCardView"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/syllabusCardView"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/syllabusCardView"
@@ -82,7 +82,7 @@
                     android:layout_marginTop="12dp"
                     android:layout_marginBottom="28dp"
                     android:background="@drawable/radius_corner_25"
-                    android:backgroundTint="@color/lightGray"
+                    android:backgroundTint="@color/ku_boost_searchbar_color"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">

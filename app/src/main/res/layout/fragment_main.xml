@@ -28,7 +28,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:tabSelectedTextColor="@color/primaryTextColor" />
+            app:tabIconTint="@color/ku_boost_tab_icon_color"
+            app:tabSelectedTextColor="@color/tabIconColor" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

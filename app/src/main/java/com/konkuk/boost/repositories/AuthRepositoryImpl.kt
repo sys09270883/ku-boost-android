@@ -2,6 +2,7 @@ package com.konkuk.boost.repositories
 
 import android.util.Log
 import com.konkuk.boost.api.AuthService
+import com.konkuk.boost.data.auth.ChangePasswordResponse
 import com.konkuk.boost.data.auth.LoginResponse
 import com.konkuk.boost.persistence.PreferenceManager
 import com.konkuk.boost.utils.UseCase
@@ -28,9 +29,21 @@ class AuthRepositoryImpl(
         preferenceManager.cookie = cookie
 
         val loginBody = loginResponse.body()
-        val loginSuccess =
-            loginBody?.loginSuccess ?: return UseCase.error("아이디, 비밀번호를 확인하세요.")
-        val loginFailure = loginBody.loginFailure
+
+        /* 90일 후 변경 테스트
+        val loginBody = LoginResponse(
+            null, LoginFailure(
+                "비밀번호 변경 후 90일이 지났습니다. 비밀번호를 변경해주세요.",
+                -3000,
+                "SYS.CMMN@CMMN018"
+            )
+        ) */
+
+        val loginSuccess = loginBody?.loginSuccess
+        val loginFailure = loginBody?.loginFailure
+
+        if (loginSuccess == null)
+            return UseCase.error("${loginFailure?.errorMessage}", loginBody)
 
         return when {
             loginSuccess.isSucceeded -> {
@@ -55,9 +68,64 @@ class AuthRepositoryImpl(
 
     override fun getUsername() = preferenceManager.username
 
+    override fun getPassword() = preferenceManager.password
+
     override fun getName() = preferenceManager.name
 
     override fun getDept() = preferenceManager.dept
 
     override fun getStdNo() = preferenceManager.stdNo
+
+    override suspend fun setPassword(password: String) {
+        preferenceManager.password = password
+    }
+
+    override suspend fun makeChangePasswordRequest(
+        username: String,
+        password: String
+    ): UseCase<ChangePasswordResponse> {
+        val changePasswordResponse: ChangePasswordResponse
+
+        try {
+            changePasswordResponse = authService.changePasswordAfter90Days(username, password)
+        } catch (e: Exception) {
+            return UseCase.error("${e.message}")
+        }
+
+        return when (changePasswordResponse.response.flag) {
+            "1" -> UseCase.error("아이디, 패스워드가 일치하지 않습니다.")
+            "3" -> UseCase.success(changePasswordResponse, "비밀번호를 변경했습니다.")
+            "PASS" -> UseCase.success(changePasswordResponse, "90일 후 변경하기로 설정했습니다.")
+            else -> UseCase.error("서버에 문제가 발생했습니다.")
+        }
+    }
+
+    override suspend fun makeChangePasswordRequest(
+        username: String,
+        beforePassword: String,
+        password: String,
+        password2: String,
+        procDiv: String
+    ): UseCase<ChangePasswordResponse> {
+        val changePasswordResponse: ChangePasswordResponse
+
+        try {
+            changePasswordResponse = authService.changePasswordAfter90Days(
+                username,
+                beforePassword,
+                password,
+                password2,
+                procDiv
+            )
+        } catch (e: Exception) {
+            return UseCase.error("${e.message}")
+        }
+
+        return when (changePasswordResponse.response.flag) {
+            "1" -> UseCase.error("아이디, 패스워드가 일치하지 않습니다.")
+            "3" -> UseCase.success(changePasswordResponse, "비밀번호를 변경했습니다.")
+            "PASS" -> UseCase.success(changePasswordResponse, "90일 후 변경하기로 설정했습니다.")
+            else -> UseCase.error("서버에 문제가 발생했습니다.")
+        }
+    }
 }

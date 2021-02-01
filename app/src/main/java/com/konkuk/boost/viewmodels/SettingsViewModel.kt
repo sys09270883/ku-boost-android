@@ -13,6 +13,10 @@ class SettingsViewModel(
     private val authRepository: AuthRepository,
 ) : ViewModel() {
 
+    fun getUsername() = authRepository.getUsername()
+
+    fun getPassword() = authRepository.getPassword()
+
     private val _name = MutableLiveData(authRepository.getName())
     val name get() = _name
 

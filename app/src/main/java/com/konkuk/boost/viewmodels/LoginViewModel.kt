@@ -3,10 +3,11 @@ package com.konkuk.boost.viewmodels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.konkuk.boost.utils.UseCase
-import com.konkuk.boost.repositories.AuthRepository
+import com.konkuk.boost.data.auth.ChangePasswordResponse
 import com.konkuk.boost.data.auth.LoginResponse
+import com.konkuk.boost.repositories.AuthRepository
 import com.konkuk.boost.repositories.GradeRepository
+import com.konkuk.boost.utils.UseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -51,6 +52,24 @@ class LoginViewModel(
                 gradeRepository.makeUserInformationRequest()
             }
             _loading.postValue(false)
+        }
+    }
+
+    val changePasswordResponse = MutableLiveData<UseCase<ChangePasswordResponse>>()
+
+    fun changePasswordAfter90Days() {
+        val username = username.value ?: return
+        val password = password.value ?: return
+
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                changePasswordResponse.postValue(
+                    authRepository.makeChangePasswordRequest(
+                        username,
+                        password
+                    )
+                )
+            }
         }
     }
 

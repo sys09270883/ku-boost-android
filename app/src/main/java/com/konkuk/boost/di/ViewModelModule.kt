@@ -19,4 +19,5 @@ val viewModelModule = module {
     viewModel { CourseSummaryViewModel(get()) }
     viewModel { CourseSearchViewModel(get()) }
     viewModel { CertificateOfAcquiredViewModel(get()) }
+    viewModel { ChangePasswordViewModel(get()) }
 }
