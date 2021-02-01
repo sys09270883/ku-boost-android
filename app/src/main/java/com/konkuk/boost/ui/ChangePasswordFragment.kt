@@ -24,6 +24,15 @@ class ChangePasswordFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel: ChangePasswordViewModel by viewModel()
 
+    private fun changePassword() {
+        val imm =
+            requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(binding.beforePassword.windowToken, 0);
+        imm.hideSoftInputFromWindow(binding.password.windowToken, 0);
+        imm.hideSoftInputFromWindow(binding.password2.windowToken, 0);
+        viewModel.changePassword()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -96,11 +105,7 @@ class ChangePasswordFragment : Fragment() {
 
         binding.apply {
             confirmButton.setOnClickListener {
-                val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                imm.hideSoftInputFromWindow(binding.beforePassword.windowToken, 0);
-                imm.hideSoftInputFromWindow(binding.password.windowToken, 0);
-                imm.hideSoftInputFromWindow(binding.password2.windowToken, 0);
-                viewModel?.changePassword()
+                changePassword()
             }
 
             password.addTextChangedListener(object : TextWatcher {
