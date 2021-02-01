@@ -96,6 +96,10 @@ class ChangePasswordFragment : Fragment() {
 
         binding.apply {
             confirmButton.setOnClickListener {
+                val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(binding.beforePassword.windowToken, 0);
+                imm.hideSoftInputFromWindow(binding.password.windowToken, 0);
+                imm.hideSoftInputFromWindow(binding.password2.windowToken, 0);
                 viewModel?.changePassword()
             }
 
