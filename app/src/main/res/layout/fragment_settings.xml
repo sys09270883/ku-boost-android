@@ -125,7 +125,7 @@
                 android:textSize="18sp"
                 app:icon="@drawable/ic_baseline_qr_code_24"
                 app:iconPadding="12dp"
-                app:iconSize="30dp"
+                app:iconSize="32dp"
                 app:iconTint="@color/settingsIconColor" />
 
             <com.google.android.material.button.MaterialButton
@@ -142,7 +142,7 @@
                 android:textSize="18sp"
                 app:icon="@drawable/ic_baseline_share_24"
                 app:iconPadding="12dp"
-                app:iconSize="30dp"
+                app:iconSize="32dp"
                 app:iconTint="@color/settingsIconColor" />
 
             <com.google.android.material.button.MaterialButton
@@ -176,7 +176,7 @@
                 android:textSize="18sp"
                 app:icon="@drawable/ic_outline_article_24"
                 app:iconPadding="12dp"
-                app:iconSize="30dp"
+                app:iconSize="32dp"
                 app:iconTint="@color/settingsIconColor" />
 
             <com.google.android.material.button.MaterialButton
@@ -193,7 +193,7 @@
                 android:textSize="18sp"
                 app:icon="@drawable/ic_baseline_logout_24"
                 app:iconPadding="12dp"
-                app:iconSize="30dp"
+                app:iconSize="32dp"
                 app:iconTint="@color/settingsIconColor" />
 
         </LinearLayout>

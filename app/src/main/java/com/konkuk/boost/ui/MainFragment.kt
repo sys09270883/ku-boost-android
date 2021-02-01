@@ -6,10 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
@@ -48,11 +45,8 @@ class MainFragment : Fragment() {
         binding.apply {
             viewPager.adapter = MainFragmentStateAdapter(activity)
             TabLayoutMediator(tabLayout, viewPager) { tab, position ->
-                val tabView = layoutInflater.inflate(R.layout.custom_tab, null)
-                tabView.findViewById<ImageView>(R.id.tabIcon)
-                    .setImageDrawable(ContextCompat.getDrawable(activity, tabIconList[position]))
-                tabView.findViewById<TextView>(R.id.tabText).text = tabTextList[position]
-                tab.customView = tabView
+                tab.setIcon(tabIconList[position])
+                tab.text = tabTextList[position]
             }.attach()
         }
 
