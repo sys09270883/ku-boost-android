@@ -26,7 +26,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
-            android:layout_marginEnd="12dp"
             android:text="@string/prompt_search_course"
             android:textColor="@color/primaryTextColor"
             android:textSize="24sp"
@@ -38,23 +37,20 @@
             android:id="@+id/dateTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
             android:layout_marginEnd="24dp"
-            android:layout_marginBottom="4dp"
+            android:layout_marginTop="12dp"
             android:textColor="@color/primaryTextColor"
             android:textSize="16sp"
             app:bind_date_text="@{courseSearchViewModel.semester}"
-            app:layout_constraintBottom_toTopOf="@+id/syllabusCardView"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/syllabusCardView"/>
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/syllabusCardView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginEnd="12dp"
-            android:layout_marginBottom="12dp"
+            android:layout_margin="12dp"
             app:cardCornerRadius="10dp"
             app:cardElevation="5dp"
             app:cardUseCompatPadding="true"
@@ -78,18 +74,29 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <androidx.appcompat.widget.SearchView
-                    android:id="@+id/syllabusSearchView"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:id="@+id/searchLayout"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginHorizontal="10dp"
+                    android:layout_marginTop="12dp"
                     android:layout_marginBottom="28dp"
-                    app:bind_syllabus_search_view_visibility="@{courseViewModel.syllabusLoading}"
-                    app:iconifiedByDefault="false"
+                    android:background="@drawable/radius_corner_25"
+                    android:backgroundTint="@color/lightGray"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:queryHint="@string/hint_syllabus" />
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <androidx.appcompat.widget.SearchView
+                        android:id="@+id/syllabusSearchView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:bind_syllabus_search_view_visibility="@{courseViewModel.syllabusLoading}"
+                        app:iconifiedByDefault="false"
+                        app:queryBackground="@null"
+                        app:queryHint="@string/hint_syllabus" />
+                </LinearLayout>
+
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/syllabusRecyclerView"
@@ -105,7 +112,7 @@
                     app:layout_behavior="@string/appbar_scrolling_view_behavior"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/syllabusSearchView" />
+                    app:layout_constraintTop_toBottomOf="@+id/searchLayout" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -55,7 +55,7 @@
                         android:layout_marginBottom="16dp"
                         app:bind_img_res="@{viewModel.stdNo}"
                         app:civ_border_color="@color/reverseThemeColor"
-                        app:civ_border_width="2dp"
+                        app:civ_border_width="1dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -64,8 +64,8 @@
                         android:id="@+id/userDept"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="16dp"
+                        android:layout_marginStart="18dp"
+                        android:layout_marginTop="32dp"
                         android:layout_marginEnd="16dp"
                         android:layout_marginBottom="8dp"
                         android:text="@{viewModel.dept}"
@@ -73,25 +73,27 @@
                         android:textSize="16sp"
                         app:layout_constraintBottom_toTopOf="@id/userNameTextView"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/userImage" />
+                        app:layout_constraintStart_toEndOf="@id/userImage"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
                         android:id="@+id/userNameTextView"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
+                        android:layout_marginStart="18dp"
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="16dp"
-                        android:layout_marginBottom="20dp"
+                        android:layout_marginBottom="32dp"
                         android:text="@{viewModel.name}"
                         android:textColor="@color/primaryTextColor"
                         android:textSize="18sp"
                         android:textStyle="bold"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/userImage" />
+                        app:layout_constraintStart_toEndOf="@id/userImage"
+                        app:layout_constraintTop_toBottomOf="@id/userDept" />
 
-                    <com.airbnb.lottie.LottieAnimationView
+                    <ImageView
                         android:id="@+id/readInfoMoreButton"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
@@ -99,12 +101,10 @@
                         android:layout_marginTop="16dp"
                         android:layout_marginEnd="16dp"
                         android:layout_marginBottom="16dp"
+                        android:src="@drawable/arrow_right_icon"
                         android:visibility="invisible"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:lottie_autoPlay="true"
-                        app:lottie_fileName="read_more.json"
-                        app:lottie_loop="true"
                         tools:ignore="ContentDescription" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -124,8 +124,8 @@
                 android:textColor="@color/primaryTextColor"
                 android:textSize="18sp"
                 app:icon="@drawable/ic_baseline_qr_code_24"
-                app:iconPadding="8dp"
-                app:iconSize="32dp"
+                app:iconPadding="12dp"
+                app:iconSize="30dp"
                 app:iconTint="@color/settingsIconColor" />
 
             <com.google.android.material.button.MaterialButton
@@ -141,8 +141,8 @@
                 android:textColor="@color/primaryTextColor"
                 android:textSize="18sp"
                 app:icon="@drawable/ic_baseline_share_24"
-                app:iconPadding="8dp"
-                app:iconSize="32dp"
+                app:iconPadding="12dp"
+                app:iconSize="30dp"
                 app:iconTint="@color/settingsIconColor" />
 
             <com.google.android.material.button.MaterialButton
@@ -175,8 +175,8 @@
                 android:textColor="@color/primaryTextColor"
                 android:textSize="18sp"
                 app:icon="@drawable/ic_outline_article_24"
-                app:iconPadding="8dp"
-                app:iconSize="32dp"
+                app:iconPadding="12dp"
+                app:iconSize="30dp"
                 app:iconTint="@color/settingsIconColor" />
 
             <com.google.android.material.button.MaterialButton
@@ -192,8 +192,8 @@
                 android:textColor="@color/primaryTextColor"
                 android:textSize="18sp"
                 app:icon="@drawable/ic_baseline_logout_24"
-                app:iconPadding="8dp"
-                app:iconSize="32dp"
+                app:iconPadding="12dp"
+                app:iconSize="30dp"
                 app:iconTint="@color/settingsIconColor" />
 
         </LinearLayout>
