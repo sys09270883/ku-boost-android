@@ -1,5 +1,6 @@
 package com.konkuk.boost.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -55,29 +56,30 @@ class ChangePasswordViewModel(private val authRepository: AuthRepository) : View
         val state = isOk.value ?: 0
         if (!pwd.matches(PASSWORD_REGEX)) {
             isOk.postValue(state and ((1 shl 0).inv()))
-            isPasswordValid.postValue(2)
+            isPasswordValid.value = 2
         } else if (pwd == beforePassword.value) {
             isOk.postValue(state and ((1 shl 0).inv()))
-            isPasswordValid.postValue(1)
+            isPasswordValid.value = 1
         } else {
             isOk.postValue(0b01)
-            isPasswordValid.postValue(0)
+            isPasswordValid.value = 0
         }
     }
 
     fun updatePasswordState(password: String, password2: String) {
-        if (isPasswordValid.value != 0) {
-            return
-        }
+        Log.d("yoonseop", "[After] pwd: ${password} pwd2: ${password2}")
 
         val state = isOk.value ?: 0
+        updatePasswordSame(password, password2)
         if (password == password2) {
-            isPasswordSame.postValue(true)
             isOk.postValue(state or 0b10)
         } else {
-            isPasswordSame.postValue(false)
             isOk.postValue(state and ((1 shl 1).inv()))
         }
+    }
+
+    fun updatePasswordSame(password: String, password2: String) {
+        isPasswordSame.value = password == password2
     }
 
     private val _loading: MutableLiveData<Boolean> by lazy {

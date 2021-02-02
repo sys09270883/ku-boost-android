@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -122,6 +123,12 @@ class ChangePasswordFragment : Fragment() {
                 }
 
                 override fun afterTextChanged(s: Editable?) {
+                    val pwd = s.toString()
+                    val pwd2 = binding.password2.text.toString()
+
+                    if (pwd2.isNotBlank()) {
+                        viewModel?.updatePasswordState(pwd, pwd2)
+                    }
                 }
             })
 
@@ -136,11 +143,14 @@ class ChangePasswordFragment : Fragment() {
 
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                     val password = binding.password.text.toString()
-                    val password2 = s.toString()
+                    val password2 = binding.password2.text.toString()
+                    Log.d("yoonseop", "[Before] pwd: ${password} pwd2: ${password2}")
                     viewModel?.updatePasswordState(password, password2)
                 }
 
-                override fun afterTextChanged(s: Editable?) {}
+                override fun afterTextChanged(s: Editable?) {
+
+                }
 
             })
 
