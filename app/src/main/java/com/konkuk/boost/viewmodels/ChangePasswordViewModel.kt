@@ -54,13 +54,13 @@ class ChangePasswordViewModel(private val authRepository: AuthRepository) : View
     fun checkPasswordValid(pwd: String) {
         val state = isOk.value ?: 0
         if (!pwd.matches(PASSWORD_REGEX)) {
-            isOk.postValue(state and ((1 shl 0).inv()))
+            isOk.value = state and ((1 shl 0).inv())
             isPasswordValid.value = 2
         } else if (pwd == beforePassword.value) {
-            isOk.postValue(state and ((1 shl 0).inv()))
+            isOk.value = state and ((1 shl 0).inv())
             isPasswordValid.value = 1
         } else {
-            isOk.postValue(0b01)
+            isOk.value = 0b01
             isPasswordValid.value = 0
         }
     }
@@ -69,9 +69,9 @@ class ChangePasswordViewModel(private val authRepository: AuthRepository) : View
         val state = isOk.value ?: 0
         isPasswordSame.value = password == password2
         if (password == password2) {
-            isOk.postValue(state or 0b10)
+            isOk.value = state or 0b10
         } else {
-            isOk.postValue(state and ((1 shl 1).inv()))
+            isOk.value = state and ((1 shl 1).inv())
         }
     }
 

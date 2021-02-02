@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -119,6 +120,7 @@ class ChangePasswordFragment : Fragment() {
 
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                     viewModel?.checkPasswordValid(s.toString())
+                    Log.d("yoonseop", viewModel?.isOk?.value.toString())
                 }
 
                 override fun afterTextChanged(s: Editable?) {
