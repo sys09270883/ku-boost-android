@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,6 +25,15 @@ class ChangePasswordFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel: ChangePasswordViewModel by viewModel()
 
+    private fun changePassword() {
+        val imm =
+            requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(binding.beforePassword.windowToken, 0)
+        imm.hideSoftInputFromWindow(binding.password.windowToken, 0)
+        imm.hideSoftInputFromWindow(binding.password2.windowToken, 0)
+        viewModel.changePassword()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -41,8 +51,9 @@ class ChangePasswordFragment : Fragment() {
                 binding.passwordLayout.error = null
             } else {
                 when (it) {
-                    true -> binding.passwordLayout.error = null
-                    else -> binding.passwordLayout.error = "8~20자 이내, 하나 이상의 문자, 숫자, 특수 문자를 입력하세요."
+                    0 -> binding.passwordLayout.error = null
+                    1 -> binding.passwordLayout.error = "현재 비밀번호와 다른 비밀번호를 입력하세요"
+                    2 -> binding.passwordLayout.error = "8~20자 이내, 하나 이상의 문자, 숫자, 특수 문자를 입력하세요."
                 }
             }
         }
@@ -88,16 +99,14 @@ class ChangePasswordFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val username = requireArguments().getString("username", "")
-        val beforePassword = requireArguments().getString("password", "")
         val isLoggedIn = requireArguments().getBoolean("isLoggedIn", false)
 
         viewModel.setUsername(username)
-        viewModel.setBeforePassword(beforePassword)
         viewModel.setLoggedIn(isLoggedIn)
 
         binding.apply {
             confirmButton.setOnClickListener {
-                viewModel?.changePassword()
+                changePassword()
             }
 
             password.addTextChangedListener(object : TextWatcher {
@@ -114,6 +123,12 @@ class ChangePasswordFragment : Fragment() {
                 }
 
                 override fun afterTextChanged(s: Editable?) {
+                    val pwd = s.toString()
+                    val pwd2 = binding.password2.text.toString()
+
+                    if (pwd2.isNotBlank()) {
+                        viewModel?.updatePasswordState(pwd, pwd2)
+                    }
                 }
             })
 
@@ -128,11 +143,13 @@ class ChangePasswordFragment : Fragment() {
 
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                     val password = binding.password.text.toString()
-                    val password2 = s.toString()
+                    val password2 = binding.password2.text.toString()
                     viewModel?.updatePasswordState(password, password2)
                 }
 
-                override fun afterTextChanged(s: Editable?) {}
+                override fun afterTextChanged(s: Editable?) {
+
+                }
 
             })
 
