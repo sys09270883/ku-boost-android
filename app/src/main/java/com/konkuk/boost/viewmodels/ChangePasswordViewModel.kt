@@ -67,19 +67,13 @@ class ChangePasswordViewModel(private val authRepository: AuthRepository) : View
     }
 
     fun updatePasswordState(password: String, password2: String) {
-        Log.d("yoonseop", "[After] pwd: ${password} pwd2: ${password2}")
-
         val state = isOk.value ?: 0
-        updatePasswordSame(password, password2)
+        isPasswordSame.value = password == password2
         if (password == password2) {
             isOk.postValue(state or 0b10)
         } else {
             isOk.postValue(state and ((1 shl 1).inv()))
         }
-    }
-
-    fun updatePasswordSame(password: String, password2: String) {
-        isPasswordSame.value = password == password2
     }
 
     private val _loading: MutableLiveData<Boolean> by lazy {

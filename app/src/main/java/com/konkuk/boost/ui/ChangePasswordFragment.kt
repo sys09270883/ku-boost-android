@@ -144,7 +144,6 @@ class ChangePasswordFragment : Fragment() {
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                     val password = binding.password.text.toString()
                     val password2 = binding.password2.text.toString()
-                    Log.d("yoonseop", "[Before] pwd: ${password} pwd2: ${password2}")
                     viewModel?.updatePasswordState(password, password2)
                 }
 
