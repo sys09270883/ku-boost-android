@@ -4,7 +4,6 @@ import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,9 +27,9 @@ class ChangePasswordFragment : Fragment() {
     private fun changePassword() {
         val imm =
             requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.hideSoftInputFromWindow(binding.beforePassword.windowToken, 0);
-        imm.hideSoftInputFromWindow(binding.password.windowToken, 0);
-        imm.hideSoftInputFromWindow(binding.password2.windowToken, 0);
+        imm.hideSoftInputFromWindow(binding.beforePassword.windowToken, 0)
+        imm.hideSoftInputFromWindow(binding.password.windowToken, 0)
+        imm.hideSoftInputFromWindow(binding.password2.windowToken, 0)
         viewModel.changePassword()
     }
 
