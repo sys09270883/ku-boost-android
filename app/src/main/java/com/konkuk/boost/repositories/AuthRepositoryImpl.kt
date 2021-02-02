@@ -93,7 +93,7 @@ class AuthRepositoryImpl(
         }
 
         return when (changePasswordResponse.response.flag) {
-            "1" -> UseCase.error("아이디, 패스워드가 일치하지 않습니다.")
+            "1" -> UseCase.error("현재 비밀번호가 일치하지 않습니다.")
             "3" -> UseCase.success(changePasswordResponse, "비밀번호를 변경했습니다.")
             "PASS" -> UseCase.success(changePasswordResponse, "90일 후 변경하기로 설정했습니다.")
             else -> UseCase.error("서버에 문제가 발생했습니다.")
@@ -122,7 +122,7 @@ class AuthRepositoryImpl(
         }
 
         return when (changePasswordResponse.response.flag) {
-            "1" -> UseCase.error("아이디, 패스워드가 일치하지 않습니다.")
+            "1" -> UseCase.error("현재 비밀번호가 일치하지 않습니다.")
             "3" -> UseCase.success(changePasswordResponse, "비밀번호를 변경했습니다.")
             "PASS" -> UseCase.success(changePasswordResponse, "90일 후 변경하기로 설정했습니다.")
             else -> UseCase.error("서버에 문제가 발생했습니다.")
