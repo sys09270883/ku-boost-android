@@ -120,7 +120,6 @@ class ChangePasswordFragment : Fragment() {
 
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                     viewModel?.checkPasswordValid(s.toString())
-                    Log.d("yoonseop", viewModel?.isOk?.value.toString())
                 }
 
                 override fun afterTextChanged(s: Editable?) {
