@@ -86,7 +86,10 @@ class CourseRepositoryImpl(
         return UseCase.success(Unit)
     }
 
-    override suspend fun makeAllLikeCoursesRequest(year: Int, semester: Int): UseCase<List<LikeCourseEntity>> {
+    override suspend fun makeAllLikeCoursesRequest(
+        year: Int,
+        semester: Int
+    ): UseCase<List<LikeCourseEntity>> {
         val username = preferenceManager.username
         val allLikeCourses: List<LikeCourseEntity>
 
@@ -131,7 +134,7 @@ class CourseRepositoryImpl(
                     val semCode = GradeUtils.convertToSemesterCode(semester)
                     val url = """
                     https://kupis.konkuk.ac.kr/sugang/acd/cour/aply/CourBasketInwonInq.jsp?
-                    ltYy=${year}&ltShtm=${semCode}&promShyr=${promYear}&sbjtId=${subjectId}
+                    ltYy=${year}&ltShtm=${semCode}&promShyr=${promYear}&sbjtId=${subjectId}&fg=B
                     """.trimIndent()
                     val doc = Jsoup.connect(url).timeout(1000).get()
                     val contents = doc.select("table tbody tr td")
