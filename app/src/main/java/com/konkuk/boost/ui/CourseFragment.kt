@@ -74,11 +74,16 @@ class CourseFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        updateCourseInfo()
         timer = timer(period = 3000L) {
-            viewModel.fetchSelectedSemester()
-            viewModel.fetchAllLikeCourses()
-            viewModel.fetchRegistrationStatus()
+            updateCourseInfo()
         }
+    }
+
+    private fun updateCourseInfo() {
+        viewModel.fetchSelectedSemester()
+        viewModel.fetchAllLikeCourses()
+        viewModel.fetchRegistrationStatus()
     }
 
     override fun onPause() {

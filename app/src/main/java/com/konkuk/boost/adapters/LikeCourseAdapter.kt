@@ -108,7 +108,7 @@ class LikeCourseAdapter :
                     results[i].text = "인원초과"
                     results[i].setTextColor(ContextCompat.getColor(context, R.color.pastelRed))
                 } else {
-                    results[i].text = "${limited - registration}"
+                    results[i].text = "${limited - registration - basket}"
                     results[i].setTextColor(ContextCompat.getColor(context, R.color.pastelBlue))
                 }
             }
