@@ -1,5 +1,6 @@
 package com.konkuk.boost.repositories
 
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.konkuk.boost.api.LibraryService
 import com.konkuk.boost.data.library.LoginRequest
 import com.konkuk.boost.data.library.LoginResponse
@@ -21,6 +22,7 @@ class LibraryResponseImpl(
             val token = loginResponse.data.accessToken
             preferenceManager.accessToken = token
         } catch (e: Exception) {
+            FirebaseCrashlytics.getInstance().log("${e.message}")
             return UseCase.error("${e.message}")
         }
 
@@ -34,6 +36,7 @@ class LibraryResponseImpl(
         try {
             qrResponse = libraryService.getMobileQRCode(accessToken)
         } catch (e: Exception) {
+            FirebaseCrashlytics.getInstance().log("${e.message}")
             return UseCase.error("${e.message}")
         }
 

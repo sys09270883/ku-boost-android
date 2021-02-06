@@ -1,6 +1,6 @@
 package com.konkuk.boost.repositories
 
-import android.util.Log
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.konkuk.boost.api.GradeService
 import com.konkuk.boost.data.grade.GraduationSimulationResponse
 import com.konkuk.boost.data.grade.UserInformationResponse
@@ -46,8 +46,9 @@ class GradeRepositoryImpl(
                 graduationSimulationDao.insertGraduationSimulation(data)
             }
 
-        } catch (exception: Exception) {
-            return UseCase.error("${exception.message}")
+        } catch (e: Exception) {
+            FirebaseCrashlytics.getInstance().log("${e.message}")
+            return UseCase.error("${e.message}")
         }
 
         return UseCase.success(graduationSimulationResponse)
@@ -66,9 +67,9 @@ class GradeRepositoryImpl(
                     code = code
                 )
             }
-        } catch (exception: Exception) {
-            Log.e("ku-boost", "${exception.message}")
-            return UseCase.error("${exception.message}")
+        } catch (e: Exception) {
+            FirebaseCrashlytics.getInstance().log("${e.message}")
+            return UseCase.error("${e.message}")
         }
 
         return UseCase.success(userInfoResponse)
@@ -81,8 +82,9 @@ class GradeRepositoryImpl(
         try {
             graduationSimulationList =
                 graduationSimulationDao.loadGraduationSimulationByUsername(username)
-        } catch (exception: Exception) {
-            return UseCase.error("${exception.message}")
+        } catch (e: Exception) {
+            FirebaseCrashlytics.getInstance().log("${e.message}")
+            return UseCase.error("${e.message}")
         }
 
         return UseCase.success(graduationSimulationList)
@@ -134,9 +136,9 @@ class GradeRepositoryImpl(
 
             gradeDao.insertGrade(*allGrades.toTypedArray())
             preferenceManager.hasData = true
-        } catch (exception: Exception) {
-            Log.e("ku-boost", "${exception.message}")
-            return UseCase.error("${exception.message}")
+        } catch (e: Exception) {
+            FirebaseCrashlytics.getInstance().log("${e.message}")
+            return UseCase.error("${e.message}")
         }
 
         return UseCase.success(Unit)
@@ -153,8 +155,9 @@ class GradeRepositoryImpl(
             for (validGrade in validGrades) {
                 gradeDao.updateValid(username, validGrade.subjectId, true)
             }
-        } catch (exception: Exception) {
-            return UseCase.error("${exception.message}")
+        } catch (e: Exception) {
+            FirebaseCrashlytics.getInstance().log("${e.message}")
+            return UseCase.error("${e.message}")
         }
         return UseCase.success(Unit)
     }
@@ -165,8 +168,9 @@ class GradeRepositoryImpl(
         val allValidGrades: List<GradeEntity>
         try {
             allValidGrades = gradeDao.getAllGrades(username)
-        } catch (exception: Exception) {
-            return UseCase.error("${exception.message}")
+        } catch (e: Exception) {
+            FirebaseCrashlytics.getInstance().log("${e.message}")
+            return UseCase.error("${e.message}")
         }
 
         return UseCase.success(allValidGrades)
@@ -178,9 +182,9 @@ class GradeRepositoryImpl(
         val currentGrades: List<GradeEntity>
         try {
             currentGrades = gradeDao.getCurrentSemesterGradesTransaction(username)
-        } catch (exception: Exception) {
-            Log.e("ku-boost", "${exception.message}")
-            return UseCase.error("${exception.message}")
+        } catch (e: Exception) {
+            FirebaseCrashlytics.getInstance().log("${e.message}")
+            return UseCase.error("${e.message}")
         }
 
         return UseCase.success(currentGrades)
@@ -194,8 +198,9 @@ class GradeRepositoryImpl(
         val gradesByClassification: List<GradeEntity>
         try {
             gradesByClassification = gradeDao.getGradesByClassification(username, clf)
-        } catch (exception: Exception) {
-            return UseCase.error("${exception.message}")
+        } catch (e: Exception) {
+            FirebaseCrashlytics.getInstance().log("${e.message}")
+            return UseCase.error("${e.message}")
         }
 
         return UseCase.success(gradesByClassification)

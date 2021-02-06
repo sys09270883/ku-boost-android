@@ -1,6 +1,6 @@
 package com.konkuk.boost.repositories
 
-import android.util.Log
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.konkuk.boost.api.AuthService
 import com.konkuk.boost.data.auth.ChangePasswordResponse
 import com.konkuk.boost.data.auth.LoginResponse
@@ -20,7 +20,7 @@ class AuthRepositoryImpl(
         try {
             loginResponse = authService.login(username, password)
         } catch (e: Exception) {
-            Log.e("ku-boost", "${e.message}")
+            FirebaseCrashlytics.getInstance().log("${e.message}")
             return UseCase.error("서버에 문제가 발생했습니다.")
         }
 
@@ -42,8 +42,9 @@ class AuthRepositoryImpl(
         val loginSuccess = loginBody?.loginSuccess
         val loginFailure = loginBody?.loginFailure
 
-        if (loginSuccess == null)
+        if (loginSuccess == null) {
             return UseCase.error("${loginFailure?.errorMessage}", loginBody)
+        }
 
         return when {
             loginSuccess.isSucceeded -> {
@@ -89,6 +90,7 @@ class AuthRepositoryImpl(
         try {
             changePasswordResponse = authService.changePasswordAfter90Days(username, password)
         } catch (e: Exception) {
+            FirebaseCrashlytics.getInstance().log("${e.message}")
             return UseCase.error("${e.message}")
         }
 
@@ -118,6 +120,7 @@ class AuthRepositoryImpl(
                 procDiv
             )
         } catch (e: Exception) {
+            FirebaseCrashlytics.getInstance().log("${e.message}")
             return UseCase.error("${e.message}")
         }
 
