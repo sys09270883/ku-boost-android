@@ -30,15 +30,6 @@ class AuthRepositoryImpl(
 
         val loginBody = loginResponse.body()
 
-        /* 90일 후 변경 테스트
-        val loginBody = LoginResponse(
-            null, LoginFailure(
-                "비밀번호 변경 후 90일이 지났습니다. 비밀번호를 변경해주세요.",
-                -3000,
-                "SYS.CMMN@CMMN018"
-            )
-        ) */
-
         val loginSuccess = loginBody?.loginSuccess
         val loginFailure = loginBody?.loginFailure
 
