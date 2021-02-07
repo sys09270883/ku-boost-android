@@ -8,8 +8,8 @@ on:
 
 
 jobs:
-  build:
-    name: Build
+  work:
+    name: Do build, test, generate APK
     runs-on: ubuntu-latest
     
     steps:
@@ -33,15 +33,8 @@ jobs:
           tar xvf services.tar
 
       - name: Build debug APK
-        run: bash ./gradlew assembleDebug --stacktrace
-   
-   
-  test:
-    name: Test
-    needs: build
-    runs-on: ubuntu-latest
-    
-    steps:
+        run: ./gradlew assembleDebug --stacktrace
+      
       - name: Make gradlew executable
         run: chmod +x ./gradlew
 
@@ -54,14 +47,7 @@ jobs:
         with:
           name: reports
           path: app/build/test-results
-  
-  report:
-    name: Test report
-    runs-on: ubuntu-latest
-    needs: test
-    if: ${{ always() }}
-    
-    steps:
+      
       - name: Download test reports folder
         uses: actions/download-artifact@v2
         with:
@@ -69,13 +55,7 @@ jobs:
 
       - name: Android test report
         uses: asadmansr/android-test-report-action@v1.2.0
- 
-  apk:
-    name: Generate APK(debug)
-    runs-on: ubuntu-latest
-    needs: test
-
-    steps:
+        
       - name: Upload APK(debug)
         uses: actions/upload-artifact@v1
         with:
