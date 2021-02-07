@@ -1,12 +1,14 @@
 package com.konkuk.boost.ui
 
 import android.content.Context
+import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.os.Bundle
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.util.Log
+import android.util.TypedValue
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.bumptech.glide.Glide
@@ -68,6 +70,17 @@ class QRCodeActivity : AppCompatActivity() {
     }
 
     private fun generateQRCode(text: String): Bitmap {
+        var high: Int
+        var low: Int
+        val background = TypedValue()
+        theme.resolveAttribute(android.R.attr.colorBackground, background, true)
+        low = background.data
+
+        when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
+            Configuration.UI_MODE_NIGHT_YES -> high = Color.WHITE
+            else -> high = Color.BLACK
+        }
+
         val width = 500
         val height = 500
         val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
@@ -78,7 +91,7 @@ class QRCodeActivity : AppCompatActivity() {
             val bitMatrix = codeWriter.encode(text, BarcodeFormat.QR_CODE, width, height, hints)
             for (x in 0 until width) {
                 for (y in 0 until height) {
-                    bitmap.setPixel(x, y, if (bitMatrix[x, y]) Color.BLACK else Color.WHITE)
+                    bitmap.setPixel(x, y, if (bitMatrix[x, y]) high else low)
                 }
             }
         } catch (e: WriterException) {
