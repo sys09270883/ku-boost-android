@@ -39,8 +39,7 @@
                 android:id="@+id/thumbnailImageView"
                 android:layout_width="0dp"
                 android:layout_height="260dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="20dp"
+                android:layout_marginVertical="24dp"
                 android:adjustViewBounds="true"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -52,14 +51,86 @@
                 android:id="@+id/qrImageView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="20dp"
+                android:layout_marginVertical="24dp"
                 android:adjustViewBounds="true"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/thumbnailImageView"
                 app:layout_constraintWidth_percent="0.5"
                 tools:ignore="ContentDescription" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideLineV35"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.35" />
+
+            <TextView
+                android:id="@+id/stdNoTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="8dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="8dp"
+                android:text="@string/prompt_std_no"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toStartOf="@id/guideLineV35"
+                app:layout_constraintTop_toBottomOf="@id/qrImageView" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:text="@{Integer.toString(viewModel.stdNo)}"
+                android:textColor="@color/primaryTextColor"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="@id/stdNoTextView"
+                app:layout_constraintStart_toEndOf="@+id/guideLineV35"
+                app:layout_constraintTop_toTopOf="@id/stdNoTextView" />
+
+            <TextView
+                android:id="@+id/nameTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:text="@string/prompt_name"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toStartOf="@id/guideLineV35"
+                app:layout_constraintTop_toBottomOf="@id/stdNoTextView" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:text="@{viewModel.name}"
+                android:textColor="@color/primaryTextColor"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="@+id/nameTextView"
+                app:layout_constraintStart_toEndOf="@+id/guideLineV35"
+                app:layout_constraintTop_toTopOf="@+id/nameTextView" />
+
+            <TextView
+                android:id="@+id/belongTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:text="@string/prompt_belong"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toStartOf="@id/guideLineV35"
+                app:layout_constraintTop_toBottomOf="@id/nameTextView" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginVertical="12dp"
+                android:text="@{viewModel.dept}"
+                android:textColor="@color/primaryTextColor"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="@+id/belongTextView"
+                app:layout_constraintStart_toEndOf="@+id/guideLineV35"
+                app:layout_constraintTop_toTopOf="@+id/belongTextView" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
