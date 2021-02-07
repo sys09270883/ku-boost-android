@@ -24,6 +24,9 @@ class CourseSearchViewModel(
 
     fun setSemester(semester: Int) {
         courseRepository.setSemester(semester)
+    }
+
+    fun updateSemester(semester: Int) {
         _semester.value = semester
     }
 
