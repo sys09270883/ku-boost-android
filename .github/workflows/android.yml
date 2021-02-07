@@ -32,11 +32,11 @@ jobs:
         run:
           tar xvf services.tar
 
-      - name: Build debug APK
-        run: ./gradlew assembleDebug --stacktrace
-      
       - name: Make gradlew executable
         run: chmod +x ./gradlew
+
+      - name: Build debug APK
+        run: ./gradlew assembleDebug --stacktrace
 
       - name: Unit test
         run: ./gradlew testDebugUnitTest
