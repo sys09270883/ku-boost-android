@@ -1,16 +1,17 @@
-name: CI workflow
+name: CI/CD workflow
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, dev ]
   pull_request:
-    branches: [ main ]
+    branches: [ main, dev ]
+
 
 jobs:
-  apk:
-    name: Generate APK
+  work:
+    name: Do build, test, generate APK
     runs-on: ubuntu-latest
-
+    
     steps:
       - name: Clone repo
         uses: actions/checkout@v1
@@ -20,21 +21,42 @@ jobs:
         with:
           java-version: 1.8
           
-      - name: Decrypt Services
+      - name: Decrypt services
         run: 
           gpg --quiet --batch --yes --always-trust --decrypt --passphrase="$FIREBASE_SECRET" --output services.tar services.tar.gpg
 
         env: 
           FIREBASE_SECRET: ${{ secrets.FIREBASE_SECRET }}
           
-      - name: Unzip Services
+      - name: Unzip services
         run:
           tar xvf services.tar
 
-      - name: Build debug APK
-        run: bash ./gradlew assembleDebug --stacktrace
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
 
-      - name: Upload APK
+      - name: Build debug APK
+        run: ./gradlew assembleDebug --stacktrace
+
+      - name: Unit test
+        run: ./gradlew testDebugUnitTest
+
+      - name: Upload test reports
+        uses: actions/upload-artifact@v2
+        if: ${{ always() }}
+        with:
+          name: reports
+          path: app/build/test-results
+      
+      - name: Download test reports folder
+        uses: actions/download-artifact@v2
+        with:
+          name: reports
+
+      - name: Android test report
+        uses: asadmansr/android-test-report-action@v1.2.0
+        
+      - name: Upload APK(debug)
         uses: actions/upload-artifact@v1
         with:
           name: app
