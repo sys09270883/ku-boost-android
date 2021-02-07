@@ -1,4 +1,4 @@
 /build
 google-services.json
 src/main/assets
-src/main/assets/*
+src/main/java/com/konkuk/boost/utils/OzEngine.kt
