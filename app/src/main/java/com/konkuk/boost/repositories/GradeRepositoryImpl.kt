@@ -60,10 +60,10 @@ class GradeRepositoryImpl(
             userInfoResponse = gradeService.fetchUserInformation()
             userInfoResponse.userInformation.apply {
                 preferenceManager.setUserInfo(
-                    name = name,
+                    name = name ?: "",
                     stdNo = stdNo.toInt(),  // API stdNo는 String
-                    state = state,
-                    dept = dept,
+                    state = state ?: "",
+                    dept = dept ?: "",
                     code = code
                 )
             }

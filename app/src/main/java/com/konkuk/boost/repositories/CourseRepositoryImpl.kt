@@ -123,6 +123,7 @@ class CourseRepositoryImpl(
         return UseCase.success(likeCourse)
     }
 
+    @Suppress("BlockingMethodInNonBlockingContext")
     override suspend fun makeCourseRegistrationStatusRequest(
         year: Int,
         semester: Int,
