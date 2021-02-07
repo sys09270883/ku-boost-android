@@ -24,7 +24,7 @@ import com.konkuk.boost.persistence.GradeEntity
 import com.konkuk.boost.persistence.GraduationSimulationEntity
 import com.konkuk.boost.utils.GradeUtils
 import com.konkuk.boost.utils.StorageUtils.checkStoragePermission
-import com.konkuk.boost.viewmodels.HomeViewModel
+import com.konkuk.boost.viewmodels.GradeViewModel
 import com.konkuk.boost.views.CaptureUtils.capture
 import com.konkuk.boost.views.ChartUtils
 import com.konkuk.boost.views.CustomValueFormatter
@@ -37,7 +37,7 @@ class GradeFragment : Fragment() {
 
     private var _binding: FragmentGradeBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: HomeViewModel by viewModel()
+    private val viewModel: GradeViewModel by viewModel()
     private var dialog: AlertDialog? = null
     private val colors: List<Int> by lazy {
         val context = requireContext()

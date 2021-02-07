@@ -13,7 +13,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class HomeViewModel(
+class GradeViewModel(
     private val authRepository: AuthRepository,
     private val gradeRepository: GradeRepository
 ) : ViewModel() {
