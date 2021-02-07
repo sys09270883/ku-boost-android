@@ -33,16 +33,15 @@ class AuthRepositoryImpl(
         val loginSuccess = loginBody?.loginSuccess
         val loginFailure = loginBody?.loginFailure
 
-        if (loginSuccess == null) {
-            return UseCase.error("${loginFailure?.errorMessage}", loginBody)
-        }
-
         return when {
-            loginSuccess.isSucceeded -> {
+            loginSuccess?.isSucceeded == true -> {
                 preferenceManager.setAuthInfo(username, password)
                 UseCase.success(loginBody)
             }
-            loginFailure != null -> UseCase.error(loginFailure.errorMessage)
+            loginSuccess == null && loginFailure != null -> UseCase.error(
+                loginFailure.errorMessage,
+                loginBody
+            )
             else -> UseCase.error("서버에 문제가 발생했습니다.")
         }
     }
