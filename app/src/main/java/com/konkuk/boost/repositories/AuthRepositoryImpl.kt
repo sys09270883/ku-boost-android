@@ -30,28 +30,18 @@ class AuthRepositoryImpl(
 
         val loginBody = loginResponse.body()
 
-        /* 90일 후 변경 테스트
-        val loginBody = LoginResponse(
-            null, LoginFailure(
-                "비밀번호 변경 후 90일이 지났습니다. 비밀번호를 변경해주세요.",
-                -3000,
-                "SYS.CMMN@CMMN018"
-            )
-        ) */
-
         val loginSuccess = loginBody?.loginSuccess
         val loginFailure = loginBody?.loginFailure
 
-        if (loginSuccess == null) {
-            return UseCase.error("${loginFailure?.errorMessage}", loginBody)
-        }
-
         return when {
-            loginSuccess.isSucceeded -> {
+            loginSuccess?.isSucceeded == true -> {
                 preferenceManager.setAuthInfo(username, password)
                 UseCase.success(loginBody)
             }
-            loginFailure != null -> UseCase.error(loginFailure.errorMessage)
+            loginSuccess == null && loginFailure != null -> UseCase.error(
+                loginFailure.errorMessage,
+                loginBody
+            )
             else -> UseCase.error("서버에 문제가 발생했습니다.")
         }
     }
