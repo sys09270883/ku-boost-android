@@ -8,8 +8,8 @@ on:
 
 
 jobs:
-  test:
-    name: Android test
+  build:
+    name: Build
     runs-on: ubuntu-latest
     
     steps:
@@ -34,7 +34,14 @@ jobs:
 
       - name: Build debug APK
         run: bash ./gradlew assembleDebug --stacktrace
-
+   
+   
+  test:
+    name: Test
+    needs: build
+    runs-on: ubuntu-latest
+    
+    steps:
       - name: Make gradlew executable
         run: chmod +x ./gradlew
 
