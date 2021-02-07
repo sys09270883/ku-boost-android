@@ -38,9 +38,9 @@ class GradeRepositoryImpl(
                 val data = GraduationSimulationEntity(
                     username = username,
                     classification = simulation.classification,
-                    standard = simulation.standard,
-                    acquired = simulation.acquired.toInt(),     // API에서 String으로 넘어 옴.
-                    remainder = simulation.remainder,
+                    standard = simulation.standard ?: 0,
+                    acquired = simulation.acquired?.toInt() ?: 0,   // String으로 넘어 옴.
+                    remainder = simulation.remainder ?: 0,
                     modifiedAt = System.currentTimeMillis()
                 )
                 graduationSimulationDao.insertGraduationSimulation(data)
@@ -121,12 +121,12 @@ class GradeRepositoryImpl(
                             semester = semesterConverter[semester]!!,
                             classification = grade.classification,
                             characterGrade = grade.characterGrade ?: "",
-                            grade = grade.grade,
-                            professor = grade.professor,
+                            grade = grade.grade ?: 0.0f,
+                            professor = grade.professor ?: "",
                             subjectId = grade.subjectId,
-                            subjectName = grade.subjectName,
-                            subjectNumber = grade.subjectNumber,
-                            subjectPoint = grade.subjectPoint,
+                            subjectName = grade.subjectName ?: "",
+                            subjectNumber = grade.subjectNumber ?: "",
+                            subjectPoint = grade.subjectPoint ?: 0,
                             valid = false,
                             modifiedAt = System.currentTimeMillis()
                         )
