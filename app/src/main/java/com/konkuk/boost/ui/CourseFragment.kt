@@ -6,6 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
+import android.widget.ArrayAdapter
+import android.widget.Spinner
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -18,6 +21,8 @@ import com.konkuk.boost.adapters.LikeCourseAdapter
 import com.konkuk.boost.data.course.RegistrationStatusData
 import com.konkuk.boost.databinding.FragmentCourseBinding
 import com.konkuk.boost.viewmodels.CourseViewModel
+import com.konkuk.boost.views.DialogUtils
+import com.konkuk.boost.views.DialogUtils.setSpinner
 import com.skydoves.balloon.*
 import kotlinx.coroutines.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -97,6 +102,32 @@ class CourseFragment : Fragment() {
         setFabListener()
         setLikeCourseRecyclerViewConfig()
         setInfoConfig()
+        setDateTextViewListener()
+    }
+
+    private fun setDateTextViewListener() {
+        val context = requireContext()
+
+        binding.dateTextView.setOnClickListener {
+            val builder = AlertDialog.Builder(context)
+            val spinner = Spinner(context)
+            spinner.adapter = ArrayAdapter(
+                context, R.layout.spinner_item,
+                arrayOf("1학기", "하계 계절학기", "2학기", "동계 계절학기")
+            )
+            builder.setTitle(getString(R.string.app_name))
+                .setMessage(getString(R.string.prompt_choose_semester))
+                .setSpinner(spinner)
+                .setPositiveButton(getString(R.string.prompt_yes)) { _, _ ->
+                    val semester = spinner.selectedItemPosition + 1
+                    viewModel.setSemester(semester)
+                    viewModel.updateSemester(semester)
+                    updateCourseInfo()
+                }.setNegativeButton(getString(R.string.prompt_no)) { _, _ ->
+                }
+            val dialog = DialogUtils.recolor(builder.create())
+            dialog.show()
+        }
     }
 
     private fun setInfoConfig() {

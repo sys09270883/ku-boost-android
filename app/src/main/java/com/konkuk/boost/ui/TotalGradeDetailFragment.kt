@@ -27,6 +27,7 @@ import com.konkuk.boost.utils.StorageUtils.checkStoragePermission
 import com.konkuk.boost.viewmodels.TotalGradeViewModel
 import com.konkuk.boost.views.CaptureUtils.capture
 import com.konkuk.boost.views.ChartUtils
+import com.konkuk.boost.views.DialogUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class TotalGradeDetailFragment : Fragment() {
@@ -89,16 +90,8 @@ class TotalGradeDetailFragment : Fragment() {
             }
             builder.setNegativeButton(getString(R.string.prompt_no)) { _, _ ->
             }
-            val dlg = builder.create()
-            dlg.setOnShowListener {
-                dlg.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(
-                    ContextCompat.getColor(activity, R.color.primaryTextColor)
-                )
-                dlg.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(
-                    ContextCompat.getColor(activity, R.color.primaryTextColor)
-                )
-            }
-            dlg.show()
+            val dialog = DialogUtils.recolor(builder.create())
+            dialog.show()
             true
         }
     }

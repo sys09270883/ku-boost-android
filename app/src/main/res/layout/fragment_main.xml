@@ -25,11 +25,10 @@
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabLayout"
+            style="@style/KUBoost.TabLayoutStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:tabIconTint="@color/ku_boost_tab_icon_color"
-            app:tabSelectedTextColor="@color/tabIconColor" />
+            app:layout_constraintBottom_toBottomOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

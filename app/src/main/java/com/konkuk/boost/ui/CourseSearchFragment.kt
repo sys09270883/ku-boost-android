@@ -5,11 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.FrameLayout
 import android.widget.Spinner
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SearchView
-import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -23,6 +21,8 @@ import com.konkuk.boost.databinding.FragmentCourseSearchBinding
 import com.konkuk.boost.utils.DateTimeConverter
 import com.konkuk.boost.viewmodels.CourseSearchViewModel
 import com.konkuk.boost.viewmodels.CourseViewModel
+import com.konkuk.boost.views.DialogUtils
+import com.konkuk.boost.views.DialogUtils.setSpinner
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -78,26 +78,20 @@ class CourseSearchFragment : Fragment() {
                 activity, R.layout.spinner_item,
                 arrayOf("1학기", "하계 계절학기", "2학기", "동계 계절학기")
             )
+
             builder.setTitle(getString(R.string.app_name))
                 .setMessage(getString(R.string.prompt_choose_semester))
                 .setSpinner(spinner)
                 .setPositiveButton(getString(R.string.prompt_yes)) { _, _ ->
                     val semester = spinner.selectedItemPosition + 1
                     courseSearchViewModel.setSemester(semester)
-                    courseViewModel.setSemester(semester)
+                    courseSearchViewModel.updateSemester(semester)
+                    courseViewModel.updateSemester(semester)
                     fetchAllSyllabus()
                 }.setNegativeButton(getString(R.string.prompt_no)) { _, _ ->
                 }
-            val dlg = builder.create()
-            dlg.setOnShowListener {
-                dlg.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(
-                    ContextCompat.getColor(activity, R.color.primaryTextColor)
-                )
-                dlg.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(
-                    ContextCompat.getColor(activity, R.color.primaryTextColor)
-                )
-            }
-            dlg.show()
+            val dialog = DialogUtils.recolor(builder.create())
+            dialog.show()
         }
     }
 
@@ -162,26 +156,6 @@ class CourseSearchFragment : Fragment() {
 
     private fun fetchAllSyllabus() {
         courseViewModel.fetchAllSyllabus()
-    }
-
-    private fun AlertDialog.Builder.setSpinner(spinner: Spinner): AlertDialog.Builder {
-        val activity = requireActivity()
-        val container = FrameLayout(activity)
-        container.addView(spinner)
-        val containerParams = FrameLayout.LayoutParams(
-            FrameLayout.LayoutParams.MATCH_PARENT,
-            FrameLayout.LayoutParams.MATCH_PARENT
-        )
-        val marginHorizontal = 200f
-        val marginTop = 16f
-        containerParams.topMargin = (marginTop / 2).toInt()
-        containerParams.leftMargin = marginHorizontal.toInt()
-        containerParams.rightMargin = marginHorizontal.toInt()
-        container.layoutParams = containerParams
-        val superContainer = FrameLayout(requireContext())
-        superContainer.addView(container)
-        setView(superContainer)
-        return this
     }
 
 }

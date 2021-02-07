@@ -28,6 +28,7 @@ import com.konkuk.boost.viewmodels.HomeViewModel
 import com.konkuk.boost.views.CaptureUtils.capture
 import com.konkuk.boost.views.ChartUtils
 import com.konkuk.boost.views.CustomValueFormatter
+import com.konkuk.boost.views.DialogUtils
 import com.konkuk.boost.views.TableRowUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
@@ -231,16 +232,8 @@ class GradeFragment : Fragment() {
             }
             builder.setNegativeButton(getString(R.string.prompt_no)) { _, _ ->
             }
-            val dlg = builder.create()
-            dlg.setOnShowListener {
-                dlg.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(
-                    ContextCompat.getColor(activity, R.color.primaryTextColor)
-                )
-                dlg.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(
-                    ContextCompat.getColor(activity, R.color.primaryTextColor)
-                )
-            }
-            dlg.show()
+            val dialog = DialogUtils.recolor(builder.create())
+            dialog.show()
             true
         }
 

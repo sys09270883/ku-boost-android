@@ -32,6 +32,7 @@
     <color name="infoBackground">#494949</color>
     <color name="infoTextColor">@color/white</color>
     <color name="reverseThemeColor">@color/white</color>
+    <color name="appPrimaryHighlightColor">@color/white</color>
     <color name="loginLocoColor">@color/white</color>
     <color name="tabIconColor">@color/white</color>
     <color name="settingsIconColor">@color/white</color>

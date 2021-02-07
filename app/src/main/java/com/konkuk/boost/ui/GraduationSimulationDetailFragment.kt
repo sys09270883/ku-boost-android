@@ -23,6 +23,7 @@ import com.konkuk.boost.utils.StorageUtils
 import com.konkuk.boost.viewmodels.GraduationSimulationDetailViewModel
 import com.konkuk.boost.views.CaptureUtils
 import com.konkuk.boost.views.ChartUtils
+import com.konkuk.boost.views.DialogUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class GraduationSimulationDetailFragment : Fragment() {
@@ -67,30 +68,22 @@ class GraduationSimulationDetailFragment : Fragment() {
         val activity = requireActivity()
         binding.cardView.setOnLongClickListener {
             val builder = AlertDialog.Builder(activity)
-            builder.setTitle(getString(R.string.app_name))
-            builder.setMessage(getString(R.string.question_grades))
-            builder.setPositiveButton(getString(R.string.prompt_yes)) { _, _ ->
-                if (StorageUtils.checkStoragePermission(activity)) {
-                    CaptureUtils.capture(activity, it)
-                    Snackbar.make(
-                        binding.container,
-                        getString(R.string.prompt_save),
-                        Snackbar.LENGTH_SHORT
-                    ).show()
+                .setTitle(getString(R.string.app_name))
+                .setMessage(getString(R.string.question_grades))
+                .setPositiveButton(getString(R.string.prompt_yes)) { _, _ ->
+                    if (StorageUtils.checkStoragePermission(activity)) {
+                        CaptureUtils.capture(activity, it)
+                        Snackbar.make(
+                            binding.container,
+                            getString(R.string.prompt_save),
+                            Snackbar.LENGTH_SHORT
+                        ).show()
+                    }
                 }
-            }
-            builder.setNegativeButton(getString(R.string.prompt_no)) { _, _ ->
-            }
-            val dlg = builder.create()
-            dlg.setOnShowListener {
-                dlg.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(
-                    ContextCompat.getColor(activity, R.color.primaryTextColor)
-                )
-                dlg.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(
-                    ContextCompat.getColor(activity, R.color.primaryTextColor)
-                )
-            }
-            dlg.show()
+                .setNegativeButton(getString(R.string.prompt_no)) { _, _ ->
+                }
+            val dialog = DialogUtils.recolor(builder.create())
+            dialog.show()
             true
         }
     }
