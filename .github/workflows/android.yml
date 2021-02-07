@@ -1,4 +1,4 @@
-name: CI workflow
+name: CI/CD workflow
 
 on:
   push:
@@ -8,10 +8,10 @@ on:
 
 
 jobs:
-  apk:
-    name: Generate APK
+  test:
+    name: Android test
     runs-on: ubuntu-latest
-
+    
     steps:
       - name: Clone repo
         uses: actions/checkout@v1
@@ -38,14 +38,38 @@ jobs:
       - name: Make gradlew executable
         run: chmod +x ./gradlew
 
-      - name: Unit Test
+      - name: Unit test
         run: ./gradlew testDebugUnitTest
 
-      - name: Android Test Report
-        uses: asadmansr/android-test-report-action@v1.2.0
+      - name: Upload test reports
+        uses: actions/upload-artifact@v2
         if: ${{ always() }}
+        with:
+          name: reports
+          path: app/build/test-results
+  
+  report:
+    name: Test report
+    runs-on: ubuntu-latest
+    needs: test
+    if: ${{ always() }}
+    
+    steps:
+      - name: Download test reports folder
+        uses: actions/download-artifact@v2
+        with:
+          name: reports
 
-      - name: Upload APK
+      - name: Android test report
+        uses: asadmansr/android-test-report-action@v1.2.0
+ 
+  apk:
+    name: Generate APK(debug)
+    runs-on: ubuntu-latest
+    needs: test
+
+    steps:
+      - name: Upload APK(debug)
         uses: actions/upload-artifact@v1
         with:
           name: app
