@@ -16,5 +16,5 @@ interface RankDao {
     suspend fun insert(vararg rankEntity: RankEntity)
 
     @Query("SELECT * FROM $TABLE_NAME WHERE $USERNAME = :username AND $YEAR = :year AND $SEMESTER = :semester")
-    suspend fun fetch(username: String, year: Int = 0, semester: Int = 0): RankEntity
+    suspend fun getTotalRank(username: String, year: Int = 0, semester: Int = 0): RankEntity
 }

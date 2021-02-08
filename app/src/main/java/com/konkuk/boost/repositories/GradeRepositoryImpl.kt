@@ -1,19 +1,28 @@
 package com.konkuk.boost.repositories
 
+import android.content.res.AssetManager
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.konkuk.boost.api.GradeService
+import com.konkuk.boost.api.OzService
 import com.konkuk.boost.data.grade.GraduationSimulationResponse
 import com.konkuk.boost.data.grade.UserInformationResponse
 import com.konkuk.boost.data.grade.ValidGradesResponse
 import com.konkuk.boost.persistence.*
 import com.konkuk.boost.utils.DateTimeConverter
+import com.konkuk.boost.utils.OzEngine
 import com.konkuk.boost.utils.UseCase
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody.Companion.toRequestBody
+import org.koin.core.component.KoinApiExtension
+import java.io.File
 
 class GradeRepositoryImpl(
     private val gradeService: GradeService,
     private val graduationSimulationDao: GraduationSimulationDao,
     private val preferenceManager: PreferenceManager,
-    private val gradeDao: GradeDao
+    private val gradeDao: GradeDao,
+    private val rankDao: RankDao,
+    private val ozService: OzService
 ) : GradeRepository {
     override suspend fun makeGraduationSimulationRequest(): UseCase<GraduationSimulationResponse> {
         val username = preferenceManager.username
@@ -204,6 +213,53 @@ class GradeRepositoryImpl(
         }
 
         return UseCase.success(gradesByClassification)
+    }
+
+    override suspend fun getTotalRank(): UseCase<RankEntity> {
+        val username = preferenceManager.username
+
+        val totalRank: RankEntity
+        try {
+            totalRank = rankDao.getTotalRank(username)
+        } catch (e: Exception) {
+            FirebaseCrashlytics.getInstance().log("${e.message}")
+            return UseCase.error("${e.message}")
+        }
+
+        return UseCase.success(totalRank)
+    }
+
+    @KoinApiExtension
+    override suspend fun makeTotalRank(am: AssetManager): UseCase<Unit> {
+        val username = preferenceManager.username
+        val stdNo = preferenceManager.stdNo
+
+        try {
+            val oz = OzEngine.getInstance(username, stdNo.toString())
+            val filePath = oz.getGradeFilePath()
+            val file = File("$filePath/grade$stdNo.bin")
+
+            val params = file.readBytes()
+            val requestBody = params.toRequestBody(
+                "application/octet-stream".toMediaTypeOrNull(),
+                0,
+                params.size
+            )
+
+            val responseBody = ozService.getRank(requestBody)
+            val rankMap = oz.getRankMap(responseBody.byteStream())
+
+            val ranks = mutableListOf<RankEntity>()
+            for ((key, value) in rankMap) {
+                ranks += RankEntity(username, key.year, key.semester, value.rank, value.total)
+            }
+            rankDao.insert(*ranks.toTypedArray())
+        } catch (e: Exception) {
+            FirebaseCrashlytics.getInstance().log("${e.message}")
+            return UseCase.error("${e.message}")
+        }
+
+        return UseCase.success(Unit)
     }
 
 }

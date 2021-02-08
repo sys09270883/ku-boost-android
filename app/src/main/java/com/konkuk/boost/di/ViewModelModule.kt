@@ -7,7 +7,7 @@ import org.koin.dsl.module
 val viewModelModule = module {
     viewModel { SplashViewModel(get()) }
     viewModel { LoginViewModel(get(), get()) }
-    viewModel { GradeViewModel(get(), get()) }
+    viewModel { GradeViewModel(get()) }
     viewModel { TotalGradeViewModel(get()) }
     viewModel { GradeDetailViewModel() }
     viewModel { GraduationSimulationViewModel(get()) }

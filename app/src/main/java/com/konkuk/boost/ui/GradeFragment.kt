@@ -24,6 +24,7 @@ import com.konkuk.boost.persistence.GradeEntity
 import com.konkuk.boost.persistence.GraduationSimulationEntity
 import com.konkuk.boost.utils.GradeUtils
 import com.konkuk.boost.utils.StorageUtils.checkStoragePermission
+import com.konkuk.boost.utils.UseCase
 import com.konkuk.boost.viewmodels.GradeViewModel
 import com.konkuk.boost.views.CaptureUtils.capture
 import com.konkuk.boost.views.ChartUtils
@@ -92,6 +93,23 @@ class GradeFragment : Fragment() {
         observeCurrentGrades()
         observeLoading()
         observeFetching()
+        observeRankInserted()
+        ozFile()
+    }
+
+    fun ozFile() {
+        val context = requireContext()
+        Log.d("yoonseop", "${context.filesDir}")
+    }
+
+    private fun observeRankInserted() {
+        viewModel.totalRankResponse.observe(viewLifecycleOwner) {
+            when (it.status) {
+                UseCase.Status.SUCCESS -> viewModel.fetchTotalRankFromLocalDb()
+                UseCase.Status.ERROR -> {
+                }
+            }
+        }
     }
 
     private fun setCurrentGradesRecyclerViewConfig() {
@@ -136,6 +154,7 @@ class GradeFragment : Fragment() {
                     viewModel.fetchGraduationSimulationFromLocalDb()
                     viewModel.fetchCurrentGradesFromLocalDb()
                     viewModel.fetchTotalGradesFromLocalDb()
+                    viewModel.fetchTotalRankFromLocalDb()
                 }
             }
         }
@@ -273,6 +292,7 @@ class GradeFragment : Fragment() {
 
             viewModel.fetchGraduationSimulationFromServer()
             viewModel.fetchAllGradesFromServer()
+            viewModel.makeTotalRank(resources.assets)
         }
     }
 
@@ -285,6 +305,7 @@ class GradeFragment : Fragment() {
         viewModel.fetchGraduationSimulationFromLocalDb()
         viewModel.fetchCurrentGradesFromLocalDb()
         viewModel.fetchTotalGradesFromLocalDb()
+        viewModel.fetchTotalRankFromLocalDb()
     }
 
     private fun observeLogout() {
