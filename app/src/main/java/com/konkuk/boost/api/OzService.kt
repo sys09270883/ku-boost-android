@@ -9,5 +9,5 @@ import retrofit2.http.POST
 interface OzService {
     @POST("oz70/server")
     @Headers("Content-Type: application/octet-stream")
-    suspend fun getRank(@Body file: RequestBody): ResponseBody
+    suspend fun postOzBinary(@Body file: RequestBody): ResponseBody
 }

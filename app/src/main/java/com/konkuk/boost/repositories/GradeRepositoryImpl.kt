@@ -244,7 +244,7 @@ class GradeRepositoryImpl(
                 params.size
             )
 
-            val responseBody = ozService.getRank(requestBody)
+            val responseBody = ozService.postOzBinary(requestBody)
             val rankMap = oz.getRankMap(responseBody.byteStream())
 
             val ranks = mutableListOf<RankEntity>()
