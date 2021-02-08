@@ -59,46 +59,6 @@ val apiModule = module {
     fun provideOzService(retrofit: Retrofit): OzService =
         retrofit.create(OzService::class.java)
 
-//    fun provideOzService(): OzService =
-//        object : OzService {
-//            override suspend fun getRank(file: File): String {
-//                Log.d("yoonseop", "absolute path: ${file.absolutePath}")
-//                val url = URL(BuildConfig.OZ_URL)
-//                val con: HttpsURLConnection = url.openConnection() as HttpsURLConnection
-//                con.doInput = true
-//                con.doOutput = true
-//                con.requestMethod = "POST"
-//
-//                val contentBytes = file.readBytes()
-//                val contentLength = contentBytes.size
-//
-//                con.setRequestProperty("Content-Type", "application/octet-stream")
-//                con.setRequestProperty("Content-Length", contentLength.toString())
-//                con.setHostnameVerifier { hostname, session ->
-//                    true
-//                }
-//                con.connect()
-//
-//                val out = file.readBytes()
-//                val outputStream: OutputStream = con.outputStream
-//                outputStream.write(out, 0, out.size)
-//                outputStream.flush()
-//
-//                val inputStream = BufferedReader(InputStreamReader(con.inputStream))
-//                val content = StringBuffer()
-//
-//                var inputLine: String
-//                while (inputStream.readLine().also { inputLine = it } != null) {
-//                    content.append(inputLine)
-//                }
-//
-//                inputStream.close()
-//                con.disconnect()
-//
-//                return content.toString()
-//            }
-//        }
-
     single { provideHttpLoggingInterceptor() }
     single(named("default")) { provideOkHttpClient(get()) }
     single(named("cookie")) { provideCookieClient(get(), get()) }

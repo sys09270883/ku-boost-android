@@ -94,12 +94,6 @@ class GradeFragment : Fragment() {
         observeLoading()
         observeFetching()
         observeRankInserted()
-        ozFile()
-    }
-
-    fun ozFile() {
-        val context = requireContext()
-        Log.d("yoonseop", "${context.filesDir}")
     }
 
     private fun observeRankInserted() {

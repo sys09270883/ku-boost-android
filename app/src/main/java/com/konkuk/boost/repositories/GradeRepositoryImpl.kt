@@ -14,7 +14,6 @@ import com.konkuk.boost.utils.UseCase
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.koin.core.component.KoinApiExtension
-import java.io.File
 
 class GradeRepositoryImpl(
     private val gradeService: GradeService,
@@ -236,8 +235,7 @@ class GradeRepositoryImpl(
 
         try {
             val oz = OzEngine.getInstance(username, stdNo.toString())
-            val filePath = oz.getGradeFilePath()
-            val file = File("$filePath/grade$stdNo.bin")
+            val file = oz.makeGradeFile()
 
             val params = file.readBytes()
             val requestBody = params.toRequestBody(
@@ -253,6 +251,7 @@ class GradeRepositoryImpl(
             for ((key, value) in rankMap) {
                 ranks += RankEntity(username, key.year, key.semester, value.rank, value.total)
             }
+
             rankDao.insert(*ranks.toTypedArray())
         } catch (e: Exception) {
             FirebaseCrashlytics.getInstance().log("${e.message}")
