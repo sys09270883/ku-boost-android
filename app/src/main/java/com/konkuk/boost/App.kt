@@ -22,7 +22,8 @@ class App : Application() {
                     viewModelModule,
                     apiModule,
                     repositoryModule,
-                    persistenceModule
+                    persistenceModule,
+                    utilityModule,
                 )
             )
         }

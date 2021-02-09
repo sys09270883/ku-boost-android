@@ -2,18 +2,25 @@ package com.konkuk.boost.repositories
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.konkuk.boost.api.GradeService
+import com.konkuk.boost.api.OzService
 import com.konkuk.boost.data.grade.GraduationSimulationResponse
 import com.konkuk.boost.data.grade.UserInformationResponse
 import com.konkuk.boost.data.grade.ValidGradesResponse
 import com.konkuk.boost.persistence.*
 import com.konkuk.boost.utils.DateTimeConverter
+import com.konkuk.boost.utils.OzEngine
 import com.konkuk.boost.utils.UseCase
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody.Companion.toRequestBody
+import org.koin.core.component.KoinApiExtension
 
 class GradeRepositoryImpl(
     private val gradeService: GradeService,
     private val graduationSimulationDao: GraduationSimulationDao,
     private val preferenceManager: PreferenceManager,
-    private val gradeDao: GradeDao
+    private val gradeDao: GradeDao,
+    private val rankDao: RankDao,
+    private val ozService: OzService
 ) : GradeRepository {
     override suspend fun makeGraduationSimulationRequest(): UseCase<GraduationSimulationResponse> {
         val username = preferenceManager.username
@@ -102,7 +109,9 @@ class GradeRepositoryImpl(
             val username = preferenceManager.username
             val startYear = stdNo.toString().substring(0, 4).toInt()
             val endYear = DateTimeConverter.currentYear().toInt()
-            val semesters = intArrayOf(1, 4, 2, 5)
+            val semesters = intArrayOf(5, 2, 4, 1)
+
+            var isLastSemesterQueried = false
 
             for (year in startYear..endYear) {
                 for (semester in semesters) {
@@ -112,6 +121,11 @@ class GradeRepositoryImpl(
                         semester = "B0101$semester",
                         curDate = DateTimeConverter.today()
                     )
+
+                    if (year == endYear && !isLastSemesterQueried && gradeResponse.grades.isNotEmpty()) {
+                        gradeDao.removeGrades(username, year, semesterConverter[semester]!!)
+                        isLastSemesterQueried = true
+                    }
 
                     for (grade in gradeResponse.grades) {
                         allGrades += GradeEntity(
@@ -204,6 +218,53 @@ class GradeRepositoryImpl(
         }
 
         return UseCase.success(gradesByClassification)
+    }
+
+    override suspend fun getTotalRank(year: Int, semester: Int): UseCase<RankEntity> {
+        val username = preferenceManager.username
+
+        val totalRank: RankEntity
+        try {
+            totalRank = rankDao.get(username, year, semester)
+        } catch (e: Exception) {
+            FirebaseCrashlytics.getInstance().log("${e.message}")
+            return UseCase.error("${e.message}")
+        }
+
+        return UseCase.success(totalRank)
+    }
+
+    @KoinApiExtension
+    override suspend fun makeTotalRank(): UseCase<Unit> {
+        val username = preferenceManager.username
+        val stdNo = preferenceManager.stdNo
+
+        try {
+            val oz = OzEngine.getInstance(username, stdNo.toString())
+            val file = oz.makeGradeFile()
+
+            val params = file.readBytes()
+            val requestBody = params.toRequestBody(
+                "application/octet-stream".toMediaTypeOrNull(),
+                0,
+                params.size
+            )
+
+            val responseBody = ozService.postOzBinary(requestBody)
+            val rankMap = oz.getRankMap(responseBody.byteStream())
+
+            val ranks = mutableListOf<RankEntity>()
+            for ((key, value) in rankMap) {
+                ranks += RankEntity(username, key.year, key.semester, value.rank, value.total)
+            }
+
+            rankDao.insert(*ranks.toTypedArray())
+        } catch (e: Exception) {
+            FirebaseCrashlytics.getInstance().log("${e.message}")
+            return UseCase.error("${e.message}")
+        }
+
+        return UseCase.success(Unit)
     }
 
 }

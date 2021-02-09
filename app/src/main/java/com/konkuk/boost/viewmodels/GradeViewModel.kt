@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.konkuk.boost.data.grade.GraduationSimulationResponse
 import com.konkuk.boost.persistence.GradeEntity
 import com.konkuk.boost.persistence.GraduationSimulationEntity
+import com.konkuk.boost.persistence.RankEntity
 import com.konkuk.boost.repositories.AuthRepository
 import com.konkuk.boost.repositories.GradeRepository
 import com.konkuk.boost.utils.UseCase
@@ -13,7 +14,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class HomeViewModel(
+class GradeViewModel(
     private val authRepository: AuthRepository,
     private val gradeRepository: GradeRepository
 ) : ViewModel() {
@@ -40,14 +41,6 @@ class HomeViewModel(
 
     fun clearLogoutResource() {
         logoutResponse = MutableLiveData<UseCase<Unit>>()
-    }
-
-    fun logout() {
-        viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                logoutResponse.postValue(authRepository.makeLogoutRequest())
-            }
-        }
     }
 
     fun fetchGraduationSimulationFromLocalDb() {
@@ -105,4 +98,28 @@ class HomeViewModel(
     fun isFetched(): Boolean = fetched.value ?: false
 
     fun hasData(): Boolean = gradeRepository.hasData()
+
+    val isTotalRankInsertedResponse = MutableLiveData<UseCase<Unit>>()
+
+    val totalRankResponse = MutableLiveData<UseCase<RankEntity>>()
+
+    fun getRankAndTotal(): Pair<Int, Int> =
+        totalRankResponse.value?.data?.toRankAndTotal() ?: Pair(0, 0)
+
+    fun makeTotalRank() {
+        viewModelScope.launch {
+            isTotalRankInsertedResponse.postValue(gradeRepository.makeTotalRank())
+        }
+    }
+
+    fun fetchTotalRankFromLocalDb() {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                // Total rank {year: 0, semester: 0}
+                totalRankResponse.postValue(gradeRepository.getTotalRank(0, 0))
+            }
+        }
+    }
+
+    fun getDept() = authRepository.getDept()
 }

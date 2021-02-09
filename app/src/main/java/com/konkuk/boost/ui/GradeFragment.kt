@@ -1,5 +1,6 @@
 package com.konkuk.boost.ui
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -24,7 +25,8 @@ import com.konkuk.boost.persistence.GradeEntity
 import com.konkuk.boost.persistence.GraduationSimulationEntity
 import com.konkuk.boost.utils.GradeUtils
 import com.konkuk.boost.utils.StorageUtils.checkStoragePermission
-import com.konkuk.boost.viewmodels.HomeViewModel
+import com.konkuk.boost.utils.UseCase
+import com.konkuk.boost.viewmodels.GradeViewModel
 import com.konkuk.boost.views.CaptureUtils.capture
 import com.konkuk.boost.views.ChartUtils
 import com.konkuk.boost.views.CustomValueFormatter
@@ -37,7 +39,7 @@ class GradeFragment : Fragment() {
 
     private var _binding: FragmentGradeBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: HomeViewModel by viewModel()
+    private val viewModel: GradeViewModel by viewModel()
     private var dialog: AlertDialog? = null
     private val colors: List<Int> by lazy {
         val context = requireContext()
@@ -92,6 +94,30 @@ class GradeFragment : Fragment() {
         observeCurrentGrades()
         observeLoading()
         observeFetching()
+        observeRankInserted()
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun updateTotalRank() {
+        val dept = viewModel.getDept()
+        val (rank, total) = viewModel.getRankAndTotal()
+
+        binding.rankTextView.apply {
+            text = "$dept ${total}명 중 ${rank}등"
+        }
+    }
+
+    private fun observeRankInserted() {
+        viewModel.totalRankResponse.observe(viewLifecycleOwner) {
+            when (it.status) {
+                UseCase.Status.SUCCESS -> {
+                    viewModel.fetchTotalRankFromLocalDb()
+                    updateTotalRank()
+                }
+                UseCase.Status.ERROR -> {
+                }
+            }
+        }
     }
 
     private fun setCurrentGradesRecyclerViewConfig() {
@@ -136,6 +162,7 @@ class GradeFragment : Fragment() {
                     viewModel.fetchGraduationSimulationFromLocalDb()
                     viewModel.fetchCurrentGradesFromLocalDb()
                     viewModel.fetchTotalGradesFromLocalDb()
+                    viewModel.fetchTotalRankFromLocalDb()
                 }
             }
         }
@@ -273,6 +300,7 @@ class GradeFragment : Fragment() {
 
             viewModel.fetchGraduationSimulationFromServer()
             viewModel.fetchAllGradesFromServer()
+            viewModel.makeTotalRank()
         }
     }
 
@@ -285,6 +313,7 @@ class GradeFragment : Fragment() {
         viewModel.fetchGraduationSimulationFromLocalDb()
         viewModel.fetchCurrentGradesFromLocalDb()
         viewModel.fetchTotalGradesFromLocalDb()
+        viewModel.fetchTotalRankFromLocalDb()
     }
 
     private fun observeLogout() {

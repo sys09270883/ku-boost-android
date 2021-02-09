@@ -1,13 +1,7 @@
 package com.konkuk.boost.di
 
-import com.konkuk.boost.api.AuthService
-import com.konkuk.boost.api.CourseService
-import com.konkuk.boost.api.GradeService
-import com.konkuk.boost.api.LibraryService
-import com.konkuk.boost.persistence.GradeDao
-import com.konkuk.boost.persistence.GraduationSimulationDao
-import com.konkuk.boost.persistence.LikeCourseDao
-import com.konkuk.boost.persistence.PreferenceManager
+import com.konkuk.boost.api.*
+import com.konkuk.boost.persistence.*
 import com.konkuk.boost.repositories.*
 import org.koin.dsl.module
 
@@ -21,9 +15,18 @@ val repositoryModule = module {
         gradeService: GradeService,
         graduationSimulationDao: GraduationSimulationDao,
         preferenceManager: PreferenceManager,
-        gradeDao: GradeDao
+        gradeDao: GradeDao,
+        rankDao: RankDao,
+        ozService: OzService
     ): GradeRepository =
-        GradeRepositoryImpl(gradeService, graduationSimulationDao, preferenceManager, gradeDao)
+        GradeRepositoryImpl(
+            gradeService,
+            graduationSimulationDao,
+            preferenceManager,
+            gradeDao,
+            rankDao,
+            ozService
+        )
 
     fun provideCourseRepository(
         courseService: CourseService,
@@ -39,7 +42,7 @@ val repositoryModule = module {
         LibraryResponseImpl(libraryService, preferenceManager)
 
     single { provideLoginRepository(get(), get()) }
-    single { provideGradeRepository(get(), get(), get(), get()) }
+    single { provideGradeRepository(get(), get(), get(), get(), get(), get()) }
     single { provideCourseRepository(get(), get(), get()) }
     single { provideLibraryRepository(get(), get()) }
 }

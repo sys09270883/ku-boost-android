@@ -4,13 +4,18 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.konkuk.boost.persistence.GradeEntity
+import com.konkuk.boost.persistence.RankEntity
+import com.konkuk.boost.repositories.AuthRepository
 import com.konkuk.boost.repositories.GradeRepository
 import com.konkuk.boost.utils.UseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class TotalGradeViewModel(private val gradeRepository: GradeRepository): ViewModel() {
+class TotalGradeViewModel(
+    private val authRepository: AuthRepository,
+    private val gradeRepository: GradeRepository
+): ViewModel() {
 
     private val fetched = MutableLiveData(false)
 
@@ -42,4 +47,22 @@ class TotalGradeViewModel(private val gradeRepository: GradeRepository): ViewMod
     }
 
     fun getSelectedPosition() = selectedPosition.value ?: 0
+
+    val selectedRankResponse = MutableLiveData<UseCase<RankEntity>>()
+
+    fun getRankAndTotal(): Pair<Int, Int> =
+        selectedRankResponse.value?.data?.toRankAndTotal() ?: Pair(0, 0)
+
+    fun fetchSelectedRankFromLocalDb(year: Int, semester: Int) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                // Total rank {year: 0, semester: 0}
+                selectedRankResponse.postValue(gradeRepository.getTotalRank(year, semester))
+            }
+        }
+    }
+
+    private val dept = MutableLiveData(authRepository.getDept())
+
+    fun getDept() = dept.value ?: ""
 }
