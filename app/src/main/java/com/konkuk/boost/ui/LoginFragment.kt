@@ -2,22 +2,22 @@ package com.konkuk.boost.ui
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.konkuk.boost.R
 import com.konkuk.boost.databinding.FragmentLoginBinding
 import com.konkuk.boost.utils.UseCase
 import com.konkuk.boost.viewmodels.LoginViewModel
+import com.konkuk.boost.views.DialogUtils
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -81,8 +81,7 @@ class LoginFragment : Fragment() {
                             viewModel.clearLoginResource()
                             val context = requireContext()
                             val builder = AlertDialog.Builder(context)
-                            val dialog = builder
-                                .setTitle(getString(R.string.app_name))
+                            builder.setTitle(getString(R.string.app_name))
                                 .setMessage("비밀번호 변경 후 90일이 지났습니다. 비밀번호를 변경해주세요.")
                                 .setCancelable(false)
                                 .setPositiveButton("90일 뒤 변경") { _, _ ->
@@ -99,20 +98,11 @@ class LoginFragment : Fragment() {
                                         bundle
                                     )
                                 }
-                                .create()
-                            dialog.setOnShowListener {
-                                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(
-                                    ContextCompat.getColor(context, R.color.primaryTextColor)
-                                )
-                                dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(
-                                    ContextCompat.getColor(context, R.color.primaryTextColor)
-                                )
-                            }
+                            val dialog = DialogUtils.recolor(builder.create())
                             dialog.show()
                         }
                     }
                     Snackbar.make(binding.container, "${it.message}", Snackbar.LENGTH_SHORT).show()
-                    Log.e("ku-boost", "${it.message}")
                 }
             }
         }

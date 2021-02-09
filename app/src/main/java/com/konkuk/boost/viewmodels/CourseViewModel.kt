@@ -139,6 +139,10 @@ class CourseViewModel(
     )
 
     fun setSemester(semester: Int) {
+        courseRepository.setSemester(semester)
+    }
+
+    fun updateSemester(semester: Int) {
         selectedSemester.value = semester
     }
 

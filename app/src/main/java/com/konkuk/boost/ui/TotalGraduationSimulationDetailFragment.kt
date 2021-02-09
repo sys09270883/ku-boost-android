@@ -34,10 +34,6 @@ class TotalGraduationSimulationDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.fetchGraduationSimulationFromLocalDb()
-
-        binding.certificateButton.setOnClickListener {
-            findNavController().navigate(R.id.action_totalGraduationSimulationDetailFragment_to_certificateOfAcquiredFragment)
-        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

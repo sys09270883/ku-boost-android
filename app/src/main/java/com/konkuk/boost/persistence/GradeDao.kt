@@ -42,4 +42,7 @@ interface GradeDao {
         clf: String,
         valid: Boolean = true
     ): List<GradeEntity>
+
+    @Query("DELETE FROM $TABLE_NAME WHERE $USERNAME = :username AND $YEAR = :year AND $SEMESTER = :semester")
+    suspend fun removeGrades(username: String, year: Int, semester: Int)
 }

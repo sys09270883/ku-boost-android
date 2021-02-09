@@ -3,6 +3,7 @@ package com.konkuk.boost.persistence
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.konkuk.boost.persistence.LikeCourseContract.LikeCourseEntry
+import com.konkuk.boost.persistence.RankContract.RankEntry
 
 object AppMigration {
     val MIGRATION_1_2 = object : Migration(1, 2) {
@@ -17,6 +18,21 @@ object AppMigration {
                     "${LikeCourseEntry.LIKE} INTEGER NOT NULL DEFAULT null," +
                     "CONSTRAINT ${LikeCourseEntry.PRIMARY_KEYS} PRIMARY KEY (" +
                     "${LikeCourseEntry.USERNAME}, ${LikeCourseEntry.YEAR}, ${LikeCourseEntry.SEMESTER}, ${LikeCourseEntry.SUBJECT_ID})" +
+                    ")"
+            database.execSQL(sql)
+        }
+    }
+
+    val MIGRATION_2_3 = object : Migration(2, 3) {
+        override fun migrate(database: SupportSQLiteDatabase) {
+            val sql = "CREATE TABLE IF NOT EXISTS ${RankEntry.TABLE_NAME} (" +
+                    "${RankEntry.USERNAME} TEXT NOT NULL DEFAULT null," +
+                    "${RankEntry.YEAR} INTEGER NOT NULL DEFAULT null," +
+                    "${RankEntry.SEMESTER} INTEGER NOT NULL DEFAULT null," +
+                    "${RankEntry.RANK} INTEGER NOT NULL DEFAULT null," +
+                    "${RankEntry.TOTAL} INTEGER NOT NULL DEFAULT null," +
+                    "CONSTRAINT ${RankEntry.PRIMARY_KEYS} PRIMARY KEY (" +
+                    "${RankEntry.USERNAME}, ${RankEntry.YEAR}, ${RankEntry.SEMESTER})" +
                     ")"
             database.execSQL(sql)
         }

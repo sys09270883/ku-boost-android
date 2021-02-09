@@ -10,10 +10,13 @@ import org.koin.dsl.module
 val persistenceModule = module {
     single {
         Room.databaseBuilder(androidApplication(), AppDatabase::class.java, "boost-db")
-            .addMigrations(AppMigration.MIGRATION_1_2).build()
+            .addMigrations(AppMigration.MIGRATION_1_2)
+            .addMigrations(AppMigration.MIGRATION_2_3)
+            .build()
     }
     single { get<AppDatabase>().graduationSimulationDao() }
     single { get<AppDatabase>().gradeDao() }
     single { get<AppDatabase>().likeCourseDao() }
+    single { get<AppDatabase>().rankDao() }
     single { PreferenceManager(androidApplication()) }
 }

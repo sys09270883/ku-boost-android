@@ -1,2 +1,5 @@
 /build
 google-services.json
+src/main/assets/gradeBase.bin
+src/main/assets/simulBase.bin
+src/main/java/com/konkuk/boost/utils/OzEngine.kt

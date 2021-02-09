@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
@@ -14,6 +13,7 @@ import com.konkuk.boost.databinding.FragmentSplashBinding
 import com.konkuk.boost.utils.NetworkUtils
 import com.konkuk.boost.utils.UseCase
 import com.konkuk.boost.viewmodels.SplashViewModel
+import com.konkuk.boost.views.DialogUtils
 import kotlinx.coroutines.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -54,19 +54,14 @@ class SplashFragment : Fragment() {
                 ).show()
                 findNavController().navigate(R.id.action_splashFragment_to_mainFragment)
             } else {                // 사용자 정보가 저장되어 있지 않을 경우
-                val dialog = AlertDialog.Builder(activity)
+                val builder = AlertDialog.Builder(activity)
                     .setTitle(getString(R.string.app_name))
                     .setMessage(getString(R.string.prompt_no_network))
                     .setCancelable(false)
                     .setPositiveButton(
                         getString(R.string.prompt_yes)
                     ) { _, _ -> activity.finish() }
-                    .create()
-                dialog.setOnShowListener {
-                    dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(
-                        ContextCompat.getColor(activity, R.color.primaryTextColor)
-                    )
-                }
+                val dialog = DialogUtils.recolor(builder.create())
                 dialog.show()
             }
         }

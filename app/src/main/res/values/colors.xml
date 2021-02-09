@@ -32,6 +32,7 @@
     <color name="infoBackground">#efefef</color>
     <color name="infoTextColor">#000000</color>
     <color name="reverseThemeColor">#000000</color>
+    <color name="appPrimaryHighlightColor">@color/primaryColor</color>
     <color name="loginLocoColor">@color/primaryColor</color>
     <color name="tabIconColor">@color/primaryColor</color>
     <color name="settingsIconColor">@color/primaryColor</color>

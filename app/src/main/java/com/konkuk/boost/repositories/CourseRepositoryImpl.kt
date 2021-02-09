@@ -1,6 +1,6 @@
 package com.konkuk.boost.repositories
 
-import android.util.Log
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.konkuk.boost.api.CourseService
 import com.konkuk.boost.data.course.RegistrationStatus
 import com.konkuk.boost.data.course.SyllabusDetailResponse
@@ -26,6 +26,7 @@ class CourseRepositoryImpl(
             syllabusResponse =
                 courseService.fetchAllSyllabus(year, GradeUtils.convertToSemesterCode(semester))
         } catch (e: Exception) {
+            FirebaseCrashlytics.getInstance().log("${e.message}")
             return UseCase.error("${e.message}")
         }
 
@@ -45,7 +46,7 @@ class CourseRepositoryImpl(
                 subjectId
             )
         } catch (e: Exception) {
-            Log.e("ku-boost", "${e.message}")
+            FirebaseCrashlytics.getInstance().log("${e.message}")
             return UseCase.error("${e.message}")
         }
 
@@ -56,6 +57,7 @@ class CourseRepositoryImpl(
         try {
             preferenceManager.selectedSemester = semester
         } catch (e: Exception) {
+            FirebaseCrashlytics.getInstance().log("${e.message}")
             return UseCase.error("${e.message}")
         }
         return UseCase.success(Unit)
@@ -80,6 +82,7 @@ class CourseRepositoryImpl(
                 LikeCourseEntity(username, year, semester, subjectId, subjectName, professor, like)
             likeCourseDao.insertLikeCourse(course)
         } catch (e: Exception) {
+            FirebaseCrashlytics.getInstance().log("${e.message}")
             return UseCase.error("${e.message}")
         }
 
@@ -96,6 +99,7 @@ class CourseRepositoryImpl(
         try {
             allLikeCourses = likeCourseDao.getAllLikeCourses(username, year, semester)
         } catch (e: Exception) {
+            FirebaseCrashlytics.getInstance().log("${e.message}")
             return UseCase.error("${e.message}")
         }
 
@@ -119,6 +123,7 @@ class CourseRepositoryImpl(
         return UseCase.success(likeCourse)
     }
 
+    @Suppress("BlockingMethodInNonBlockingContext")
     override suspend fun makeCourseRegistrationStatusRequest(
         year: Int,
         semester: Int,
@@ -148,7 +153,8 @@ class CourseRepositoryImpl(
                 subjectList.add(list)
             }
         } catch (e: Exception) {
-            Log.d("ku-boost", "${e.message}")
+            FirebaseCrashlytics.getInstance().log("${e.message}")
+            return UseCase.error("${e.message}")
         }
 
         return UseCase.success(subjectList)

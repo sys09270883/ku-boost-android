@@ -27,23 +27,40 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
+                android:layout_marginBottom="8dp"
                 android:background="@drawable/background_spinner"
                 android:elevation="12dp"
                 android:gravity="center"
+                app:layout_constraintBottom_toTopOf="@id/rankTextView"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintWidth_percent="0.8" />
 
+            <TextView
+                android:id="@+id/rankTextView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="12dp"
+                android:layout_marginVertical="8dp"
+                android:gravity="center"
+                android:textColor="@color/primaryTextColor"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toTopOf="@id/cardView"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/semesterSpinner" />
+
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="12dp"
+                android:layout_marginHorizontal="12dp"
+                android:layout_marginVertical="8dp"
                 app:cardCornerRadius="10dp"
                 app:cardElevation="5dp"
                 app:cardUseCompatPadding="true"
-                app:layout_constraintTop_toBottomOf="@+id/semesterSpinner">
+                app:layout_constraintTop_toBottomOf="@+id/rankTextView">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"

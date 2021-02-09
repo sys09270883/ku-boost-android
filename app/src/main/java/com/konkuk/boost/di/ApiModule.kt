@@ -1,10 +1,7 @@
 package com.konkuk.boost.di
 
 import com.konkuk.boost.BuildConfig
-import com.konkuk.boost.api.AuthService
-import com.konkuk.boost.api.CourseService
-import com.konkuk.boost.api.GradeService
-import com.konkuk.boost.api.LibraryService
+import com.konkuk.boost.api.*
 import com.konkuk.boost.persistence.PreferenceManager
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -59,13 +56,16 @@ val apiModule = module {
     fun provideLibraryService(retrofit: Retrofit): LibraryService =
         retrofit.create(LibraryService::class.java)
 
+    fun provideOzService(retrofit: Retrofit): OzService =
+        retrofit.create(OzService::class.java)
+
     single { provideHttpLoggingInterceptor() }
     single(named("default")) { provideOkHttpClient(get()) }
     single(named("cookie")) { provideCookieClient(get(), get()) }
     single(named("default-retrofit")) {
         provideRetrofit(
             get(named("default")),
-            BuildConfig.BASE_URL
+            BuildConfig.KUIS_URL
         )
     }
     single(named("library-retrofit")) {
@@ -77,12 +77,19 @@ val apiModule = module {
     single(named("cookie-retrofit")) {
         provideCookieRetrofit(
             get((named("cookie"))),
-            BuildConfig.BASE_URL
+            BuildConfig.KUIS_URL
+        )
+    }
+    single(named("oz-retrofit")) {
+        provideRetrofit(
+            get(named("default")),
+            BuildConfig.OZ_URL
         )
     }
     single { provideAuthService(get(named("default-retrofit"))) }
     single { provideGradeService(get(named("cookie-retrofit"))) }
     single { provideCourseService(get(named("cookie-retrofit"))) }
     single { provideLibraryService(get(named("library-retrofit"))) }
+    single { provideOzService(get(named("oz-retrofit"))) }
 }
 
