@@ -1,6 +1,5 @@
 package com.konkuk.boost.repositories
 
-import android.content.res.AssetManager
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.konkuk.boost.api.GradeService
 import com.konkuk.boost.api.OzService
@@ -214,12 +213,12 @@ class GradeRepositoryImpl(
         return UseCase.success(gradesByClassification)
     }
 
-    override suspend fun getTotalRank(): UseCase<RankEntity> {
+    override suspend fun getTotalRank(year: Int, semester: Int): UseCase<RankEntity> {
         val username = preferenceManager.username
 
         val totalRank: RankEntity
         try {
-            totalRank = rankDao.getTotalRank(username)
+            totalRank = rankDao.getTotalRank(username, year, semester)
         } catch (e: Exception) {
             FirebaseCrashlytics.getInstance().log("${e.message}")
             return UseCase.error("${e.message}")
@@ -229,7 +228,7 @@ class GradeRepositoryImpl(
     }
 
     @KoinApiExtension
-    override suspend fun makeTotalRank(am: AssetManager): UseCase<Unit> {
+    override suspend fun makeTotalRank(): UseCase<Unit> {
         val username = preferenceManager.username
         val stdNo = preferenceManager.stdNo
 

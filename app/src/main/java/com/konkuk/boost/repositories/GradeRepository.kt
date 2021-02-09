@@ -1,6 +1,5 @@
 package com.konkuk.boost.repositories
 
-import android.content.res.AssetManager
 import com.konkuk.boost.data.grade.GraduationSimulationResponse
 import com.konkuk.boost.data.grade.UserInformationResponse
 import com.konkuk.boost.persistence.GradeEntity
@@ -29,7 +28,7 @@ interface GradeRepository {
 
     suspend fun getGradesByClassification(clf: String): UseCase<List<GradeEntity>>
 
-    suspend fun getTotalRank(): UseCase<RankEntity>
+    suspend fun getTotalRank(year: Int, semester: Int): UseCase<RankEntity>
 
-    suspend fun makeTotalRank(am: AssetManager): UseCase<Unit>
+    suspend fun makeTotalRank(): UseCase<Unit>
 }

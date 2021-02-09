@@ -1,6 +1,5 @@
 package com.konkuk.boost.viewmodels
 
-import android.content.res.AssetManager
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -102,16 +101,17 @@ class GradeViewModel(
 
     val totalRankResponse = MutableLiveData<UseCase<RankEntity>>()
 
-    fun makeTotalRank(am: AssetManager) {
+    fun makeTotalRank() {
         viewModelScope.launch {
-            isTotalRankInsertedResponse.postValue(gradeRepository.makeTotalRank(am))
+            isTotalRankInsertedResponse.postValue(gradeRepository.makeTotalRank())
         }
     }
 
     fun fetchTotalRankFromLocalDb() {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                totalRankResponse.postValue(gradeRepository.getTotalRank())
+                // Total rank {year: 0, semester: 0}
+                totalRankResponse.postValue(gradeRepository.getTotalRank(0, 0))
             }
         }
     }
