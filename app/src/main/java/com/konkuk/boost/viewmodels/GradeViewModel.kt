@@ -7,6 +7,7 @@ import com.konkuk.boost.data.grade.GraduationSimulationResponse
 import com.konkuk.boost.persistence.GradeEntity
 import com.konkuk.boost.persistence.GraduationSimulationEntity
 import com.konkuk.boost.persistence.RankEntity
+import com.konkuk.boost.repositories.AuthRepository
 import com.konkuk.boost.repositories.GradeRepository
 import com.konkuk.boost.utils.UseCase
 import kotlinx.coroutines.Dispatchers
@@ -14,6 +15,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class GradeViewModel(
+    private val authRepository: AuthRepository,
     private val gradeRepository: GradeRepository
 ) : ViewModel() {
     private val _allGradesLoading = MutableLiveData(false)
@@ -101,6 +103,9 @@ class GradeViewModel(
 
     val totalRankResponse = MutableLiveData<UseCase<RankEntity>>()
 
+    fun getRankAndTotal(): Pair<Int, Int> =
+        totalRankResponse.value?.data?.toRankAndTotal() ?: Pair(0, 0)
+
     fun makeTotalRank() {
         viewModelScope.launch {
             isTotalRankInsertedResponse.postValue(gradeRepository.makeTotalRank())
@@ -115,4 +120,6 @@ class GradeViewModel(
             }
         }
     }
+
+    fun getDept() = authRepository.getDept()
 }

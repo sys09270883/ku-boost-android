@@ -1,5 +1,6 @@
 package com.konkuk.boost.ui
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -96,10 +97,23 @@ class GradeFragment : Fragment() {
         observeRankInserted()
     }
 
+    @SuppressLint("SetTextI18n")
+    private fun updateTotalRank() {
+        val dept = viewModel.getDept()
+        val (rank, total) = viewModel.getRankAndTotal()
+
+        binding.rankTextView.apply {
+            text = "$dept ${total}명 중 ${rank}등"
+        }
+    }
+
     private fun observeRankInserted() {
         viewModel.totalRankResponse.observe(viewLifecycleOwner) {
             when (it.status) {
-                UseCase.Status.SUCCESS -> viewModel.fetchTotalRankFromLocalDb()
+                UseCase.Status.SUCCESS -> {
+                    viewModel.fetchTotalRankFromLocalDb()
+                    updateTotalRank()
+                }
                 UseCase.Status.ERROR -> {
                 }
             }
@@ -286,7 +300,7 @@ class GradeFragment : Fragment() {
 
             viewModel.fetchGraduationSimulationFromServer()
             viewModel.fetchAllGradesFromServer()
-            viewModel.makeTotalRank(resources.assets)
+            viewModel.makeTotalRank()
         }
     }
 

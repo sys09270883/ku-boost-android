@@ -32,4 +32,8 @@ data class RankEntity(
     override fun hashCode(): Int {
         return Objects.hash(this.username, this.year, this.semester)
     }
+
+    fun toRankAndTotal(): Pair<Int, Int> {
+        return Pair(this.rank, this.total)
+    }
 }

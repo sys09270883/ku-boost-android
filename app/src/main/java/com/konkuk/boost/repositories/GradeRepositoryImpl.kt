@@ -218,7 +218,7 @@ class GradeRepositoryImpl(
 
         val totalRank: RankEntity
         try {
-            totalRank = rankDao.getTotalRank(username, year, semester)
+            totalRank = rankDao.get(username, year, semester)
         } catch (e: Exception) {
             FirebaseCrashlytics.getInstance().log("${e.message}")
             return UseCase.error("${e.message}")

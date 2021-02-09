@@ -1,7 +1,9 @@
 package com.konkuk.boost.ui
 
+import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,6 +26,7 @@ import com.konkuk.boost.databinding.FragmentTotalGradeDetailBinding
 import com.konkuk.boost.persistence.GradeEntity
 import com.konkuk.boost.utils.GradeUtils
 import com.konkuk.boost.utils.StorageUtils.checkStoragePermission
+import com.konkuk.boost.utils.UseCase
 import com.konkuk.boost.viewmodels.TotalGradeViewModel
 import com.konkuk.boost.views.CaptureUtils.capture
 import com.konkuk.boost.views.ChartUtils
@@ -70,6 +73,25 @@ class TotalGradeDetailFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         observeAllValidGrades()
+        observeRankOfSelectedSemester()
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun observeRankOfSelectedSemester() {
+        viewModel.selectedRankResponse.observe(viewLifecycleOwner) {
+            when (it.status) {
+                UseCase.Status.SUCCESS -> {
+                    val dept = viewModel.getDept()
+                    val (rank, total) = viewModel.getRankAndTotal()
+
+                    binding.rankTextView.apply {
+                        text = "$dept ${total}명 중 ${rank}등"
+                    }
+                }
+                UseCase.Status.ERROR -> {
+                }
+            }
+        }
     }
 
     private fun setCardViewLongClickListener() {
@@ -136,6 +158,20 @@ class TotalGradeDetailFragment : Fragment() {
                     id: Long
                 ) {
                     val (year, semester) = yearAndSemesters[spinner.selectedItemPosition]
+
+                    Log.d("yoonseop", "year: $year semester: ${GradeUtils.translate(semester)}")
+
+                    // 1학기, 2학기에만 등수 표기
+                    if (semester == 1 || semester == 3) {
+                        binding.rankTextView.visibility = View.VISIBLE
+                        viewModel.fetchSelectedRankFromLocalDb(
+                            year,
+                            GradeUtils.translate(semester).toInt()
+                        )
+                    } else {
+                        // 그 외 학기에는 등수 표기하지 않음
+                        binding.rankTextView.visibility = View.GONE
+                    }
 
                     val selectedGrades = mutableListOf<GradeEntity>()
                     for (data in it.data) {
