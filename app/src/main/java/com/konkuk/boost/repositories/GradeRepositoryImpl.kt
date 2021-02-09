@@ -1,6 +1,5 @@
 package com.konkuk.boost.repositories
 
-import android.util.Log
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.konkuk.boost.api.GradeService
 import com.konkuk.boost.api.OzService
@@ -110,7 +109,7 @@ class GradeRepositoryImpl(
             val username = preferenceManager.username
             val startYear = stdNo.toString().substring(0, 4).toInt()
             val endYear = DateTimeConverter.currentYear().toInt()
-            val semesters = intArrayOf(1, 4, 2, 5)
+            val semesters = intArrayOf(5, 2, 4, 1)
 
             var isLastSemesterQueried = false
 

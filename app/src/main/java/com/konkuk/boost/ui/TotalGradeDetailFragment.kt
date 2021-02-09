@@ -3,7 +3,6 @@ package com.konkuk.boost.ui
 import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -158,8 +157,6 @@ class TotalGradeDetailFragment : Fragment() {
                     id: Long
                 ) {
                     val (year, semester) = yearAndSemesters[spinner.selectedItemPosition]
-
-                    Log.d("yoonseop", "year: $year semester: ${GradeUtils.translate(semester)}")
 
                     // 1학기, 2학기에만 등수 표기
                     if (semester == 1 || semester == 3) {
