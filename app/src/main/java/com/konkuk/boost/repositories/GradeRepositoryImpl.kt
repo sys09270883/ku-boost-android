@@ -1,5 +1,6 @@
 package com.konkuk.boost.repositories
 
+import android.util.Log
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.konkuk.boost.api.GradeService
 import com.konkuk.boost.api.OzService
@@ -111,6 +112,8 @@ class GradeRepositoryImpl(
             val endYear = DateTimeConverter.currentYear().toInt()
             val semesters = intArrayOf(1, 4, 2, 5)
 
+            var isLastSemesterQueried = false
+
             for (year in startYear..endYear) {
                 for (semester in semesters) {
                     val gradeResponse = gradeService.fetchRegularGrade(
@@ -119,6 +122,11 @@ class GradeRepositoryImpl(
                         semester = "B0101$semester",
                         curDate = DateTimeConverter.today()
                     )
+
+                    if (year == endYear && !isLastSemesterQueried && gradeResponse.grades.isNotEmpty()) {
+                        gradeDao.removeGrades(username, year, semesterConverter[semester]!!)
+                        isLastSemesterQueried = true
+                    }
 
                     for (grade in gradeResponse.grades) {
                         allGrades += GradeEntity(
