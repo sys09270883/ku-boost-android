@@ -59,6 +59,9 @@ val apiModule = module {
     fun provideOzService(retrofit: Retrofit): OzService =
         retrofit.create(OzService::class.java)
 
+    fun provideKupisService(retrofit: Retrofit): KupisService =
+        retrofit.create(KupisService::class.java)
+
     single { provideHttpLoggingInterceptor() }
     single(named("default")) { provideOkHttpClient(get()) }
     single(named("cookie")) { provideCookieClient(get(), get()) }
@@ -86,10 +89,17 @@ val apiModule = module {
             BuildConfig.OZ_URL
         )
     }
+    single(named("kupis-retrofit")) {
+        provideRetrofit(
+            get(named("default")),
+            BuildConfig.KUPIS_URL
+        )
+    }
     single { provideAuthService(get(named("default-retrofit"))) }
     single { provideGradeService(get(named("cookie-retrofit"))) }
     single { provideCourseService(get(named("cookie-retrofit"))) }
     single { provideLibraryService(get(named("library-retrofit"))) }
     single { provideOzService(get(named("oz-retrofit"))) }
+    single { provideKupisService(get(named("kupis-retrofit"))) }
 }
 

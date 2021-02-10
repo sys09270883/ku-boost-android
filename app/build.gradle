@@ -20,6 +20,7 @@ android {
         buildConfigField "String", "KUIS_URL", "\"https://kuis.konkuk.ac.kr/\""
         buildConfigField "String", "OZ_URL", "\"https://kureport1.konkuk.ac.kr:8443/\""
         buildConfigField "String", "LIB_URL", "\"https://library.konkuk.ac.kr/\""
+        buildConfigField "String", "KUPIS_URL", "\"https://kupis.konkuk.ac.kr/\""
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         javaCompileOptions {
