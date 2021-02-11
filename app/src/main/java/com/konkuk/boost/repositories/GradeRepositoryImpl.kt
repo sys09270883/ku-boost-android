@@ -1,6 +1,5 @@
 package com.konkuk.boost.repositories
 
-import android.util.Log
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.konkuk.boost.api.AuthorizedKuisService
 import com.konkuk.boost.api.OzService
@@ -9,6 +8,7 @@ import com.konkuk.boost.data.grade.UserInformationResponse
 import com.konkuk.boost.data.grade.ValidGradesResponse
 import com.konkuk.boost.persistence.*
 import com.konkuk.boost.utils.DateTimeConverter
+import com.konkuk.boost.utils.GradeUtils
 import com.konkuk.boost.utils.OzEngine
 import com.konkuk.boost.utils.UseCase
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -142,6 +142,7 @@ class GradeRepositoryImpl(
                             subjectName = grade.subjectName ?: "",
                             subjectNumber = grade.subjectNumber ?: "",
                             subjectPoint = grade.subjectPoint ?: 0,
+                            subjectArea = "",
                             valid = false,
                             modifiedAt = System.currentTimeMillis()
                         )
@@ -273,13 +274,9 @@ class GradeRepositoryImpl(
         val username = preferenceManager.username
         val stdNo = preferenceManager.stdNo
 
-        Log.d("yoonseop", "$username, $stdNo")
-
         try {
             val oz = OzEngine.getInstance(username, stdNo.toString())
             val file = oz.makeSimulFile()
-
-            Log.d("yoonseop", file.absolutePath)
 
             val params = file.readBytes()
             val requestBody = params.toRequestBody(
@@ -291,7 +288,25 @@ class GradeRepositoryImpl(
             val responseBody = ozService.postOzBinary(requestBody)
             val simulMap = oz.getSimulMap(responseBody.byteStream())
 
-            Log.d("yoonseop", "$simulMap")
+            for ((clf, subjectIdList) in simulMap) {
+                for (subjectId in subjectIdList) {
+                    val onlySubjectNumber = subjectId.substring(0, 9)
+                    var subjectArea = subjectId.substring(9)
+                    subjectArea = when (clf) {
+                        "핵교" -> GradeUtils.foo1(subjectArea)
+                        "기교" -> GradeUtils.foo2(subjectArea)
+                        "심교" -> GradeUtils.foo3(subjectArea)
+                        else -> ""
+                    }
+
+                    gradeDao.updateClassificationBySubjectNumber(
+                        username,
+                        clf,
+                        onlySubjectNumber,
+                        subjectArea
+                    )
+                }
+            }
         } catch (e: Exception) {
             FirebaseCrashlytics.getInstance().log("${e.message}")
             return UseCase.error("${e.message}")

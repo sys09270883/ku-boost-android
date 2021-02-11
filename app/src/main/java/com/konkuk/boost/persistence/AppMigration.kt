@@ -2,6 +2,7 @@ package com.konkuk.boost.persistence
 
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.konkuk.boost.persistence.GradeContract.GradeEntry
 import com.konkuk.boost.persistence.LikeCourseContract.LikeCourseEntry
 import com.konkuk.boost.persistence.RankContract.RankEntry
 
@@ -34,6 +35,14 @@ object AppMigration {
                     "CONSTRAINT ${RankEntry.PRIMARY_KEYS} PRIMARY KEY (" +
                     "${RankEntry.USERNAME}, ${RankEntry.YEAR}, ${RankEntry.SEMESTER})" +
                     ")"
+            database.execSQL(sql)
+        }
+    }
+
+    val MIGRATION_3_4 = object : Migration(3, 4) {
+        override fun migrate(database: SupportSQLiteDatabase) {
+            val sql = "ALTER TABLE ${GradeEntry.TABLE_NAME} " +
+                    "ADD COLUMN ${GradeEntry.SUBJECT_AREA} TEXT NOT NULL DEFAULT \'\'"
             database.execSQL(sql)
         }
     }

@@ -88,6 +88,9 @@ class GradeViewModel(
                 // 서버에서 유효한 성적 정보를 가져와 로컬 DB 업데이트
                 gradeRepository.makeAllValidGradesRequest()
             }
+            withContext(Dispatchers.IO) {
+                gradeRepository.makeSimulation()
+            }
             // 전체 성적조회 로딩 끝
             _allGradesLoading.postValue(false)
 

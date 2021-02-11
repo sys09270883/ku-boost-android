@@ -12,6 +12,7 @@ val persistenceModule = module {
         Room.databaseBuilder(androidApplication(), AppDatabase::class.java, "boost-db")
             .addMigrations(AppMigration.MIGRATION_1_2)
             .addMigrations(AppMigration.MIGRATION_2_3)
+            .addMigrations(AppMigration.MIGRATION_3_4)
             .build()
     }
     single { get<AppDatabase>().graduationSimulationDao() }
