@@ -5,16 +5,24 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.konkuk.boost.R
+import com.konkuk.boost.databinding.FragmentInfoBinding
+import com.konkuk.boost.viewmodels.InfoViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class InfoFragment : Fragment() {
+
+    private var _binding: FragmentInfoBinding? = null
+    private val binding get() = _binding!!
+    val viewModel: InfoViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_info, container, false)
+    ): View {
+        _binding = FragmentInfoBinding.inflate(inflater, container, false)
+        binding.lifecycleOwner = this
+        binding.viewModel = viewModel
+        return binding.root
     }
 
 }

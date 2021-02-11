@@ -75,15 +75,15 @@
                 android:id="@+id/profileImage"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="92dp"
                 android:layout_marginBottom="8dp"
                 android:src="@drawable/profile"
-                app:civ_border_color="@color/primaryDarkColor"
-                app:civ_border_width="2dp"
+                app:civ_border_color="@color/reverseThemeColor"
+                app:civ_border_width="1dp"
                 app:civ_circle_background_color="@color/pastelLightGray"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/syllabusSubjectIdTextView" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/professorTextView"
