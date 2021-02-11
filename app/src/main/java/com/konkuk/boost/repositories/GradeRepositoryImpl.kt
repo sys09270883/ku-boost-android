@@ -1,7 +1,7 @@
 package com.konkuk.boost.repositories
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics
-import com.konkuk.boost.api.GradeService
+import com.konkuk.boost.api.AuthorizedKuisService
 import com.konkuk.boost.api.OzService
 import com.konkuk.boost.data.grade.GraduationSimulationResponse
 import com.konkuk.boost.data.grade.UserInformationResponse
@@ -15,7 +15,7 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import org.koin.core.component.KoinApiExtension
 
 class GradeRepositoryImpl(
-    private val gradeService: GradeService,
+    private val authorizedKuisService: AuthorizedKuisService,
     private val graduationSimulationDao: GraduationSimulationDao,
     private val preferenceManager: PreferenceManager,
     private val gradeDao: GradeDao,
@@ -33,7 +33,7 @@ class GradeRepositoryImpl(
         try {
             if (username.isEmpty()) throw Exception("사용자 이름이 없습니다.")
 
-            graduationSimulationResponse = gradeService.fetchGraduationSimulation(
+            graduationSimulationResponse = authorizedKuisService.fetchGraduationSimulation(
                 stdNo = stdNo,
                 year = courseYear,
                 shregCd = code
@@ -64,7 +64,7 @@ class GradeRepositoryImpl(
     override suspend fun makeUserInformationRequest(): UseCase<UserInformationResponse> {
         val userInfoResponse: UserInformationResponse
         try {
-            userInfoResponse = gradeService.fetchUserInformation()
+            userInfoResponse = authorizedKuisService.fetchUserInformation()
             userInfoResponse.userInformation.apply {
                 preferenceManager.setUserInfo(
                     name = name ?: "",
@@ -115,7 +115,7 @@ class GradeRepositoryImpl(
 
             for (year in startYear..endYear) {
                 for (semester in semesters) {
-                    val gradeResponse = gradeService.fetchRegularGrade(
+                    val gradeResponse = authorizedKuisService.fetchRegularGrade(
                         stdNo = stdNo,
                         year = year,
                         semester = "B0101$semester",
@@ -164,7 +164,7 @@ class GradeRepositoryImpl(
         val validGradesResponse: ValidGradesResponse
 
         try {
-            validGradesResponse = gradeService.fetchValidGrades(stdNo = stdNo)
+            validGradesResponse = authorizedKuisService.fetchValidGrades(stdNo = stdNo)
             val validGrades = validGradesResponse.validGrades
             for (validGrade in validGrades) {
                 gradeDao.updateValid(username, validGrade.subjectId, true)
