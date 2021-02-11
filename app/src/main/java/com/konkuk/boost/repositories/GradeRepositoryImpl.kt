@@ -1,5 +1,6 @@
 package com.konkuk.boost.repositories
 
+import android.util.Log
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.konkuk.boost.api.AuthorizedKuisService
 import com.konkuk.boost.api.OzService
@@ -259,6 +260,38 @@ class GradeRepositoryImpl(
             }
 
             rankDao.insert(*ranks.toTypedArray())
+        } catch (e: Exception) {
+            FirebaseCrashlytics.getInstance().log("${e.message}")
+            return UseCase.error("${e.message}")
+        }
+
+        return UseCase.success(Unit)
+    }
+
+    @KoinApiExtension
+    override suspend fun makeSimulation(): UseCase<Unit> {
+        val username = preferenceManager.username
+        val stdNo = preferenceManager.stdNo
+
+        Log.d("yoonseop", "$username, $stdNo")
+
+        try {
+            val oz = OzEngine.getInstance(username, stdNo.toString())
+            val file = oz.makeSimulFile()
+
+            Log.d("yoonseop", file.absolutePath)
+
+            val params = file.readBytes()
+            val requestBody = params.toRequestBody(
+                "application/octet-stream".toMediaTypeOrNull(),
+                0,
+                params.size
+            )
+
+            val responseBody = ozService.postOzBinary(requestBody)
+            val simulMap = oz.getSimulMap(responseBody.byteStream())
+
+            Log.d("yoonseop", "$simulMap")
         } catch (e: Exception) {
             FirebaseCrashlytics.getInstance().log("${e.message}")
             return UseCase.error("${e.message}")

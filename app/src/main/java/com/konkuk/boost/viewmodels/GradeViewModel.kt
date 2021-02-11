@@ -122,4 +122,10 @@ class GradeViewModel(
     }
 
     fun getDept() = authRepository.getDept()
+
+    fun makeSimulation() {
+        viewModelScope.launch {
+            gradeRepository.makeSimulation()
+        }
+    }
 }

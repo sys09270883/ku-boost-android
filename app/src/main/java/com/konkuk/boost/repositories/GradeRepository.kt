@@ -31,4 +31,6 @@ interface GradeRepository {
     suspend fun getTotalRank(year: Int, semester: Int): UseCase<RankEntity>
 
     suspend fun makeTotalRank(): UseCase<Unit>
+
+    suspend fun makeSimulation(): UseCase<Unit>
 }

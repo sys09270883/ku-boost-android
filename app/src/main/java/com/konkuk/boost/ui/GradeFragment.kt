@@ -301,6 +301,7 @@ class GradeFragment : Fragment() {
             viewModel.fetchGraduationSimulationFromServer()
             viewModel.fetchAllGradesFromServer()
             viewModel.makeTotalRank()
+            viewModel.makeSimulation()
         }
     }
 
