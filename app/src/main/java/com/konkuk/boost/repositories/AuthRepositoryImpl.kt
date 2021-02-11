@@ -67,6 +67,8 @@ class AuthRepositoryImpl(
 
     override fun getStdNo() = preferenceManager.stdNo
 
+    override fun getState() = preferenceManager.state
+
     override suspend fun setPassword(password: String) {
         preferenceManager.password = password
     }

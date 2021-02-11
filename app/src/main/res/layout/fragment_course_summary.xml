@@ -78,7 +78,7 @@
                 android:layout_marginTop="92dp"
                 android:layout_marginBottom="8dp"
                 android:src="@drawable/profile"
-                app:civ_border_color="@color/reverseThemeColor"
+                app:civ_border_color="@color/white"
                 app:civ_border_width="1dp"
                 app:civ_circle_background_color="@color/pastelLightGray"
                 app:layout_constraintEnd_toEndOf="parent"

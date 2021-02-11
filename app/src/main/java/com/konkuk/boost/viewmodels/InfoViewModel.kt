@@ -9,4 +9,11 @@ class InfoViewModel(
 ): ViewModel() {
 
     val stdNo = MutableLiveData(authRepository.getStdNo())
+
+    val name = MutableLiveData(authRepository.getName())
+
+    val dept = MutableLiveData(authRepository.getDept())
+
+    val state = MutableLiveData(authRepository.getState())
+
 }

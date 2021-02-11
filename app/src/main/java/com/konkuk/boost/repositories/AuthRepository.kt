@@ -21,6 +21,8 @@ interface AuthRepository {
 
     fun getStdNo(): Int
 
+    fun getState(): String
+
     suspend fun setPassword(password: String): Unit
 
     suspend fun makeChangePasswordRequest(

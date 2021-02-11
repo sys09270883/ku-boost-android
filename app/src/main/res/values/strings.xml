@@ -23,6 +23,7 @@
     <string name="prompt_subject_name">과목명</string>
     <string name="prompt_subject_number">학수번호</string>
     <string name="prompt_subject_id">과목번호</string>
+    <string name="prompt_dept">학과</string>
     <string name="prompt_professor">담당교수</string>
     <string name="prompt_grade">학점</string>
     <string name="prompt_std_no">학번</string>
@@ -72,4 +73,6 @@
     <string name="prompt_change_password">비밀번호 변경</string>
     <string name="prompt_confirm">확인</string>
     <string name="prompt_belong">소속</string>
+    <string name="prompt_my_info">내 정보</string>
+    <string name="prompt_state">학적상태</string>
 </resources>
