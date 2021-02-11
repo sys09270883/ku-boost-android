@@ -7,12 +7,12 @@ import org.koin.dsl.module
 
 val repositoryModule = module {
     fun provideLoginRepository(
-        kuisService: KuisService,
+        authService: AuthService,
         preferenceManager: PreferenceManager
-    ): AuthRepository = AuthRepositoryImpl(kuisService, preferenceManager)
+    ): AuthRepository = AuthRepositoryImpl(authService, preferenceManager)
 
     fun provideGradeRepository(
-        authorizedKuisService: AuthorizedKuisService,
+        gradeService: GradeService,
         graduationSimulationDao: GraduationSimulationDao,
         preferenceManager: PreferenceManager,
         gradeDao: GradeDao,
@@ -20,7 +20,7 @@ val repositoryModule = module {
         ozService: OzService
     ): GradeRepository =
         GradeRepositoryImpl(
-            authorizedKuisService,
+            gradeService,
             graduationSimulationDao,
             preferenceManager,
             gradeDao,
@@ -29,12 +29,11 @@ val repositoryModule = module {
         )
 
     fun provideCourseRepository(
-        authorizedKuisService: AuthorizedKuisService,
+        courseService: CourseService,
         preferenceManager: PreferenceManager,
-        likeCourseDao: LikeCourseDao,
-        kupisService: KupisService
+        likeCourseDao: LikeCourseDao
     ): CourseRepository =
-        CourseRepositoryImpl(authorizedKuisService, preferenceManager, likeCourseDao, kupisService)
+        CourseRepositoryImpl(courseService, preferenceManager, likeCourseDao)
 
     fun provideLibraryRepository(
         libraryService: LibraryService,
@@ -44,6 +43,6 @@ val repositoryModule = module {
 
     single { provideLoginRepository(get(), get()) }
     single { provideGradeRepository(get(), get(), get(), get(), get(), get()) }
-    single { provideCourseRepository(get(), get(), get(), get()) }
+    single { provideCourseRepository(get(), get(), get()) }
     single { provideLibraryRepository(get(), get()) }
 }

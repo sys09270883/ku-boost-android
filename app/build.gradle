@@ -20,7 +20,6 @@ android {
         buildConfigField "String", "KUIS_URL", "\"https://kuis.konkuk.ac.kr/\""
         buildConfigField "String", "OZ_URL", "\"https://kureport1.konkuk.ac.kr:8443/\""
         buildConfigField "String", "LIB_URL", "\"https://library.konkuk.ac.kr/\""
-        buildConfigField "String", "KUPIS_URL", "\"https://kupis.konkuk.ac.kr/\""
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         javaCompileOptions {
@@ -62,6 +61,12 @@ dependencies {
     testImplementation 'junit:junit:4.13.1'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    implementation 'androidx.core:core-ktx:1.3.2'
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+    testImplementation 'junit:junit:4.13.1'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.2.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1'
@@ -96,4 +101,5 @@ dependencies {
     implementation group: 'com.kakao.sdk', name: 'kakaolink', version: project.KAKAO_SDK_VERSION
     implementation 'org.jsoup:jsoup:1.13.1'
     implementation "com.github.skydoves:balloon:1.3.0"
+    implementation "androidx.webkit:webkit:1.4.0"
 }
