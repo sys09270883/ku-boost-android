@@ -16,42 +16,34 @@ val apiModule = module {
 
     fun provideOkHttpClient(
         httpLoggingInterceptor: HttpLoggingInterceptor
-    ) = OkHttpClient.Builder()
-        .addInterceptor(httpLoggingInterceptor)
-        .build()
+    ) = OkHttpClient.Builder().addInterceptor(httpLoggingInterceptor).build()
 
     fun provideCookieClient(
         httpLoggingInterceptor: HttpLoggingInterceptor,
         preferenceManager: PreferenceManager
-    ) = OkHttpClient.Builder()
-        .addInterceptor(httpLoggingInterceptor)
-        .addInterceptor {
-            val original = it.request()
-            val cookie = preferenceManager.cookie
+    ) = OkHttpClient.Builder().addInterceptor(httpLoggingInterceptor).addInterceptor {
+        val original = it.request()
+        val cookie = preferenceManager.cookie
 
-            val authorized = original.newBuilder()
-                .addHeader("Cookie", cookie).build()
+        val authorized = original.newBuilder()
+            .addHeader("Cookie", cookie).build()
 
-            it.proceed(authorized)
-        }.build()
+        it.proceed(authorized)
+    }.build()
 
-    fun provideRetrofit(okHttpClient: OkHttpClient, baseUrl: String): Retrofit = Retrofit.Builder()
-        .baseUrl(baseUrl).client(okHttpClient)
-        .addConverterFactory(GsonConverterFactory.create()).build()
-
-    fun provideCookieRetrofit(cookieClient: OkHttpClient, baseUrl: String): Retrofit =
-        Retrofit.Builder()
-            .baseUrl(baseUrl).client(cookieClient)
+    fun provideRetrofit(okHttpClient: OkHttpClient, baseUrl: String): Retrofit =
+        Retrofit.Builder().baseUrl(baseUrl).client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create()).build()
 
-    fun provideAuthService(retrofit: Retrofit): AuthService =
-        retrofit.create(AuthService::class.java)
+    fun provideCookieRetrofit(cookieClient: OkHttpClient, baseUrl: String): Retrofit =
+        Retrofit.Builder().baseUrl(baseUrl).client(cookieClient)
+            .addConverterFactory(GsonConverterFactory.create()).build()
 
-    fun provideGradeService(retrofit: Retrofit): GradeService =
-        retrofit.create(GradeService::class.java)
+    fun provideKuisService(retrofit: Retrofit): KuisService =
+        retrofit.create(KuisService::class.java)
 
-    fun provideCourseService(retrofit: Retrofit): CourseService =
-        retrofit.create(CourseService::class.java)
+    fun provideAuthorizedKuisService(retrofit: Retrofit): AuthorizedKuisService =
+        retrofit.create(AuthorizedKuisService::class.java)
 
     fun provideLibraryService(retrofit: Retrofit): LibraryService =
         retrofit.create(LibraryService::class.java)
@@ -63,8 +55,10 @@ val apiModule = module {
         retrofit.create(KupisService::class.java)
 
     single { provideHttpLoggingInterceptor() }
+
     single(named("default")) { provideOkHttpClient(get()) }
     single(named("cookie")) { provideCookieClient(get(), get()) }
+
     single(named("default-retrofit")) {
         provideRetrofit(
             get(named("default")),
@@ -95,9 +89,9 @@ val apiModule = module {
             BuildConfig.KUPIS_URL
         )
     }
-    single { provideAuthService(get(named("default-retrofit"))) }
-    single { provideGradeService(get(named("cookie-retrofit"))) }
-    single { provideCourseService(get(named("cookie-retrofit"))) }
+
+    single { provideKuisService(get(named("default-retrofit"))) }
+    single { provideAuthorizedKuisService(get(named("cookie-retrofit"))) }
     single { provideLibraryService(get(named("library-retrofit"))) }
     single { provideOzService(get(named("oz-retrofit"))) }
     single { provideKupisService(get(named("kupis-retrofit"))) }

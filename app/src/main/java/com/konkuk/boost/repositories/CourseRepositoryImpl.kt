@@ -1,7 +1,7 @@
 package com.konkuk.boost.repositories
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics
-import com.konkuk.boost.api.CourseService
+import com.konkuk.boost.api.AuthorizedKuisService
 import com.konkuk.boost.api.KupisService
 import com.konkuk.boost.data.course.RegistrationStatus
 import com.konkuk.boost.data.course.SyllabusDetailResponse
@@ -14,7 +14,7 @@ import com.konkuk.boost.utils.UseCase
 import org.jsoup.Jsoup
 
 class CourseRepositoryImpl(
-    private val courseService: CourseService,
+    private val authorizedKuisService: AuthorizedKuisService,
     private val preferenceManager: PreferenceManager,
     private val likeCourseDao: LikeCourseDao,
     private val kupisService: KupisService
@@ -26,7 +26,10 @@ class CourseRepositoryImpl(
         val syllabusResponse: SyllabusResponse
         try {
             syllabusResponse =
-                courseService.fetchAllSyllabus(year, GradeUtils.convertToSemesterCode(semester))
+                authorizedKuisService.fetchAllSyllabus(
+                    year,
+                    GradeUtils.convertToSemesterCode(semester)
+                )
         } catch (e: Exception) {
             FirebaseCrashlytics.getInstance().log("${e.message}")
             return UseCase.error("${e.message}")
@@ -42,7 +45,7 @@ class CourseRepositoryImpl(
     ): UseCase<SyllabusDetailResponse> {
         val syllabusDetailResponse: SyllabusDetailResponse
         try {
-            syllabusDetailResponse = courseService.fetchSyllabus(
+            syllabusDetailResponse = authorizedKuisService.fetchSyllabus(
                 year,
                 GradeUtils.convertToSemesterCode(semester),
                 subjectId
@@ -139,7 +142,8 @@ class CourseRepositoryImpl(
 
                 for (promYear in 1..4) {
                     val semCode = GradeUtils.convertToSemesterCode(semester)
-                    val response = kupisService.getCourseRegistrationStatus(year, semCode, promYear, subjectId)
+                    val response =
+                        kupisService.getCourseRegistrationStatus(year, semCode, promYear, subjectId)
                     val doc = Jsoup.parse(response.string())
                     val contents = doc.select("table tbody tr td")
                     val classBasketNumber = contents.first().text()
