@@ -1,7 +1,7 @@
 package com.konkuk.boost.repositories
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics
-import com.konkuk.boost.api.KuisService
+import com.konkuk.boost.api.AuthService
 import com.konkuk.boost.data.auth.ChangePasswordResponse
 import com.konkuk.boost.data.auth.LoginResponse
 import com.konkuk.boost.persistence.PreferenceManager
@@ -9,7 +9,7 @@ import com.konkuk.boost.utils.UseCase
 import retrofit2.Response
 
 class AuthRepositoryImpl(
-    private val kuisService: KuisService,
+    private val authService: AuthService,
     private val preferenceManager: PreferenceManager
 ) : AuthRepository {
     override suspend fun makeLoginRequest(
@@ -18,7 +18,7 @@ class AuthRepositoryImpl(
     ): UseCase<LoginResponse> {
         val loginResponse: Response<LoginResponse>
         try {
-            loginResponse = kuisService.login(username, password)
+            loginResponse = authService.login(username, password)
         } catch (e: Exception) {
             FirebaseCrashlytics.getInstance().log("${e.message}")
             return UseCase.error("서버에 문제가 발생했습니다.")
@@ -78,7 +78,7 @@ class AuthRepositoryImpl(
         val changePasswordResponse: ChangePasswordResponse
 
         try {
-            changePasswordResponse = kuisService.changePasswordAfter90Days(username, password)
+            changePasswordResponse = authService.changePasswordAfter90Days(username, password)
         } catch (e: Exception) {
             FirebaseCrashlytics.getInstance().log("${e.message}")
             return UseCase.error("${e.message}")
@@ -102,7 +102,7 @@ class AuthRepositoryImpl(
         val changePasswordResponse: ChangePasswordResponse
 
         try {
-            changePasswordResponse = kuisService.changePasswordAfter90Days(
+            changePasswordResponse = authService.changePasswordAfter90Days(
                 username,
                 beforePassword,
                 password,

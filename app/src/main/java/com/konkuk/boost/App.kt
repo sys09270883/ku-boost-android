@@ -18,6 +18,7 @@ class App : Application() {
             androidFileProperties()
             modules(
                 listOf(
+                    fragmentModule,
                     viewModelModule,
                     apiModule,
                     repositoryModule,
