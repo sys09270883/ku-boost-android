@@ -6,7 +6,24 @@ import kotlin.math.floor
 
 object GradeUtils {
 
-    fun foo1(area: String) = when (area[1].toString()) {
+    fun corePerYear(year: Int, area: String) = when (year) {
+        2015 -> core(area)
+        else -> ""
+    }
+
+    fun basicPerYear(year: Int, area: String) = when (year) {
+        2015 -> basicBefore2016(area)
+        2016, 2017, 2018, 2019, 2020 -> basic(area)
+        else -> ""
+    }
+
+    fun advancedPerYear(year: Int, area: String) = when (year) {
+        2016, 2017, 2018, 2019, 2020 -> advanced(area)
+        else -> ""
+    }
+
+    // 핵교 (2015)
+    fun core(area: String) = when (area[1].toString()) {
         "문" -> "문화예술영역"
         "사" -> "사회과학영역"
         "인" -> "인문과학영역"
@@ -15,13 +32,24 @@ object GradeUtils {
         else -> ""
     }
 
-    fun foo2(area: String) = when (area[1].toString()) {
+    // 기교
+    fun basicBefore2016(area: String) = when (area[1].toString()) {
         "교" -> "교양영어1"
         "글" -> "글쓰기1"
         else -> ""
     }
 
-    fun foo3(area: String) = when (area.substring(1, 3)) {
+    fun basic(area: String) = when (area[1].toString()) {
+        "S" -> "SW"
+        "글" -> "글쓰기"
+        "취" -> "취창업"
+        "외" -> "외국어"
+        "인" -> "인성"
+        else -> ""
+    }
+
+    // 심교
+    fun advanced(area: String) = when (area.substring(1, 3)) {
         "사고" -> "사고력증진"
         "인재" -> "글로벌인재양성"
         "학문" -> "학문소양및인성함양"

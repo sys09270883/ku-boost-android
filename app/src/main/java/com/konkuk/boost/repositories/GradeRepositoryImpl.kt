@@ -273,6 +273,7 @@ class GradeRepositoryImpl(
     override suspend fun makeSimulation(): UseCase<Unit> {
         val username = preferenceManager.username
         val stdNo = preferenceManager.stdNo
+        val year = stdNo / 100_000
 
         try {
             val oz = OzEngine.getInstance(username, stdNo.toString())
@@ -293,9 +294,9 @@ class GradeRepositoryImpl(
                     val onlySubjectNumber = subjectId.substring(0, 9)
                     var subjectArea = subjectId.substring(9)
                     subjectArea = when (clf) {
-                        "핵교" -> GradeUtils.foo1(subjectArea)
-                        "기교" -> GradeUtils.foo2(subjectArea)
-                        "심교" -> GradeUtils.foo3(subjectArea)
+                        "핵교" -> GradeUtils.corePerYear(year, subjectArea)
+                        "기교" -> GradeUtils.basicPerYear(year, subjectArea)
+                        "심교" -> GradeUtils.advancedPerYear(year, subjectArea)
                         else -> ""
                     }
 
