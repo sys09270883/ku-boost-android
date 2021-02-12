@@ -55,7 +55,7 @@ interface GradeDao {
         username: String,
         clf: String,
         subjectNumber: String,
-        subjectArea: String = ""
+        subjectArea: String = "",
     ) {
         val gradeEntity = getGradeBySubjectNumber(username, subjectNumber)
         gradeEntity.classification = clf

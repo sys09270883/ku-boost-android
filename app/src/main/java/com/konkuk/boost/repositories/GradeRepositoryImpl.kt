@@ -1,5 +1,6 @@
 package com.konkuk.boost.repositories
 
+import android.util.Log
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.konkuk.boost.api.AuthorizedKuisService
 import com.konkuk.boost.api.OzService
@@ -21,7 +22,8 @@ class GradeRepositoryImpl(
     private val preferenceManager: PreferenceManager,
     private val gradeDao: GradeDao,
     private val rankDao: RankDao,
-    private val ozService: OzService
+    private val ozService: OzService,
+    private val subjectAreaDao: SubjectAreaDao,
 ) : GradeRepository {
     override suspend fun makeGraduationSimulationRequest(): UseCase<GraduationSimulationResponse> {
         val username = preferenceManager.username
@@ -273,7 +275,6 @@ class GradeRepositoryImpl(
     override suspend fun makeSimulation(): UseCase<Unit> {
         val username = preferenceManager.username
         val stdNo = preferenceManager.stdNo
-        val year = stdNo / 100_000
 
         try {
             val oz = OzEngine.getInstance(username, stdNo.toString())
@@ -287,16 +288,35 @@ class GradeRepositoryImpl(
             )
 
             val responseBody = ozService.postOzBinary(requestBody)
-            val simulMap = oz.getSimulMap(responseBody.byteStream())
+            val stream = responseBody.byteStream()
+
+            val (simulMap, electiveMap) = oz.getSimulMap(stream)
+            val subjectAreaList = mutableListOf<SubjectAreaEntity>()
+
+            for (item in electiveMap) {
+                for (elective in item.value) {
+                    val type = when (item.key) {
+                        "basic" -> 1
+                        "core" -> 2
+                        else -> 0
+                    }
+
+                    if (type > 0) {
+                        subjectAreaList.add(SubjectAreaEntity(username, type, elective))
+                    }
+                }
+            }
+
+            subjectAreaDao.insert(*subjectAreaList.toTypedArray())
 
             for ((clf, subjectIdList) in simulMap) {
                 for (subjectId in subjectIdList) {
                     val onlySubjectNumber = subjectId.substring(0, 9)
                     var subjectArea = subjectId.substring(9)
+
                     subjectArea = when (clf) {
-                        "핵교" -> GradeUtils.corePerYear(year, subjectArea)
-                        "기교" -> GradeUtils.basicPerYear(year, subjectArea)
-                        "심교" -> GradeUtils.advancedPerYear(year, subjectArea)
+                        "기교" -> GradeUtils.basic(subjectArea)
+                        "심교", "핵교" -> GradeUtils.core(subjectArea)
                         else -> ""
                     }
 

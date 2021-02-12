@@ -13,11 +13,13 @@ val persistenceModule = module {
             .addMigrations(AppMigration.MIGRATION_1_2)
             .addMigrations(AppMigration.MIGRATION_2_3)
             .addMigrations(AppMigration.MIGRATION_3_4)
+            .addMigrations(AppMigration.MIGRATION_4_5)
             .build()
     }
     single { get<AppDatabase>().graduationSimulationDao() }
     single { get<AppDatabase>().gradeDao() }
     single { get<AppDatabase>().likeCourseDao() }
     single { get<AppDatabase>().rankDao() }
+    single { get<AppDatabase>().subjectAreaDao() }
     single { PreferenceManager(androidApplication()) }
 }
