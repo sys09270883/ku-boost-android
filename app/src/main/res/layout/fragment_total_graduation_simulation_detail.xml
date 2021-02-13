@@ -91,6 +91,7 @@
                 app:cardCornerRadius="10dp"
                 app:cardElevation="5dp"
                 app:cardUseCompatPadding="true"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/electiveTextView">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
