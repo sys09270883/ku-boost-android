@@ -1,6 +1,7 @@
 package com.konkuk.boost.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -8,10 +9,15 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import com.konkuk.boost.R
+import com.konkuk.boost.data.grade.SubjectAreaSection
 import com.konkuk.boost.databinding.FragmentTotalGraduationSimulationDetailBinding
+import com.konkuk.boost.utils.UseCase
 import com.konkuk.boost.viewmodels.GraduationSimulationViewModel
 import com.konkuk.boost.views.TableRowUtils
+import io.github.luizgrp.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapter
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class TotalGraduationSimulationDetailFragment : Fragment() {
@@ -33,15 +39,52 @@ class TotalGraduationSimulationDetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        fetchGraduationSimulation()
+        setElectiveRecyclerViewConfig()
+        fetchElectiveStatus()
+    }
+
+    private fun setElectiveRecyclerViewConfig() {
+        val context = requireContext()
+        val recyclerView = binding.electiveRecyclerView
+        recyclerView.layoutManager = LinearLayoutManager(context)
+        val adapter = SectionedRecyclerViewAdapter()
+        adapter.addSection("basic", SubjectAreaSection(1))
+        adapter.addSection("core", SubjectAreaSection(viewModel.getCoreFlag()))
+        recyclerView.adapter = adapter
+    }
+
+    private fun fetchElectiveStatus() {
+        viewModel.fetchElectiveStatus()
+    }
+
+    private fun fetchGraduationSimulation() {
         viewModel.fetchGraduationSimulationFromLocalDb()
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        observeGraduationSimulation()
+        observeSubjectAreaCounts()
+    }
+
+    private fun observeSubjectAreaCounts() {
+        viewModel.subjectAreaCounts.observe(viewLifecycleOwner) {
+            when (it.status) {
+                UseCase.Status.SUCCESS -> {
+                    updateSubjectAreaStatus()
+                }
+                UseCase.Status.ERROR -> {
+                    Snackbar.make(binding.container, "${it.message}", Snackbar.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+    private fun observeGraduationSimulation() {
         viewModel.graduationSimulation.observe(viewLifecycleOwner) {
-            if (it.data == null)
-                return@observe
-            val simulations = it.data
+            val simulations = it.data ?: return@observe
+
             if (simulations.isEmpty())
                 return@observe
 
@@ -95,6 +138,27 @@ class TotalGraduationSimulationDetailFragment : Fragment() {
                     row.setBackgroundResource(outValue.resourceId)
                 }
             }
+        }
+    }
+
+    private fun updateSubjectAreaStatus() {
+        try {
+            val areaWithCounts = viewModel.getAreaWithCounts()
+            val adapter =
+                binding.electiveRecyclerView.adapter as SectionedRecyclerViewAdapter
+
+            val basicList = areaWithCounts.filter { item -> item.area.type == 1 }
+            val coreList = areaWithCounts.filter { item -> item.area.type == 2 }
+
+            val basicSection = adapter.getSection("basic") as SubjectAreaSection
+            val coreSection = adapter.getSection("core") as SubjectAreaSection
+
+            basicSection.itemList = basicList
+            coreSection.itemList = coreList
+
+            adapter.notifyDataSetChanged()
+        } catch (e: Exception) {
+            Log.e("ku-boost", "${e.message}")
         }
     }
 

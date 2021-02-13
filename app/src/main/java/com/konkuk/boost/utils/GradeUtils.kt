@@ -6,6 +6,34 @@ import kotlin.math.floor
 
 object GradeUtils {
 
+    fun core(area: String): String {
+        var str = area.replace("(", "")
+        str = str.replace(")", "")
+        str = str.replace("E", "")
+
+        return when (str) {
+            "문" -> "문화예술영역"
+            "사" -> "사회과학영역"
+            "인" -> "인문과학영역"
+            "자" -> "자연과학기술융합영역"
+            "외" -> "제2외국어영역"
+            "사고" -> "사고력증진"
+            "인재" -> "글로벌인재양성"
+            "학문" -> "학문소양및인성함양"
+            else -> ""
+        }
+    }
+
+    fun basic(area: String) = when (area[1]) {
+        'S' -> "SW"
+        '글' -> "글쓰기"
+        '취' -> "취창업"
+        '외' -> "외국어"
+        '인' -> "인성"
+        '교' -> "교양영어"
+        else -> ""
+    }
+
     // 각 학기별 평균
     fun average(allGrades: List<GradeEntity>): List<String> {
         val keys = sortedSetOf<String>()

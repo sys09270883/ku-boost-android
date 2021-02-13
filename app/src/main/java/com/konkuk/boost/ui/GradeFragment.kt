@@ -22,7 +22,6 @@ import com.konkuk.boost.adapters.GradeAdapter
 import com.konkuk.boost.data.grade.ParcelableGrade
 import com.konkuk.boost.databinding.FragmentGradeBinding
 import com.konkuk.boost.persistence.GradeEntity
-import com.konkuk.boost.persistence.GraduationSimulationEntity
 import com.konkuk.boost.utils.GradeUtils
 import com.konkuk.boost.utils.StorageUtils.checkStoragePermission
 import com.konkuk.boost.utils.UseCase
@@ -325,16 +324,7 @@ class GradeFragment : Fragment() {
 
     private fun observeGraduationSimulation() {
         viewModel.graduationSimulation.observe(viewLifecycleOwner) {
-            if (it.data == null)
-                return@observe
-
-            val simulations: List<GraduationSimulationEntity>
-
-            try {
-                simulations = it.data
-            } catch (e: Exception) {
-                return@observe
-            }
+            val simulations = it.data ?: return@observe
 
             if (simulations.isEmpty())
                 return@observe

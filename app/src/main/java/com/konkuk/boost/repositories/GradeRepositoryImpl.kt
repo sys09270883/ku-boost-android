@@ -4,10 +4,12 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.konkuk.boost.api.AuthorizedKuisService
 import com.konkuk.boost.api.OzService
 import com.konkuk.boost.data.grade.GraduationSimulationResponse
+import com.konkuk.boost.data.grade.SubjectAreaCount
 import com.konkuk.boost.data.grade.UserInformationResponse
 import com.konkuk.boost.data.grade.ValidGradesResponse
 import com.konkuk.boost.persistence.*
 import com.konkuk.boost.utils.DateTimeConverter
+import com.konkuk.boost.utils.GradeUtils
 import com.konkuk.boost.utils.OzEngine
 import com.konkuk.boost.utils.UseCase
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -20,7 +22,8 @@ class GradeRepositoryImpl(
     private val preferenceManager: PreferenceManager,
     private val gradeDao: GradeDao,
     private val rankDao: RankDao,
-    private val ozService: OzService
+    private val ozService: OzService,
+    private val subjectAreaDao: SubjectAreaDao,
 ) : GradeRepository {
     override suspend fun makeGraduationSimulationRequest(): UseCase<GraduationSimulationResponse> {
         val username = preferenceManager.username
@@ -141,6 +144,7 @@ class GradeRepositoryImpl(
                             subjectName = grade.subjectName ?: "",
                             subjectNumber = grade.subjectNumber ?: "",
                             subjectPoint = grade.subjectPoint ?: 0,
+                            subjectArea = "",
                             valid = false,
                             modifiedAt = System.currentTimeMillis()
                         )
@@ -265,6 +269,139 @@ class GradeRepositoryImpl(
         }
 
         return UseCase.success(Unit)
+    }
+
+    @KoinApiExtension
+    override suspend fun makeSimulation(): UseCase<Unit> {
+        val username = preferenceManager.username
+        val stdNo = preferenceManager.stdNo
+
+        try {
+            val oz = OzEngine.getInstance(username, stdNo.toString())
+            val file = oz.makeSimulFile()
+
+            val params = file.readBytes()
+            val requestBody = params.toRequestBody(
+                "application/octet-stream".toMediaTypeOrNull(),
+                0,
+                params.size
+            )
+
+            val responseBody = ozService.postOzBinary(requestBody)
+            val stream = responseBody.byteStream()
+
+            val (simulMap, electiveMap) = oz.getSimulMap(stream)
+            val subjectAreaList = mutableListOf<SubjectAreaEntity>()
+
+            for (item in electiveMap) {
+                for (elective in item.value) {
+                    val type = when (item.key) {
+                        "basic" -> 1
+                        "core" -> 2
+                        else -> 0
+                    }
+
+                    if (type > 0) {
+                        subjectAreaList.add(SubjectAreaEntity(username, type, elective))
+                    }
+                }
+            }
+
+            subjectAreaDao.insert(*subjectAreaList.toTypedArray())
+
+            for ((clf, subjectIdList) in simulMap) {
+                for (subjectId in subjectIdList) {
+                    val onlySubjectNumber = subjectId.substring(0, 9)
+                    var subjectArea = subjectId.substring(9)
+
+                    subjectArea = when (clf) {
+                        "기교" -> GradeUtils.basic(subjectArea)
+                        "심교", "핵교" -> GradeUtils.core(subjectArea)
+                        else -> ""
+                    }
+
+                    gradeDao.updateClassificationBySubjectNumber(
+                        username,
+                        clf,
+                        onlySubjectNumber,
+                        subjectArea
+                    )
+                }
+            }
+        } catch (e: Exception) {
+            FirebaseCrashlytics.getInstance().log("${e.message}")
+            return UseCase.error("${e.message}")
+        }
+
+        return UseCase.success(Unit)
+    }
+
+    override suspend fun getAllSubjectArea(): UseCase<List<SubjectAreaEntity>> {
+        val username = preferenceManager.username
+        val subjectAreas: List<SubjectAreaEntity>
+
+        try {
+            subjectAreas = subjectAreaDao.getAll(username)
+        } catch (e: Exception) {
+            FirebaseCrashlytics.getInstance().log("${e.message}")
+            return UseCase.error("${e.message}")
+        }
+
+        return UseCase.success(subjectAreas)
+    }
+
+    override suspend fun getSubjectAreaCounts(): UseCase<List<SubjectAreaCount>> {
+        val username = preferenceManager.username
+        val stdNo = preferenceManager.stdNo
+        val year = stdNo / 100_000
+        val basicType = "기교"
+        val coreType = if (year > 2015) "심교" else "핵교"
+        val subjectAreas: List<SubjectAreaEntity>
+        val subjectAreaCounts = mutableListOf<SubjectAreaCount>()
+        val basicGrades: List<GradeEntity>
+        val coreGrades: List<GradeEntity>
+
+        try {
+            subjectAreas = subjectAreaDao.getAll(username)
+            for (area in subjectAreas) {
+                subjectAreaCounts += SubjectAreaCount(area)
+            }
+            basicGrades = gradeDao.getGradesByClassification(username, basicType)
+            coreGrades = gradeDao.getGradesByClassification(username, coreType)
+
+            for (grade in basicGrades) {
+                for (areaWithCount in subjectAreaCounts) {
+                    val area = areaWithCount.area
+
+                    if (area.type != 1) {
+                        continue
+                    }
+
+                    if (area.subjectAreaName == grade.subjectArea) {
+                        areaWithCount.count += 1
+                    }
+                }
+            }
+
+            for (grade in coreGrades) {
+                for (areaWithCount in subjectAreaCounts) {
+                    val area = areaWithCount.area
+
+                    if (area.type != 2) {
+                        continue
+                    }
+
+                    if (area.subjectAreaName == grade.subjectArea) {
+                        areaWithCount.count += 1
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            FirebaseCrashlytics.getInstance().log("${e.message}")
+            return UseCase.error("${e.message}")
+        }
+
+        return UseCase.success(subjectAreaCounts)
     }
 
 }

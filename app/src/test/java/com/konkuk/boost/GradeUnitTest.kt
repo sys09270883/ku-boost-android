@@ -32,4 +32,16 @@ class GradeUnitTest {
 
         assert(latestYear == 2021 && latestSemester == 3)
     }
+
+    @Test
+    fun `grade_stringReplaceTest`() {
+        val target = "BQAA16970(교)(E)"
+        val area = target.substring(9)
+
+        var str = area.replace("(", "")
+        str = str.replace(")", "")
+        str = str.replace("E", "")
+
+        assert(str == "교")
+    }
 }

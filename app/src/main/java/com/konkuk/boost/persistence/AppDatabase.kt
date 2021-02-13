@@ -4,8 +4,14 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 
 @Database(
-    entities = [GraduationSimulationEntity::class, GradeEntity::class, LikeCourseEntity::class, RankEntity::class],
-    version = 3,
+    entities = [
+        GraduationSimulationEntity::class,
+        GradeEntity::class,
+        LikeCourseEntity::class,
+        RankEntity::class,
+        SubjectAreaEntity::class
+    ],
+    version = 5,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -16,4 +22,6 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun likeCourseDao(): LikeCourseDao
 
     abstract fun rankDao(): RankDao
+
+    abstract fun subjectAreaDao(): SubjectAreaDao
 }
