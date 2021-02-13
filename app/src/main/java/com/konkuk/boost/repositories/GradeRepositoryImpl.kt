@@ -1,10 +1,10 @@
 package com.konkuk.boost.repositories
 
-import android.util.Log
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.konkuk.boost.api.AuthorizedKuisService
 import com.konkuk.boost.api.OzService
 import com.konkuk.boost.data.grade.GraduationSimulationResponse
+import com.konkuk.boost.data.grade.SubjectAreaCount
 import com.konkuk.boost.data.grade.UserInformationResponse
 import com.konkuk.boost.data.grade.ValidGradesResponse
 import com.konkuk.boost.persistence.*
@@ -334,6 +334,74 @@ class GradeRepositoryImpl(
         }
 
         return UseCase.success(Unit)
+    }
+
+    override suspend fun getAllSubjectArea(): UseCase<List<SubjectAreaEntity>> {
+        val username = preferenceManager.username
+        val subjectAreas: List<SubjectAreaEntity>
+
+        try {
+            subjectAreas = subjectAreaDao.getAll(username)
+        } catch (e: Exception) {
+            FirebaseCrashlytics.getInstance().log("${e.message}")
+            return UseCase.error("${e.message}")
+        }
+
+        return UseCase.success(subjectAreas)
+    }
+
+    override suspend fun getSubjectAreaCounts(): UseCase<List<SubjectAreaCount>> {
+        val username = preferenceManager.username
+        val stdNo = preferenceManager.stdNo
+        val year = stdNo / 100_000
+        val basicType = "기교"
+        val coreType = if (year > 2015) "심교" else "핵교"
+        val subjectAreas: List<SubjectAreaEntity>
+        val subjectAreaCounts = mutableListOf<SubjectAreaCount>()
+        val basicGrades: List<GradeEntity>
+        val coreGrades: List<GradeEntity>
+
+        try {
+            subjectAreas = subjectAreaDao.getAll(username)
+            for (area in subjectAreas) {
+                subjectAreaCounts += SubjectAreaCount(area)
+            }
+            basicGrades = gradeDao.getGradesByClassification(username, basicType)
+            coreGrades = gradeDao.getGradesByClassification(username, coreType)
+
+            for (grade in basicGrades) {
+                for (areaWithCount in subjectAreaCounts) {
+                    val area = areaWithCount.area
+
+                    if (area.type != 1) {
+                        continue
+                    }
+
+                    if (area.subjectAreaName == grade.subjectArea) {
+                        areaWithCount.count += 1
+                    }
+                }
+            }
+
+            for (grade in coreGrades) {
+                for (areaWithCount in subjectAreaCounts) {
+                    val area = areaWithCount.area
+
+                    if (area.type != 2) {
+                        continue
+                    }
+
+                    if (area.subjectAreaName == grade.subjectArea) {
+                        areaWithCount.count += 1
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            FirebaseCrashlytics.getInstance().log("${e.message}")
+            return UseCase.error("${e.message}")
+        }
+
+        return UseCase.success(subjectAreaCounts)
     }
 
 }

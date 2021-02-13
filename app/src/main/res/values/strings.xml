@@ -72,4 +72,8 @@
     <string name="prompt_change_password">비밀번호 변경</string>
     <string name="prompt_confirm">확인</string>
     <string name="prompt_belong">소속</string>
+    <string name="prompt_elective_status">선택교양이수현황</string>
+    <string name="prompt_basic_elective">기교</string>
+    <string name="prompt_core_elective">핵교</string>
+    <string name="prompt_advanced_elective">심교</string>
 </resources>
