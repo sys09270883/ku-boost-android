@@ -4,6 +4,7 @@ import androidx.room.*
 import com.konkuk.boost.persistence.GradeContract.GradeEntry.CLASSIFICATION
 import com.konkuk.boost.persistence.GradeContract.GradeEntry.SEMESTER
 import com.konkuk.boost.persistence.GradeContract.GradeEntry.SUBJECT_ID
+import com.konkuk.boost.persistence.GradeContract.GradeEntry.SUBJECT_NUMBER
 import com.konkuk.boost.persistence.GradeContract.GradeEntry.TABLE_NAME
 import com.konkuk.boost.persistence.GradeContract.GradeEntry.USERNAME
 import com.konkuk.boost.persistence.GradeContract.GradeEntry.VALID
@@ -45,4 +46,23 @@ interface GradeDao {
 
     @Query("DELETE FROM $TABLE_NAME WHERE $USERNAME = :username AND $YEAR = :year AND $SEMESTER = :semester")
     suspend fun removeGrades(username: String, year: Int, semester: Int)
+
+    @Query("SELECT * FROM $TABLE_NAME WHERE $USERNAME = :username AND $SUBJECT_NUMBER = :subjectNumber")
+    suspend fun getGradeBySubjectNumber(username: String, subjectNumber: String): GradeEntity
+
+    @Transaction
+    suspend fun updateClassificationBySubjectNumber(
+        username: String,
+        clf: String,
+        subjectNumber: String,
+        subjectArea: String = "",
+    ) {
+        val gradeEntity = getGradeBySubjectNumber(username, subjectNumber)
+        gradeEntity.classification = clf
+
+        if (subjectArea.isNotBlank())
+            gradeEntity.subjectArea = subjectArea
+
+        insertGrade(gradeEntity)
+    }
 }

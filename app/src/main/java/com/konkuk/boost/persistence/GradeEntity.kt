@@ -14,7 +14,7 @@ data class GradeEntity(
     @ColumnInfo(name = GradeEntry.EVALUATION_METHOD) val evaluationMethod: String,
     @ColumnInfo(name = GradeEntry.YEAR) val year: Int,
     @ColumnInfo(name = GradeEntry.SEMESTER) val semester: Int,
-    @ColumnInfo(name = GradeEntry.CLASSIFICATION) val classification: String,
+    @ColumnInfo(name = GradeEntry.CLASSIFICATION) var classification: String,
     @ColumnInfo(name = GradeEntry.CHARACTER_GRADE) val characterGrade: String,
     @ColumnInfo(name = GradeEntry.GRADE) val grade: Float,
     @ColumnInfo(name = GradeEntry.PROFESSOR) val professor: String,
@@ -22,7 +22,8 @@ data class GradeEntity(
     @ColumnInfo(name = GradeEntry.SUBJECT_NAME) val subjectName: String,
     @ColumnInfo(name = GradeEntry.SUBJECT_NUMBER) val subjectNumber: String,
     @ColumnInfo(name = GradeEntry.SUBJECT_POINT) val subjectPoint: Int,
-    @ColumnInfo(name = GradeEntry.VALID) val valid: Boolean,
+    @ColumnInfo(name = GradeEntry.SUBJECT_AREA) var subjectArea: String,
+    @ColumnInfo(name = GradeEntry.VALID) var valid: Boolean,
     @ColumnInfo(
         name = GradeEntry.MODIFIED_AT,
         defaultValue = "CURRENT_TIMESTAMP"

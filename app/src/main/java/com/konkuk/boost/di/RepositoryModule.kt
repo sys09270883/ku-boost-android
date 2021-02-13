@@ -17,7 +17,8 @@ val repositoryModule = module {
         preferenceManager: PreferenceManager,
         gradeDao: GradeDao,
         rankDao: RankDao,
-        ozService: OzService
+        ozService: OzService,
+        subjectAreaDao: SubjectAreaDao
     ): GradeRepository =
         GradeRepositoryImpl(
             authorizedKuisService,
@@ -25,7 +26,8 @@ val repositoryModule = module {
             preferenceManager,
             gradeDao,
             rankDao,
-            ozService
+            ozService,
+            subjectAreaDao
         )
 
     fun provideCourseRepository(
@@ -43,7 +45,7 @@ val repositoryModule = module {
         LibraryResponseImpl(libraryService, preferenceManager)
 
     single { provideLoginRepository(get(), get()) }
-    single { provideGradeRepository(get(), get(), get(), get(), get(), get()) }
+    single { provideGradeRepository(get(), get(), get(), get(), get(), get(), get()) }
     single { provideCourseRepository(get(), get(), get(), get()) }
     single { provideLibraryRepository(get(), get()) }
 }
