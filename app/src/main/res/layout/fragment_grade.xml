@@ -6,7 +6,11 @@
     <data>
 
         <variable
-            name="viewModel"
+            name="mainViewModel"
+            type="com.konkuk.boost.viewmodels.MainFragmentViewModel" />
+
+        <variable
+            name="gradeViewModel"
             type="com.konkuk.boost.viewmodels.GradeViewModel" />
     </data>
 
@@ -61,7 +65,7 @@
                         android:text="@string/prompt_grade_no_data"
                         android:textSize="32sp"
                         android:textStyle="bold"
-                        app:bind_visibility="@{viewModel.currentGrades}"
+                        app:bind_visibility="@{gradeViewModel.currentGrades}"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -74,7 +78,7 @@
                         android:layout_marginTop="16dp"
                         android:layout_marginBottom="16dp"
                         android:clickable="false"
-                        app:bind_visibility="@{viewModel.currentGrades}"
+                        app:bind_visibility="@{gradeViewModel.currentGrades}"
                         app:layout_constraintEnd_toStartOf="@id/currentMajorPieChart"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/currentGradesTitleTextView"
@@ -87,7 +91,7 @@
                         android:layout_marginTop="16dp"
                         android:layout_marginBottom="16dp"
                         android:clickable="false"
-                        app:bind_visibility="@{viewModel.currentGrades}"
+                        app:bind_visibility="@{gradeViewModel.currentGrades}"
                         app:layout_constraintEnd_toStartOf="@id/currentSummaryPieChart"
                         app:layout_constraintStart_toEndOf="@id/currentTotalPieChart"
                         app:layout_constraintTop_toBottomOf="@+id/currentGradesTitleTextView"
@@ -100,7 +104,7 @@
                         android:layout_marginTop="16dp"
                         android:layout_marginBottom="16dp"
                         android:clickable="false"
-                        app:bind_visibility="@{viewModel.currentGrades}"
+                        app:bind_visibility="@{gradeViewModel.currentGrades}"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@id/currentMajorPieChart"
                         app:layout_constraintTop_toBottomOf="@+id/currentGradesTitleTextView"
@@ -116,7 +120,7 @@
                         android:layout_marginBottom="16dp"
                         android:overScrollMode="never"
                         android:paddingBottom="20dp"
-                        app:bind_visibility="@{viewModel.currentGrades}"
+                        app:bind_visibility="@{gradeViewModel.currentGrades}"
                         app:layout_behavior="@string/appbar_scrolling_view_behavior"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -165,7 +169,7 @@
                         android:text="@string/prompt_grade_no_data"
                         android:textSize="32sp"
                         android:textStyle="bold"
-                        app:bind_visibility="@{viewModel.allValidGrades}"
+                        app:bind_visibility="@{gradeViewModel.allValidGrades}"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -180,7 +184,7 @@
                         android:layout_marginEnd="16dp"
                         android:layout_marginBottom="16dp"
                         android:src="@drawable/ic_baseline_more_vert_24"
-                        app:bind_grade_visibility="@{viewModel.allValidGrades}"
+                        app:bind_grade_visibility="@{gradeViewModel.allValidGrades}"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         tools:ignore="ContentDescription" />
@@ -192,7 +196,7 @@
                         android:layout_marginTop="16dp"
                         android:layout_marginBottom="16dp"
                         android:clickable="false"
-                        app:bind_visibility="@{viewModel.allValidGrades}"
+                        app:bind_visibility="@{gradeViewModel.allValidGrades}"
                         app:layout_constraintEnd_toStartOf="@id/majorPieChart"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/allGradesTitleTextView"
@@ -205,7 +209,7 @@
                         android:layout_marginTop="16dp"
                         android:layout_marginBottom="16dp"
                         android:clickable="false"
-                        app:bind_visibility="@{viewModel.allValidGrades}"
+                        app:bind_visibility="@{gradeViewModel.allValidGrades}"
                         app:layout_constraintEnd_toStartOf="@id/summaryPieChart"
                         app:layout_constraintStart_toEndOf="@id/totalPieChart"
                         app:layout_constraintTop_toBottomOf="@+id/allGradesTitleTextView"
@@ -218,7 +222,7 @@
                         android:layout_marginTop="16dp"
                         android:layout_marginBottom="16dp"
                         android:clickable="false"
-                        app:bind_visibility="@{viewModel.allValidGrades}"
+                        app:bind_visibility="@{gradeViewModel.allValidGrades}"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@id/majorPieChart"
                         app:layout_constraintTop_toBottomOf="@+id/allGradesTitleTextView"
@@ -233,7 +237,7 @@
                         android:layout_marginEnd="16dp"
                         android:layout_marginBottom="16dp"
                         android:clickable="false"
-                        app:bind_visibility="@{viewModel.allValidGrades}"
+                        app:bind_visibility="@{gradeViewModel.allValidGrades}"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/summaryPieChart" />
@@ -296,7 +300,7 @@
                         android:layout_marginEnd="16dp"
                         android:layout_marginBottom="16dp"
                         android:src="@drawable/ic_baseline_more_vert_24"
-                        app:bind_simul_visibility="@{viewModel.graduationSimulation}"
+                        app:bind_simul_visibility="@{gradeViewModel.graduationSimulation}"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         tools:ignore="ContentDescription" />

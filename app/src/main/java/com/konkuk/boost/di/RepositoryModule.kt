@@ -8,8 +8,9 @@ import org.koin.dsl.module
 val repositoryModule = module {
     fun provideLoginRepository(
         kuisService: KuisService,
-        preferenceManager: PreferenceManager
-    ): AuthRepository = AuthRepositoryImpl(kuisService, preferenceManager)
+        preferenceManager: PreferenceManager,
+        authorizedKuisService: AuthorizedKuisService
+    ): AuthRepository = AuthRepositoryImpl(kuisService, preferenceManager, authorizedKuisService)
 
     fun provideGradeRepository(
         authorizedKuisService: AuthorizedKuisService,
@@ -44,7 +45,7 @@ val repositoryModule = module {
     ): LibraryRepository =
         LibraryResponseImpl(libraryService, preferenceManager)
 
-    single { provideLoginRepository(get(), get()) }
+    single { provideLoginRepository(get(), get(), get()) }
     single { provideGradeRepository(get(), get(), get(), get(), get(), get(), get()) }
     single { provideCourseRepository(get(), get(), get(), get()) }
     single { provideLibraryRepository(get(), get()) }

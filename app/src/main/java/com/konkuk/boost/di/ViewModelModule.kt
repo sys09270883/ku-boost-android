@@ -13,7 +13,7 @@ val viewModelModule = module {
     viewModel { GraduationSimulationViewModel(get()) }
     viewModel { GraduationSimulationDetailViewModel(get()) }
     viewModel { CourseViewModel(get()) }
-    viewModel { MainFragmentViewModel(get()) }
+    viewModel { MainFragmentViewModel(get(), get(), get()) }
     viewModel { QRCodeViewModel(get(), get()) }
     viewModel { SettingsViewModel(get()) }
     viewModel { CourseSummaryViewModel(get()) }

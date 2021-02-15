@@ -1,5 +1,6 @@
 package com.konkuk.boost.repositories
 
+import android.util.Log
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.konkuk.boost.api.AuthorizedKuisService
 import com.konkuk.boost.api.OzService
@@ -57,6 +58,7 @@ class GradeRepositoryImpl(
             }
 
         } catch (e: Exception) {
+            Log.e("ku-boost", "${e.message}")
             FirebaseCrashlytics.getInstance().log("${e.message}")
             return UseCase.error("${e.message}")
         }
