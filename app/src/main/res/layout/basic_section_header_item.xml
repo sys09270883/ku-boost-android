@@ -7,7 +7,8 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="12dp"
+        android:layout_marginVertical="12dp"
+        android:layout_marginHorizontal="16dp"
         android:textStyle="bold"
         android:text="@string/prompt_basic_elective"
         android:textColor="@color/appPrimaryHighlightColor"
