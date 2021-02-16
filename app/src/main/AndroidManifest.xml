@@ -48,4 +48,8 @@
             android:value="@string/kakao_app_key" />
     </application>
 
+    <queries>
+        <package android:name="com.kakao.talk" />
+    </queries>
+
 </manifest>
