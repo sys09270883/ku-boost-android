@@ -100,9 +100,12 @@ class LikeCourseAdapter :
                 registrations[i].text = list[i].registrationNumber
                 limited[i].text = list[i].limitedNumber
 
-                val basket = list[i].classBasketNumber.toInt()
-                val registration = list[i].registrationNumber.toInt()
-                val limited = list[i].limitedNumber.toInt()
+                val basket =
+                    if (list[i].classBasketNumber.isBlank()) 0 else list[i].classBasketNumber.toInt()
+                val registration =
+                    if (list[i].registrationNumber.isBlank()) 0 else list[i].registrationNumber.toInt()
+                val limited =
+                    if (list[i].limitedNumber.isBlank()) 0 else list[i].limitedNumber.toInt()
 
                 if (basket > limited - registration) {
                     results[i].text = "인원초과"

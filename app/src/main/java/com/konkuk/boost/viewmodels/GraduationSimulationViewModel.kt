@@ -43,5 +43,6 @@ class GraduationSimulationViewModel(private val gradeRepository: GradeRepository
         }
     }
 
-    fun getAreaWithCounts() = subjectAreaCounts.value?.data ?: throw Exception("subjectAreaCounts are empty.")
+    fun getAreaWithCounts() =
+        subjectAreaCounts.value?.data ?: throw Exception("subjectAreaCounts are empty.")
 }

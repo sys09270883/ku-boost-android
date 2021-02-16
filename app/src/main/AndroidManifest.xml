@@ -25,6 +25,7 @@
         </activity>
         <activity
             android:name=".ui.MainActivity"
+            android:screenOrientation="user"
             android:theme="@style/Theme.KUBoost">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -46,5 +47,9 @@
             android:name="com.kakao.sdk.AppKey"
             android:value="@string/kakao_app_key" />
     </application>
+
+    <queries>
+        <package android:name="com.kakao.talk" />
+    </queries>
 
 </manifest>

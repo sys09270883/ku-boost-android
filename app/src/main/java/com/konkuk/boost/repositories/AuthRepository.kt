@@ -2,6 +2,7 @@ package com.konkuk.boost.repositories
 
 import com.konkuk.boost.data.auth.ChangePasswordResponse
 import com.konkuk.boost.data.auth.LoginResponse
+import com.konkuk.boost.data.auth.StudentInfoResponse
 import com.konkuk.boost.utils.UseCase
 
 interface AuthRepository {
@@ -21,7 +22,9 @@ interface AuthRepository {
 
     fun getStdNo(): Int
 
-    suspend fun setPassword(password: String): Unit
+    fun getState(): String
+
+    suspend fun setPassword(password: String)
 
     suspend fun makeChangePasswordRequest(
         username: String,
@@ -35,4 +38,6 @@ interface AuthRepository {
         password2: String,
         procDiv: String = ""
     ): UseCase<ChangePasswordResponse>
+
+    suspend fun makeStudentInfoRequest(): UseCase<StudentInfoResponse>
 }

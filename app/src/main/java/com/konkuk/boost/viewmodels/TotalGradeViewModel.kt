@@ -15,7 +15,7 @@ import kotlinx.coroutines.withContext
 class TotalGradeViewModel(
     private val authRepository: AuthRepository,
     private val gradeRepository: GradeRepository
-): ViewModel() {
+) : ViewModel() {
 
     private val fetched = MutableLiveData(false)
 
@@ -24,18 +24,10 @@ class TotalGradeViewModel(
     var allValidGrades = MutableLiveData<UseCase<List<GradeEntity>>>()
 
     fun fetchAllGradesFromLocal() {
-        // 전체 성적조회 로딩
-
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                // 서버에서 유효한 성적 정보를 가져와 로컬 DB 업데이트
-                gradeRepository.makeAllValidGradesRequest()
-            }
-            withContext(Dispatchers.IO) {
-                // 로컬 DB에 있는 데이터를 가져와 LiveData 업데이트
                 allValidGrades.postValue(gradeRepository.getAllValidGrades())
             }
-
             fetched.postValue(true)
         }
     }

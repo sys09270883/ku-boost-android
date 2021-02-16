@@ -18,9 +18,7 @@ interface GradeRepository {
 
     fun getStdNo(): Int
 
-    suspend fun makeAllGradesRequest(): UseCase<Unit>
-
-    suspend fun makeAllValidGradesRequest(): UseCase<Unit>
+    suspend fun makeValidGradesAndUpdateClassification(): UseCase<Unit>
 
     suspend fun getAllValidGrades(): UseCase<List<GradeEntity>>
 
@@ -33,8 +31,6 @@ interface GradeRepository {
     suspend fun getTotalRank(year: Int, semester: Int): UseCase<RankEntity>
 
     suspend fun makeTotalRank(): UseCase<Unit>
-
-    suspend fun makeSimulation(): UseCase<Unit>
 
     suspend fun getAllSubjectArea(): UseCase<List<SubjectAreaEntity>>
 

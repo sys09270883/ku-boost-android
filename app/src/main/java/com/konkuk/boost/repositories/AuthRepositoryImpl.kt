@@ -1,16 +1,20 @@
 package com.konkuk.boost.repositories
 
+import android.util.Log
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import com.konkuk.boost.api.AuthorizedKuisService
 import com.konkuk.boost.api.KuisService
 import com.konkuk.boost.data.auth.ChangePasswordResponse
 import com.konkuk.boost.data.auth.LoginResponse
+import com.konkuk.boost.data.auth.StudentInfoResponse
 import com.konkuk.boost.persistence.PreferenceManager
 import com.konkuk.boost.utils.UseCase
 import retrofit2.Response
 
 class AuthRepositoryImpl(
     private val kuisService: KuisService,
-    private val preferenceManager: PreferenceManager
+    private val preferenceManager: PreferenceManager,
+    private val authorizedKuisService: AuthorizedKuisService,
 ) : AuthRepository {
     override suspend fun makeLoginRequest(
         username: String,
@@ -67,6 +71,8 @@ class AuthRepositoryImpl(
 
     override fun getStdNo() = preferenceManager.stdNo
 
+    override fun getState() = preferenceManager.state
+
     override suspend fun setPassword(password: String) {
         preferenceManager.password = password
     }
@@ -120,5 +126,19 @@ class AuthRepositoryImpl(
             "PASS" -> UseCase.success(changePasswordResponse, "90일 후 변경하기로 설정했습니다.")
             else -> UseCase.error("서버에 문제가 발생했습니다.")
         }
+    }
+
+    override suspend fun makeStudentInfoRequest(): UseCase<StudentInfoResponse> {
+        val stdNo = preferenceManager.stdNo
+
+        val studentInfoResponse: StudentInfoResponse
+        try {
+            studentInfoResponse = authorizedKuisService.fetchStudentInfo(stdNo)
+        } catch (e: Exception) {
+            Log.e("ku-boost", "${e.message}")
+            return UseCase.error("${e.message}")
+        }
+
+        return UseCase.success(studentInfoResponse)
     }
 }
