@@ -17,7 +17,6 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.koin.core.component.KoinApiExtension
 
-// TODO: total grade, valid grade, update graduation simulation 이 세가지 과정을 atomic 하게 변경
 class GradeRepositoryImpl(
     private val authorizedKuisService: AuthorizedKuisService,
     private val graduationSimulationDao: GraduationSimulationDao,
@@ -105,84 +104,6 @@ class GradeRepositoryImpl(
 
     override fun getStdNo(): Int = preferenceManager.stdNo
 
-    override suspend fun makeAllGradesRequest(): UseCase<Unit> {
-        val allGrades = mutableListOf<GradeEntity>()
-        // 1학기: 1, 여름학기: 2, 2학기: 3, 겨울학기: 4
-        val semesterConverter = hashMapOf(1 to 1, 4 to 2, 2 to 3, 5 to 4)
-
-        try {
-            val stdNo = preferenceManager.stdNo
-            val username = preferenceManager.username
-            val startYear = stdNo.toString().substring(0, 4).toInt()
-            val endYear = DateTimeConverter.currentYear().toInt()
-            val semesters = intArrayOf(5, 2, 4, 1)
-
-            var isLastSemesterQueried = false
-
-            for (year in startYear..endYear) {
-                for (semester in semesters) {
-                    val gradeResponse = authorizedKuisService.fetchRegularGrade(
-                        stdNo = stdNo,
-                        year = year,
-                        semester = "B0101$semester",
-                        curDate = DateTimeConverter.today()
-                    )
-
-                    if (year == endYear && !isLastSemesterQueried && gradeResponse.grades.isNotEmpty()) {
-                        gradeDao.removeGrades(username, year, semesterConverter[semester]!!)
-                        isLastSemesterQueried = true
-                    }
-
-                    for (grade in gradeResponse.grades) {
-                        allGrades += GradeEntity(
-                            username = username,
-                            evaluationMethod = grade.evaluationMethod ?: "미정",
-                            year = year,
-                            semester = semesterConverter[semester]!!,
-                            classification = grade.classification,
-                            characterGrade = grade.characterGrade ?: "",
-                            grade = grade.grade ?: 0.0f,
-                            professor = grade.professor ?: "",
-                            subjectId = grade.subjectId,
-                            subjectName = grade.subjectName ?: "",
-                            subjectNumber = grade.subjectNumber ?: "",
-                            subjectPoint = grade.subjectPoint ?: 0,
-                            subjectArea = "",
-                            valid = false,
-                            modifiedAt = System.currentTimeMillis()
-                        )
-                    }
-                }
-            }
-
-            gradeDao.insertGrade(*allGrades.toTypedArray())
-            preferenceManager.hasData = true
-        } catch (e: Exception) {
-            FirebaseCrashlytics.getInstance().log("${e.message}")
-            return UseCase.error("${e.message}")
-        }
-
-        return UseCase.success(Unit)
-    }
-
-    override suspend fun makeAllValidGradesRequest(): UseCase<Unit> {
-        val stdNo = preferenceManager.stdNo
-        val username = preferenceManager.username
-        val validGradesResponse: ValidGradesResponse
-
-        try {
-            validGradesResponse = authorizedKuisService.fetchValidGrades(stdNo = stdNo)
-            val validGrades = validGradesResponse.validGrades
-            for (validGrade in validGrades) {
-                gradeDao.updateValid(username, validGrade.subjectId, true)
-            }
-        } catch (e: Exception) {
-            FirebaseCrashlytics.getInstance().log("${e.message}")
-            return UseCase.error("${e.message}")
-        }
-        return UseCase.success(Unit)
-    }
-
     private suspend fun fetchValidGrades(): List<ValidGrade> {
         val stdNo = preferenceManager.stdNo
         val validGradesResponse: ValidGradesResponse
@@ -257,13 +178,14 @@ class GradeRepositoryImpl(
     }
 
     @KoinApiExtension
-    override suspend fun makeValidGradesAndSimulation(): UseCase<Unit> {
+    override suspend fun makeValidGradesAndUpdateClassification(): UseCase<Unit> {
         val stdNo = preferenceManager.stdNo
         val username = preferenceManager.username
-        val grades = mutableListOf<GradeEntity>()
+        val grades: MutableList<GradeEntity>
 
         try {
             withContext(Dispatchers.IO) {
+                // fetch all grades and do grades validation.
                 val deferredAllGrades = async {
                     fetchAllGrades()
                 }
@@ -275,12 +197,12 @@ class GradeRepositoryImpl(
                 val validGrades = deferredValidGrades.await()
 
                 for (validGrade in validGrades) {
-                    val grade =
-                        allGrades.find { grade -> grade.subjectId == validGrade.subjectId }
-                            ?: continue
+                    val grade = allGrades.find { grade -> grade.subjectId == validGrade.subjectId }
+                        ?: continue
                     grade.valid = true
-                    grades += grade
                 }
+
+                grades = allGrades.toMutableList()
 
                 // Update classification of graduation simulation.
                 val oz = OzEngine.getInstance(username, stdNo.toString())
@@ -429,71 +351,6 @@ class GradeRepositoryImpl(
             }
 
             rankDao.insert(*ranks.toTypedArray())
-        } catch (e: Exception) {
-            FirebaseCrashlytics.getInstance().log("${e.message}")
-            return UseCase.error("${e.message}")
-        }
-
-        return UseCase.success(Unit)
-    }
-
-    @KoinApiExtension
-    override suspend fun makeSimulation(): UseCase<Unit> {
-        val username = preferenceManager.username
-        val stdNo = preferenceManager.stdNo
-
-        try {
-            val oz = OzEngine.getInstance(username, stdNo.toString())
-            val file = oz.makeSimulFile()
-
-            val params = file.readBytes()
-            val requestBody = params.toRequestBody(
-                "application/octet-stream".toMediaTypeOrNull(),
-                0,
-                params.size
-            )
-
-            val responseBody = ozService.postOzBinary(requestBody)
-            val stream = responseBody.byteStream()
-
-            val (simulMap, electiveMap) = oz.getSimulMap(stream)
-            val subjectAreaList = mutableListOf<SubjectAreaEntity>()
-
-            for (item in electiveMap) {
-                for (elective in item.value) {
-                    val type = when (item.key) {
-                        "basic" -> 1
-                        "core" -> 2
-                        else -> 0
-                    }
-
-                    if (type > 0) {
-                        subjectAreaList.add(SubjectAreaEntity(username, type, elective))
-                    }
-                }
-            }
-
-            subjectAreaDao.insert(*subjectAreaList.toTypedArray())
-
-            for ((clf, subjectIdList) in simulMap) {
-                for (subjectId in subjectIdList) {
-                    val onlySubjectNumber = subjectId.substring(0, 9)
-                    var subjectArea = subjectId.substring(9)
-
-                    subjectArea = when (clf) {
-                        "기교" -> GradeUtils.basic(subjectArea)
-                        "심교", "핵교" -> GradeUtils.core(subjectArea)
-                        else -> ""
-                    }
-
-                    gradeDao.updateClassificationBySubjectNumber(
-                        username,
-                        clf,
-                        onlySubjectNumber,
-                        subjectArea
-                    )
-                }
-            }
         } catch (e: Exception) {
             FirebaseCrashlytics.getInstance().log("${e.message}")
             return UseCase.error("${e.message}")

@@ -51,7 +51,7 @@ class MainFragmentViewModel(
 
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                gradeRepository.makeValidGradesAndSimulation()
+                gradeRepository.makeValidGradesAndUpdateClassification()
             }
             Log.d(
                 "ku-boost",
@@ -67,6 +67,7 @@ class MainFragmentViewModel(
             withContext(Dispatchers.IO) {
                 gradeRepository.makeGraduationSimulationRequest()
             }
+            Log.d("ku-boost", "Graduation simulation is fetched.")
         }
     }
 
