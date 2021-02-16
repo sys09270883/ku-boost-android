@@ -3,7 +3,6 @@ package com.konkuk.boost.viewmodels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.konkuk.boost.data.grade.GraduationSimulationResponse
 import com.konkuk.boost.persistence.GradeEntity
 import com.konkuk.boost.persistence.GraduationSimulationEntity
 import com.konkuk.boost.persistence.RankEntity
@@ -18,14 +17,15 @@ class GradeViewModel(
     private val authRepository: AuthRepository,
     private val gradeRepository: GradeRepository
 ) : ViewModel() {
-    private val _allGradesLoading = MutableLiveData(false)
-    val allGradesLoading get() = _allGradesLoading
-
     val fetched = MutableLiveData(false)
 
-    var logoutResponse = MutableLiveData<UseCase<Unit>>()
+    fun isFetched() = fetched.value == true
 
-    var graduationSimulationResponse = MutableLiveData<UseCase<GraduationSimulationResponse>>()
+    fun setFetch(value: Boolean) {
+        fetched.value = value
+    }
+
+    var logoutResponse = MutableLiveData<UseCase<Unit>>()
 
     var graduationSimulation = MutableLiveData<UseCase<List<GraduationSimulationEntity>>>()
 
@@ -51,14 +51,6 @@ class GradeViewModel(
         }
     }
 
-    fun fetchGraduationSimulationFromServer() {
-        viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                graduationSimulationResponse.postValue(gradeRepository.makeGraduationSimulationRequest())
-            }
-        }
-    }
-
     fun fetchCurrentGradesFromLocalDb() {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
@@ -77,29 +69,6 @@ class GradeViewModel(
         }
     }
 
-    fun fetchAllGradesFromServer() {
-        // 전체 성적조회 로딩
-        _allGradesLoading.value = true
-
-        viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                // 서버에서 전체 성적 정보를 가져와 로컬 DB에 저장
-                gradeRepository.makeAllGradesRequest()
-                // 서버에서 유효한 성적 정보를 가져와 로컬 DB 업데이트
-                gradeRepository.makeAllValidGradesRequest()
-            }
-            withContext(Dispatchers.IO) {
-                gradeRepository.makeSimulation()
-            }
-            // 전체 성적조회 로딩 끝
-            _allGradesLoading.postValue(false)
-
-            fetched.postValue(true)
-        }
-    }
-
-    fun isFetched(): Boolean = fetched.value ?: false
-
     fun hasData(): Boolean = gradeRepository.hasData()
 
     val isTotalRankInsertedResponse = MutableLiveData<UseCase<Unit>>()
@@ -108,12 +77,6 @@ class GradeViewModel(
 
     fun getRankAndTotal(): Pair<Int, Int> =
         totalRankResponse.value?.data?.toRankAndTotal() ?: Pair(0, 0)
-
-    fun makeTotalRank() {
-        viewModelScope.launch {
-            isTotalRankInsertedResponse.postValue(gradeRepository.makeTotalRank())
-        }
-    }
 
     fun fetchTotalRankFromLocalDb() {
         viewModelScope.launch {

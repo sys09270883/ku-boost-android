@@ -47,6 +47,10 @@ class SettingsFragment : Fragment() {
 
     private fun setSettingsClickListener() {
         binding.apply {
+            readInfoMoreButton.setOnClickListener {
+                findNavController().navigate(R.id.action_mainFragment_to_infoFragment)
+            }
+
             mobileQrCodeBtn.setOnClickListener {
                 startActivity(Intent(requireActivity(), QRCodeActivity::class.java))
             }

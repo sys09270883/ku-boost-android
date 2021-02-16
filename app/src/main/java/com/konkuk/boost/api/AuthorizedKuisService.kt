@@ -1,5 +1,6 @@
 package com.konkuk.boost.api
 
+import com.konkuk.boost.data.auth.StudentInfoResponse
 import com.konkuk.boost.data.course.SyllabusDetailResponse
 import com.konkuk.boost.data.course.SyllabusResponse
 import com.konkuk.boost.data.grade.GradeResponse
@@ -53,4 +54,10 @@ interface AuthorizedKuisService {
         @Query("argShtm") argShtm: Int = 0,
         @Query("_AUTH_MENU_KEY") authMenuKey: Int = 1140606
     ): ValidGradesResponse
+
+    @GET("RegiRegisterMasterInq/find.do?")
+    suspend fun fetchStudentInfo(
+        @Query("strStdNo") stdNo: Int,
+        @Query("_AUTH_MENU_KEY") authMenuKey: Int = 1122208
+    ): StudentInfoResponse
 }

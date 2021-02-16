@@ -6,8 +6,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
-import android.widget.ProgressBar
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
@@ -26,11 +24,13 @@ import com.konkuk.boost.utils.GradeUtils
 import com.konkuk.boost.utils.StorageUtils.checkStoragePermission
 import com.konkuk.boost.utils.UseCase
 import com.konkuk.boost.viewmodels.GradeViewModel
+import com.konkuk.boost.viewmodels.MainFragmentViewModel
 import com.konkuk.boost.views.CaptureUtils.capture
 import com.konkuk.boost.views.ChartUtils
 import com.konkuk.boost.views.CustomValueFormatter
 import com.konkuk.boost.views.DialogUtils
 import com.konkuk.boost.views.TableRowUtils
+import org.koin.androidx.viewmodel.ext.android.getViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
 
@@ -38,8 +38,8 @@ class GradeFragment : Fragment() {
 
     private var _binding: FragmentGradeBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: GradeViewModel by viewModel()
-    private var dialog: AlertDialog? = null
+    private val mainViewModel: MainFragmentViewModel by lazy { requireParentFragment().getViewModel() }
+    private val gradeViewModel: GradeViewModel by viewModel()
     private val colors: List<Int> by lazy {
         val context = requireContext()
         listOf(
@@ -69,7 +69,8 @@ class GradeFragment : Fragment() {
     ): View {
         _binding = FragmentGradeBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = this
-        binding.viewModel = viewModel
+        binding.gradeViewModel = gradeViewModel
+        binding.mainViewModel = mainViewModel
         val view = binding.root
         view.postDelayed({ view.requestLayout() }, 0)
         return view
@@ -91,15 +92,14 @@ class GradeFragment : Fragment() {
         observeStdNo()
         observeAllValidGrades()
         observeCurrentGrades()
-        observeLoading()
         observeFetching()
         observeRankInserted()
     }
 
     @SuppressLint("SetTextI18n")
     private fun updateTotalRank() {
-        val dept = viewModel.getDept()
-        val (rank, total) = viewModel.getRankAndTotal()
+        val dept = gradeViewModel.getDept()
+        val (rank, total) = gradeViewModel.getRankAndTotal()
 
         binding.rankTextView.apply {
             text = "$dept ${total}명 중 ${rank}등"
@@ -107,10 +107,10 @@ class GradeFragment : Fragment() {
     }
 
     private fun observeRankInserted() {
-        viewModel.totalRankResponse.observe(viewLifecycleOwner) {
+        gradeViewModel.totalRankResponse.observe(viewLifecycleOwner) {
             when (it.status) {
                 UseCase.Status.SUCCESS -> {
-                    viewModel.fetchTotalRankFromLocalDb()
+                    gradeViewModel.fetchTotalRankFromLocalDb()
                     updateTotalRank()
                 }
                 UseCase.Status.ERROR -> {
@@ -155,48 +155,33 @@ class GradeFragment : Fragment() {
     }
 
     private fun observeFetching() {
-        viewModel.fetched.observe(viewLifecycleOwner) {
+        mainViewModel.fetched.observe(viewLifecycleOwner) {
             when (it) {
                 true -> {
-                    viewModel.fetchGraduationSimulationFromLocalDb()
-                    viewModel.fetchCurrentGradesFromLocalDb()
-                    viewModel.fetchTotalGradesFromLocalDb()
-                    viewModel.fetchTotalRankFromLocalDb()
-                }
-            }
-        }
-    }
-
-    private fun observeLoading() {
-        viewModel.allGradesLoading.observe(viewLifecycleOwner) {
-            when (it) {
-                true -> {
-                    if (!viewModel.hasData()) {
-                        // 첫 로그인 시 로컬 데이터베이스가 비어있는 경우 다이얼로그를 띄움
-                        val context = requireContext()
-                        val builder = AlertDialog.Builder(context)
-                        dialog = builder
-                            .setTitle(getString(R.string.app_name))
-                            .setMessage(getString(R.string.prompt_chart_no_data))
-                            .setProgressBar(ProgressBar(context))
-                            .setCancelable(false)
-                            .create()
-                        dialog?.show()
+                    if (gradeViewModel.isFetched()) {
+                        return@observe
                     }
+
+                    Log.d("ku-boost", "Received from MainFragmentViewModel: FETCHED.")
+                    gradeViewModel.fetchGraduationSimulationFromLocalDb()
+                    Log.d("ku-boost", "Update graduation simulation from local DB.")
+                    gradeViewModel.fetchCurrentGradesFromLocalDb()
+                    Log.d("ku-boost", "Update current grades from local DB.")
+                    gradeViewModel.fetchTotalGradesFromLocalDb()
+                    Log.d("ku-boost", "Update total grades from local DB.")
+                    gradeViewModel.fetchTotalRankFromLocalDb()
+                    Log.d("ku-boost", "Update total rank from local DB.")
+                    gradeViewModel.setFetch(true)
                 }
                 false -> {
-                    try {
-                        if (dialog?.isShowing == true) dialog?.dismiss()
-                    } catch (e: Exception) {
-                        Log.e("ku-boost", "${e.message}")
-                    }
+                    Log.d("ku-boost", "Received from MainFragmentViewModel: NOT FETCHED.")
                 }
             }
         }
     }
 
     private fun observeCurrentGrades() {
-        viewModel.currentGrades.observe(viewLifecycleOwner) {
+        gradeViewModel.currentGrades.observe(viewLifecycleOwner) {
             if (it.data == null)
                 return@observe
 
@@ -293,37 +278,32 @@ class GradeFragment : Fragment() {
     }
 
     private fun observeStdNo() {
-        viewModel.stdNo.observe(viewLifecycleOwner) {
-            if (viewModel.isFetched())
-                return@observe
-
-            viewModel.fetchGraduationSimulationFromServer()
-            viewModel.fetchAllGradesFromServer()
-            viewModel.makeTotalRank()
+        gradeViewModel.stdNo.observe(viewLifecycleOwner) {
+//            gradeViewModel.fetchGraduationSimulationFromServer()
+//            gradeViewModel.fetchAllGradesFromServer()
+//            gradeViewModel.makeTotalRank()
         }
     }
 
     private fun fetchFromLocalDb() {
-        if (viewModel.isFetched())
-            return
-        if (!viewModel.hasData())
+        if (!gradeViewModel.hasData())
             return
 
-        viewModel.fetchGraduationSimulationFromLocalDb()
-        viewModel.fetchCurrentGradesFromLocalDb()
-        viewModel.fetchTotalGradesFromLocalDb()
-        viewModel.fetchTotalRankFromLocalDb()
+        gradeViewModel.fetchGraduationSimulationFromLocalDb()
+        gradeViewModel.fetchCurrentGradesFromLocalDb()
+        gradeViewModel.fetchTotalGradesFromLocalDb()
+        gradeViewModel.fetchTotalRankFromLocalDb()
     }
 
     private fun observeLogout() {
-        viewModel.logoutResponse.observe(viewLifecycleOwner) {
-            viewModel.clearLogoutResource()
+        gradeViewModel.logoutResponse.observe(viewLifecycleOwner) {
+            gradeViewModel.clearLogoutResource()
             findNavController().navigate(R.id.action_mainFragment_to_loginFragment)
         }
     }
 
     private fun observeGraduationSimulation() {
-        viewModel.graduationSimulation.observe(viewLifecycleOwner) {
+        gradeViewModel.graduationSimulation.observe(viewLifecycleOwner) {
             val simulations = it.data ?: return@observe
 
             if (simulations.isEmpty())
@@ -361,7 +341,7 @@ class GradeFragment : Fragment() {
     }
 
     private fun observeAllValidGrades() {
-        viewModel.allValidGrades.observe(viewLifecycleOwner) {
+        gradeViewModel.allValidGrades.observe(viewLifecycleOwner) {
             if (it.data == null)
                 return@observe
 
@@ -429,26 +409,6 @@ class GradeFragment : Fragment() {
             lineData.setValueTextSize(12f)
             lineChart.data = lineData
         }
-    }
-
-    private fun AlertDialog.Builder.setProgressBar(progressBar: ProgressBar): AlertDialog.Builder {
-        val activity = requireActivity()
-        val container = FrameLayout(activity)
-        container.addView(progressBar)
-        val containerParams = FrameLayout.LayoutParams(
-            FrameLayout.LayoutParams.MATCH_PARENT,
-            FrameLayout.LayoutParams.MATCH_PARENT
-        )
-        val marginHorizontal = 48f
-        val margin = 48f
-        containerParams.leftMargin = marginHorizontal.toInt()
-        containerParams.rightMargin = marginHorizontal.toInt()
-        containerParams.bottomMargin = margin.toInt()
-        container.layoutParams = containerParams
-        val superContainer = FrameLayout(requireContext())
-        superContainer.addView(container)
-        setView(superContainer)
-        return this
     }
 
 }
