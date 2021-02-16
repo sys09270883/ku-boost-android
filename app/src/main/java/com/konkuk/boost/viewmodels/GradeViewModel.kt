@@ -51,14 +51,6 @@ class GradeViewModel(
         }
     }
 
-//    fun fetchGraduationSimulationFromServer() {
-//        viewModelScope.launch {
-//            withContext(Dispatchers.IO) {
-//                gradeRepository.makeGraduationSimulationRequest()
-//            }
-//        }
-//    }
-
     fun fetchCurrentGradesFromLocalDb() {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
@@ -85,12 +77,6 @@ class GradeViewModel(
 
     fun getRankAndTotal(): Pair<Int, Int> =
         totalRankResponse.value?.data?.toRankAndTotal() ?: Pair(0, 0)
-
-    fun makeTotalRank() {
-        viewModelScope.launch {
-            isTotalRankInsertedResponse.postValue(gradeRepository.makeTotalRank())
-        }
-    }
 
     fun fetchTotalRankFromLocalDb() {
         viewModelScope.launch {

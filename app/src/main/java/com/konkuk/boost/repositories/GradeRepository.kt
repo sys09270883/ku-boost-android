@@ -22,6 +22,8 @@ interface GradeRepository {
 
     suspend fun makeAllValidGradesRequest(): UseCase<Unit>
 
+    suspend fun makeValidGradesAndSimulation(): UseCase<Unit>
+
     suspend fun getAllValidGrades(): UseCase<List<GradeEntity>>
 
     suspend fun getCurrentGrades(): UseCase<List<GradeEntity>>

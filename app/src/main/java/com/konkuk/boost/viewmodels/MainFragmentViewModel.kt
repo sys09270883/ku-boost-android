@@ -46,17 +46,17 @@ class MainFragmentViewModel(
         }
     }
 
-    fun fetchAllGradesFromServer() {
+    fun fetchValidGradesAndUpdateClassificationFromServer() {
         _allGradesLoading.value = true
 
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                gradeRepository.makeAllGradesRequest()
-                gradeRepository.makeAllValidGradesRequest()
-                gradeRepository.makeSimulation()
+                gradeRepository.makeValidGradesAndSimulation()
             }
-            Log.d("ku-boost", "All grades, valid grades are fetched.")
-            Log.d("ku-boost", "Graduation Simulation is updated.")
+            Log.d(
+                "ku-boost",
+                "All valid grades, classification of graduation simulation are updated."
+            )
             _allGradesLoading.postValue(false)
             fetched.postValue(true)
         }

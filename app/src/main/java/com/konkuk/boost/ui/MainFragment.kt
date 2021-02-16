@@ -60,7 +60,7 @@ class MainFragment : Fragment() {
     private fun fetchData() {
         if (viewModel.isNotFetched()) {
             viewModel.fetchStudentInfo()
-            viewModel.fetchAllGradesFromServer()
+            viewModel.fetchValidGradesAndUpdateClassificationFromServer()
             viewModel.fetchGraduationSimulationFromServer()
             viewModel.makeTotalRank()
         }
