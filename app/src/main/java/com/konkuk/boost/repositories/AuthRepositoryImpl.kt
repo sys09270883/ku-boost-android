@@ -134,6 +134,13 @@ class AuthRepositoryImpl(
         val studentInfoResponse: StudentInfoResponse
         try {
             studentInfoResponse = authorizedKuisService.fetchStudentInfo(stdNo)
+            Log.d("ku-boost", "${studentInfoResponse.deptTransferInfo}")
+            Log.d("ku-boost", "${studentInfoResponse.personalInfo}")
+//            Log.d("ku-boost", "${studentInfoResponse.profilePhoto}")
+            Log.d("ku-boost", "${studentInfoResponse.scholarships}")
+            Log.d("ku-boost", "${studentInfoResponse.studentStateChangeInfo}")
+            Log.d("ku-boost", "${studentInfoResponse.tuitionFees}")
+            Log.d("ku-boost", "${studentInfoResponse.warnHonors}")
         } catch (e: Exception) {
             Log.e("ku-boost", "${e.message}")
             return UseCase.error("${e.message}")

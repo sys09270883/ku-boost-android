@@ -182,11 +182,12 @@
 
             </com.google.android.material.card.MaterialCardView>
 
-            <com.google.android.material.tabs.TabLayout
-                android:id="@+id/tabLayout"
-                style="@style/KUBoost.TabLayoutStyle"
+            <me.relex.circleindicator.CircleIndicator3
+                android:id="@+id/indicator"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                app:ci_drawable="@drawable/selected_indicator"
+                app:ci_drawable_unselected="@drawable/unselected_indicator"
                 app:layout_constraintBottom_toTopOf="@id/viewPager"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -198,7 +199,7 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tabLayout" />
+                app:layout_constraintTop_toBottomOf="@id/indicator" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
