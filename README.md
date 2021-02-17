@@ -8,7 +8,7 @@
 ## 아키텍처
 - MVVM
 - Repository pattern
-<img width="480" alt="final-architecture" src="https://user-images.githubusercontent.com/50787869/104835701-ab558700-58eb-11eb-87d1-d2d4910fa473.png">
+<img alt="final-architecture" src="https://user-images.githubusercontent.com/50787869/104835701-ab558700-58eb-11eb-87d1-d2d4910fa473.png">
 
 ## MAD Scorecard
 ![summary](https://user-images.githubusercontent.com/50787869/108174752-3623de80-7143-11eb-9195-6d99781c5416.png)
