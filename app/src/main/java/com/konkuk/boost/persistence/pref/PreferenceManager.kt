@@ -1,4 +1,4 @@
-package com.konkuk.boost.persistence
+package com.konkuk.boost.persistence.pref
 
 import android.content.Context
 import android.content.SharedPreferences

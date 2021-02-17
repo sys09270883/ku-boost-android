@@ -1,4 +1,4 @@
-package com.konkuk.boost.persistence
+package com.konkuk.boost.persistence.grade
 
 import android.provider.BaseColumns
 

@@ -3,8 +3,8 @@ package com.konkuk.boost.viewmodels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.konkuk.boost.persistence.GradeEntity
-import com.konkuk.boost.persistence.RankEntity
+import com.konkuk.boost.persistence.grade.GradeEntity
+import com.konkuk.boost.persistence.rank.RankEntity
 import com.konkuk.boost.repositories.AuthRepository
 import com.konkuk.boost.repositories.GradeRepository
 import com.konkuk.boost.utils.UseCase

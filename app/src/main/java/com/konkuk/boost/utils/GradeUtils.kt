@@ -1,7 +1,7 @@
 package com.konkuk.boost.utils
 
 import android.util.Log
-import com.konkuk.boost.persistence.GradeEntity
+import com.konkuk.boost.persistence.grade.GradeEntity
 import kotlin.math.floor
 
 object GradeUtils {

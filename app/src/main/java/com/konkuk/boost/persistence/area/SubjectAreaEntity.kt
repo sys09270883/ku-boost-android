@@ -1,8 +1,8 @@
-package com.konkuk.boost.persistence
+package com.konkuk.boost.persistence.area
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import com.konkuk.boost.persistence.SubjectAreaContract.SubjectAreaEntry
+import com.konkuk.boost.persistence.area.SubjectAreaContract.SubjectAreaEntry
 import java.util.*
 
 @Entity(

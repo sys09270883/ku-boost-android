@@ -7,7 +7,7 @@ import com.konkuk.boost.api.KuisService
 import com.konkuk.boost.data.auth.ChangePasswordResponse
 import com.konkuk.boost.data.auth.LoginResponse
 import com.konkuk.boost.data.auth.StudentInfoResponse
-import com.konkuk.boost.persistence.PreferenceManager
+import com.konkuk.boost.persistence.pref.PreferenceManager
 import com.konkuk.boost.utils.UseCase
 import retrofit2.Response
 

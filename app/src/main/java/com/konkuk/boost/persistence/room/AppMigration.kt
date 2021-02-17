@@ -1,11 +1,11 @@
-package com.konkuk.boost.persistence
+package com.konkuk.boost.persistence.room
 
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
-import com.konkuk.boost.persistence.GradeContract.GradeEntry
-import com.konkuk.boost.persistence.LikeCourseContract.LikeCourseEntry
-import com.konkuk.boost.persistence.RankContract.RankEntry
-import com.konkuk.boost.persistence.SubjectAreaContract.SubjectAreaEntry
+import com.konkuk.boost.persistence.grade.GradeContract.GradeEntry
+import com.konkuk.boost.persistence.like.LikeCourseContract.LikeCourseEntry
+import com.konkuk.boost.persistence.rank.RankContract.RankEntry
+import com.konkuk.boost.persistence.area.SubjectAreaContract.SubjectAreaEntry
 
 object AppMigration {
     val MIGRATION_1_2 = object : Migration(1, 2) {

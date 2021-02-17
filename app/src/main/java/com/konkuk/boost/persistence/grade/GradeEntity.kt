@@ -1,8 +1,8 @@
-package com.konkuk.boost.persistence
+package com.konkuk.boost.persistence.grade
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import com.konkuk.boost.persistence.GradeContract.GradeEntry
+import com.konkuk.boost.persistence.grade.GradeContract.GradeEntry
 import java.util.*
 
 @Entity(

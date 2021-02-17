@@ -1,7 +1,12 @@
 package com.konkuk.boost.di
 
 import com.konkuk.boost.api.*
-import com.konkuk.boost.persistence.*
+import com.konkuk.boost.persistence.area.SubjectAreaDao
+import com.konkuk.boost.persistence.grade.GradeDao
+import com.konkuk.boost.persistence.like.LikeCourseDao
+import com.konkuk.boost.persistence.pref.PreferenceManager
+import com.konkuk.boost.persistence.rank.RankDao
+import com.konkuk.boost.persistence.simul.GraduationSimulationDao
 import com.konkuk.boost.repositories.*
 import org.koin.dsl.module
 

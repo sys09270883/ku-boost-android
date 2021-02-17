@@ -1,9 +1,9 @@
 package com.konkuk.boost.di
 
 import androidx.room.Room
-import com.konkuk.boost.persistence.AppDatabase
-import com.konkuk.boost.persistence.AppMigration
-import com.konkuk.boost.persistence.PreferenceManager
+import com.konkuk.boost.persistence.room.AppDatabase
+import com.konkuk.boost.persistence.room.AppMigration
+import com.konkuk.boost.persistence.pref.PreferenceManager
 import org.koin.android.ext.koin.androidApplication
 import org.koin.dsl.module
 

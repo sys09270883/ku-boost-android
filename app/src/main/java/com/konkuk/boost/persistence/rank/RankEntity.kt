@@ -1,8 +1,8 @@
-package com.konkuk.boost.persistence
+package com.konkuk.boost.persistence.rank
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import com.konkuk.boost.persistence.RankContract.RankEntry
+import com.konkuk.boost.persistence.rank.RankContract.RankEntry
 import java.util.*
 
 @Entity(

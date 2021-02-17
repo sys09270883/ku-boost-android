@@ -11,8 +11,8 @@ import com.bumptech.glide.Glide
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.charts.PieChart
 import com.google.android.material.button.MaterialButton
-import com.konkuk.boost.persistence.GradeEntity
-import com.konkuk.boost.persistence.GraduationSimulationEntity
+import com.konkuk.boost.persistence.grade.GradeEntity
+import com.konkuk.boost.persistence.simul.GraduationSimulationEntity
 import com.konkuk.boost.utils.DateTimeConverter
 import com.konkuk.boost.utils.GradeUtils
 import com.konkuk.boost.utils.UseCase
