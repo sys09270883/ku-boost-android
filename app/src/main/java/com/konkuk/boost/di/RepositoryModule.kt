@@ -4,6 +4,7 @@ import com.konkuk.boost.api.*
 import com.konkuk.boost.persistence.area.SubjectAreaDao
 import com.konkuk.boost.persistence.grade.GradeDao
 import com.konkuk.boost.persistence.like.LikeCourseDao
+import com.konkuk.boost.persistence.personal.PersonalInfoDao
 import com.konkuk.boost.persistence.pref.PreferenceManager
 import com.konkuk.boost.persistence.rank.RankDao
 import com.konkuk.boost.persistence.simul.GraduationSimulationDao
@@ -14,8 +15,10 @@ val repositoryModule = module {
     fun provideLoginRepository(
         kuisService: KuisService,
         preferenceManager: PreferenceManager,
-        authorizedKuisService: AuthorizedKuisService
-    ): AuthRepository = AuthRepositoryImpl(kuisService, preferenceManager, authorizedKuisService)
+        authorizedKuisService: AuthorizedKuisService,
+        personalInfoDao: PersonalInfoDao
+    ): AuthRepository =
+        AuthRepositoryImpl(kuisService, preferenceManager, authorizedKuisService, personalInfoDao)
 
     fun provideGradeRepository(
         authorizedKuisService: AuthorizedKuisService,
@@ -50,7 +53,7 @@ val repositoryModule = module {
     ): LibraryRepository =
         LibraryResponseImpl(libraryService, preferenceManager)
 
-    single { provideLoginRepository(get(), get(), get()) }
+    single { provideLoginRepository(get(), get(), get(), get()) }
     single { provideGradeRepository(get(), get(), get(), get(), get(), get(), get()) }
     single { provideCourseRepository(get(), get(), get(), get()) }
     single { provideLibraryRepository(get(), get()) }
