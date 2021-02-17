@@ -1,9 +1,13 @@
 # 건국대학교 부스트
 
-[![Android CI](https://github.com/sys09270883/ku-boost-android/workflows/CI%20workflow/badge.svg)](https://github.com/sys09270883/ku-boost-android/)
-
 ![ku-boost-graphic-image](https://user-images.githubusercontent.com/50787869/108175584-4c7e6a00-7144-11eb-8b6e-02b35d6c50aa.jpg)
 
+<p align="center">
+  <a href="https://opensource.org/licenses/MIT"><img alt="License" src="https://img.shields.io/badge/License-MIT-yellow.svg"/></a>
+  <a href="https://android-arsenal.com/api?level=23"><img alt="API" src="https://img.shields.io/badge/API-23%2B-brightgreen.svg?style=flat"/></a>
+  <a href="https://github.com/sys09270883/ku-boost-android/actions"><img alt="Build Status" src="https://github.com/sys09270883/ku-boost-android/workflows/CI%20workflow/badge.svg"/></a> 
+  <a href="https://github.com/sys09270883/ku-boost-android/releases"><img alt="Release" src="https://img.shields.io/github/v/release/sys09270883/ku-boost-android"></a>
+</p>
 
 ## 아키텍처
 - MVVM
