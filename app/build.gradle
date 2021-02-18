@@ -15,7 +15,7 @@ android {
         applicationId "com.konkuk.boost"
         minSdkVersion 23
         targetSdkVersion 30
-        versionCode 19
+        versionCode 20
         versionName "1.2.6"
         buildConfigField "String", "KUIS_URL", "\"https://kuis.konkuk.ac.kr/\""
         buildConfigField "String", "OZ_URL", "\"https://kureport1.konkuk.ac.kr:8443/\""
