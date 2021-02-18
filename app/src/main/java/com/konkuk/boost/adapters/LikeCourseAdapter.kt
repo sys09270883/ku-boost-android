@@ -102,14 +102,16 @@ class LikeCourseAdapter :
 
                 val basket =
                     if (list[i].classBasketNumber.isBlank()) 0 else list[i].classBasketNumber.toInt()
+                val registration =
+                    if (list[i].registrationNumber.isBlank()) 0 else list[i].registrationNumber.toInt()
                 val limited =
                     if (list[i].limitedNumber.isBlank()) 0 else list[i].limitedNumber.toInt()
 
-                if (basket > limited) {
+                if (limited < basket.coerceAtLeast(registration)) {
                     results[i].text = "인원초과"
                     results[i].setTextColor(ContextCompat.getColor(context, R.color.pastelRed))
                 } else {
-                    results[i].text = "${limited - basket}"
+                    results[i].text = "${limited - basket.coerceAtLeast(registration)}"
                     results[i].setTextColor(ContextCompat.getColor(context, R.color.pastelBlue))
                 }
             }
