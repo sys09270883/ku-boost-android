@@ -110,8 +110,9 @@ class GraduationSimulationDetailFragment : Fragment() {
                 return@observe
 
             val gradesByClassification = it.data
+            val validGradesByClassification = it.data.filter { grade -> grade.valid }
 
-            val (avr, _) = GradeUtils.totalAverages(gradesByClassification)
+            val (avr, _) = GradeUtils.totalAverages(validGradesByClassification)
             // 전체평점
             ChartUtils.makeGradeChart(
                 binding.totalPieChart,
