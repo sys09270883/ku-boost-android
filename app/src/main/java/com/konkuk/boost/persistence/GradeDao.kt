@@ -19,7 +19,10 @@ interface GradeDao {
     suspend fun updateValid(username: String, subjectId: String, valid: Boolean)
 
     @Query("SELECT * FROM $TABLE_NAME WHERE $USERNAME = :username AND $VALID = :valid ORDER BY $YEAR, $SEMESTER")
-    suspend fun getAllGrades(username: String, valid: Boolean = true): List<GradeEntity>
+    suspend fun getAllValidGrades(username: String, valid: Boolean = true): List<GradeEntity>
+
+    @Query("SELECT * FROM $TABLE_NAME WHERE $USERNAME = :username ORDER BY $YEAR, $SEMESTER")
+    suspend fun getAllGrades(username: String): List<GradeEntity>
 
     @Query("SELECT * FROM $TABLE_NAME WHERE $USERNAME = :username ORDER BY $YEAR DESC, $SEMESTER DESC LIMIT 1")
     suspend fun getCurrentSemester(username: String): GradeEntity
@@ -37,11 +40,10 @@ interface GradeDao {
         return getCurrentSemesterGrades(username, gradeEntity.year, gradeEntity.semester)
     }
 
-    @Query("SELECT * FROM $TABLE_NAME WHERE $USERNAME = :username AND $CLASSIFICATION = :clf AND $VALID = :valid")
+    @Query("SELECT * FROM $TABLE_NAME WHERE $USERNAME = :username AND $CLASSIFICATION = :clf")
     suspend fun getGradesByClassification(
         username: String,
-        clf: String,
-        valid: Boolean = true
+        clf: String
     ): List<GradeEntity>
 
     @Query("DELETE FROM $TABLE_NAME WHERE $USERNAME = :username AND $YEAR = :year AND $SEMESTER = :semester")
