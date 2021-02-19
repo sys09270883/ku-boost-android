@@ -9,7 +9,6 @@ data class PersonalInfo(
     @SerializedName("CHA_NM") val chineseName: String?,  // 한자이름
     @SerializedName("SHYR") val schoolYear: String, // 학년
     @SerializedName("EMAIL") val email: String?, // 이메일
-    @SerializedName("ENTR_YY") val enterYear: String, // 입학년도
     @SerializedName("HSCH_NM") val highSchoolName: String?, // 출신 고등학교 이름
     @SerializedName("UNIV_NM") val universityName: String?, // 출신 대학교 이름
     @SerializedName("GEN") val gender: String?, // 성별
@@ -17,13 +16,10 @@ data class PersonalInfo(
     @SerializedName("EALY_GRDT_CHECK") val earlyGraduationAvailability: String?, // 조기졸업여부
     @SerializedName("COUN_CD") val country: String?, // 국적
     @SerializedName("TEL_NO") val tellNo: String?, // 집 전화번호
-    @SerializedName("SHREG_CD") val schoolRegisteredState: String?, // 학적상태
     @SerializedName("KOR_NM") val koreanName: String?, // 한글이름
     @SerializedName("ENG_NM") val englishName: String?, // 영어이름
     @SerializedName("BIRTH_DT") val birthday: String?, // 생일 (yyMMdd)
     @SerializedName("STD_DIV") val studentDiv: String?, // 학생구분
-    @SerializedName("NOW_COLG") val dept: String?, // 대학
-    @SerializedName("NOW_SUST") val major: String?, // 학과/학부
     @SerializedName("ENTR_CD") val enterCode: String?, // 입학구분
     @SerializedName("ADDR") val address: String?, // 주소
     @SerializedName("HANDICAP_FG") val impairment: String?, // 장애여부

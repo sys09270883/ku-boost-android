@@ -138,22 +138,26 @@ class AuthRepositoryImpl(
 
         try {
             studentInfoResponse = authorizedKuisService.fetchStudentInfo(stdNo)
+
             Log.d("ku-boost", "${studentInfoResponse.deptTransferInfo}")
 
             Log.d("ku-boost", "${studentInfoResponse.personalInfo}")
-            val personalInfoList = studentInfoResponse.personalInfo
+            val personalInfo = studentInfoResponse.personalInfo.first()
             val personalEntities = mutableListOf<PersonalInfoEntity>()
 
-            for (info in personalInfoList) {
-                val varArray = info.javaClass.declaredFields
-                Log.d("ku-boost", varArray.toString())
-//                personalEntities += PersonalInfoEntity(
-//                    username,
-//                    "enter",
-//                    info.enterYear
-//                )
+            val personalInfoFields = personalInfo.javaClass.declaredFields
+            val personalInfoFieldNames = personalInfoFields.map { field -> field.name }
+
+            for ((idx, field) in personalInfoFields.withIndex()) {
+                field.isAccessible = true
+                personalEntities += PersonalInfoEntity(
+                    username,
+                    personalInfoFieldNames[idx],
+                    field.get(personalInfo)?.toString()?.trim() ?: ""
+                )
             }
-//            personalInfoDao.insert()
+
+            personalInfoDao.insert(*personalEntities.toTypedArray())
 
 //            Log.d("ku-boost", "${studentInfoResponse.profilePhoto}")
 
@@ -171,5 +175,19 @@ class AuthRepositoryImpl(
         }
 
         return UseCase.success(studentInfoResponse)
+    }
+
+    override suspend fun getPersonalInfo(): UseCase<List<PersonalInfoEntity>> {
+        val username = preferenceManager.username
+        val personalInfo: List<PersonalInfoEntity>
+
+        try {
+            personalInfo = personalInfoDao.getAll(username)
+        } catch (e: Exception) {
+            Log.e("ku-boost", "${e.message}")
+            return UseCase.error("${e.message}")
+        }
+
+        return UseCase.success(personalInfo)
     }
 }
