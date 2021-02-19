@@ -273,13 +273,27 @@ class GradeRepositoryImpl(
 
         val allValidGrades: List<GradeEntity>
         try {
-            allValidGrades = gradeDao.getAllGrades(username)
+            allValidGrades = gradeDao.getAllValidGrades(username)
         } catch (e: Exception) {
             FirebaseCrashlytics.getInstance().log("${e.message}")
             return UseCase.error("${e.message}")
         }
 
         return UseCase.success(allValidGrades)
+    }
+
+    override suspend fun getAllGrades(): UseCase<List<GradeEntity>> {
+        val username = preferenceManager.username
+
+        val allGrades: List<GradeEntity>
+        try {
+            allGrades = gradeDao.getAllGrades(username)
+        } catch (e: Exception) {
+            FirebaseCrashlytics.getInstance().log("${e.message}")
+            return UseCase.error("${e.message}")
+        }
+
+        return UseCase.success(allGrades)
     }
 
     override suspend fun getCurrentGrades(): UseCase<List<GradeEntity>> {
