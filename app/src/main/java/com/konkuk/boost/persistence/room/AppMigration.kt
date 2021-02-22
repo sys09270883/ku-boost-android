@@ -3,10 +3,12 @@ package com.konkuk.boost.persistence.room
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.konkuk.boost.persistence.area.SubjectAreaContract.SubjectAreaEntry
+import com.konkuk.boost.persistence.dept.DeptTransferContract
 import com.konkuk.boost.persistence.grade.GradeContract.GradeEntry
 import com.konkuk.boost.persistence.like.LikeCourseContract.LikeCourseEntry
 import com.konkuk.boost.persistence.personal.PersonalInfoContract
 import com.konkuk.boost.persistence.rank.RankContract.RankEntry
+import com.konkuk.boost.persistence.stdstate.StudentStateChangeContract
 
 object AppMigration {
     val MIGRATION_1_2 = object : Migration(1, 2) {
@@ -65,6 +67,18 @@ object AppMigration {
     val MIGRATION_5_6 = object : Migration(5, 6) {
         override fun migrate(database: SupportSQLiteDatabase) {
             database.execSQL(PersonalInfoContract.CREATE_SQL)
+        }
+    }
+
+    val MIGRATION_6_7 = object : Migration(6, 7) {
+        override fun migrate(database: SupportSQLiteDatabase) {
+            database.execSQL(DeptTransferContract.CREATE_SQL)
+        }
+    }
+
+    val MIGRATION_7_8 = object : Migration(7, 8) {
+        override fun migrate(database: SupportSQLiteDatabase) {
+            database.execSQL(StudentStateChangeContract.CREATE_SQL)
         }
     }
 }

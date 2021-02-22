@@ -7,9 +7,13 @@ import com.konkuk.boost.api.KuisService
 import com.konkuk.boost.data.auth.ChangePasswordResponse
 import com.konkuk.boost.data.auth.LoginResponse
 import com.konkuk.boost.data.auth.StudentInfoResponse
+import com.konkuk.boost.persistence.dept.DeptTransferDao
+import com.konkuk.boost.persistence.dept.DeptTransferEntity
 import com.konkuk.boost.persistence.personal.PersonalInfoDao
 import com.konkuk.boost.persistence.personal.PersonalInfoEntity
 import com.konkuk.boost.persistence.pref.PreferenceManager
+import com.konkuk.boost.persistence.stdstate.StudentStateChangeDao
+import com.konkuk.boost.persistence.stdstate.StudentStateChangeEntity
 import com.konkuk.boost.utils.UseCase
 import retrofit2.Response
 
@@ -18,6 +22,8 @@ class AuthRepositoryImpl(
     private val preferenceManager: PreferenceManager,
     private val authorizedKuisService: AuthorizedKuisService,
     private val personalInfoDao: PersonalInfoDao,
+    private val deptTransferDao: DeptTransferDao,
+    private val studentStateChangeDao: StudentStateChangeDao,
 ) : AuthRepository {
     override suspend fun makeLoginRequest(
         username: String,
@@ -139,9 +145,48 @@ class AuthRepositoryImpl(
         try {
             studentInfoResponse = authorizedKuisService.fetchStudentInfo(stdNo)
 
-            Log.d("ku-boost", "${studentInfoResponse.deptTransferInfo}")
+            // Fetch department transfer information and insert into table.
+            val deptTransferInfoList = studentInfoResponse.deptTransferInfo
+            val deptTransferEntities = mutableListOf<DeptTransferEntity>()
 
-            Log.d("ku-boost", "${studentInfoResponse.personalInfo}")
+            for (info in deptTransferInfoList) {
+                deptTransferEntities += DeptTransferEntity(
+                    username,
+                    info.beforeDept ?: "",
+                    info.beforeSust ?: "",
+                    info.beforeMajor ?: "",
+                    info.changedCode,
+                    info.changedDate,
+                    info.changedYear,
+                    info.changedSemester,
+                    info.dept ?: "",
+                    info.sust ?: "",
+                    info.major ?: ""
+                )
+            }
+
+            deptTransferDao.insert(*deptTransferEntities.toTypedArray())
+
+
+            // Fetch student state change information and insert into table.
+            val studentStateChangeInfoList = studentInfoResponse.studentStateChangeInfo
+            val studentStateChangeEntities = mutableListOf<StudentStateChangeEntity>()
+
+            for (info in studentStateChangeInfoList) {
+                studentStateChangeEntities += StudentStateChangeEntity(
+                    username,
+                    info.applyDate,
+                    info.changedDate,
+                    info.changedCode,
+                    info.changedReason ?: "",
+                    info.appliedStateCode
+                )
+            }
+
+            studentStateChangeDao.insert(*studentStateChangeEntities.toTypedArray())
+
+
+            // Fetch personal information and insert into table.
             val personalInfo = studentInfoResponse.personalInfo.first()
             val personalEntities = mutableListOf<PersonalInfoEntity>()
 
@@ -162,8 +207,6 @@ class AuthRepositoryImpl(
 //            Log.d("ku-boost", "${studentInfoResponse.profilePhoto}")
 
             Log.d("ku-boost", "${studentInfoResponse.scholarships}")
-
-            Log.d("ku-boost", "${studentInfoResponse.studentStateChangeInfo}")
 
             Log.d("ku-boost", "${studentInfoResponse.tuitionFees}")
 

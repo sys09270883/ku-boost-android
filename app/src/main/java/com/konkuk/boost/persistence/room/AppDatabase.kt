@@ -4,6 +4,8 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import com.konkuk.boost.persistence.area.SubjectAreaDao
 import com.konkuk.boost.persistence.area.SubjectAreaEntity
+import com.konkuk.boost.persistence.dept.DeptTransferDao
+import com.konkuk.boost.persistence.dept.DeptTransferEntity
 import com.konkuk.boost.persistence.grade.GradeDao
 import com.konkuk.boost.persistence.grade.GradeEntity
 import com.konkuk.boost.persistence.like.LikeCourseDao
@@ -14,6 +16,8 @@ import com.konkuk.boost.persistence.rank.RankDao
 import com.konkuk.boost.persistence.rank.RankEntity
 import com.konkuk.boost.persistence.simul.GraduationSimulationDao
 import com.konkuk.boost.persistence.simul.GraduationSimulationEntity
+import com.konkuk.boost.persistence.stdstate.StudentStateChangeDao
+import com.konkuk.boost.persistence.stdstate.StudentStateChangeEntity
 
 @Database(
     entities = [
@@ -23,8 +27,10 @@ import com.konkuk.boost.persistence.simul.GraduationSimulationEntity
         RankEntity::class,
         SubjectAreaEntity::class,
         PersonalInfoEntity::class,
+        DeptTransferEntity::class,
+        StudentStateChangeEntity::class,
     ],
-    version = 6,
+    version = 8,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -39,4 +45,8 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun subjectAreaDao(): SubjectAreaDao
 
     abstract fun personalInfoDao(): PersonalInfoDao
+
+    abstract fun deptTransferDao(): DeptTransferDao
+
+    abstract fun studentStateChangeDao(): StudentStateChangeDao
 }
