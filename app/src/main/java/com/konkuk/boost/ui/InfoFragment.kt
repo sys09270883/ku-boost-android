@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.viewpager2.widget.ViewPager2
 import com.konkuk.boost.adapters.InfoFragmentStateAdapter
 import com.konkuk.boost.databinding.FragmentInfoBinding
 import com.konkuk.boost.viewmodels.InfoViewModel

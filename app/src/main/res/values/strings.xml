@@ -70,4 +70,8 @@
     <string name="prompt_basic_elective">기교</string>
     <string name="prompt_core_elective">핵교</string>
     <string name="prompt_advanced_elective">심교</string>
+    <string name="prompt_dept_transfer_info">학과변경정보</string>
+    <string name="prompt_student_state_change_info">학적변동</string>
+    <string name="prompt_apply">신청</string>
+    <string name="prompt_change">변동</string>
 </resources>

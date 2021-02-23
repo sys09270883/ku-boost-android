@@ -3,7 +3,9 @@ package com.konkuk.boost.repositories
 import com.konkuk.boost.data.auth.ChangePasswordResponse
 import com.konkuk.boost.data.auth.LoginResponse
 import com.konkuk.boost.data.auth.StudentInfoResponse
+import com.konkuk.boost.persistence.dept.DeptTransferEntity
 import com.konkuk.boost.persistence.personal.PersonalInfoEntity
+import com.konkuk.boost.persistence.stdstate.StudentStateChangeEntity
 import com.konkuk.boost.utils.UseCase
 
 interface AuthRepository {
@@ -43,4 +45,8 @@ interface AuthRepository {
     suspend fun makeStudentInfoRequest(): UseCase<StudentInfoResponse>
 
     suspend fun getPersonalInfo(): UseCase<List<PersonalInfoEntity>>
+
+    suspend fun getDeptTransferInfo(): UseCase<List<DeptTransferEntity>>
+
+    suspend fun getStudentStateChangeInfo(): UseCase<List<StudentStateChangeEntity>>
 }

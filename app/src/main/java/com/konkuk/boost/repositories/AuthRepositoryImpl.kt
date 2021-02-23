@@ -233,4 +233,32 @@ class AuthRepositoryImpl(
 
         return UseCase.success(personalInfo)
     }
+
+    override suspend fun getDeptTransferInfo(): UseCase<List<DeptTransferEntity>> {
+        val username = preferenceManager.username
+        val deptTransferInfo: List<DeptTransferEntity>
+
+        try {
+            deptTransferInfo = deptTransferDao.getAll(username)
+        } catch (e: Exception) {
+            Log.e("ku-boost", "${e.message}")
+            return UseCase.error("${e.message}")
+        }
+
+        return UseCase.success(deptTransferInfo)
+    }
+
+    override suspend fun getStudentStateChangeInfo(): UseCase<List<StudentStateChangeEntity>> {
+        val username = preferenceManager.username
+        val studentStateChangeEntity: List<StudentStateChangeEntity>
+
+        try {
+            studentStateChangeEntity = studentStateChangeDao.getAll(username)
+        } catch (e: Exception) {
+            Log.e("ku-boost", "${e.message}")
+            return UseCase.error("${e.message}")
+        }
+
+        return UseCase.success(studentStateChangeEntity)
+    }
 }
