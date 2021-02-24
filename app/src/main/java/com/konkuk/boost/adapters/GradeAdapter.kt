@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.konkuk.boost.R
-import com.konkuk.boost.persistence.GradeEntity
+import com.konkuk.boost.persistence.grade.GradeEntity
 
 class GradeAdapter : ListAdapter<GradeEntity, GradeAdapter.GradeViewHolder>(DiffCallback) {
 

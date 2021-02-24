@@ -1,13 +1,13 @@
-package com.konkuk.boost.persistence
+package com.konkuk.boost.persistence.rank
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.konkuk.boost.persistence.RankContract.RankEntry.SEMESTER
-import com.konkuk.boost.persistence.RankContract.RankEntry.TABLE_NAME
-import com.konkuk.boost.persistence.RankContract.RankEntry.USERNAME
-import com.konkuk.boost.persistence.RankContract.RankEntry.YEAR
+import com.konkuk.boost.persistence.rank.RankContract.RankEntry.SEMESTER
+import com.konkuk.boost.persistence.rank.RankContract.RankEntry.TABLE_NAME
+import com.konkuk.boost.persistence.rank.RankContract.RankEntry.USERNAME
+import com.konkuk.boost.persistence.rank.RankContract.RankEntry.YEAR
 
 
 @Dao

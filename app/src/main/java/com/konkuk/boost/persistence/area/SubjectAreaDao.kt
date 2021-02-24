@@ -1,11 +1,11 @@
-package com.konkuk.boost.persistence
+package com.konkuk.boost.persistence.area
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.konkuk.boost.persistence.SubjectAreaContract.SubjectAreaEntry.TABLE_NAME
-import com.konkuk.boost.persistence.SubjectAreaContract.SubjectAreaEntry.USERNAME
+import com.konkuk.boost.persistence.area.SubjectAreaContract.SubjectAreaEntry.TABLE_NAME
+import com.konkuk.boost.persistence.area.SubjectAreaContract.SubjectAreaEntry.USERNAME
 
 @Dao
 interface SubjectAreaDao {

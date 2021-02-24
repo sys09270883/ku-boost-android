@@ -2,10 +2,15 @@ package com.konkuk.boost.persistence
 
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
-import com.konkuk.boost.persistence.GradeContract.GradeEntry
-import com.konkuk.boost.persistence.LikeCourseContract.LikeCourseEntry
-import com.konkuk.boost.persistence.RankContract.RankEntry
-import com.konkuk.boost.persistence.SubjectAreaContract.SubjectAreaEntry
+import com.konkuk.boost.persistence.area.SubjectAreaContract.SubjectAreaEntry
+import com.konkuk.boost.persistence.dept.DeptTransferContract
+import com.konkuk.boost.persistence.grade.GradeContract.GradeEntry
+import com.konkuk.boost.persistence.like.LikeCourseContract.LikeCourseEntry
+import com.konkuk.boost.persistence.personal.PersonalInfoContract
+import com.konkuk.boost.persistence.rank.RankContract.RankEntry
+import com.konkuk.boost.persistence.scholarship.ScholarshipContract
+import com.konkuk.boost.persistence.stdstate.StudentStateChangeContract
+import com.konkuk.boost.persistence.tuition.TuitionContract
 
 object AppMigration {
     val MIGRATION_1_2 = object : Migration(1, 2) {
@@ -60,4 +65,35 @@ object AppMigration {
             database.execSQL(sql)
         }
     }
+
+    val MIGRATION_5_6 = object : Migration(5, 6) {
+        override fun migrate(database: SupportSQLiteDatabase) {
+            database.execSQL(PersonalInfoContract.CREATE_SQL)
+        }
+    }
+
+    val MIGRATION_6_7 = object : Migration(6, 7) {
+        override fun migrate(database: SupportSQLiteDatabase) {
+            database.execSQL(DeptTransferContract.CREATE_SQL)
+        }
+    }
+
+    val MIGRATION_7_8 = object : Migration(7, 8) {
+        override fun migrate(database: SupportSQLiteDatabase) {
+            database.execSQL(StudentStateChangeContract.CREATE_SQL)
+        }
+    }
+
+    val MIGRATION_8_9 = object : Migration(8, 9) {
+        override fun migrate(database: SupportSQLiteDatabase) {
+            database.execSQL(TuitionContract.CREATE_SQL)
+        }
+    }
+
+    val MIGRATION_9_10 = object : Migration(9, 10) {
+        override fun migrate(database: SupportSQLiteDatabase) {
+            database.execSQL(ScholarshipContract.CREATE_SQL)
+        }
+    }
+
 }

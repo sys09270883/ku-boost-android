@@ -1,7 +1,7 @@
 package com.konkuk.boost.utils
 
 import android.util.Log
-import com.konkuk.boost.persistence.GradeEntity
+import com.konkuk.boost.persistence.grade.GradeEntity
 import kotlin.math.floor
 
 object GradeUtils {
@@ -155,5 +155,29 @@ object GradeUtils {
             else -> throw Exception("Semester invalid error: $semester")
         }
         return "B0101$sem"
+    }
+
+    fun convertToKorean(englishKey: String) = when (englishKey) {
+        "zipCode" -> "우편번호"
+        "cellPhoneNo" -> "핸드폰번호"
+        "enterDate" -> "입학일자"
+        "chineseName" -> "한자이름"
+        "schoolYear" -> "학년"
+        "email" -> "이메일"
+        "highSchoolName" -> "출신고교"
+        "universityName" -> "출신대학"
+        "gender" -> "성별"
+        "highSchoolGraduationDate" -> "고교졸업일자"
+        "earlyGraduationAvailability" -> "조기졸업"
+        "country" -> "국적"
+        "tellNo" -> "집전화번호"
+        "koreanName" -> "이름"
+        "englishName" -> "영어이름"
+        "birthday" -> "생일"
+        "studentDiv" -> "구분"
+        "enterCode" -> "입학구분"
+        "address" -> "주소"
+        "impairment" -> "장애여부"
+        else -> ""
     }
 }

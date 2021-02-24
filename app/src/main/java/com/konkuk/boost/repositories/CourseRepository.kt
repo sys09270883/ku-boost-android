@@ -3,7 +3,7 @@ package com.konkuk.boost.repositories
 import com.konkuk.boost.data.course.RegistrationStatus
 import com.konkuk.boost.data.course.SyllabusDetailResponse
 import com.konkuk.boost.data.course.SyllabusResponse
-import com.konkuk.boost.persistence.LikeCourseEntity
+import com.konkuk.boost.persistence.like.LikeCourseEntity
 import com.konkuk.boost.utils.UseCase
 
 interface CourseRepository {

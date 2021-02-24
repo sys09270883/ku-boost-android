@@ -1,6 +1,6 @@
 package com.konkuk.boost.data.grade
 
-import com.konkuk.boost.persistence.SubjectAreaEntity
+import com.konkuk.boost.persistence.area.SubjectAreaEntity
 
 data class SubjectAreaCount(
     val area: SubjectAreaEntity,

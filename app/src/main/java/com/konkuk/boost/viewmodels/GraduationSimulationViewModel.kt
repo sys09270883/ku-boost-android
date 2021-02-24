@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.konkuk.boost.data.grade.SubjectAreaCount
-import com.konkuk.boost.persistence.GraduationSimulationEntity
+import com.konkuk.boost.persistence.simul.GraduationSimulationEntity
 import com.konkuk.boost.repositories.GradeRepository
 import com.konkuk.boost.utils.UseCase
 import kotlinx.coroutines.Dispatchers
