@@ -74,4 +74,5 @@
     <string name="prompt_student_state_change_info">학적변동</string>
     <string name="prompt_apply">신청</string>
     <string name="prompt_change">변동</string>
+    <string name="prompt_tuition_info">등록정보</string>
 </resources>

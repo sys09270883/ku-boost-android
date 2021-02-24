@@ -7,13 +7,15 @@ import com.konkuk.boost.api.KuisService
 import com.konkuk.boost.data.auth.ChangePasswordResponse
 import com.konkuk.boost.data.auth.LoginResponse
 import com.konkuk.boost.data.auth.StudentInfoResponse
+import com.konkuk.boost.persistence.PreferenceManager
 import com.konkuk.boost.persistence.dept.DeptTransferDao
 import com.konkuk.boost.persistence.dept.DeptTransferEntity
 import com.konkuk.boost.persistence.personal.PersonalInfoDao
 import com.konkuk.boost.persistence.personal.PersonalInfoEntity
-import com.konkuk.boost.persistence.pref.PreferenceManager
 import com.konkuk.boost.persistence.stdstate.StudentStateChangeDao
 import com.konkuk.boost.persistence.stdstate.StudentStateChangeEntity
+import com.konkuk.boost.persistence.tuition.TuitionDao
+import com.konkuk.boost.persistence.tuition.TuitionEntity
 import com.konkuk.boost.utils.UseCase
 import retrofit2.Response
 
@@ -24,6 +26,7 @@ class AuthRepositoryImpl(
     private val personalInfoDao: PersonalInfoDao,
     private val deptTransferDao: DeptTransferDao,
     private val studentStateChangeDao: StudentStateChangeDao,
+    private val tuitionDao: TuitionDao,
 ) : AuthRepository {
     override suspend fun makeLoginRequest(
         username: String,
@@ -204,13 +207,26 @@ class AuthRepositoryImpl(
 
             personalInfoDao.insert(*personalEntities.toTypedArray())
 
-//            Log.d("ku-boost", "${studentInfoResponse.profilePhoto}")
-
-            Log.d("ku-boost", "${studentInfoResponse.scholarships}")
 
             Log.d("ku-boost", "${studentInfoResponse.tuitionFees}")
+            val tuitionFees = studentInfoResponse.tuitionFees
+            val tuitionEntities = mutableListOf<TuitionEntity>()
 
-            Log.d("ku-boost", "${studentInfoResponse.warnHonors}")
+            for (tuition in tuitionFees) {
+                tuitionEntities += TuitionEntity(
+                    username,
+                    tuition.paidDate,
+                    tuition.tuitionAmount ?: 0,
+                    tuition.enterAmount ?: 0,
+                    tuition.year,
+                    tuition.semester,
+                    tuition.stateCode
+                )
+            }
+
+            tuitionDao.insert(*tuitionEntities.toTypedArray())
+
+            Log.d("ku-boost", "${studentInfoResponse.scholarships}")
 
         } catch (e: Exception) {
             Log.e("ku-boost", "${e.message}")
@@ -260,5 +276,19 @@ class AuthRepositoryImpl(
         }
 
         return UseCase.success(studentStateChangeEntity)
+    }
+
+    override suspend fun getTuitionInfo(): UseCase<List<TuitionEntity>> {
+        val username = preferenceManager.username
+        val tuitionEntity: List<TuitionEntity>
+
+        try {
+            tuitionEntity = tuitionDao.getAll(username)
+        } catch (e: Exception) {
+            Log.e("ku-boost", "${e.message}")
+            return UseCase.error("${e.message}")
+        }
+
+        return UseCase.success(tuitionEntity)
     }
 }

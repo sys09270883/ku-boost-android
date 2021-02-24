@@ -2,7 +2,7 @@ package com.konkuk.boost.di
 
 import com.konkuk.boost.BuildConfig
 import com.konkuk.boost.api.*
-import com.konkuk.boost.persistence.pref.PreferenceManager
+import com.konkuk.boost.persistence.PreferenceManager
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.core.qualifier.named

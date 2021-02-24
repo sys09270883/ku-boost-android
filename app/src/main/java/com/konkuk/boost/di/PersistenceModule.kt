@@ -1,9 +1,9 @@
 package com.konkuk.boost.di
 
 import androidx.room.Room
-import com.konkuk.boost.persistence.pref.PreferenceManager
-import com.konkuk.boost.persistence.room.AppDatabase
-import com.konkuk.boost.persistence.room.AppMigration
+import com.konkuk.boost.persistence.AppDatabase
+import com.konkuk.boost.persistence.AppMigration
+import com.konkuk.boost.persistence.PreferenceManager
 import org.koin.android.ext.koin.androidApplication
 import org.koin.dsl.module
 
@@ -17,6 +17,7 @@ val persistenceModule = module {
             .addMigrations(AppMigration.MIGRATION_5_6)
             .addMigrations(AppMigration.MIGRATION_6_7)
             .addMigrations(AppMigration.MIGRATION_7_8)
+            .addMigrations(AppMigration.MIGRATION_8_9)
             .build()
     }
     single { get<AppDatabase>().graduationSimulationDao() }
@@ -27,5 +28,6 @@ val persistenceModule = module {
     single { get<AppDatabase>().personalInfoDao() }
     single { get<AppDatabase>().deptTransferDao() }
     single { get<AppDatabase>().studentStateChangeDao() }
+    single { get<AppDatabase>().tuitionDao() }
     single { PreferenceManager(androidApplication()) }
 }

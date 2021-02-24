@@ -5,7 +5,7 @@ import com.konkuk.boost.api.LibraryService
 import com.konkuk.boost.data.library.LoginRequest
 import com.konkuk.boost.data.library.LoginResponse
 import com.konkuk.boost.data.library.QRResponse
-import com.konkuk.boost.persistence.pref.PreferenceManager
+import com.konkuk.boost.persistence.PreferenceManager
 import com.konkuk.boost.utils.UseCase
 
 class LibraryResponseImpl(

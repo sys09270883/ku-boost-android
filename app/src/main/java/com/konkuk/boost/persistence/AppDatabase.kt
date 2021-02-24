@@ -1,4 +1,4 @@
-package com.konkuk.boost.persistence.room
+package com.konkuk.boost.persistence
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
@@ -18,6 +18,8 @@ import com.konkuk.boost.persistence.simul.GraduationSimulationDao
 import com.konkuk.boost.persistence.simul.GraduationSimulationEntity
 import com.konkuk.boost.persistence.stdstate.StudentStateChangeDao
 import com.konkuk.boost.persistence.stdstate.StudentStateChangeEntity
+import com.konkuk.boost.persistence.tuition.TuitionDao
+import com.konkuk.boost.persistence.tuition.TuitionEntity
 
 @Database(
     entities = [
@@ -29,8 +31,9 @@ import com.konkuk.boost.persistence.stdstate.StudentStateChangeEntity
         PersonalInfoEntity::class,
         DeptTransferEntity::class,
         StudentStateChangeEntity::class,
+        TuitionEntity::class,
     ],
-    version = 8,
+    version = 9,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -49,4 +52,6 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun deptTransferDao(): DeptTransferDao
 
     abstract fun studentStateChangeDao(): StudentStateChangeDao
+
+    abstract fun tuitionDao(): TuitionDao
 }

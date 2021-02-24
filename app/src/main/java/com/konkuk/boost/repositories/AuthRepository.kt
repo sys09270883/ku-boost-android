@@ -6,6 +6,7 @@ import com.konkuk.boost.data.auth.StudentInfoResponse
 import com.konkuk.boost.persistence.dept.DeptTransferEntity
 import com.konkuk.boost.persistence.personal.PersonalInfoEntity
 import com.konkuk.boost.persistence.stdstate.StudentStateChangeEntity
+import com.konkuk.boost.persistence.tuition.TuitionEntity
 import com.konkuk.boost.utils.UseCase
 
 interface AuthRepository {
@@ -49,4 +50,6 @@ interface AuthRepository {
     suspend fun getDeptTransferInfo(): UseCase<List<DeptTransferEntity>>
 
     suspend fun getStudentStateChangeInfo(): UseCase<List<StudentStateChangeEntity>>
+
+    suspend fun getTuitionInfo(): UseCase<List<TuitionEntity>>
 }

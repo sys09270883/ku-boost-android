@@ -8,7 +8,7 @@ import com.konkuk.boost.data.course.SyllabusDetailResponse
 import com.konkuk.boost.data.course.SyllabusResponse
 import com.konkuk.boost.persistence.like.LikeCourseDao
 import com.konkuk.boost.persistence.like.LikeCourseEntity
-import com.konkuk.boost.persistence.pref.PreferenceManager
+import com.konkuk.boost.persistence.PreferenceManager
 import com.konkuk.boost.utils.GradeUtils
 import com.konkuk.boost.utils.UseCase
 import org.jsoup.Jsoup

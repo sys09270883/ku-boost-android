@@ -9,7 +9,7 @@ import com.konkuk.boost.persistence.area.SubjectAreaDao
 import com.konkuk.boost.persistence.area.SubjectAreaEntity
 import com.konkuk.boost.persistence.grade.GradeDao
 import com.konkuk.boost.persistence.grade.GradeEntity
-import com.konkuk.boost.persistence.pref.PreferenceManager
+import com.konkuk.boost.persistence.PreferenceManager
 import com.konkuk.boost.persistence.rank.RankDao
 import com.konkuk.boost.persistence.rank.RankEntity
 import com.konkuk.boost.persistence.simul.GraduationSimulationDao
