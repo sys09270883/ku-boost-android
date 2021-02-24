@@ -14,6 +14,8 @@ import com.konkuk.boost.persistence.personal.PersonalInfoDao
 import com.konkuk.boost.persistence.personal.PersonalInfoEntity
 import com.konkuk.boost.persistence.rank.RankDao
 import com.konkuk.boost.persistence.rank.RankEntity
+import com.konkuk.boost.persistence.scholarship.ScholarshipDao
+import com.konkuk.boost.persistence.scholarship.ScholarshipEntity
 import com.konkuk.boost.persistence.simul.GraduationSimulationDao
 import com.konkuk.boost.persistence.simul.GraduationSimulationEntity
 import com.konkuk.boost.persistence.stdstate.StudentStateChangeDao
@@ -32,8 +34,9 @@ import com.konkuk.boost.persistence.tuition.TuitionEntity
         DeptTransferEntity::class,
         StudentStateChangeEntity::class,
         TuitionEntity::class,
+        ScholarshipEntity::class,
     ],
-    version = 9,
+    version = 10,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -54,4 +57,6 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun studentStateChangeDao(): StudentStateChangeDao
 
     abstract fun tuitionDao(): TuitionDao
+
+    abstract fun scholarshipDao(): ScholarshipDao
 }

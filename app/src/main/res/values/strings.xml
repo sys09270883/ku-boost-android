@@ -75,4 +75,5 @@
     <string name="prompt_apply">신청</string>
     <string name="prompt_change">변동</string>
     <string name="prompt_tuition_info">등록정보</string>
+    <string name="prompt_scholarship_info">장학정보</string>
 </resources>

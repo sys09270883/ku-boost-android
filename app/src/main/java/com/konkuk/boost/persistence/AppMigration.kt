@@ -8,6 +8,7 @@ import com.konkuk.boost.persistence.grade.GradeContract.GradeEntry
 import com.konkuk.boost.persistence.like.LikeCourseContract.LikeCourseEntry
 import com.konkuk.boost.persistence.personal.PersonalInfoContract
 import com.konkuk.boost.persistence.rank.RankContract.RankEntry
+import com.konkuk.boost.persistence.scholarship.ScholarshipContract
 import com.konkuk.boost.persistence.stdstate.StudentStateChangeContract
 import com.konkuk.boost.persistence.tuition.TuitionContract
 
@@ -88,4 +89,11 @@ object AppMigration {
             database.execSQL(TuitionContract.CREATE_SQL)
         }
     }
+
+    val MIGRATION_9_10 = object : Migration(9, 10) {
+        override fun migrate(database: SupportSQLiteDatabase) {
+            database.execSQL(ScholarshipContract.CREATE_SQL)
+        }
+    }
+
 }

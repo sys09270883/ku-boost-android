@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.konkuk.boost.data.auth.ScholarshipSection
 import com.konkuk.boost.data.auth.TuitionSection
 import com.konkuk.boost.databinding.FragmentRegistrationAndScholarshipBinding
 import com.konkuk.boost.utils.UseCase
@@ -26,13 +27,20 @@ class RegistrationAndScholarshipFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentRegistrationAndScholarshipBinding.inflate(inflater, container, false)
+        binding.lifecycleOwner = this
+        binding.viewModel = viewModel
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.fetchTuitionResponse()
+        fetchTuitionAndScholarship()
         setTuitionAndScholarshipRecyclerViewConfig()
+    }
+
+    private fun fetchTuitionAndScholarship() {
+        viewModel.fetchTuitionResponse()
+        viewModel.fetchScholarshipResponse()
     }
 
     private fun setTuitionAndScholarshipRecyclerViewConfig() {
@@ -41,7 +49,7 @@ class RegistrationAndScholarshipFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(context)
         val adapter = SectionedRecyclerViewAdapter()
         adapter.addSection("tuition", TuitionSection())
-//        adapter.addSection("scholarship", ScholarshipSection())
+        adapter.addSection("scholarship", ScholarshipSection())
         recyclerView.adapter = adapter
     }
 
@@ -57,6 +65,17 @@ class RegistrationAndScholarshipFragment : Fragment() {
                 }
             }
         }
+
+        viewModel.scholarshipResponse.observe(viewLifecycleOwner) {
+            when (it.status) {
+                UseCase.Status.SUCCESS -> {
+                    updateScholarship()
+                }
+                UseCase.Status.ERROR -> {
+                    Log.e("ku-boost", "${it.message}")
+                }
+            }
+        }
     }
 
     private fun updateTuition() {
@@ -64,6 +83,14 @@ class RegistrationAndScholarshipFragment : Fragment() {
             binding.tuitionAndScholarshipRecyclerView.adapter as SectionedRecyclerViewAdapter
         val section = adapter.getSection("tuition") as TuitionSection
         section.items = viewModel.getTuition()
+        adapter.notifyDataSetChanged()
+    }
+
+    private fun updateScholarship() {
+        val adapter =
+            binding.tuitionAndScholarshipRecyclerView.adapter as SectionedRecyclerViewAdapter
+        val section = adapter.getSection("scholarship") as ScholarshipSection
+        section.items = viewModel.getScholarship()
         adapter.notifyDataSetChanged()
     }
 }

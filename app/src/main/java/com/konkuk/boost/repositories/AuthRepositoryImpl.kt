@@ -12,6 +12,8 @@ import com.konkuk.boost.persistence.dept.DeptTransferDao
 import com.konkuk.boost.persistence.dept.DeptTransferEntity
 import com.konkuk.boost.persistence.personal.PersonalInfoDao
 import com.konkuk.boost.persistence.personal.PersonalInfoEntity
+import com.konkuk.boost.persistence.scholarship.ScholarshipDao
+import com.konkuk.boost.persistence.scholarship.ScholarshipEntity
 import com.konkuk.boost.persistence.stdstate.StudentStateChangeDao
 import com.konkuk.boost.persistence.stdstate.StudentStateChangeEntity
 import com.konkuk.boost.persistence.tuition.TuitionDao
@@ -27,6 +29,7 @@ class AuthRepositoryImpl(
     private val deptTransferDao: DeptTransferDao,
     private val studentStateChangeDao: StudentStateChangeDao,
     private val tuitionDao: TuitionDao,
+    private val scholarshipDao: ScholarshipDao,
 ) : AuthRepository {
     override suspend fun makeLoginRequest(
         username: String,
@@ -207,8 +210,7 @@ class AuthRepositoryImpl(
 
             personalInfoDao.insert(*personalEntities.toTypedArray())
 
-
-            Log.d("ku-boost", "${studentInfoResponse.tuitionFees}")
+            // Fetch tuition information and insert into table.
             val tuitionFees = studentInfoResponse.tuitionFees
             val tuitionEntities = mutableListOf<TuitionEntity>()
 
@@ -226,8 +228,25 @@ class AuthRepositoryImpl(
 
             tuitionDao.insert(*tuitionEntities.toTypedArray())
 
-            Log.d("ku-boost", "${studentInfoResponse.scholarships}")
 
+            // Fetch scholarship information and insert into table.
+            val scholarships = studentInfoResponse.scholarships
+            val scholarshipEntities = mutableListOf<ScholarshipEntity>()
+
+            for (scholarship in scholarships) {
+                scholarshipEntities += ScholarshipEntity(
+                    username,
+                    scholarship.scholarshipName,
+                    scholarship.scholarshipEnterAmount ?: 0,
+                    scholarship.scholarshipTuitionAmount ?: 0,
+                    scholarship.etcAmount ?: 0,
+                    scholarship.year,
+                    scholarship.semester,
+                    scholarship.date
+                )
+            }
+
+            scholarshipDao.insert(*scholarshipEntities.toTypedArray())
         } catch (e: Exception) {
             Log.e("ku-boost", "${e.message}")
             return UseCase.error("${e.message}")
@@ -290,5 +309,19 @@ class AuthRepositoryImpl(
         }
 
         return UseCase.success(tuitionEntity)
+    }
+
+    override suspend fun getScholarshipInfo(): UseCase<List<ScholarshipEntity>> {
+        val username = preferenceManager.username
+        val scholarshipEntities: List<ScholarshipEntity>
+
+        try {
+            scholarshipEntities = scholarshipDao.getAll(username)
+        } catch (e: Exception) {
+            Log.e("ku-boost", "${e.message}")
+            return UseCase.error("${e.message}")
+        }
+
+        return UseCase.success(scholarshipEntities)
     }
 }

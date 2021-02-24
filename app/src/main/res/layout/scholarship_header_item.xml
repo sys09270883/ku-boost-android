@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
         android:layout_marginVertical="12dp"
-        android:text="@string/prompt_tuition_info"
+        android:text="@string/prompt_scholarship_info"
         android:textColor="@color/appPrimaryHighlightColor"
         android:textSize="14sp"
         android:textStyle="bold"
