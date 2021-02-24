@@ -1,10 +1,10 @@
-package com.konkuk.boost.persistence
+package com.konkuk.boost.persistence.like
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.konkuk.boost.persistence.LikeCourseContract.LikeCourseEntry
+import com.konkuk.boost.persistence.like.LikeCourseContract.LikeCourseEntry
 
 @Dao
 interface LikeCourseDao {

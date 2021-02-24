@@ -1,8 +1,8 @@
-package com.konkuk.boost.persistence
+package com.konkuk.boost.persistence.simul
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import com.konkuk.boost.persistence.GraduationSimulationContract.GraduationSimulationEntry
+import com.konkuk.boost.persistence.simul.GraduationSimulationContract.GraduationSimulationEntry
 import java.util.*
 
 @Entity(

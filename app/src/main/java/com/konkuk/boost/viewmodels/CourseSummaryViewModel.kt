@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.konkuk.boost.data.course.SyllabusDetailResponse
-import com.konkuk.boost.persistence.LikeCourseEntity
+import com.konkuk.boost.persistence.like.LikeCourseEntity
 import com.konkuk.boost.repositories.CourseRepository
 import com.konkuk.boost.utils.UseCase
 import kotlinx.coroutines.Dispatchers

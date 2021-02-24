@@ -1,14 +1,14 @@
-package com.konkuk.boost.persistence
+package com.konkuk.boost.persistence.grade
 
 import androidx.room.*
-import com.konkuk.boost.persistence.GradeContract.GradeEntry.CLASSIFICATION
-import com.konkuk.boost.persistence.GradeContract.GradeEntry.SEMESTER
-import com.konkuk.boost.persistence.GradeContract.GradeEntry.SUBJECT_ID
-import com.konkuk.boost.persistence.GradeContract.GradeEntry.SUBJECT_NUMBER
-import com.konkuk.boost.persistence.GradeContract.GradeEntry.TABLE_NAME
-import com.konkuk.boost.persistence.GradeContract.GradeEntry.USERNAME
-import com.konkuk.boost.persistence.GradeContract.GradeEntry.VALID
-import com.konkuk.boost.persistence.GradeContract.GradeEntry.YEAR
+import com.konkuk.boost.persistence.grade.GradeContract.GradeEntry.CLASSIFICATION
+import com.konkuk.boost.persistence.grade.GradeContract.GradeEntry.SEMESTER
+import com.konkuk.boost.persistence.grade.GradeContract.GradeEntry.SUBJECT_ID
+import com.konkuk.boost.persistence.grade.GradeContract.GradeEntry.SUBJECT_NUMBER
+import com.konkuk.boost.persistence.grade.GradeContract.GradeEntry.TABLE_NAME
+import com.konkuk.boost.persistence.grade.GradeContract.GradeEntry.USERNAME
+import com.konkuk.boost.persistence.grade.GradeContract.GradeEntry.VALID
+import com.konkuk.boost.persistence.grade.GradeContract.GradeEntry.YEAR
 
 @Dao
 interface GradeDao {

@@ -5,7 +5,15 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.konkuk.boost.api.AuthorizedKuisService
 import com.konkuk.boost.api.OzService
 import com.konkuk.boost.data.grade.*
-import com.konkuk.boost.persistence.*
+import com.konkuk.boost.persistence.area.SubjectAreaDao
+import com.konkuk.boost.persistence.area.SubjectAreaEntity
+import com.konkuk.boost.persistence.grade.GradeDao
+import com.konkuk.boost.persistence.grade.GradeEntity
+import com.konkuk.boost.persistence.PreferenceManager
+import com.konkuk.boost.persistence.rank.RankDao
+import com.konkuk.boost.persistence.rank.RankEntity
+import com.konkuk.boost.persistence.simul.GraduationSimulationDao
+import com.konkuk.boost.persistence.simul.GraduationSimulationEntity
 import com.konkuk.boost.utils.DateTimeConverter
 import com.konkuk.boost.utils.GradeUtils
 import com.konkuk.boost.utils.OzEngine

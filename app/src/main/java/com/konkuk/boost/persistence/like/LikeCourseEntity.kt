@@ -1,8 +1,8 @@
-package com.konkuk.boost.persistence
+package com.konkuk.boost.persistence.like
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import com.konkuk.boost.persistence.LikeCourseContract.LikeCourseEntry
+import com.konkuk.boost.persistence.like.LikeCourseContract.LikeCourseEntry
 import java.util.*
 
 @Entity(

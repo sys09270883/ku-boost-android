@@ -22,7 +22,7 @@ import com.konkuk.boost.R
 import com.konkuk.boost.adapters.GradeAdapter
 import com.konkuk.boost.data.grade.ParcelableGrade
 import com.konkuk.boost.databinding.FragmentTotalGradeDetailBinding
-import com.konkuk.boost.persistence.GradeEntity
+import com.konkuk.boost.persistence.grade.GradeEntity
 import com.konkuk.boost.utils.GradeUtils
 import com.konkuk.boost.utils.StorageUtils.checkStoragePermission
 import com.konkuk.boost.utils.UseCase

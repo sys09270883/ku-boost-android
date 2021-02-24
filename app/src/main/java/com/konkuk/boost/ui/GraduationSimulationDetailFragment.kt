@@ -17,7 +17,7 @@ import com.konkuk.boost.R
 import com.konkuk.boost.adapters.GradeAdapter
 import com.konkuk.boost.data.grade.ParcelableGrade
 import com.konkuk.boost.databinding.FragmentGraduationSimulationDetailBinding
-import com.konkuk.boost.persistence.GradeEntity
+import com.konkuk.boost.persistence.grade.GradeEntity
 import com.konkuk.boost.utils.GradeUtils
 import com.konkuk.boost.utils.StorageUtils
 import com.konkuk.boost.viewmodels.GraduationSimulationDetailViewModel
