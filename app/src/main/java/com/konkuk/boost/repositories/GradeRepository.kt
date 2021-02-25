@@ -22,13 +22,13 @@ interface GradeRepository {
 
     suspend fun getAllValidGrades(): UseCase<List<GradeEntity>>
 
-    suspend fun getAllGrades(): UseCase<List<GradeEntity>>
+    suspend fun getNotDeletedGrades(): UseCase<List<GradeEntity>>
 
     suspend fun getCurrentGrades(): UseCase<List<GradeEntity>>
 
     fun hasData(): Boolean
 
-    suspend fun getGradesByClassification(clf: String): UseCase<List<GradeEntity>>
+    suspend fun getNotDeletedGradesByClassification(clf: String): UseCase<List<GradeEntity>>
 
     suspend fun getTotalRank(year: Int, semester: Int): UseCase<RankEntity>
 

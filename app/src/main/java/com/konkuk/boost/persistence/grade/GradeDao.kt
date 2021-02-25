@@ -20,8 +20,8 @@ interface GradeDao {
     @Query("SELECT * FROM $TABLE_NAME WHERE $USERNAME = :username AND $TYPE = :type ORDER BY $YEAR, $SEMESTER")
     suspend fun getAllValidGrades(username: String, type: Int = 0): List<GradeEntity>
 
-    @Query("SELECT * FROM $TABLE_NAME WHERE $USERNAME = :username ORDER BY $YEAR, $SEMESTER")
-    suspend fun getAllGrades(username: String): List<GradeEntity>
+    @Query("SELECT * FROM $TABLE_NAME WHERE $USERNAME = :username AND $TYPE < 2 ORDER BY $YEAR, $SEMESTER")
+    suspend fun getNotDeletedGrades(username: String): List<GradeEntity>
 
     @Query("SELECT * FROM $TABLE_NAME WHERE $USERNAME = :username ORDER BY $YEAR DESC, $SEMESTER DESC LIMIT 1")
     suspend fun getCurrentSemester(username: String): GradeEntity
@@ -39,8 +39,8 @@ interface GradeDao {
         return getCurrentSemesterGrades(username, gradeEntity.year, gradeEntity.semester)
     }
 
-    @Query("SELECT * FROM $TABLE_NAME WHERE $USERNAME = :username AND $CLASSIFICATION = :clf")
-    suspend fun getGradesByClassification(
+    @Query("SELECT * FROM $TABLE_NAME WHERE $USERNAME = :username AND $CLASSIFICATION = :clf AND $TYPE < 2")
+    suspend fun getNotDeletedGradesByClassification(
         username: String,
         clf: String
     ): List<GradeEntity>

@@ -31,9 +31,9 @@ class GraduationSimulationDetailViewModel(private val gradeRepository: GradeRepo
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 if (clf == "총점")
-                    gradesByClassification.postValue(gradeRepository.getAllGrades())
+                    gradesByClassification.postValue(gradeRepository.getNotDeletedGrades())
                 else
-                    gradesByClassification.postValue(gradeRepository.getGradesByClassification(clf))
+                    gradesByClassification.postValue(gradeRepository.getNotDeletedGradesByClassification(clf))
             }
             fetched.postValue(true)
         }

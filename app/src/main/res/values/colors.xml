@@ -30,5 +30,4 @@
     <color name="loginLocoColor">@color/primaryColor</color>
     <color name="tabIconColor">@color/primaryColor</color>
     <color name="settingsIconColor">@color/primaryColor</color>
-
 </resources>

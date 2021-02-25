@@ -17,6 +17,7 @@ import com.konkuk.boost.R
 import com.konkuk.boost.adapters.GradeAdapter
 import com.konkuk.boost.data.grade.ParcelableGrade
 import com.konkuk.boost.databinding.FragmentGraduationSimulationDetailBinding
+import com.konkuk.boost.persistence.grade.GradeContract
 import com.konkuk.boost.persistence.grade.GradeEntity
 import com.konkuk.boost.utils.GradeUtils
 import com.konkuk.boost.utils.StorageUtils
@@ -110,7 +111,8 @@ class GraduationSimulationDetailFragment : Fragment() {
                 return@observe
 
             val gradesByClassification = it.data
-            val validGradesByClassification = it.data.filter { grade -> grade.type == 0 }
+            val validGradesByClassification =
+                it.data.filter { grade -> grade.type == GradeContract.Type.VALID.value }
 
             val (avr, _) = GradeUtils.totalAverages(validGradesByClassification)
             // 전체평점
@@ -123,7 +125,7 @@ class GraduationSimulationDetailFragment : Fragment() {
             )
 
             // 성적분포
-            val characterGradesMap = GradeUtils.characterGrades(gradesByClassification)
+            val characterGradesMap = GradeUtils.characterGrades(validGradesByClassification)
             val characterGrades = mutableListOf<PieEntry>()
 
             for (grade in characterGradesMap) {

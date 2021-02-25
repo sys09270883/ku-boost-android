@@ -290,12 +290,12 @@ class GradeRepositoryImpl(
         return UseCase.success(allValidGrades)
     }
 
-    override suspend fun getAllGrades(): UseCase<List<GradeEntity>> {
+    override suspend fun getNotDeletedGrades(): UseCase<List<GradeEntity>> {
         val username = preferenceManager.username
 
         val allGrades: List<GradeEntity>
         try {
-            allGrades = gradeDao.getAllGrades(username)
+            allGrades = gradeDao.getNotDeletedGrades(username)
         } catch (e: Exception) {
             FirebaseCrashlytics.getInstance().log("${e.message}")
             return UseCase.error("${e.message}")
@@ -320,12 +320,12 @@ class GradeRepositoryImpl(
 
     override fun hasData() = preferenceManager.hasData
 
-    override suspend fun getGradesByClassification(clf: String): UseCase<List<GradeEntity>> {
+    override suspend fun getNotDeletedGradesByClassification(clf: String): UseCase<List<GradeEntity>> {
         val username = preferenceManager.username
 
         val gradesByClassification: List<GradeEntity>
         try {
-            gradesByClassification = gradeDao.getGradesByClassification(username, clf)
+            gradesByClassification = gradeDao.getNotDeletedGradesByClassification(username, clf)
         } catch (e: Exception) {
             FirebaseCrashlytics.getInstance().log("${e.message}")
             return UseCase.error("${e.message}")
@@ -415,8 +415,8 @@ class GradeRepositoryImpl(
             for (area in subjectAreas) {
                 subjectAreaCounts += SubjectAreaCount(area)
             }
-            basicGrades = gradeDao.getGradesByClassification(username, basicType)
-            coreGrades = gradeDao.getGradesByClassification(username, coreType)
+            basicGrades = gradeDao.getNotDeletedGradesByClassification(username, basicType)
+            coreGrades = gradeDao.getNotDeletedGradesByClassification(username, coreType)
 
             for (grade in basicGrades) {
                 for (areaWithCount in subjectAreaCounts) {
