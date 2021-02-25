@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.konkuk.boost.data.course.RegistrationStatus
 import com.konkuk.boost.data.course.RegistrationStatusData
 import com.konkuk.boost.data.course.SyllabusResponse
-import com.konkuk.boost.persistence.LikeCourseEntity
+import com.konkuk.boost.persistence.like.LikeCourseEntity
 import com.konkuk.boost.repositories.CourseRepository
 import com.konkuk.boost.utils.DateTimeConverter
 import com.konkuk.boost.utils.UseCase

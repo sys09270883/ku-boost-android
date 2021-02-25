@@ -3,9 +3,9 @@ package com.konkuk.boost.viewmodels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.konkuk.boost.persistence.GradeEntity
-import com.konkuk.boost.persistence.GraduationSimulationEntity
-import com.konkuk.boost.persistence.RankEntity
+import com.konkuk.boost.persistence.grade.GradeEntity
+import com.konkuk.boost.persistence.rank.RankEntity
+import com.konkuk.boost.persistence.simul.GraduationSimulationEntity
 import com.konkuk.boost.repositories.AuthRepository
 import com.konkuk.boost.repositories.GradeRepository
 import com.konkuk.boost.utils.UseCase
@@ -54,7 +54,6 @@ class GradeViewModel(
     fun fetchCurrentGradesFromLocalDb() {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                // 로컬 DB에 있는 데이터를 가져와 LiveData 업데이트
                 currentGrades.postValue(gradeRepository.getCurrentGrades())
             }
         }
@@ -63,15 +62,12 @@ class GradeViewModel(
     fun fetchTotalGradesFromLocalDb() {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                // 로컬 DB에 있는 데이터를 가져와 LiveData 업데이트
                 allValidGrades.postValue(gradeRepository.getAllValidGrades())
             }
         }
     }
 
     fun hasData(): Boolean = gradeRepository.hasData()
-
-    val isTotalRankInsertedResponse = MutableLiveData<UseCase<Unit>>()
 
     val totalRankResponse = MutableLiveData<UseCase<RankEntity>>()
 

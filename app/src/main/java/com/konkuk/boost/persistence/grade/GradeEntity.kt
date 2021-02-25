@@ -1,8 +1,8 @@
-package com.konkuk.boost.persistence
+package com.konkuk.boost.persistence.grade
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import com.konkuk.boost.persistence.GradeContract.GradeEntry
+import com.konkuk.boost.persistence.grade.GradeContract.GradeEntry
 import java.util.*
 
 @Entity(
@@ -23,11 +23,7 @@ data class GradeEntity(
     @ColumnInfo(name = GradeEntry.SUBJECT_NUMBER) val subjectNumber: String,
     @ColumnInfo(name = GradeEntry.SUBJECT_POINT) val subjectPoint: Int,
     @ColumnInfo(name = GradeEntry.SUBJECT_AREA) var subjectArea: String,
-    @ColumnInfo(name = GradeEntry.VALID) var valid: Boolean,
-    @ColumnInfo(
-        name = GradeEntry.MODIFIED_AT,
-        defaultValue = "CURRENT_TIMESTAMP"
-    ) val modifiedAt: Long,
+    @ColumnInfo(name = GradeEntry.TYPE) var type: Int,  // 0: valid, 1: pending, 2: deleted
 ) {
 
     override fun equals(other: Any?): Boolean {

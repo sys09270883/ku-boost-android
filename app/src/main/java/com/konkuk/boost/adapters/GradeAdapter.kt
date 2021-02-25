@@ -3,12 +3,13 @@ package com.konkuk.boost.adapters
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.konkuk.boost.R
-import com.konkuk.boost.persistence.GradeEntity
+import com.konkuk.boost.persistence.grade.GradeEntity
 
 class GradeAdapter : ListAdapter<GradeEntity, GradeAdapter.GradeViewHolder>(DiffCallback) {
 
@@ -29,6 +30,7 @@ class GradeAdapter : ListAdapter<GradeEntity, GradeAdapter.GradeViewHolder>(Diff
     }
 
     inner class GradeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val container: LinearLayout = itemView.findViewById(R.id.container)
         val subjectNameTextView: TextView = itemView.findViewById(R.id.subjectNameTextView)
         val professorTextView: TextView = itemView.findViewById(R.id.professorTextView)
         val subjectPointTextView: TextView = itemView.findViewById(R.id.subjectPointTextView)
