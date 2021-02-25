@@ -36,7 +36,7 @@ import com.konkuk.boost.persistence.tuition.TuitionEntity
         TuitionEntity::class,
         ScholarshipEntity::class,
     ],
-    version = 10,
+    version = 11,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {

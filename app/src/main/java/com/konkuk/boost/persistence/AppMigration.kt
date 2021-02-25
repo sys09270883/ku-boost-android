@@ -4,6 +4,7 @@ import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.konkuk.boost.persistence.area.SubjectAreaContract.SubjectAreaEntry
 import com.konkuk.boost.persistence.dept.DeptTransferContract
+import com.konkuk.boost.persistence.grade.GradeContract
 import com.konkuk.boost.persistence.grade.GradeContract.GradeEntry
 import com.konkuk.boost.persistence.like.LikeCourseContract.LikeCourseEntry
 import com.konkuk.boost.persistence.personal.PersonalInfoContract
@@ -93,6 +94,14 @@ object AppMigration {
     val MIGRATION_9_10 = object : Migration(9, 10) {
         override fun migrate(database: SupportSQLiteDatabase) {
             database.execSQL(ScholarshipContract.CREATE_SQL)
+        }
+    }
+
+    val MIGRATION_10_11 = object : Migration(10, 11) {
+        override fun migrate(database: SupportSQLiteDatabase) {
+            database.execSQL(GradeContract.CREATE_NEW_TABLE_WITH_TYPE)
+            database.execSQL(GradeContract.DROP_ORIGIN_TABLE)
+            database.execSQL(GradeContract.RENAME_TMP_TO_GRADE_TABLE)
         }
     }
 

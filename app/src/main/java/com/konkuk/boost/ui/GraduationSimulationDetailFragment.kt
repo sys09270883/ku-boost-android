@@ -110,7 +110,7 @@ class GraduationSimulationDetailFragment : Fragment() {
                 return@observe
 
             val gradesByClassification = it.data
-            val validGradesByClassification = it.data.filter { grade -> grade.valid }
+            val validGradesByClassification = it.data.filter { grade -> grade.type == 0 }
 
             val (avr, _) = GradeUtils.totalAverages(validGradesByClassification)
             // 전체평점
