@@ -5,11 +5,12 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.konkuk.boost.api.AuthorizedKuisService
 import com.konkuk.boost.api.OzService
 import com.konkuk.boost.data.grade.*
+import com.konkuk.boost.persistence.PreferenceManager
 import com.konkuk.boost.persistence.area.SubjectAreaDao
 import com.konkuk.boost.persistence.area.SubjectAreaEntity
+import com.konkuk.boost.persistence.grade.GradeContract
 import com.konkuk.boost.persistence.grade.GradeDao
 import com.konkuk.boost.persistence.grade.GradeEntity
-import com.konkuk.boost.persistence.PreferenceManager
 import com.konkuk.boost.persistence.rank.RankDao
 import com.konkuk.boost.persistence.rank.RankEntity
 import com.konkuk.boost.persistence.simul.GraduationSimulationDao
@@ -170,8 +171,7 @@ class GradeRepositoryImpl(
                             grade.subjectNumber ?: "",
                             grade.subjectPoint ?: 0,
                             "",
-                            false,
-                            System.currentTimeMillis()
+                            GradeContract.Type.PENDING.value,
                         )
                     }
                 }
@@ -207,7 +207,7 @@ class GradeRepositoryImpl(
                 for (validGrade in validGrades) {
                     val grade = allGrades.find { grade -> grade.subjectId == validGrade.subjectId }
                         ?: continue
-                    grade.valid = true
+                    grade.type = GradeContract.Type.VALID.value
                 }
 
                 grades = allGrades.toMutableList()
@@ -290,12 +290,12 @@ class GradeRepositoryImpl(
         return UseCase.success(allValidGrades)
     }
 
-    override suspend fun getAllGrades(): UseCase<List<GradeEntity>> {
+    override suspend fun getNotDeletedGrades(): UseCase<List<GradeEntity>> {
         val username = preferenceManager.username
 
         val allGrades: List<GradeEntity>
         try {
-            allGrades = gradeDao.getAllGrades(username)
+            allGrades = gradeDao.getNotDeletedGrades(username)
         } catch (e: Exception) {
             FirebaseCrashlytics.getInstance().log("${e.message}")
             return UseCase.error("${e.message}")
@@ -320,12 +320,12 @@ class GradeRepositoryImpl(
 
     override fun hasData() = preferenceManager.hasData
 
-    override suspend fun getGradesByClassification(clf: String): UseCase<List<GradeEntity>> {
+    override suspend fun getNotDeletedGradesByClassification(clf: String): UseCase<List<GradeEntity>> {
         val username = preferenceManager.username
 
         val gradesByClassification: List<GradeEntity>
         try {
-            gradesByClassification = gradeDao.getGradesByClassification(username, clf)
+            gradesByClassification = gradeDao.getNotDeletedGradesByClassification(username, clf)
         } catch (e: Exception) {
             FirebaseCrashlytics.getInstance().log("${e.message}")
             return UseCase.error("${e.message}")
@@ -349,7 +349,7 @@ class GradeRepositoryImpl(
     }
 
     @KoinApiExtension
-    override suspend fun makeTotalRank(): UseCase<Unit> {
+    override suspend fun makeTotalRankAndUpdateDeletedSubjects(): UseCase<Unit> {
         val username = preferenceManager.username
         val stdNo = preferenceManager.stdNo
 
@@ -365,11 +365,15 @@ class GradeRepositoryImpl(
             )
 
             val responseBody = ozService.postOzBinary(requestBody)
-            val rankMap = oz.getRankMap(responseBody.byteStream())
+            val (rankMap, deletedSubjects) = oz.getRankMapAndDeletedSubjects(responseBody.byteStream())
 
             val ranks = mutableListOf<RankEntity>()
             for ((key, value) in rankMap) {
                 ranks += RankEntity(username, key.year, key.semester, value.rank, value.total)
+            }
+
+            for (deletedSubject in deletedSubjects) {
+                gradeDao.updateType(username, deletedSubject, GradeContract.Type.DELETED.value)
             }
 
             rankDao.insert(*ranks.toTypedArray())
@@ -411,8 +415,8 @@ class GradeRepositoryImpl(
             for (area in subjectAreas) {
                 subjectAreaCounts += SubjectAreaCount(area)
             }
-            basicGrades = gradeDao.getGradesByClassification(username, basicType)
-            coreGrades = gradeDao.getGradesByClassification(username, coreType)
+            basicGrades = gradeDao.getNotDeletedGradesByClassification(username, basicType)
+            coreGrades = gradeDao.getNotDeletedGradesByClassification(username, coreType)
 
             for (grade in basicGrades) {
                 for (areaWithCount in subjectAreaCounts) {

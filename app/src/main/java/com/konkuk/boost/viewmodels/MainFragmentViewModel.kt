@@ -46,9 +46,7 @@ class MainFragmentViewModel(
         }
     }
 
-    fun fetchValidGradesAndUpdateClassificationFromServer() {
-        _allGradesLoading.value = true
-
+    fun fetchGrades() {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 gradeRepository.makeValidGradesAndUpdateClassification()
@@ -57,6 +55,10 @@ class MainFragmentViewModel(
                 "ku-boost",
                 "All valid grades, classification of graduation simulation are updated."
             )
+            withContext(Dispatchers.IO) {
+                gradeRepository.makeTotalRankAndUpdateDeletedSubjects()
+            }
+            Log.d("ku-boost", "Total rank and deleted subjects are updated.")
             _allGradesLoading.postValue(false)
             fetched.postValue(true)
         }
@@ -71,12 +73,4 @@ class MainFragmentViewModel(
         }
     }
 
-    fun makeTotalRank() {
-        viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                gradeRepository.makeTotalRank()
-            }
-            Log.d("ku-boost", "Total rank is generated.")
-        }
-    }
 }

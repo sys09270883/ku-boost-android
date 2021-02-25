@@ -19,6 +19,7 @@ val persistenceModule = module {
             .addMigrations(AppMigration.MIGRATION_7_8)
             .addMigrations(AppMigration.MIGRATION_8_9)
             .addMigrations(AppMigration.MIGRATION_9_10)
+            .addMigrations(AppMigration.MIGRATION_10_11)
             .build()
     }
     single { get<AppDatabase>().graduationSimulationDao() }
