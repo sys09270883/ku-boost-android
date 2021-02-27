@@ -430,7 +430,7 @@ class GradeRepositoryImpl(
                         continue
                     }
 
-                    if (area.subjectAreaName == grade.subjectArea) {
+                    if (area.subjectAreaName == grade.subjectArea && grade.type == GradeContract.Type.VALID.value) {
                         areaWithCount.count += 1
                     }
                 }
