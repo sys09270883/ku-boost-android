@@ -47,10 +47,8 @@ class LoginViewModel(
 
         _loading.value = true
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                loginResource.postValue(authRepository.makeLoginRequest(username, password))
-                gradeRepository.makeUserInformationRequest()
-            }
+            loginResource.postValue(authRepository.makeLoginRequest(username, password))
+            gradeRepository.makeUserInformationRequest()
             _loading.postValue(false)
         }
     }

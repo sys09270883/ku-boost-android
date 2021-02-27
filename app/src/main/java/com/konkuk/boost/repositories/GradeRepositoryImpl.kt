@@ -79,14 +79,16 @@ class GradeRepositoryImpl(
         val userInfoResponse: UserInformationResponse
         try {
             userInfoResponse = authorizedKuisService.fetchUserInformation()
-            userInfoResponse.userInformation.apply {
-                preferenceManager.setUserInfo(
-                    name = name ?: "",
-                    stdNo = stdNo.toInt(),  // API stdNo는 String
-                    state = state ?: "",
-                    dept = dept ?: "",
-                    code = code
-                )
+            withContext(Dispatchers.IO) {
+                userInfoResponse.userInformation.apply {
+                    preferenceManager.setUserInfo(
+                        name = name ?: "",
+                        stdNo = stdNo.toInt(),  // API stdNo는 String
+                        state = state ?: "",
+                        dept = dept ?: "",
+                        code = code
+                    )
+                }
             }
         } catch (e: Exception) {
             FirebaseCrashlytics.getInstance().log("${e.message}")
@@ -97,12 +99,14 @@ class GradeRepositoryImpl(
     }
 
     override suspend fun getGraduationSimulations(): UseCase<List<GraduationSimulationEntity>> {
-        val username = preferenceManager.username
         val graduationSimulationList: List<GraduationSimulationEntity>
 
         try {
-            graduationSimulationList =
-                graduationSimulationDao.loadGraduationSimulationByUsername(username)
+            withContext(Dispatchers.IO) {
+                val username = preferenceManager.username
+                graduationSimulationList =
+                    graduationSimulationDao.loadGraduationSimulationByUsername(username)
+            }
         } catch (e: Exception) {
             FirebaseCrashlytics.getInstance().log("${e.message}")
             return UseCase.error("${e.message}")
@@ -440,7 +444,7 @@ class GradeRepositoryImpl(
                         continue
                     }
 
-                    if (area.subjectAreaName == grade.subjectArea) {
+                    if (area.subjectAreaName == grade.subjectArea && grade.type == GradeContract.Type.VALID.value) {
                         areaWithCount.count += 1
                     }
                 }
