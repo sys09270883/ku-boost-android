@@ -52,7 +52,7 @@ class GradeRepositoryImpl(
                 shregCd = code
             )
 
-            val simulations = graduationSimulationResponse.simulations
+            val simulations = graduationSimulationResponse.simulations ?: emptyList()
 
             for (simulation in simulations) {
                 val data = GraduationSimulationEntity(
@@ -79,14 +79,16 @@ class GradeRepositoryImpl(
         val userInfoResponse: UserInformationResponse
         try {
             userInfoResponse = authorizedKuisService.fetchUserInformation()
-            userInfoResponse.userInformation.apply {
-                preferenceManager.setUserInfo(
-                    name = name ?: "",
-                    stdNo = stdNo.toInt(),  // API stdNo는 String
-                    state = state ?: "",
-                    dept = dept ?: "",
-                    code = code
-                )
+            withContext(Dispatchers.IO) {
+                userInfoResponse.userInformation.apply {
+                    preferenceManager.setUserInfo(
+                        name = name ?: "",
+                        stdNo = stdNo.toInt(),  // API stdNo는 String
+                        state = state ?: "",
+                        dept = dept ?: "",
+                        code = code
+                    )
+                }
             }
         } catch (e: Exception) {
             FirebaseCrashlytics.getInstance().log("${e.message}")
@@ -97,12 +99,14 @@ class GradeRepositoryImpl(
     }
 
     override suspend fun getGraduationSimulations(): UseCase<List<GraduationSimulationEntity>> {
-        val username = preferenceManager.username
         val graduationSimulationList: List<GraduationSimulationEntity>
 
         try {
-            graduationSimulationList =
-                graduationSimulationDao.loadGraduationSimulationByUsername(username)
+            withContext(Dispatchers.IO) {
+                val username = preferenceManager.username
+                graduationSimulationList =
+                    graduationSimulationDao.loadGraduationSimulationByUsername(username)
+            }
         } catch (e: Exception) {
             FirebaseCrashlytics.getInstance().log("${e.message}")
             return UseCase.error("${e.message}")
@@ -115,13 +119,14 @@ class GradeRepositoryImpl(
 
     private suspend fun fetchValidGrades(): List<ValidGrade> {
         val stdNo = preferenceManager.stdNo
-        val validGradesResponse: ValidGradesResponse
+        val validGradesResponse: ValidGradesResponse?
         val validGrades: List<ValidGrade>
 
         try {
             validGradesResponse = authorizedKuisService.fetchValidGrades(stdNo = stdNo)
-            validGrades = validGradesResponse.validGrades
+            validGrades = validGradesResponse?.validGrades ?: emptyList()
         } catch (e: Exception) {
+            Log.e("ku-boost", "${e.message}")
             return emptyList()
         }
 
@@ -139,7 +144,6 @@ class GradeRepositoryImpl(
             val startYear = stdNo.toString().substring(0, 4).toInt()
             val endYear = DateTimeConverter.currentYear().toInt()
             val semesters = intArrayOf(5, 2, 4, 1)
-
             var isLastSemesterQueried = false
 
             for (year in startYear..endYear) {
@@ -373,7 +377,13 @@ class GradeRepositoryImpl(
             }
 
             for (deletedSubject in deletedSubjects) {
-                gradeDao.updateType(username, deletedSubject, GradeContract.Type.DELETED.value)
+                gradeDao.updateType(
+                    username,
+                    deletedSubject.first,
+                    GradeContract.Type.DELETED.value,
+                    deletedSubject.second,
+                    deletedSubject.third
+                )
             }
 
             rankDao.insert(*ranks.toTypedArray())
@@ -426,7 +436,7 @@ class GradeRepositoryImpl(
                         continue
                     }
 
-                    if (area.subjectAreaName == grade.subjectArea) {
+                    if (area.subjectAreaName == grade.subjectArea && grade.type == GradeContract.Type.VALID.value) {
                         areaWithCount.count += 1
                     }
                 }
@@ -440,7 +450,7 @@ class GradeRepositoryImpl(
                         continue
                     }
 
-                    if (area.subjectAreaName == grade.subjectArea) {
+                    if (area.subjectAreaName == grade.subjectArea && grade.type == GradeContract.Type.VALID.value) {
                         areaWithCount.count += 1
                     }
                 }

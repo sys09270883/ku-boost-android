@@ -11,7 +11,6 @@ import android.widget.ProgressBar
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
 import com.konkuk.boost.R
 import com.konkuk.boost.adapters.MainFragmentStateAdapter
@@ -74,7 +73,7 @@ class MainFragment : Fragment() {
                 UseCase.Status.SUCCESS -> {
                 }
                 UseCase.Status.ERROR -> {
-                    Snackbar.make(binding.container, "${it.message}", Snackbar.LENGTH_SHORT).show()
+//                    Snackbar.make(binding.container, "${it.message}", Snackbar.LENGTH_SHORT).show()
                 }
             }
         }
