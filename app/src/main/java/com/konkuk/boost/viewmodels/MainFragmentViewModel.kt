@@ -47,6 +47,7 @@ class MainFragmentViewModel(
     }
 
     fun fetchGrades() {
+        _allGradesLoading.value = true
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 gradeRepository.makeValidGradesAndUpdateClassification()

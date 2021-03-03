@@ -14,8 +14,14 @@ interface GradeDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertGrade(vararg gradeEntity: GradeEntity)
 
-    @Query("UPDATE $TABLE_NAME SET $TYPE = :type WHERE $USERNAME = :username AND $SUBJECT_NUMBER = :subjectNumber")
-    suspend fun updateType(username: String, subjectNumber: String, type: Int)
+    @Query("""
+        UPDATE $TABLE_NAME SET $TYPE = :type 
+        WHERE $USERNAME = :username 
+        AND $SUBJECT_NUMBER = :subjectNumber
+        AND $YEAR = :year
+        AND $SEMESTER = :semester
+    """)
+    suspend fun updateType(username: String, subjectNumber: String, type: Int, year: Int, semester: Int)
 
     @Query("SELECT * FROM $TABLE_NAME WHERE $USERNAME = :username AND $TYPE = :type ORDER BY $YEAR, $SEMESTER")
     suspend fun getAllValidGrades(username: String, type: Int = 0): List<GradeEntity>
