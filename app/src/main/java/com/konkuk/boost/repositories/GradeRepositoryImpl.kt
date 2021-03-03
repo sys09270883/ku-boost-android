@@ -370,6 +370,8 @@ class GradeRepositoryImpl(
 
             val responseBody = ozService.postOzBinary(requestBody)
             val (rankMap, deletedSubjects) = oz.getRankMapAndDeletedSubjects(responseBody.byteStream())
+            Log.d("ku-boost", rankMap.toString())
+            Log.d("ku-boost", deletedSubjects.toString())
 
             val ranks = mutableListOf<RankEntity>()
             for ((key, value) in rankMap) {
@@ -377,7 +379,13 @@ class GradeRepositoryImpl(
             }
 
             for (deletedSubject in deletedSubjects) {
-                gradeDao.updateType(username, deletedSubject, GradeContract.Type.DELETED.value)
+                gradeDao.updateType(
+                    username,
+                    deletedSubject.first,
+                    GradeContract.Type.DELETED.value,
+                    deletedSubject.second,
+                    deletedSubject.third
+                )
             }
 
             rankDao.insert(*ranks.toTypedArray())
