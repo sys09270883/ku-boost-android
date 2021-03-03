@@ -52,7 +52,7 @@ class GradeRepositoryImpl(
                 shregCd = code
             )
 
-            val simulations = graduationSimulationResponse.simulations
+            val simulations = graduationSimulationResponse.simulations ?: emptyList()
 
             for (simulation in simulations) {
                 val data = GraduationSimulationEntity(
@@ -119,13 +119,14 @@ class GradeRepositoryImpl(
 
     private suspend fun fetchValidGrades(): List<ValidGrade> {
         val stdNo = preferenceManager.stdNo
-        val validGradesResponse: ValidGradesResponse
+        val validGradesResponse: ValidGradesResponse?
         val validGrades: List<ValidGrade>
 
         try {
             validGradesResponse = authorizedKuisService.fetchValidGrades(stdNo = stdNo)
-            validGrades = validGradesResponse.validGrades
+            validGrades = validGradesResponse?.validGrades ?: emptyList()
         } catch (e: Exception) {
+            Log.e("ku-boost", "${e.message}")
             return emptyList()
         }
 
@@ -143,7 +144,6 @@ class GradeRepositoryImpl(
             val startYear = stdNo.toString().substring(0, 4).toInt()
             val endYear = DateTimeConverter.currentYear().toInt()
             val semesters = intArrayOf(5, 2, 4, 1)
-
             var isLastSemesterQueried = false
 
             for (year in startYear..endYear) {
@@ -370,8 +370,6 @@ class GradeRepositoryImpl(
 
             val responseBody = ozService.postOzBinary(requestBody)
             val (rankMap, deletedSubjects) = oz.getRankMapAndDeletedSubjects(responseBody.byteStream())
-            Log.d("ku-boost", rankMap.toString())
-            Log.d("ku-boost", deletedSubjects.toString())
 
             val ranks = mutableListOf<RankEntity>()
             for ((key, value) in rankMap) {

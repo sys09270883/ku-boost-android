@@ -53,7 +53,7 @@ interface AuthorizedKuisService {
         @Query("argYy") argYy: Int = 0,
         @Query("argShtm") argShtm: Int = 0,
         @Query("_AUTH_MENU_KEY") authMenuKey: Int = 1140606
-    ): ValidGradesResponse
+    ): ValidGradesResponse?
 
     @GET("RegiRegisterMasterInq/find.do?")
     suspend fun fetchStudentInfo(

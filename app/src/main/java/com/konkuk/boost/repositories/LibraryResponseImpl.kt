@@ -19,7 +19,9 @@ class LibraryResponseImpl(
         val loginResponse: LoginResponse
         try {
             loginResponse = libraryService.login(LoginRequest(username, password))
-            val token = loginResponse.data.accessToken
+
+            val token = loginResponse.data?.accessToken
+                ?: throw NullPointerException("No data when request library login.")
             preferenceManager.accessToken = token
         } catch (e: Exception) {
             FirebaseCrashlytics.getInstance().log("${e.message}")
