@@ -209,8 +209,11 @@ class GradeRepositoryImpl(
                 val validGrades = deferredValidGrades.await()
 
                 for (validGrade in validGrades) {
-                    val grade = allGrades.find { grade -> grade.subjectId == validGrade.subjectId }
-                        ?: continue
+                    val grade = allGrades.find { grade ->
+                        grade.subjectId == validGrade.subjectId
+                                && grade.year == validGrade.year.toInt()
+                                && GradeUtils.convertToSemesterCode(grade.semester) == validGrade.semesterCode
+                    } ?: continue
                     grade.type = GradeContract.Type.VALID.value
                 }
 
