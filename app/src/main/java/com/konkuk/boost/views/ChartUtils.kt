@@ -10,6 +10,7 @@ import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.konkuk.boost.R
+import com.konkuk.boost.utils.MessageUtils
 
 object ChartUtils {
 
@@ -17,7 +18,7 @@ object ChartUtils {
         pieChart: PieChart,
         classification: String,
         hasAnimation: Boolean = false,
-        noDataText: String = "데이터 가져오는 중…"
+        noDataText: String = MessageUtils.PENDING_DATA
     ) {
         pieChart.apply {
             setNoDataText(noDataText)
@@ -42,7 +43,7 @@ object ChartUtils {
     fun setSummaryConfig(
         pieChart: PieChart,
         hasAnimation: Boolean = false,
-        noDataText: String = "데이터 가져오는 중…"
+        noDataText: String = MessageUtils.PENDING_DATA
     ) {
         pieChart.apply {
             setNoDataText(noDataText)
@@ -60,7 +61,7 @@ object ChartUtils {
     fun setLineChartConfig(
         lineChart: LineChart,
         hasAnimation: Boolean = false,
-        noDataText: String = "데이터 가져오는 중…"
+        noDataText: String = MessageUtils.PENDING_DATA
     ) {
         lineChart.apply {
             setNoDataText(noDataText)

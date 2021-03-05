@@ -16,23 +16,23 @@ object KaKaoUtils {
         val template = FeedTemplate
             .newBuilder(
                 ContentObject.newBuilder(
-                    "건국대학교 부스트", // 공유링크 타이틀
+                    MessageUtils.APP_KOREAN_NAME,
                     "https://user-images.githubusercontent.com/54172475/105176309-7144e900-5b68-11eb-9eae-2662f356bb66.jpg", // 공유링크 이미지
-                    LinkObject.newBuilder().setWebUrl("https://developers.kakao.com")
-                        .setMobileWebUrl("https://developers.kakao.com").build()
+                    LinkObject.newBuilder().setWebUrl(MessageUtils.KAKAO_WEB_URL)
+                        .setMobileWebUrl(MessageUtils.KAKAO_WEB_URL).build()
                 )
-                    .setDescrption("건국대학교의 모든 정보를 편리하게 확인해보세요.") // 공유링크 설명
+                    .setDescrption(MessageUtils.APP_DESCRIPTION)
                     .setImageHeight(300)
                     .setImageWidth(600)
                     .build()
             )
             .addButton(
                 ButtonObject(
-                    "앱에서 보기", LinkObject.newBuilder() // 버튼 타이틀
-                        .setWebUrl("'https://developers.kakao.com")
-                        .setMobileWebUrl("https://developers.kakao.com")
-                        .setAndroidExecutionParams("key1=value1")
-                        .setIosExecutionParams("key1=value1")
+                    MessageUtils.KAKAO_SHARE_BUTTON_TITLE, LinkObject.newBuilder()
+                        .setWebUrl(MessageUtils.KAKAO_WEB_URL)
+                        .setMobileWebUrl(MessageUtils.KAKAO_WEB_URL)
+                        .setAndroidExecutionParams(MessageUtils.KAKAO_EXECUTION_PARAMS)
+                        .setIosExecutionParams(MessageUtils.KAKAO_EXECUTION_PARAMS)
                         .build()
                 )
             )
