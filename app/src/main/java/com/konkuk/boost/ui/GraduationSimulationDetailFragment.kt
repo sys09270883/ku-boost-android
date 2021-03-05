@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -12,7 +11,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.mikephil.charting.data.PieEntry
-import com.google.android.material.snackbar.Snackbar
 import com.konkuk.boost.R
 import com.konkuk.boost.adapters.GradeAdapter
 import com.konkuk.boost.data.grade.ParcelableGrade
@@ -20,11 +18,8 @@ import com.konkuk.boost.databinding.FragmentGraduationSimulationDetailBinding
 import com.konkuk.boost.persistence.grade.GradeContract
 import com.konkuk.boost.persistence.grade.GradeEntity
 import com.konkuk.boost.utils.GradeUtils
-import com.konkuk.boost.utils.StorageUtils
 import com.konkuk.boost.viewmodels.GraduationSimulationDetailViewModel
-import com.konkuk.boost.views.CaptureUtils
 import com.konkuk.boost.views.ChartUtils
-import com.konkuk.boost.views.DialogUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class GraduationSimulationDetailFragment : Fragment() {
@@ -62,31 +57,6 @@ class GraduationSimulationDetailFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setClassification()
         setChartConfig()
-        setCardViewLongClickListener()
-    }
-
-    private fun setCardViewLongClickListener() {
-        val activity = requireActivity()
-        binding.cardView.setOnLongClickListener {
-            val builder = AlertDialog.Builder(activity)
-                .setTitle(getString(R.string.app_name))
-                .setMessage(getString(R.string.question_grades))
-                .setPositiveButton(getString(R.string.prompt_yes)) { _, _ ->
-                    if (StorageUtils.checkStoragePermission(activity)) {
-                        CaptureUtils.capture(activity, it)
-                        Snackbar.make(
-                            binding.container,
-                            getString(R.string.prompt_save),
-                            Snackbar.LENGTH_SHORT
-                        ).show()
-                    }
-                }
-                .setNegativeButton(getString(R.string.prompt_no)) { _, _ ->
-                }
-            val dialog = DialogUtils.recolor(builder.create())
-            dialog.show()
-            true
-        }
     }
 
     private fun setClassification() {

@@ -6,7 +6,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -14,21 +13,17 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.mikephil.charting.data.*
-import com.google.android.material.snackbar.Snackbar
 import com.konkuk.boost.R
 import com.konkuk.boost.adapters.GradeAdapter
 import com.konkuk.boost.data.grade.ParcelableGrade
 import com.konkuk.boost.databinding.FragmentGradeBinding
 import com.konkuk.boost.persistence.grade.GradeEntity
 import com.konkuk.boost.utils.GradeUtils
-import com.konkuk.boost.utils.StorageUtils.checkStoragePermission
 import com.konkuk.boost.utils.UseCase
 import com.konkuk.boost.viewmodels.GradeViewModel
 import com.konkuk.boost.viewmodels.MainFragmentViewModel
-import com.konkuk.boost.views.CaptureUtils.capture
 import com.konkuk.boost.views.ChartUtils
 import com.konkuk.boost.views.CustomValueFormatter
-import com.konkuk.boost.views.DialogUtils
 import com.konkuk.boost.views.TableRowUtils
 import org.koin.androidx.viewmodel.ext.android.getViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -55,13 +50,6 @@ class GradeFragment : Fragment() {
             ContextCompat.getColor(context, R.color.pastelLightGray),
         )
     }
-    private val cardMessages: HashMap<Int, String> by lazy {
-        hashMapOf(
-            R.id.currentCardView to getString(R.string.question_current_grades),
-            R.id.totalCardView to getString(R.string.question_total_grades),
-            R.id.simulationCardView to getString(R.string.question_graduation_simulation),
-        )
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -81,7 +69,6 @@ class GradeFragment : Fragment() {
         setChartConfig()
         setReadMoreClickListener()
         setCurrentGradesRecyclerViewConfig()
-        setCardViewLongClickListener()
         fetchFromLocalDb()
     }
 
@@ -222,36 +209,6 @@ class GradeFragment : Fragment() {
             val recyclerView = binding.currentGradeRecyclerView
             val adapter = recyclerView.adapter as GradeAdapter
             adapter.submitList(currentGrades.toMutableList())
-        }
-    }
-
-    private fun setCardViewLongClickListener() {
-        val activity = requireActivity()
-        val cardClickListener = View.OnLongClickListener {
-            val builder = AlertDialog.Builder(activity)
-            builder.setTitle(getString(R.string.app_name))
-            builder.setMessage(cardMessages[it.id])
-            builder.setPositiveButton(getString(R.string.prompt_yes)) { _, _ ->
-                if (checkStoragePermission(activity)) {
-                    capture(activity, it)
-                    Snackbar.make(
-                        binding.container,
-                        getString(R.string.prompt_save),
-                        Snackbar.LENGTH_SHORT
-                    ).show()
-                }
-            }
-            builder.setNegativeButton(getString(R.string.prompt_no)) { _, _ ->
-            }
-            val dialog = DialogUtils.recolor(builder.create())
-            dialog.show()
-            true
-        }
-
-        binding.apply {
-            currentCardView.setOnLongClickListener(cardClickListener)
-            totalCardView.setOnLongClickListener(cardClickListener)
-            simulationCardView.setOnLongClickListener(cardClickListener)
         }
     }
 
