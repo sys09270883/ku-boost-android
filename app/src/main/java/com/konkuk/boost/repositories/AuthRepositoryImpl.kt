@@ -93,6 +93,20 @@ class AuthRepositoryImpl(
         preferenceManager.password = password
     }
 
+    private fun responseByPasswordFlag(changePasswordResponse: ChangePasswordResponse): UseCase<ChangePasswordResponse> =
+        when (changePasswordResponse.response.flag) {
+            "1" -> UseCase.error(MessageUtils.INCORRECT_PASSWORD)
+            "3" -> UseCase.success(
+                changePasswordResponse,
+                MessageUtils.CHANGE_PASSWORD_SUCCESSFULLY
+            )
+            "PASS" -> UseCase.success(
+                changePasswordResponse,
+                MessageUtils.CHANGE_PASSWORD_AFTER_90_DAYS
+            )
+            else -> UseCase.error(MessageUtils.ERROR_ON_SERVER)
+        }
+
     override suspend fun makeChangePasswordRequest(
         username: String,
         password: String
@@ -106,12 +120,7 @@ class AuthRepositoryImpl(
             return UseCase.error("${e.message}")
         }
 
-        return when (changePasswordResponse.response.flag) {
-            "1" -> UseCase.error(MessageUtils.INCORRECT_PASSWORD)
-            "3" -> UseCase.success(changePasswordResponse, MessageUtils.CHANGE_PASSWORD_SUCCESSFULLY)
-            "PASS" -> UseCase.success(changePasswordResponse, MessageUtils.CHANGE_PASSWORD_AFTER_90_DAYS)
-            else -> UseCase.error(MessageUtils.ERROR_ON_SERVER)
-        }
+        return responseByPasswordFlag(changePasswordResponse)
     }
 
     override suspend fun makeChangePasswordRequest(
@@ -136,12 +145,7 @@ class AuthRepositoryImpl(
             return UseCase.error("${e.message}")
         }
 
-        return when (changePasswordResponse.response.flag) {
-            "1" -> UseCase.error(MessageUtils.INCORRECT_PASSWORD)
-            "3" -> UseCase.success(changePasswordResponse, MessageUtils.CHANGE_PASSWORD_SUCCESSFULLY)
-            "PASS" -> UseCase.success(changePasswordResponse, MessageUtils.CHANGE_PASSWORD_AFTER_90_DAYS)
-            else -> UseCase.error(MessageUtils.ERROR_ON_SERVER)
-        }
+        return responseByPasswordFlag(changePasswordResponse)
     }
 
     override suspend fun makeStudentInfoRequest(): UseCase<StudentInfoResponse> {
