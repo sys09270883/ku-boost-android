@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.konkuk.boost.data.auth.ScholarshipSection
 import com.konkuk.boost.data.auth.TuitionSection
 import com.konkuk.boost.databinding.FragmentRegistrationAndScholarshipBinding
+import com.konkuk.boost.utils.MessageUtils
 import com.konkuk.boost.utils.UseCase
 import com.konkuk.boost.viewmodels.RegistrationAndScholarshipViewModel
 import io.github.luizgrp.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapter
@@ -61,7 +62,7 @@ class RegistrationAndScholarshipFragment : Fragment() {
                     updateTuition()
                 }
                 UseCase.Status.ERROR -> {
-                    Log.e("ku-boost", "${it.message}")
+                    Log.e(MessageUtils.LOG_KEY, "${it.message}")
                 }
             }
         }
@@ -72,7 +73,7 @@ class RegistrationAndScholarshipFragment : Fragment() {
                     updateScholarship()
                 }
                 UseCase.Status.ERROR -> {
-                    Log.e("ku-boost", "${it.message}")
+                    Log.e(MessageUtils.LOG_KEY, "${it.message}")
                 }
             }
         }

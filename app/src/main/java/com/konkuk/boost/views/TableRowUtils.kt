@@ -9,6 +9,7 @@ import android.widget.TableRow
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import com.konkuk.boost.R
+import com.konkuk.boost.utils.MessageUtils
 
 object TableRowUtils {
 
@@ -43,7 +44,7 @@ object TableRowUtils {
 
             tableLayout.addView(row)
         } catch (e: Exception) {
-            Log.e("ku-boost", "${e.message}")
+            Log.e(MessageUtils.LOG_KEY, "${e.message}")
         } finally {
             return row
         }
@@ -76,7 +77,7 @@ object TableRowUtils {
 
             tableLayout.addView(row)
         } catch (e: Exception) {
-            Log.e("ku-boost", "${e.message}")
+            Log.e(MessageUtils.LOG_KEY, "${e.message}")
         } finally {
             return row
         }
