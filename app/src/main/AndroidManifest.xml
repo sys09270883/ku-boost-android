@@ -19,12 +19,10 @@
 
         <activity
             android:name=".ui.QRCodeActivity"
-            android:exported="false"
             android:theme="@style/Theme.KUBoost" />
 
         <activity
             android:name=".ui.MainActivity"
-            android:exported="false"
             android:screenOrientation="user"
             android:theme="@style/Theme.KUBoost">
             <intent-filter>
