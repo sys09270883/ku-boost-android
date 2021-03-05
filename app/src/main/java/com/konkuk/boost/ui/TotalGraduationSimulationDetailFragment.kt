@@ -14,6 +14,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.konkuk.boost.R
 import com.konkuk.boost.data.grade.SubjectAreaSection
 import com.konkuk.boost.databinding.FragmentTotalGraduationSimulationDetailBinding
+import com.konkuk.boost.utils.MessageUtils
 import com.konkuk.boost.utils.UseCase
 import com.konkuk.boost.viewmodels.GraduationSimulationViewModel
 import com.konkuk.boost.views.TableRowUtils
@@ -158,7 +159,7 @@ class TotalGraduationSimulationDetailFragment : Fragment() {
 
             adapter.notifyDataSetChanged()
         } catch (e: Exception) {
-            Log.e("ku-boost", "${e.message}")
+            Log.e(MessageUtils.LOG_KEY, "${e.message}")
         }
     }
 

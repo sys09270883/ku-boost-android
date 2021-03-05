@@ -49,7 +49,7 @@ object KaKaoUtils {
             serverCallbackArgs,
             object : ResponseCallback<KakaoLinkResponse?>() {
                 override fun onFailure(errorResult: ErrorResult) {
-                    Log.e("ku-boost", errorResult.toString())
+                    Log.e(MessageUtils.LOG_KEY, errorResult.toString())
                 }
 
                 override fun onSuccess(result: KakaoLinkResponse?) {

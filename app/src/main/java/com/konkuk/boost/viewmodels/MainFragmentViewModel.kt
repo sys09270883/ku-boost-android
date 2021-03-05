@@ -8,6 +8,7 @@ import com.konkuk.boost.data.library.LoginResponse
 import com.konkuk.boost.repositories.AuthRepository
 import com.konkuk.boost.repositories.GradeRepository
 import com.konkuk.boost.repositories.LibraryRepository
+import com.konkuk.boost.utils.MessageUtils
 import com.konkuk.boost.utils.UseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -42,7 +43,7 @@ class MainFragmentViewModel(
             withContext(Dispatchers.IO) {
                 authRepository.makeStudentInfoRequest()
             }
-            Log.d("ku-boost", "Student information is fetched.")
+            Log.d(MessageUtils.LOG_KEY, "Student information is fetched.")
         }
     }
 
@@ -53,13 +54,13 @@ class MainFragmentViewModel(
                 gradeRepository.makeValidGradesAndUpdateClassification()
             }
             Log.d(
-                "ku-boost",
+                MessageUtils.LOG_KEY,
                 "All valid grades, classification of graduation simulation are updated."
             )
             withContext(Dispatchers.IO) {
                 gradeRepository.makeTotalRankAndUpdateDeletedSubjects()
             }
-            Log.d("ku-boost", "Total rank and deleted subjects are updated.")
+            Log.d(MessageUtils.LOG_KEY, "Total rank and deleted subjects are updated.")
             _allGradesLoading.postValue(false)
             fetched.postValue(true)
         }
@@ -70,7 +71,7 @@ class MainFragmentViewModel(
             withContext(Dispatchers.IO) {
                 gradeRepository.makeGraduationSimulationRequest()
             }
-            Log.d("ku-boost", "Graduation simulation is fetched.")
+            Log.d(MessageUtils.LOG_KEY, "Graduation simulation is fetched.")
         }
     }
 

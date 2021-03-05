@@ -64,7 +64,7 @@ object GradeUtils {
                 result[key] = "%.2f".format(floor((sum[key]!! / point[key]!!) * 100) / 100.0)
                 if (result[key] == "NaN") result[key] = "0.00"
             } catch (exception: Exception) {
-                Log.e("ku-boost", "${exception.message}")
+                Log.e(MessageUtils.LOG_KEY, "${exception.message}")
             }
         }
 

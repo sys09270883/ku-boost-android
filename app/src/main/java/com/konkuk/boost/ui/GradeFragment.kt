@@ -19,6 +19,7 @@ import com.konkuk.boost.data.grade.ParcelableGrade
 import com.konkuk.boost.databinding.FragmentGradeBinding
 import com.konkuk.boost.persistence.grade.GradeEntity
 import com.konkuk.boost.utils.GradeUtils
+import com.konkuk.boost.utils.MessageUtils
 import com.konkuk.boost.utils.UseCase
 import com.konkuk.boost.viewmodels.GradeViewModel
 import com.konkuk.boost.viewmodels.MainFragmentViewModel
@@ -149,19 +150,19 @@ class GradeFragment : Fragment() {
                         return@observe
                     }
 
-                    Log.d("ku-boost", "Received from MainFragmentViewModel: FETCHED.")
+                    Log.d(MessageUtils.LOG_KEY, "Received from MainFragmentViewModel: FETCHED.")
                     gradeViewModel.fetchGraduationSimulationFromLocalDb()
-                    Log.d("ku-boost", "Update graduation simulation from local DB.")
+                    Log.d(MessageUtils.LOG_KEY, "Update graduation simulation from local DB.")
                     gradeViewModel.fetchCurrentGradesFromLocalDb()
-                    Log.d("ku-boost", "Update current grades from local DB.")
+                    Log.d(MessageUtils.LOG_KEY, "Update current grades from local DB.")
                     gradeViewModel.fetchTotalGradesFromLocalDb()
-                    Log.d("ku-boost", "Update total grades from local DB.")
+                    Log.d(MessageUtils.LOG_KEY, "Update total grades from local DB.")
                     gradeViewModel.fetchTotalRankFromLocalDb()
-                    Log.d("ku-boost", "Update total rank from local DB.")
+                    Log.d(MessageUtils.LOG_KEY, "Update total rank from local DB.")
                     gradeViewModel.setFetch(true)
                 }
                 false -> {
-                    Log.d("ku-boost", "Received from MainFragmentViewModel: NOT FETCHED.")
+                    Log.d(MessageUtils.LOG_KEY, "Received from MainFragmentViewModel: NOT FETCHED.")
                 }
             }
         }

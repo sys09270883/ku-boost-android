@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.konkuk.boost.data.auth.DeptTransferSection
 import com.konkuk.boost.data.auth.StudentStateChangeSection
 import com.konkuk.boost.databinding.FragmentAcademicEventBinding
+import com.konkuk.boost.utils.MessageUtils
 import com.konkuk.boost.utils.UseCase
 import com.konkuk.boost.viewmodels.AcademicEventViewModel
 import io.github.luizgrp.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapter
@@ -47,7 +48,7 @@ class AcademicEventFragment : Fragment() {
                 UseCase.Status.SUCCESS -> {
                     updateDeptTransfer()
                 }
-                UseCase.Status.ERROR -> Log.e("ku-boost", "${it.message}")
+                UseCase.Status.ERROR -> Log.e(MessageUtils.LOG_KEY, "${it.message}")
             }
         }
 
@@ -56,7 +57,7 @@ class AcademicEventFragment : Fragment() {
                 UseCase.Status.SUCCESS -> {
                     updateStudentStateChange()
                 }
-                UseCase.Status.ERROR -> Log.e("ku-boost", "${it.message}")
+                UseCase.Status.ERROR -> Log.e(MessageUtils.LOG_KEY, "${it.message}")
             }
         }
     }
