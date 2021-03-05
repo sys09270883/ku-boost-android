@@ -18,6 +18,7 @@ import com.google.zxing.WriterException
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel
 import com.konkuk.boost.R
 import com.konkuk.boost.databinding.ActivityQRCodeBinding
+import com.konkuk.boost.utils.MessageUtils
 import com.konkuk.boost.utils.UseCase
 import com.konkuk.boost.viewmodels.QRCodeViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -83,7 +84,7 @@ class QRCodeActivity : AppCompatActivity() {
                 }
             }
         } catch (e: WriterException) {
-            Log.e("ku-boost", "generateQRCode: ${e.message}")
+            Log.e(MessageUtils.LOG_KEY, "generateQRCode: ${e.message}")
         }
         return bitmap
     }

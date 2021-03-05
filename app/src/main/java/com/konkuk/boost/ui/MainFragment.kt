@@ -15,6 +15,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.konkuk.boost.R
 import com.konkuk.boost.adapters.MainFragmentStateAdapter
 import com.konkuk.boost.databinding.FragmentMainBinding
+import com.konkuk.boost.utils.MessageUtils
 import com.konkuk.boost.utils.UseCase
 import com.konkuk.boost.viewmodels.MainFragmentViewModel
 import com.konkuk.boost.views.DialogUtils.setProgressBar
@@ -102,7 +103,7 @@ class MainFragment : Fragment() {
                     try {
                         if (dialog?.isShowing == true) dialog?.dismiss()
                     } catch (e: Exception) {
-                        Log.e("ku-boost", "${e.message}")
+                        Log.e(MessageUtils.LOG_KEY, "${e.message}")
                     }
                 }
             }

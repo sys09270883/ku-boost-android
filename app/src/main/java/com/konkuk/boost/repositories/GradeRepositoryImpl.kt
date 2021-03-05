@@ -15,10 +15,7 @@ import com.konkuk.boost.persistence.rank.RankDao
 import com.konkuk.boost.persistence.rank.RankEntity
 import com.konkuk.boost.persistence.simul.GraduationSimulationDao
 import com.konkuk.boost.persistence.simul.GraduationSimulationEntity
-import com.konkuk.boost.utils.DateTimeConverter
-import com.konkuk.boost.utils.GradeUtils
-import com.konkuk.boost.utils.OzEngine
-import com.konkuk.boost.utils.UseCase
+import com.konkuk.boost.utils.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
@@ -67,7 +64,7 @@ class GradeRepositoryImpl(
             }
 
         } catch (e: Exception) {
-            Log.e("ku-boost", "${e.message}")
+            Log.e(MessageUtils.LOG_KEY, "${e.message}")
             FirebaseCrashlytics.getInstance().log("${e.message}")
             return UseCase.error("${e.message}")
         }
@@ -126,7 +123,7 @@ class GradeRepositoryImpl(
             validGradesResponse = authorizedKuisService.fetchValidGrades(stdNo = stdNo)
             validGrades = validGradesResponse?.validGrades ?: emptyList()
         } catch (e: Exception) {
-            Log.e("ku-boost", "${e.message}")
+            Log.e(MessageUtils.LOG_KEY, "${e.message}")
             return emptyList()
         }
 
@@ -276,7 +273,7 @@ class GradeRepositoryImpl(
                 preferenceManager.hasData = true
             }
         } catch (e: Exception) {
-            Log.e("ku-boost", "${e.message}")
+            Log.e(MessageUtils.LOG_KEY, "${e.message}")
             return UseCase.error("${e.message}")
         }
 
