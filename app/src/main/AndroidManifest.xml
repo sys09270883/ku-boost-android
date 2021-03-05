@@ -15,13 +15,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.App"
         android:usesCleartextTraffic="true">
+
         <activity
             android:name=".ui.QRCodeActivity"
-            android:theme="@style/Theme.KUBoost">
+            android:exported="false"
+            android:theme="@style/Theme.KUBoost" />
 
-        </activity>
         <activity
             android:name=".ui.MainActivity"
+            android:exported="false"
             android:screenOrientation="user"
             android:theme="@style/Theme.KUBoost">
             <intent-filter>
