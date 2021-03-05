@@ -5,6 +5,7 @@ plugins {
     id 'com.google.android.gms.oss-licenses-plugin'
     id 'com.google.gms.google-services'
     id 'com.google.firebase.crashlytics'
+    id "org.sonarqube" version "3.1.1"
 }
 
 android {
@@ -99,4 +100,12 @@ dependencies {
     implementation 'io.github.luizgrp.sectionedrecyclerviewadapter:sectionedrecyclerviewadapter:1.2.0'
     implementation 'me.relex:circleindicator:2.1.4'
     implementation 'com.google.android:flexbox:2.0.1'
+}
+
+sonarqube {
+    properties {
+        property "sonar.projectKey", "sys09270883_ku-boost-android"
+        property "sonar.organization", "sys09270883"
+        property "sonar.host.url", "https://sonarcloud.io"
+    }
 }
