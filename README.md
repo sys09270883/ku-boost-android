@@ -18,6 +18,8 @@
 ## Tech stack & Open-source libraries
 ### MVVM Architecture
 - Repository pattern
+- AAC ViewModel
+- AAC LiveData
 <img alt="final-architecture" src="https://user-images.githubusercontent.com/50787869/104835701-ab558700-58eb-11eb-87d1-d2d4910fa473.png">
 
 ### Persistence
