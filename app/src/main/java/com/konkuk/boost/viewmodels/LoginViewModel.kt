@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.konkuk.boost.data.auth.ChangePasswordResponse
 import com.konkuk.boost.data.auth.LoginResponse
+import com.konkuk.boost.data.grade.UserInformationResponse
 import com.konkuk.boost.repositories.AuthRepository
 import com.konkuk.boost.repositories.GradeRepository
 import com.konkuk.boost.utils.UseCase
@@ -35,10 +36,26 @@ class LoginViewModel(
     }
     val loading get() = _loading
 
+    val eventBit = MutableLiveData(0b00)
+
+    fun updateEvent(position: Int) {
+        val event = eventBit.value ?: 0
+        eventBit.value = event or position
+    }
+
     var loginResource = MutableLiveData<UseCase<LoginResponse>>()
 
     fun clearLoginResource() {
         loginResource = MutableLiveData<UseCase<LoginResponse>>()
+        eventBit.postValue(0b00)
+    }
+
+    val userInfoResponse = MutableLiveData<UseCase<UserInformationResponse>>()
+
+    fun fetchUserInfo() {
+        viewModelScope.launch {
+            userInfoResponse.postValue(gradeRepository.makeUserInformationRequest())
+        }
     }
 
     fun login() {
@@ -48,8 +65,6 @@ class LoginViewModel(
         _loading.value = true
         viewModelScope.launch {
             loginResource.postValue(authRepository.makeLoginRequest(username, password))
-            gradeRepository.makeUserInformationRequest()
-            _loading.postValue(false)
         }
     }
 
