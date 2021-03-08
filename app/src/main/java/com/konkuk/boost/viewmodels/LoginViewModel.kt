@@ -9,9 +9,7 @@ import com.konkuk.boost.data.grade.UserInformationResponse
 import com.konkuk.boost.repositories.AuthRepository
 import com.konkuk.boost.repositories.GradeRepository
 import com.konkuk.boost.utils.UseCase
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class LoginViewModel(
     private val authRepository: AuthRepository,
@@ -75,14 +73,12 @@ class LoginViewModel(
         val password = password.value ?: return
 
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                changePasswordResponse.postValue(
-                    authRepository.makeChangePasswordRequest(
-                        username,
-                        password
-                    )
+            changePasswordResponse.postValue(
+                authRepository.makeChangePasswordRequest(
+                    username,
+                    password
                 )
-            }
+            )
         }
     }
 

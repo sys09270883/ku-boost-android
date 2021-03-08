@@ -20,6 +20,8 @@ import com.konkuk.boost.persistence.tuition.TuitionDao
 import com.konkuk.boost.persistence.tuition.TuitionEntity
 import com.konkuk.boost.utils.MessageUtils
 import com.konkuk.boost.utils.UseCase
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import retrofit2.Response
 
 class AuthRepositoryImpl(
@@ -38,7 +40,9 @@ class AuthRepositoryImpl(
     ): UseCase<LoginResponse> {
         val loginResponse: Response<LoginResponse>
         try {
-            loginResponse = kuisService.login(username, password)
+            withContext(Dispatchers.IO) {
+                loginResponse = kuisService.login(username, password)
+            }
         } catch (e: Exception) {
             FirebaseCrashlytics.getInstance().log("${e.message}")
             return UseCase.error(MessageUtils.ERROR_ON_SERVER)
@@ -114,7 +118,9 @@ class AuthRepositoryImpl(
         val changePasswordResponse: ChangePasswordResponse
 
         try {
-            changePasswordResponse = kuisService.changePasswordAfter90Days(username, password)
+            withContext(Dispatchers.IO) {
+                changePasswordResponse = kuisService.changePasswordAfter90Days(username, password)
+            }
         } catch (e: Exception) {
             FirebaseCrashlytics.getInstance().log("${e.message}")
             return UseCase.error("${e.message}")

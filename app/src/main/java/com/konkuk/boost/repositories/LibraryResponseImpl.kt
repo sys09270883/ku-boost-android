@@ -7,6 +7,8 @@ import com.konkuk.boost.data.library.LoginResponse
 import com.konkuk.boost.data.library.QRResponse
 import com.konkuk.boost.persistence.PreferenceManager
 import com.konkuk.boost.utils.UseCase
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class LibraryResponseImpl(
     private val libraryService: LibraryService,
@@ -18,7 +20,9 @@ class LibraryResponseImpl(
 
         val loginResponse: LoginResponse
         try {
-            loginResponse = libraryService.login(LoginRequest(username, password))
+            withContext(Dispatchers.IO) {
+                loginResponse = libraryService.login(LoginRequest(username, password))
+            }
 
             val token = loginResponse.data?.accessToken
                 ?: throw NullPointerException("No data when request library login.")
@@ -36,7 +40,9 @@ class LibraryResponseImpl(
 
         val qrResponse: QRResponse
         try {
-            qrResponse = libraryService.getMobileQRCode(accessToken)
+            withContext(Dispatchers.IO) {
+                qrResponse = libraryService.getMobileQRCode(accessToken)
+            }
         } catch (e: Exception) {
             FirebaseCrashlytics.getInstance().log("${e.message}")
             return UseCase.error("${e.message}")

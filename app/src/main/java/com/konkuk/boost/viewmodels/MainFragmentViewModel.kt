@@ -32,17 +32,13 @@ class MainFragmentViewModel(
 
     fun libraryLogin() {
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                libraryLoginResponse.postValue(libraryRepository.makeLoginRequest())
-            }
+            libraryLoginResponse.postValue(libraryRepository.makeLoginRequest())
         }
     }
 
     fun fetchStudentInfo() {
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                authRepository.makeStudentInfoRequest()
-            }
+            authRepository.makeStudentInfoRequest()
             Log.d(MessageUtils.LOG_KEY, "Student information is fetched.")
         }
     }
@@ -50,16 +46,12 @@ class MainFragmentViewModel(
     fun fetchGrades() {
         _allGradesLoading.value = true
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                gradeRepository.makeValidGradesAndUpdateClassification()
-            }
+            gradeRepository.makeValidGradesAndUpdateClassification()
             Log.d(
                 MessageUtils.LOG_KEY,
                 "All valid grades, classification of graduation simulation are updated."
             )
-            withContext(Dispatchers.IO) {
-                gradeRepository.makeTotalRankAndUpdateDeletedSubjects()
-            }
+            gradeRepository.makeTotalRankAndUpdateDeletedSubjects()
             Log.d(MessageUtils.LOG_KEY, "Total rank and deleted subjects are updated.")
             _allGradesLoading.postValue(false)
             fetched.postValue(true)
