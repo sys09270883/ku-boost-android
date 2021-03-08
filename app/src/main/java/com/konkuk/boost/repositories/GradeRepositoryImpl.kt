@@ -75,8 +75,8 @@ class GradeRepositoryImpl(
     override suspend fun makeUserInformationRequest(): UseCase<UserInformationResponse> {
         val userInfoResponse: UserInformationResponse
         try {
-            userInfoResponse = authorizedKuisService.fetchUserInformation()
             withContext(Dispatchers.IO) {
+                userInfoResponse = authorizedKuisService.fetchUserInformation()
                 userInfoResponse.userInformation.apply {
                     preferenceManager.setUserInfo(
                         name = name ?: "",

@@ -1,6 +1,7 @@
 package com.konkuk.boost.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.konkuk.boost.R
 import com.konkuk.boost.databinding.FragmentSplashBinding
+import com.konkuk.boost.utils.MessageUtils
 import com.konkuk.boost.utils.NetworkUtils
 import com.konkuk.boost.utils.UseCase
 import com.konkuk.boost.viewmodels.SplashViewModel
@@ -35,6 +37,12 @@ class SplashFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         observeLoginResource()
+        observeEvent()
+        observeUserInfo()
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         handleNetwork()
     }
 
@@ -43,6 +51,7 @@ class SplashFragment : Fragment() {
         val isConnected = checkNetworkConnected()
         if (isConnected) {
             viewModel.autoLogin()
+            viewModel.fetchUserInfo()
         } else {    // 네트워크 미연결시
             val username = viewModel.getUsername()
             val hasLoggedUser = username.isNotBlank()
@@ -67,18 +76,40 @@ class SplashFragment : Fragment() {
         }
     }
 
+    private fun observeEvent() {
+        viewModel.eventBit.observe(viewLifecycleOwner) {
+            if (it == 0b11) {
+                viewModel.clearLoginResource()
+                findNavController().navigate(R.id.action_splashFragment_to_mainFragment)
+            }
+        }
+    }
+
     private fun observeLoginResource() {
         viewModel.loginResource.observe(viewLifecycleOwner) {
             when (it.status) {
                 UseCase.Status.SUCCESS -> {
-                    viewModel.clearLoginResource()
-                    findNavController().navigate(R.id.action_splashFragment_to_mainFragment)
+                    viewModel.updateEvent(0b01)
                 }
                 UseCase.Status.ERROR -> {
                     coroutineScope.launch {
                         delay(1500L)
+                        viewModel.clearLoginResource()
                         findNavController().navigate(R.id.action_splashFragment_to_loginFragment)
                     }
+                }
+            }
+        }
+    }
+
+    private fun observeUserInfo() {
+        viewModel.userInfoResponse.observe(viewLifecycleOwner) {
+            when (it.status) {
+                UseCase.Status.SUCCESS -> {
+                    viewModel.updateEvent(0b10)
+                }
+                UseCase.Status.ERROR -> {
+                    Log.e(MessageUtils.LOG_KEY, "${it.message}")
                 }
             }
         }
