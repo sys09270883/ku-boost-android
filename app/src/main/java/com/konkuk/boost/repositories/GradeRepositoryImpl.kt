@@ -270,6 +270,22 @@ class GradeRepositoryImpl(
     }
 
     @KoinApiExtension
+    private suspend fun makeGradeStream(oz: OzEngine) = withContext(Dispatchers.IO) {
+        val file = oz.makeGradeFile()
+
+        val params = file.readBytes()
+        val requestBody = params.toRequestBody(
+            "application/octet-stream".toMediaTypeOrNull(),
+            0,
+            params.size
+        )
+
+        val responseBody = ozService.postOzBinary(requestBody)
+        val stream = responseBody.byteStream()
+        stream
+    }
+
+    @KoinApiExtension
     override suspend fun makeValidGradesAndUpdateClassification(): UseCase<Unit> {
         val stdNo = preferenceManager.stdNo
         val username = preferenceManager.username
@@ -392,35 +408,31 @@ class GradeRepositoryImpl(
         val stdNo = preferenceManager.stdNo
 
         try {
-            val oz = OzEngine.getInstance(username, stdNo.toString())
-            val file = oz.makeGradeFile()
+            withContext(Dispatchers.IO) {
+                val oz = OzEngine.getInstance(username, stdNo.toString())
+                val gradeStream = makeGradeStream(oz)
+                oz.makeGradeContent(gradeStream)
 
-            val params = file.readBytes()
-            val requestBody = params.toRequestBody(
-                "application/octet-stream".toMediaTypeOrNull(),
-                0,
-                params.size
-            )
+                val rankMap = oz.getRankMap()
+                val deletedSubjects = oz.getDeletedSubjects()
 
-            val responseBody = ozService.postOzBinary(requestBody)
-            val (rankMap, deletedSubjects) = oz.getRankMapAndDeletedSubjects(responseBody.byteStream())
+                val ranks = mutableListOf<RankEntity>()
+                for ((key, value) in rankMap) {
+                    ranks += RankEntity(username, key.year, key.semester, value.rank, value.total)
+                }
 
-            val ranks = mutableListOf<RankEntity>()
-            for ((key, value) in rankMap) {
-                ranks += RankEntity(username, key.year, key.semester, value.rank, value.total)
+                for (deletedSubject in deletedSubjects) {
+                    gradeDao.updateType(
+                        username,
+                        deletedSubject.first,
+                        GradeContract.Type.DELETED.value,
+                        deletedSubject.second,
+                        deletedSubject.third
+                    )
+                }
+
+                rankDao.insert(*ranks.toTypedArray())
             }
-
-            for (deletedSubject in deletedSubjects) {
-                gradeDao.updateType(
-                    username,
-                    deletedSubject.first,
-                    GradeContract.Type.DELETED.value,
-                    deletedSubject.second,
-                    deletedSubject.third
-                )
-            }
-
-            rankDao.insert(*ranks.toTypedArray())
         } catch (e: Exception) {
             FirebaseCrashlytics.getInstance().log("${e.message}")
             return UseCase.error("${e.message}")
