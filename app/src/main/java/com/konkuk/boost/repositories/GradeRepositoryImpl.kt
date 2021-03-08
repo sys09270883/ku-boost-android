@@ -77,19 +77,19 @@ class GradeRepositoryImpl(
         try {
             withContext(Dispatchers.IO) {
                 userInfoResponse = authorizedKuisService.fetchUserInformation()
-                userInfoResponse.userInformation.apply {
-                    preferenceManager.setUserInfo(
-                        name = name ?: "",
-                        stdNo = stdNo.toInt(),  // API stdNo는 String
-                        state = state ?: "",
-                        dept = dept ?: "",
-                        code = code
-                    )
-                }
+                val userInfo = userInfoResponse.userInformation
+
+                preferenceManager.setUserInfo(
+                    userInfo.name ?: "",
+                    userInfo.stdNo.toInt(),
+                    userInfo.state ?: "",
+                    userInfo.dept ?: "",
+                    userInfo.code
+                )
             }
         } catch (e: Exception) {
             FirebaseCrashlytics.getInstance().log("${e.message}")
-            return UseCase.error("${e.message}")
+            return UseCase.error("UserInfoResponse error: ${e.message}")
         }
 
         return UseCase.success(userInfoResponse)
