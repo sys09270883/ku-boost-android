@@ -80,7 +80,11 @@ class SplashFragment : Fragment() {
         viewModel.eventBit.observe(viewLifecycleOwner) {
             if (it == 0b11) {
                 viewModel.clearLoginResource()
-                findNavController().navigate(R.id.action_splashFragment_to_mainFragment)
+                runBlocking {
+                    // Wait 0.5 second for saving session.
+                    delay(500L)
+                    findNavController().navigate(R.id.action_splashFragment_to_mainFragment)
+                }
             }
         }
     }

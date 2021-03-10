@@ -80,6 +80,7 @@ class GradeRepositoryImpl(
         val userInfoResponse: UserInformationResponse
         try {
             withContext(Dispatchers.IO) {
+                Log.d(MessageUtils.LOG_KEY, "Kuis cookie: ${preferenceManager.cookie}")
                 userInfoResponse = authorizedKuisService.fetchUserInformation()
                 val userInfo = userInfoResponse.userInformation
 

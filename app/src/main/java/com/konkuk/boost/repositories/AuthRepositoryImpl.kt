@@ -53,7 +53,6 @@ class AuthRepositoryImpl(
         preferenceManager.cookie = cookie
 
         val loginBody = loginResponse.body()
-
         val loginSuccess = loginBody?.loginSuccess
         val loginFailure = loginBody?.loginFailure
 

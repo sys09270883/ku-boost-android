@@ -19,6 +19,8 @@ import com.konkuk.boost.utils.MessageUtils
 import com.konkuk.boost.utils.UseCase
 import com.konkuk.boost.viewmodels.LoginViewModel
 import com.konkuk.boost.views.DialogUtils
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class LoginFragment : Fragment() {
@@ -74,9 +76,12 @@ class LoginFragment : Fragment() {
     private fun observeEvent() {
         viewModel.eventBit.observe(viewLifecycleOwner) {
             if (it == 0b11) {
-                viewModel.loading.postValue(false)
                 viewModel.clearLoginResource()
-                findNavController().navigate(R.id.action_loginFragment_to_mainFragment)
+                runBlocking {
+                    // Wait 0.5 second for saving session.
+                    delay(500L)
+                    findNavController().navigate(R.id.action_loginFragment_to_mainFragment)
+                }
             }
         }
     }
@@ -86,6 +91,7 @@ class LoginFragment : Fragment() {
             when (it.status) {
                 UseCase.Status.SUCCESS -> {
                     viewModel.updateEvent(0b10)
+                    viewModel.loading.postValue(false)
                 }
                 UseCase.Status.ERROR -> {
                     Log.e(MessageUtils.LOG_KEY, "${it.message}")
@@ -144,6 +150,7 @@ class LoginFragment : Fragment() {
                             dialog.show()
                         }
                     }
+                    viewModel.loading.postValue(false)
                     Snackbar.make(binding.container, "${it.message}", Snackbar.LENGTH_SHORT).show()
                 }
             }
