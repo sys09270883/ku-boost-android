@@ -44,26 +44,29 @@ class GradeRepositoryImpl(
         try {
             if (username.isEmpty()) throw Exception("사용자 이름이 없습니다.")
 
-            graduationSimulationResponse = authorizedKuisService.fetchGraduationSimulation(
-                stdNo = stdNo,
-                year = courseYear,
-                shregCd = code
-            )
-
-            val simulations = graduationSimulationResponse.simulations ?: emptyList()
-
-            for (simulation in simulations) {
-                val data = GraduationSimulationEntity(
-                    username = username,
-                    classification = simulation.classification,
-                    standard = simulation.standard ?: 0,
-                    acquired = simulation.acquired?.toInt() ?: 0,   // String으로 넘어 옴.
-                    remainder = simulation.remainder ?: 0,
-                    modifiedAt = System.currentTimeMillis()
+            withContext(Dispatchers.IO) {
+                graduationSimulationResponse = authorizedKuisService.fetchGraduationSimulation(
+                    stdNo = stdNo,
+                    year = courseYear,
+                    shregCd = code
                 )
-                graduationSimulationDao.insertGraduationSimulation(data)
-            }
 
+                val simulations = graduationSimulationResponse.simulations ?: emptyList()
+
+                val simulationEntities = mutableListOf<GraduationSimulationEntity>()
+                for (simulation in simulations) {
+                    simulationEntities += GraduationSimulationEntity(
+                        username = username,
+                        classification = simulation.classification,
+                        standard = simulation.standard ?: 0,
+                        acquired = simulation.acquired?.toInt() ?: 0,   // String으로 넘어 옴.
+                        remainder = simulation.remainder ?: 0,
+                        modifiedAt = System.currentTimeMillis()
+                    )
+                }
+
+                graduationSimulationDao.insertGraduationSimulation(*simulationEntities.toTypedArray())
+            }
         } catch (e: Exception) {
             Log.e(MessageUtils.LOG_KEY, "${e.message}")
             FirebaseCrashlytics.getInstance().log("${e.message}")

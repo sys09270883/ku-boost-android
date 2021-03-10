@@ -10,9 +10,7 @@ import com.konkuk.boost.repositories.GradeRepository
 import com.konkuk.boost.repositories.LibraryRepository
 import com.konkuk.boost.utils.MessageUtils
 import com.konkuk.boost.utils.UseCase
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class MainFragmentViewModel(
     private val authRepository: AuthRepository,
@@ -60,9 +58,7 @@ class MainFragmentViewModel(
 
     fun fetchGraduationSimulationFromServer() {
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                gradeRepository.makeGraduationSimulationRequest()
-            }
+            gradeRepository.makeGraduationSimulationRequest()
             Log.d(MessageUtils.LOG_KEY, "Graduation simulation is fetched.")
         }
     }
