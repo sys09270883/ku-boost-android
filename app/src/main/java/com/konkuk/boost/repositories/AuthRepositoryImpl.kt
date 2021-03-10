@@ -23,7 +23,6 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.withContext
 import retrofit2.Response
-import java.lang.reflect.Field
 
 class AuthRepositoryImpl(
     private val kuisService: KuisService,
@@ -185,14 +184,10 @@ class AuthRepositoryImpl(
                 val personalInfoJob = async {
                     // Fetch personal information and insert into table.
                     val personalInfo = studentInfoResponse.personalInfo.first()
-                    val personalInfoFields = personalInfo.javaClass.declaredFields
-                    val personalInfoFieldNames = personalInfoFields.map { field -> field.name }
                     val personalEntities =
                         makePersonalEntities(
                             username,
-                            personalInfo,
-                            personalInfoFields,
-                            personalInfoFieldNames
+                            personalInfo
                         )
                     personalInfoDao.insert(*personalEntities.toTypedArray())
                 }
@@ -224,10 +219,10 @@ class AuthRepositoryImpl(
     private fun makePersonalEntities(
         username: String,
         personalInfo: PersonalInfo,
-        personalInfoFields: Array<Field>,
-        personalInfoFieldNames: List<String>
     ): List<PersonalInfoEntity> {
         val personalEntities = mutableListOf<PersonalInfoEntity>()
+        val personalInfoFields = personalInfo.javaClass.declaredFields
+        val personalInfoFieldNames = personalInfoFields.map { field -> field.name }
 
         for ((idx, field) in personalInfoFields.withIndex()) {
             field.isAccessible = true
