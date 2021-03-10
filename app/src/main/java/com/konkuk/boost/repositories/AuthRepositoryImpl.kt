@@ -167,109 +167,105 @@ class AuthRepositoryImpl(
             withContext(Dispatchers.IO) {
                 studentInfoResponse = authorizedKuisService.fetchStudentInfo(stdNo)
 
-                // Fetch department transfer information and insert into table.
-                val deptTransferInfoList = studentInfoResponse.deptTransferInfo
-                val deptTransferEntities = mutableListOf<DeptTransferEntity>()
-
-                for (info in deptTransferInfoList) {
-                    deptTransferEntities += DeptTransferEntity(
-                        username,
-                        info.beforeDept ?: "",
-                        info.beforeSust ?: "",
-                        info.beforeMajor ?: "",
-                        info.changedCode,
-                        info.changedDate,
-                        info.changedYear,
-                        info.changedSemester,
-                        info.dept ?: "",
-                        info.sust ?: "",
-                        info.major ?: ""
-                    )
-                }
-
-
-                // Fetch student state change information and insert into table.
-                val studentStateChangeInfoList = studentInfoResponse.studentStateChangeInfo
-                val studentStateChangeEntities = mutableListOf<StudentStateChangeEntity>()
-
-                for (info in studentStateChangeInfoList) {
-                    studentStateChangeEntities += StudentStateChangeEntity(
-                        username,
-                        info.applyDate,
-                        info.changedDate,
-                        info.changedCode,
-                        info.changedReason ?: "",
-                        info.appliedStateCode
-                    )
-                }
-
-
-                // Fetch personal information and insert into table.
-                val personalInfo = studentInfoResponse.personalInfo.first()
-                val personalEntities = mutableListOf<PersonalInfoEntity>()
-
-                val personalInfoFields = personalInfo.javaClass.declaredFields
-                val personalInfoFieldNames = personalInfoFields.map { field -> field.name }
-
-                for ((idx, field) in personalInfoFields.withIndex()) {
-                    field.isAccessible = true
-                    personalEntities += PersonalInfoEntity(
-                        username,
-                        personalInfoFieldNames[idx],
-                        field.get(personalInfo)?.toString()?.trim() ?: ""
-                    )
-                }
-
-
-                // Fetch tuition information and insert into table.
-                val tuitionFees = studentInfoResponse.tuitionFees
-                val tuitionEntities = mutableListOf<TuitionEntity>()
-
-                for (tuition in tuitionFees) {
-                    tuitionEntities += TuitionEntity(
-                        username,
-                        tuition.paidDate,
-                        tuition.tuitionAmount ?: 0,
-                        tuition.enterAmount ?: 0,
-                        tuition.year,
-                        tuition.semester,
-                        tuition.stateCode
-                    )
-                }
-
-
-                // Fetch scholarship information and insert into table.
-                val scholarships = studentInfoResponse.scholarships
-                val scholarshipEntities = mutableListOf<ScholarshipEntity>()
-
-                for (scholarship in scholarships) {
-                    scholarshipEntities += ScholarshipEntity(
-                        username,
-                        scholarship.scholarshipName,
-                        scholarship.scholarshipEnterAmount ?: 0,
-                        scholarship.scholarshipTuitionAmount ?: 0,
-                        scholarship.etcAmount ?: 0,
-                        scholarship.year,
-                        scholarship.semester,
-                        scholarship.date
-                    )
-                }
-
                 val deptJob = async {
+                    // Fetch department transfer information and insert into table.
+                    val deptTransferInfoList = studentInfoResponse.deptTransferInfo
+                    val deptTransferEntities = mutableListOf<DeptTransferEntity>()
+                    for (info in deptTransferInfoList) {
+                        deptTransferEntities += DeptTransferEntity(
+                            username,
+                            info.beforeDept ?: "",
+                            info.beforeSust ?: "",
+                            info.beforeMajor ?: "",
+                            info.changedCode,
+                            info.changedDate,
+                            info.changedYear,
+                            info.changedSemester,
+                            info.dept ?: "",
+                            info.sust ?: "",
+                            info.major ?: ""
+                        )
+                    }
                     deptTransferDao.insert(*deptTransferEntities.toTypedArray())
                 }
+
                 val studentStateJob = async {
+                    // Fetch student state change information and insert into table.
+                    val studentStateChangeInfoList = studentInfoResponse.studentStateChangeInfo
+                    val studentStateChangeEntities = mutableListOf<StudentStateChangeEntity>()
+
+                    for (info in studentStateChangeInfoList) {
+                        studentStateChangeEntities += StudentStateChangeEntity(
+                            username,
+                            info.applyDate,
+                            info.changedDate,
+                            info.changedCode,
+                            info.changedReason ?: "",
+                            info.appliedStateCode
+                        )
+                    }
                     studentStateChangeDao.insert(*studentStateChangeEntities.toTypedArray())
                 }
+
                 val personalInfoJob = async {
+                    // Fetch personal information and insert into table.
+                    val personalInfo = studentInfoResponse.personalInfo.first()
+                    val personalEntities = mutableListOf<PersonalInfoEntity>()
+
+                    val personalInfoFields = personalInfo.javaClass.declaredFields
+                    val personalInfoFieldNames = personalInfoFields.map { field -> field.name }
+
+                    for ((idx, field) in personalInfoFields.withIndex()) {
+                        field.isAccessible = true
+                        personalEntities += PersonalInfoEntity(
+                            username,
+                            personalInfoFieldNames[idx],
+                            field.get(personalInfo)?.toString()?.trim() ?: ""
+                        )
+                    }
                     personalInfoDao.insert(*personalEntities.toTypedArray())
                 }
+
+
                 val tuitionJob = async {
+                    // Fetch tuition information and insert into table.
+                    val tuitionFees = studentInfoResponse.tuitionFees
+                    val tuitionEntities = mutableListOf<TuitionEntity>()
+
+                    for (tuition in tuitionFees) {
+                        tuitionEntities += TuitionEntity(
+                            username,
+                            tuition.paidDate,
+                            tuition.tuitionAmount ?: 0,
+                            tuition.enterAmount ?: 0,
+                            tuition.year,
+                            tuition.semester,
+                            tuition.stateCode
+                        )
+                    }
                     tuitionDao.insert(*tuitionEntities.toTypedArray())
                 }
+
                 val scholarshipJob = async {
+                    // Fetch scholarship information and insert into table.
+                    val scholarships = studentInfoResponse.scholarships
+                    val scholarshipEntities = mutableListOf<ScholarshipEntity>()
+
+                    for (scholarship in scholarships) {
+                        scholarshipEntities += ScholarshipEntity(
+                            username,
+                            scholarship.scholarshipName,
+                            scholarship.scholarshipEnterAmount ?: 0,
+                            scholarship.scholarshipTuitionAmount ?: 0,
+                            scholarship.etcAmount ?: 0,
+                            scholarship.year,
+                            scholarship.semester,
+                            scholarship.date
+                        )
+                    }
                     scholarshipDao.insert(*scholarshipEntities.toTypedArray())
                 }
+
                 awaitAll(deptJob, studentStateJob, personalInfoJob, tuitionJob, scholarshipJob)
             }
         } catch (e: Exception) {
