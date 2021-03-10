@@ -21,6 +21,7 @@ import com.konkuk.boost.persistence.tuition.TuitionEntity
 import com.konkuk.boost.utils.MessageUtils
 import com.konkuk.boost.utils.UseCase
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
 import retrofit2.Response
 
@@ -139,13 +140,15 @@ class AuthRepositoryImpl(
         val changePasswordResponse: ChangePasswordResponse
 
         try {
-            changePasswordResponse = kuisService.changePasswordAfter90Days(
-                username,
-                beforePassword,
-                password,
-                password2,
-                procDiv
-            )
+            withContext(Dispatchers.IO) {
+                changePasswordResponse = kuisService.changePasswordAfter90Days(
+                    username,
+                    beforePassword,
+                    password,
+                    password2,
+                    procDiv
+                )
+            }
         } catch (e: Exception) {
             FirebaseCrashlytics.getInstance().log("${e.message}")
             return UseCase.error("${e.message}")
@@ -160,104 +163,105 @@ class AuthRepositoryImpl(
         val studentInfoResponse: StudentInfoResponse
 
         try {
-            studentInfoResponse = authorizedKuisService.fetchStudentInfo(stdNo)
+            withContext(Dispatchers.IO) {
+                studentInfoResponse = authorizedKuisService.fetchStudentInfo(stdNo)
 
-            // Fetch department transfer information and insert into table.
-            val deptTransferInfoList = studentInfoResponse.deptTransferInfo
-            val deptTransferEntities = mutableListOf<DeptTransferEntity>()
+                // Fetch department transfer information and insert into table.
+                val deptTransferInfoList = studentInfoResponse.deptTransferInfo
+                val deptTransferEntities = mutableListOf<DeptTransferEntity>()
 
-            for (info in deptTransferInfoList) {
-                deptTransferEntities += DeptTransferEntity(
-                    username,
-                    info.beforeDept ?: "",
-                    info.beforeSust ?: "",
-                    info.beforeMajor ?: "",
-                    info.changedCode,
-                    info.changedDate,
-                    info.changedYear,
-                    info.changedSemester,
-                    info.dept ?: "",
-                    info.sust ?: "",
-                    info.major ?: ""
-                )
+                for (info in deptTransferInfoList) {
+                    deptTransferEntities += DeptTransferEntity(
+                        username,
+                        info.beforeDept ?: "",
+                        info.beforeSust ?: "",
+                        info.beforeMajor ?: "",
+                        info.changedCode,
+                        info.changedDate,
+                        info.changedYear,
+                        info.changedSemester,
+                        info.dept ?: "",
+                        info.sust ?: "",
+                        info.major ?: ""
+                    )
+                }
+
+
+                // Fetch student state change information and insert into table.
+                val studentStateChangeInfoList = studentInfoResponse.studentStateChangeInfo
+                val studentStateChangeEntities = mutableListOf<StudentStateChangeEntity>()
+
+                for (info in studentStateChangeInfoList) {
+                    studentStateChangeEntities += StudentStateChangeEntity(
+                        username,
+                        info.applyDate,
+                        info.changedDate,
+                        info.changedCode,
+                        info.changedReason ?: "",
+                        info.appliedStateCode
+                    )
+                }
+
+
+                // Fetch personal information and insert into table.
+                val personalInfo = studentInfoResponse.personalInfo.first()
+                val personalEntities = mutableListOf<PersonalInfoEntity>()
+
+                val personalInfoFields = personalInfo.javaClass.declaredFields
+                val personalInfoFieldNames = personalInfoFields.map { field -> field.name }
+
+                for ((idx, field) in personalInfoFields.withIndex()) {
+                    field.isAccessible = true
+                    personalEntities += PersonalInfoEntity(
+                        username,
+                        personalInfoFieldNames[idx],
+                        field.get(personalInfo)?.toString()?.trim() ?: ""
+                    )
+                }
+
+
+                // Fetch tuition information and insert into table.
+                val tuitionFees = studentInfoResponse.tuitionFees
+                val tuitionEntities = mutableListOf<TuitionEntity>()
+
+                for (tuition in tuitionFees) {
+                    tuitionEntities += TuitionEntity(
+                        username,
+                        tuition.paidDate,
+                        tuition.tuitionAmount ?: 0,
+                        tuition.enterAmount ?: 0,
+                        tuition.year,
+                        tuition.semester,
+                        tuition.stateCode
+                    )
+                }
+
+
+                // Fetch scholarship information and insert into table.
+                val scholarships = studentInfoResponse.scholarships
+                val scholarshipEntities = mutableListOf<ScholarshipEntity>()
+
+                for (scholarship in scholarships) {
+                    scholarshipEntities += ScholarshipEntity(
+                        username,
+                        scholarship.scholarshipName,
+                        scholarship.scholarshipEnterAmount ?: 0,
+                        scholarship.scholarshipTuitionAmount ?: 0,
+                        scholarship.etcAmount ?: 0,
+                        scholarship.year,
+                        scholarship.semester,
+                        scholarship.date
+                    )
+                }
+
+                async {
+                    deptTransferDao.insert(*deptTransferEntities.toTypedArray())
+                    studentStateChangeDao.insert(*studentStateChangeEntities.toTypedArray())
+                    personalInfoDao.insert(*personalEntities.toTypedArray())
+                    tuitionDao.insert(*tuitionEntities.toTypedArray())
+                    scholarshipDao.insert(*scholarshipEntities.toTypedArray())
+                }
             }
-
-            deptTransferDao.insert(*deptTransferEntities.toTypedArray())
-
-
-            // Fetch student state change information and insert into table.
-            val studentStateChangeInfoList = studentInfoResponse.studentStateChangeInfo
-            val studentStateChangeEntities = mutableListOf<StudentStateChangeEntity>()
-
-            for (info in studentStateChangeInfoList) {
-                studentStateChangeEntities += StudentStateChangeEntity(
-                    username,
-                    info.applyDate,
-                    info.changedDate,
-                    info.changedCode,
-                    info.changedReason ?: "",
-                    info.appliedStateCode
-                )
-            }
-
-            studentStateChangeDao.insert(*studentStateChangeEntities.toTypedArray())
-
-
-            // Fetch personal information and insert into table.
-            val personalInfo = studentInfoResponse.personalInfo.first()
-            val personalEntities = mutableListOf<PersonalInfoEntity>()
-
-            val personalInfoFields = personalInfo.javaClass.declaredFields
-            val personalInfoFieldNames = personalInfoFields.map { field -> field.name }
-
-            for ((idx, field) in personalInfoFields.withIndex()) {
-                field.isAccessible = true
-                personalEntities += PersonalInfoEntity(
-                    username,
-                    personalInfoFieldNames[idx],
-                    field.get(personalInfo)?.toString()?.trim() ?: ""
-                )
-            }
-
-            personalInfoDao.insert(*personalEntities.toTypedArray())
-
-            // Fetch tuition information and insert into table.
-            val tuitionFees = studentInfoResponse.tuitionFees
-            val tuitionEntities = mutableListOf<TuitionEntity>()
-
-            for (tuition in tuitionFees) {
-                tuitionEntities += TuitionEntity(
-                    username,
-                    tuition.paidDate,
-                    tuition.tuitionAmount ?: 0,
-                    tuition.enterAmount ?: 0,
-                    tuition.year,
-                    tuition.semester,
-                    tuition.stateCode
-                )
-            }
-
-            tuitionDao.insert(*tuitionEntities.toTypedArray())
-
-
-            // Fetch scholarship information and insert into table.
-            val scholarships = studentInfoResponse.scholarships
-            val scholarshipEntities = mutableListOf<ScholarshipEntity>()
-
-            for (scholarship in scholarships) {
-                scholarshipEntities += ScholarshipEntity(
-                    username,
-                    scholarship.scholarshipName,
-                    scholarship.scholarshipEnterAmount ?: 0,
-                    scholarship.scholarshipTuitionAmount ?: 0,
-                    scholarship.etcAmount ?: 0,
-                    scholarship.year,
-                    scholarship.semester,
-                    scholarship.date
-                )
-            }
-
-            scholarshipDao.insert(*scholarshipEntities.toTypedArray())
         } catch (e: Exception) {
             Log.e(MessageUtils.LOG_KEY, "${e.message}")
             return UseCase.error("${e.message}")
@@ -271,7 +275,9 @@ class AuthRepositoryImpl(
         val personalInfo: List<PersonalInfoEntity>
 
         try {
-            personalInfo = personalInfoDao.getAll(username)
+            withContext(Dispatchers.IO) {
+                personalInfo = personalInfoDao.getAll(username)
+            }
         } catch (e: Exception) {
             Log.e(MessageUtils.LOG_KEY, "${e.message}")
             return UseCase.error("${e.message}")
@@ -285,7 +291,9 @@ class AuthRepositoryImpl(
         val deptTransferInfo: List<DeptTransferEntity>
 
         try {
-            deptTransferInfo = deptTransferDao.getAll(username)
+            withContext(Dispatchers.IO) {
+                deptTransferInfo = deptTransferDao.getAll(username)
+            }
         } catch (e: Exception) {
             Log.e(MessageUtils.LOG_KEY, "${e.message}")
             return UseCase.error("${e.message}")
@@ -299,7 +307,9 @@ class AuthRepositoryImpl(
         val studentStateChangeEntity: List<StudentStateChangeEntity>
 
         try {
-            studentStateChangeEntity = studentStateChangeDao.getAll(username)
+            withContext(Dispatchers.IO) {
+                studentStateChangeEntity = studentStateChangeDao.getAll(username)
+            }
         } catch (e: Exception) {
             Log.e(MessageUtils.LOG_KEY, "${e.message}")
             return UseCase.error("${e.message}")
@@ -313,7 +323,9 @@ class AuthRepositoryImpl(
         val tuitionEntity: List<TuitionEntity>
 
         try {
-            tuitionEntity = tuitionDao.getAll(username)
+            withContext(Dispatchers.IO) {
+                tuitionEntity = tuitionDao.getAll(username)
+            }
         } catch (e: Exception) {
             Log.e(MessageUtils.LOG_KEY, "${e.message}")
             return UseCase.error("${e.message}")
@@ -327,7 +339,9 @@ class AuthRepositoryImpl(
         val scholarshipEntities: List<ScholarshipEntity>
 
         try {
-            scholarshipEntities = scholarshipDao.getAll(username)
+            withContext(Dispatchers.IO) {
+                scholarshipEntities = scholarshipDao.getAll(username)
+            }
         } catch (e: Exception) {
             Log.e(MessageUtils.LOG_KEY, "${e.message}")
             return UseCase.error("${e.message}")

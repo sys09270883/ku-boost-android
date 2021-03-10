@@ -60,42 +60,37 @@ class CourseViewModel(
         val semester = selectedSemester.value ?: 1
 
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                allLikeCoursesResponse.postValue(
-                    courseRepository.makeAllLikeCoursesRequest(
-                        year,
-                        semester
-                    )
+            allLikeCoursesResponse.postValue(
+                courseRepository.makeAllLikeCoursesRequest(
+                    year,
+                    semester
+                )
+            )
+
+            registrationStatusListResponse.postValue(
+                courseRepository.makeCourseRegistrationStatusRequest(
+                    year,
+                    semester,
+                    getAllLikeCoursesId()
+                )
+            )
+
+            val list = mutableListOf<RegistrationStatusData>()
+            val allLikeCourses = allLikeCoursesResponse.value?.data ?: return@launch
+            val registrationStatusList =
+                registrationStatusListResponse.value?.data ?: return@launch
+
+            if (allLikeCourses.size != registrationStatusList.size)
+                return@launch
+
+            for (idx in allLikeCourses.indices) {
+                list += RegistrationStatusData(
+                    allLikeCourses[idx],
+                    registrationStatusList[idx],
                 )
             }
-            withContext(Dispatchers.IO) {
-                registrationStatusListResponse.postValue(
-                    courseRepository.makeCourseRegistrationStatusRequest(
-                        year,
-                        semester,
-                        getAllLikeCoursesId()
-                    )
-                )
-            }
-            withContext(Dispatchers.IO) {
-                val list = mutableListOf<RegistrationStatusData>()
-                val allLikeCourses = allLikeCoursesResponse.value?.data ?: return@withContext
-                val registrationStatusList =
-                    registrationStatusListResponse.value?.data ?: return@withContext
 
-                if (allLikeCourses.size != registrationStatusList.size)
-                    return@withContext
-
-                for (idx in allLikeCourses.indices) {
-                    list += RegistrationStatusData(
-                        allLikeCourses[idx],
-                        registrationStatusList[idx],
-                    )
-                }
-
-                courseAndRegistrationStatus.postValue(list)
-            }
-
+            courseAndRegistrationStatus.postValue(list)
         }
     }
 
@@ -118,15 +113,13 @@ class CourseViewModel(
         val semester = selectedSemester.value ?: 1
 
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                registrationStatusListResponse.postValue(
-                    courseRepository.makeCourseRegistrationStatusRequest(
-                        year,
-                        semester,
-                        getAllLikeCoursesId()
-                    )
+            registrationStatusListResponse.postValue(
+                courseRepository.makeCourseRegistrationStatusRequest(
+                    year,
+                    semester,
+                    getAllLikeCoursesId()
                 )
-            }
+            )
         }
     }
 
@@ -148,9 +141,7 @@ class CourseViewModel(
 
     fun fetchSelectedSemester() {
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                selectedSemester.postValue(courseRepository.getSemester().data)
-            }
+            selectedSemester.postValue(courseRepository.getSemester().data ?: 1)
         }
     }
 

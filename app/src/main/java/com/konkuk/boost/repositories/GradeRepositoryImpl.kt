@@ -16,6 +16,7 @@ import com.konkuk.boost.persistence.rank.RankEntity
 import com.konkuk.boost.persistence.simul.GraduationSimulationDao
 import com.konkuk.boost.persistence.simul.GraduationSimulationEntity
 import com.konkuk.boost.utils.*
+import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
@@ -335,7 +336,9 @@ class GradeRepositoryImpl(
 
         val allValidGrades: List<GradeEntity>
         try {
-            allValidGrades = gradeDao.getAllValidGrades(username)
+            withContext(Dispatchers.IO) {
+                allValidGrades = gradeDao.getAllValidGrades(username)
+            }
         } catch (e: Exception) {
             FirebaseCrashlytics.getInstance().log("${e.message}")
             return UseCase.error("${e.message}")
@@ -349,7 +352,9 @@ class GradeRepositoryImpl(
 
         val allGrades: List<GradeEntity>
         try {
-            allGrades = gradeDao.getNotDeletedGrades(username)
+            withContext(Dispatchers.IO) {
+                allGrades = gradeDao.getNotDeletedGrades(username)
+            }
         } catch (e: Exception) {
             FirebaseCrashlytics.getInstance().log("${e.message}")
             return UseCase.error("${e.message}")
@@ -363,7 +368,9 @@ class GradeRepositoryImpl(
 
         val currentGrades: List<GradeEntity>
         try {
-            currentGrades = gradeDao.getCurrentSemesterGradesTransaction(username)
+            withContext(Dispatchers.IO) {
+                currentGrades = gradeDao.getCurrentSemesterGradesTransaction(username)
+            }
         } catch (e: Exception) {
             FirebaseCrashlytics.getInstance().log("${e.message}")
             return UseCase.error("${e.message}")
@@ -379,7 +386,9 @@ class GradeRepositoryImpl(
 
         val gradesByClassification: List<GradeEntity>
         try {
-            gradesByClassification = gradeDao.getNotDeletedGradesByClassification(username, clf)
+            withContext(Dispatchers.IO) {
+                gradesByClassification = gradeDao.getNotDeletedGradesByClassification(username, clf)
+            }
         } catch (e: Exception) {
             FirebaseCrashlytics.getInstance().log("${e.message}")
             return UseCase.error("${e.message}")
@@ -393,7 +402,9 @@ class GradeRepositoryImpl(
 
         val totalRank: RankEntity
         try {
-            totalRank = rankDao.get(username, year, semester)
+            withContext(Dispatchers.IO) {
+                totalRank = rankDao.get(username, year, semester)
+            }
         } catch (e: Exception) {
             FirebaseCrashlytics.getInstance().log("${e.message}")
             return UseCase.error("${e.message}")
@@ -461,43 +472,56 @@ class GradeRepositoryImpl(
         val year = stdNo / 100_000
         val basicType = "기교"
         val coreType = if (year > 2015) "심교" else "핵교"
-        val subjectAreas: List<SubjectAreaEntity>
+        val deferredSubjectAreas: Deferred<List<SubjectAreaEntity>>
         val subjectAreaCounts = mutableListOf<SubjectAreaCount>()
-        val basicGrades: List<GradeEntity>
-        val coreGrades: List<GradeEntity>
+        val deferredBasicGrades: Deferred<List<GradeEntity>>
+        val deferredCoreGrades: Deferred<List<GradeEntity>>
 
         try {
-            subjectAreas = subjectAreaDao.getAll(username)
-            for (area in subjectAreas) {
-                subjectAreaCounts += SubjectAreaCount(area)
-            }
-            basicGrades = gradeDao.getNotDeletedGradesByClassification(username, basicType)
-            coreGrades = gradeDao.getNotDeletedGradesByClassification(username, coreType)
+            withContext(Dispatchers.IO) {
+                deferredSubjectAreas = async {
+                    subjectAreaDao.getAll(username)
+                }
+                deferredBasicGrades = async {
+                    gradeDao.getNotDeletedGradesByClassification(username, basicType)
+                }
+                deferredCoreGrades = async {
+                    gradeDao.getNotDeletedGradesByClassification(username, coreType)
+                }
 
-            for (grade in basicGrades) {
-                for (areaWithCount in subjectAreaCounts) {
-                    val area = areaWithCount.area
+                val subjectAreas = deferredSubjectAreas.await()
+                val basicGrades = deferredBasicGrades.await()
+                val coreGrades = deferredCoreGrades.await()
 
-                    if (area.type != 1) {
-                        continue
-                    }
+                for (area in subjectAreas) {
+                    subjectAreaCounts += SubjectAreaCount(area)
+                }
 
-                    if (area.subjectAreaName == grade.subjectArea && grade.type == GradeContract.Type.VALID.value) {
-                        areaWithCount.count += 1
+                for (grade in basicGrades) {
+                    for (areaWithCount in subjectAreaCounts) {
+                        val area = areaWithCount.area
+
+                        if (area.type != 1) {
+                            continue
+                        }
+
+                        if (area.subjectAreaName == grade.subjectArea && grade.type == GradeContract.Type.VALID.value) {
+                            areaWithCount.count += 1
+                        }
                     }
                 }
-            }
 
-            for (grade in coreGrades) {
-                for (areaWithCount in subjectAreaCounts) {
-                    val area = areaWithCount.area
+                for (grade in coreGrades) {
+                    for (areaWithCount in subjectAreaCounts) {
+                        val area = areaWithCount.area
 
-                    if (area.type != 2) {
-                        continue
-                    }
+                        if (area.type != 2) {
+                            continue
+                        }
 
-                    if (area.subjectAreaName == grade.subjectArea && grade.type == GradeContract.Type.VALID.value) {
-                        areaWithCount.count += 1
+                        if (area.subjectAreaName == grade.subjectArea && grade.type == GradeContract.Type.VALID.value) {
+                            areaWithCount.count += 1
+                        }
                     }
                 }
             }

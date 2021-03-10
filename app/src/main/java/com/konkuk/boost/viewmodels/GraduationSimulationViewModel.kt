@@ -7,9 +7,7 @@ import com.konkuk.boost.data.grade.SubjectAreaCount
 import com.konkuk.boost.persistence.simul.GraduationSimulationEntity
 import com.konkuk.boost.repositories.GradeRepository
 import com.konkuk.boost.utils.UseCase
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class GraduationSimulationViewModel(private val gradeRepository: GradeRepository) : ViewModel() {
 
@@ -27,9 +25,7 @@ class GraduationSimulationViewModel(private val gradeRepository: GradeRepository
 
     fun fetchGraduationSimulationFromLocalDb() {
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                graduationSimulation.postValue(gradeRepository.getGraduationSimulations())
-            }
+            graduationSimulation.postValue(gradeRepository.getGraduationSimulations())
         }
     }
 
@@ -37,9 +33,7 @@ class GraduationSimulationViewModel(private val gradeRepository: GradeRepository
 
     fun fetchElectiveStatus() {
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                subjectAreaCounts.postValue(gradeRepository.getSubjectAreaCounts())
-            }
+            subjectAreaCounts.postValue(gradeRepository.getSubjectAreaCounts())
         }
     }
 

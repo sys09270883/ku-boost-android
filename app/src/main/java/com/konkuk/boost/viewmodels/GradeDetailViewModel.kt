@@ -43,16 +43,16 @@ class GradeDetailViewModel : ViewModel() {
     fun setGrade(grade: ParcelableGrade?) {
         grade?.let {
             _year.postValue(grade.year)
-            _semester.postValue(grade.semester)
-            _characterGrade.postValue(grade.characterGrade)
-            _subjectId.postValue(grade.subjectId)
-            _subjectName.postValue(grade.subjectName)
-            _subjectNumber.postValue(grade.subjectNumber)
+            _semester.postValue(grade.semester ?: "")
+            _characterGrade.postValue(grade.characterGrade ?: "")
+            _subjectId.postValue(grade.subjectId ?: "")
+            _subjectName.postValue(grade.subjectName ?: "")
+            _subjectNumber.postValue(grade.subjectNumber ?: "")
             _subjectPoint.postValue(grade.subjectPoint)
-            _professor.postValue(grade.professor)
+            _professor.postValue(grade.professor ?: "")
             _grade.postValue(grade.grade)
-            _evaluationMethod.postValue(grade.evaluationMethod)
-            _classification.postValue(grade.classification)
+            _evaluationMethod.postValue(grade.evaluationMethod ?: "")
+            _classification.postValue(grade.classification ?: "")
         }
     }
 }

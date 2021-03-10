@@ -5,9 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.konkuk.boost.repositories.AuthRepository
 import com.konkuk.boost.utils.UseCase
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class SettingsViewModel(
     private val authRepository: AuthRepository,
@@ -34,9 +32,7 @@ class SettingsViewModel(
 
     fun logout() {
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                logoutResponse.postValue(authRepository.makeLogoutRequest())
-            }
+            logoutResponse.postValue(authRepository.makeLogoutRequest())
         }
     }
 }

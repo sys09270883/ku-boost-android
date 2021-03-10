@@ -9,9 +9,7 @@ import com.konkuk.boost.persistence.simul.GraduationSimulationEntity
 import com.konkuk.boost.repositories.AuthRepository
 import com.konkuk.boost.repositories.GradeRepository
 import com.konkuk.boost.utils.UseCase
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class GradeViewModel(
     private val authRepository: AuthRepository,
@@ -45,25 +43,19 @@ class GradeViewModel(
 
     fun fetchGraduationSimulationFromLocalDb() {
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                graduationSimulation.postValue(gradeRepository.getGraduationSimulations())
-            }
+            graduationSimulation.postValue(gradeRepository.getGraduationSimulations())
         }
     }
 
     fun fetchCurrentGradesFromLocalDb() {
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                currentGrades.postValue(gradeRepository.getCurrentGrades())
-            }
+            currentGrades.postValue(gradeRepository.getCurrentGrades())
         }
     }
 
     fun fetchTotalGradesFromLocalDb() {
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                allValidGrades.postValue(gradeRepository.getAllValidGrades())
-            }
+            allValidGrades.postValue(gradeRepository.getAllValidGrades())
         }
     }
 
@@ -76,10 +68,8 @@ class GradeViewModel(
 
     fun fetchTotalRankFromLocalDb() {
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                // Total rank {year: 0, semester: 0}
-                totalRankResponse.postValue(gradeRepository.getTotalRank(0, 0))
-            }
+            // Total rank {year: 0, semester: 0}
+            totalRankResponse.postValue(gradeRepository.getTotalRank(0, 0))
         }
     }
 
