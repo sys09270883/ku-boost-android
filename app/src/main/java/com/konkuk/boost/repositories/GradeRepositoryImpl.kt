@@ -211,15 +211,10 @@ class GradeRepositoryImpl(
             allGrades.toMutableList()
         }
 
-    @KoinApiExtension
-    private suspend fun getSubjectAreaList(
-        username: String,
+    private fun updateSubjectAreaAndClassification(
         simulMap: Map<String, List<String>>,
-        electiveMap: Map<String, Set<String>>,
         grades: List<GradeEntity>
-    ) = withContext(Dispatchers.IO) {
-        val subjectAreaList = mutableListOf<SubjectAreaEntity>()
-
+    ) {
         for ((clf, subjectIdList) in simulMap) {
             for (subjectId in subjectIdList) {
                 val onlySubjectNumber = subjectId.substring(0, 9)
@@ -239,6 +234,13 @@ class GradeRepositoryImpl(
                 grade.classification = clf
             }
         }
+    }
+
+    private fun makeSubjectAreaList(
+        username: String,
+        electiveMap: Map<String, Set<String>>
+    ): List<SubjectAreaEntity> {
+        val subjectAreaList = mutableListOf<SubjectAreaEntity>()
 
         for (item in electiveMap) {
             for (elective in item.value) {
@@ -254,7 +256,18 @@ class GradeRepositoryImpl(
             }
         }
 
-        subjectAreaList
+        return subjectAreaList
+    }
+
+    @KoinApiExtension
+    private suspend fun getSubjectAreaList(
+        username: String,
+        simulMap: Map<String, List<String>>,
+        electiveMap: Map<String, Set<String>>,
+        grades: List<GradeEntity>
+    ) = withContext(Dispatchers.IO) {
+        updateSubjectAreaAndClassification(simulMap, grades)
+        makeSubjectAreaList(username, electiveMap)
     }
 
     @KoinApiExtension
