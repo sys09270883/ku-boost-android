@@ -22,6 +22,7 @@ import com.konkuk.boost.utils.MessageUtils
 import com.konkuk.boost.utils.UseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.withContext
 import retrofit2.Response
 
@@ -254,13 +255,22 @@ class AuthRepositoryImpl(
                     )
                 }
 
-                async {
+                val deptJob = async {
                     deptTransferDao.insert(*deptTransferEntities.toTypedArray())
+                }
+                val studentStateJob = async {
                     studentStateChangeDao.insert(*studentStateChangeEntities.toTypedArray())
+                }
+                val personalInfoJob = async {
                     personalInfoDao.insert(*personalEntities.toTypedArray())
+                }
+                val tuitionJob = async {
                     tuitionDao.insert(*tuitionEntities.toTypedArray())
+                }
+                val scholarshipJob = async {
                     scholarshipDao.insert(*scholarshipEntities.toTypedArray())
                 }
+                awaitAll(deptJob, studentStateJob, personalInfoJob, tuitionJob, scholarshipJob)
             }
         } catch (e: Exception) {
             Log.e(MessageUtils.LOG_KEY, "${e.message}")
