@@ -96,11 +96,6 @@ class SplashFragment : Fragment() {
                     viewModel.updateEvent(0b01)
                 }
                 UseCase.Status.ERROR -> {
-                    coroutineScope.launch {
-                        delay(1500L)
-                        viewModel.clearLoginResource()
-                        findNavController().navigate(R.id.action_splashFragment_to_loginFragment)
-                    }
                 }
             }
         }
@@ -114,6 +109,11 @@ class SplashFragment : Fragment() {
                 }
                 UseCase.Status.ERROR -> {
                     Log.e(MessageUtils.LOG_KEY, "${it.message}")
+                    coroutineScope.launch {
+                        delay(1500L)
+                        viewModel.clearLoginResource()
+                        findNavController().navigate(R.id.action_splashFragment_to_loginFragment)
+                    }
                 }
             }
         }

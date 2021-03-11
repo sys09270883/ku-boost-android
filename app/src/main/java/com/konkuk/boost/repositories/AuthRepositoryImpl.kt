@@ -48,16 +48,21 @@ class AuthRepositoryImpl(
             return UseCase.error(MessageUtils.ERROR_ON_SERVER)
         }
 
-        val cookie = loginResponse.headers()["Set-Cookie"]?.split(";")?.first()
-            ?: return UseCase.error(MessageUtils.LOGIN_AGAIN)
-        preferenceManager.cookie = cookie
-
         val loginBody = loginResponse.body()
         val loginSuccess = loginBody?.loginSuccess
         val loginFailure = loginBody?.loginFailure
 
         return when {
             loginSuccess?.isSucceeded == true -> {
+                val cookie = StringBuilder()
+                val headers = loginResponse.headers()
+                for (header in headers) {
+                    if (header.first == "Set-Cookie" && header.second.contains("JSESSIONID")) {
+                        cookie.append(header.second.split(";").first())
+                    }
+                }
+
+                preferenceManager.cookie = cookie.toString()
                 preferenceManager.setAuthInfo(username, password)
                 UseCase.success(loginBody)
             }
