@@ -7,9 +7,7 @@ import com.konkuk.boost.data.course.SyllabusDetailResponse
 import com.konkuk.boost.persistence.like.LikeCourseEntity
 import com.konkuk.boost.repositories.CourseRepository
 import com.konkuk.boost.utils.UseCase
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class CourseSummaryViewModel(
     private val courseRepository: CourseRepository
@@ -58,15 +56,13 @@ class CourseSummaryViewModel(
         val semester = _semester.value ?: return
 
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                detailSyllabusResponse.postValue(
-                    courseRepository.makeDetailSyllabusRequest(
-                        year,
-                        semester,
-                        subjectId
-                    )
+            detailSyllabusResponse.postValue(
+                courseRepository.makeDetailSyllabusRequest(
+                    year,
+                    semester,
+                    subjectId
                 )
-            }
+            )
         }
     }
 
@@ -84,20 +80,18 @@ class CourseSummaryViewModel(
         val professor = _professor.value ?: return
 
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                courseRepository.insertLikeCourse(
-                    year,
-                    semester,
-                    subjectId,
-                    subjectName,
-                    professor,
-                    like
-                )
-            }
+            courseRepository.insertLikeCourse(
+                year,
+                semester,
+                subjectId,
+                subjectName,
+                professor,
+                like
+            )
         }
     }
 
-    val like = MutableLiveData<Boolean>(false)
+    val like = MutableLiveData(false)
 
     fun setLike(_like: Boolean) {
         like.value = _like
@@ -113,9 +107,7 @@ class CourseSummaryViewModel(
         val subjectId = _subjectId.value ?: return
 
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                isLikeResponse.postValue(courseRepository.isExist(year, semester, subjectId))
-            }
+            isLikeResponse.postValue(courseRepository.isExist(year, semester, subjectId))
         }
     }
 }

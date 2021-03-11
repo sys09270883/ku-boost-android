@@ -10,9 +10,7 @@ import com.konkuk.boost.repositories.GradeRepository
 import com.konkuk.boost.repositories.LibraryRepository
 import com.konkuk.boost.utils.MessageUtils
 import com.konkuk.boost.utils.UseCase
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class MainFragmentViewModel(
     private val authRepository: AuthRepository,
@@ -32,17 +30,13 @@ class MainFragmentViewModel(
 
     fun libraryLogin() {
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                libraryLoginResponse.postValue(libraryRepository.makeLoginRequest())
-            }
+            libraryLoginResponse.postValue(libraryRepository.makeLoginRequest())
         }
     }
 
     fun fetchStudentInfo() {
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                authRepository.makeStudentInfoRequest()
-            }
+            authRepository.makeStudentInfoRequest()
             Log.d(MessageUtils.LOG_KEY, "Student information is fetched.")
         }
     }
@@ -50,16 +44,12 @@ class MainFragmentViewModel(
     fun fetchGrades() {
         _allGradesLoading.value = true
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                gradeRepository.makeValidGradesAndUpdateClassification()
-            }
+            gradeRepository.makeValidGradesAndUpdateClassification()
             Log.d(
                 MessageUtils.LOG_KEY,
                 "All valid grades, classification of graduation simulation are updated."
             )
-            withContext(Dispatchers.IO) {
-                gradeRepository.makeTotalRankAndUpdateDeletedSubjects()
-            }
+            gradeRepository.makeTotalRankAndUpdateDeletedSubjects()
             Log.d(MessageUtils.LOG_KEY, "Total rank and deleted subjects are updated.")
             _allGradesLoading.postValue(false)
             fetched.postValue(true)
@@ -68,9 +58,7 @@ class MainFragmentViewModel(
 
     fun fetchGraduationSimulationFromServer() {
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                gradeRepository.makeGraduationSimulationRequest()
-            }
+            gradeRepository.makeGraduationSimulationRequest()
             Log.d(MessageUtils.LOG_KEY, "Graduation simulation is fetched.")
         }
     }

@@ -8,9 +8,7 @@ import com.konkuk.boost.persistence.rank.RankEntity
 import com.konkuk.boost.repositories.AuthRepository
 import com.konkuk.boost.repositories.GradeRepository
 import com.konkuk.boost.utils.UseCase
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class TotalGradeViewModel(
     private val authRepository: AuthRepository,
@@ -25,9 +23,7 @@ class TotalGradeViewModel(
 
     fun fetchAllGradesFromLocal() {
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                allValidGrades.postValue(gradeRepository.getAllValidGrades())
-            }
+            allValidGrades.postValue(gradeRepository.getAllValidGrades())
             fetched.postValue(true)
         }
     }
@@ -47,10 +43,8 @@ class TotalGradeViewModel(
 
     fun fetchSelectedRankFromLocalDb(year: Int, semester: Int) {
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                // Total rank {year: 0, semester: 0}
-                selectedRankResponse.postValue(gradeRepository.getTotalRank(year, semester))
-            }
+            // Total rank {year: 0, semester: 0}
+            selectedRankResponse.postValue(gradeRepository.getTotalRank(year, semester))
         }
     }
 

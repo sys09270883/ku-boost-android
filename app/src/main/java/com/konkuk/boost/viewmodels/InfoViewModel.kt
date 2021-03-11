@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.konkuk.boost.persistence.personal.PersonalInfoEntity
 import com.konkuk.boost.repositories.AuthRepository
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class InfoViewModel(
@@ -23,7 +22,7 @@ class InfoViewModel(
     val personalInfoResponse = MutableLiveData<List<PersonalInfoEntity>>()
 
     init {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             personalInfoResponse.postValue(
                 authRepository.getPersonalInfo().data ?: emptyList()
             )

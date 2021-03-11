@@ -6,9 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.konkuk.boost.data.auth.ChangePasswordResponse
 import com.konkuk.boost.repositories.AuthRepository
 import com.konkuk.boost.utils.UseCase
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class ChangePasswordViewModel(private val authRepository: AuthRepository) : ViewModel() {
 
@@ -92,16 +90,14 @@ class ChangePasswordViewModel(private val authRepository: AuthRepository) : View
         _loading.value = true
 
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                changePasswordResponse.postValue(
-                    authRepository.makeChangePasswordRequest(
-                        username,
-                        beforePassword,
-                        password,
-                        password2
-                    )
+            changePasswordResponse.postValue(
+                authRepository.makeChangePasswordRequest(
+                    username,
+                    beforePassword,
+                    password,
+                    password2
                 )
-            }
+            )
             _loading.postValue(false)
         }
     }
@@ -110,9 +106,7 @@ class ChangePasswordViewModel(private val authRepository: AuthRepository) : View
         val password = password.value ?: return
 
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                authRepository.setPassword(password)
-            }
+            authRepository.setPassword(password)
         }
     }
 }
