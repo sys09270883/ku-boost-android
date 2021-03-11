@@ -16,6 +16,7 @@ import com.konkuk.boost.persistence.rank.RankEntity
 import com.konkuk.boost.persistence.simul.GraduationSimulationDao
 import com.konkuk.boost.persistence.simul.GraduationSimulationEntity
 import com.konkuk.boost.utils.*
+import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
@@ -43,26 +44,29 @@ class GradeRepositoryImpl(
         try {
             if (username.isEmpty()) throw Exception("사용자 이름이 없습니다.")
 
-            graduationSimulationResponse = authorizedKuisService.fetchGraduationSimulation(
-                stdNo = stdNo,
-                year = courseYear,
-                shregCd = code
-            )
-
-            val simulations = graduationSimulationResponse.simulations ?: emptyList()
-
-            for (simulation in simulations) {
-                val data = GraduationSimulationEntity(
-                    username = username,
-                    classification = simulation.classification,
-                    standard = simulation.standard ?: 0,
-                    acquired = simulation.acquired?.toInt() ?: 0,   // String으로 넘어 옴.
-                    remainder = simulation.remainder ?: 0,
-                    modifiedAt = System.currentTimeMillis()
+            withContext(Dispatchers.IO) {
+                graduationSimulationResponse = authorizedKuisService.fetchGraduationSimulation(
+                    stdNo = stdNo,
+                    year = courseYear,
+                    shregCd = code
                 )
-                graduationSimulationDao.insertGraduationSimulation(data)
-            }
 
+                val simulations = graduationSimulationResponse.simulations ?: emptyList()
+
+                val simulationEntities = mutableListOf<GraduationSimulationEntity>()
+                for (simulation in simulations) {
+                    simulationEntities += GraduationSimulationEntity(
+                        username = username,
+                        classification = simulation.classification,
+                        standard = simulation.standard ?: 0,
+                        acquired = simulation.acquired?.toInt() ?: 0,   // String으로 넘어 옴.
+                        remainder = simulation.remainder ?: 0,
+                        modifiedAt = System.currentTimeMillis()
+                    )
+                }
+
+                graduationSimulationDao.insertGraduationSimulation(*simulationEntities.toTypedArray())
+            }
         } catch (e: Exception) {
             Log.e(MessageUtils.LOG_KEY, "${e.message}")
             FirebaseCrashlytics.getInstance().log("${e.message}")
@@ -75,21 +79,22 @@ class GradeRepositoryImpl(
     override suspend fun makeUserInformationRequest(): UseCase<UserInformationResponse> {
         val userInfoResponse: UserInformationResponse
         try {
-            userInfoResponse = authorizedKuisService.fetchUserInformation()
             withContext(Dispatchers.IO) {
-                userInfoResponse.userInformation.apply {
-                    preferenceManager.setUserInfo(
-                        name = name ?: "",
-                        stdNo = stdNo.toInt(),  // API stdNo는 String
-                        state = state ?: "",
-                        dept = dept ?: "",
-                        code = code
-                    )
-                }
+                Log.d(MessageUtils.LOG_KEY, "Kuis cookie: ${preferenceManager.cookie}")
+                userInfoResponse = authorizedKuisService.fetchUserInformation()
+                val userInfo = userInfoResponse.userInformation
+
+                preferenceManager.setUserInfo(
+                    userInfo.name ?: "",
+                    userInfo.stdNo.toInt(),
+                    userInfo.state ?: "",
+                    userInfo.dept ?: "",
+                    userInfo.code
+                )
             }
         } catch (e: Exception) {
             FirebaseCrashlytics.getInstance().log("${e.message}")
-            return UseCase.error("${e.message}")
+            return UseCase.error("UserInfoResponse error: ${e.message}")
         }
 
         return UseCase.success(userInfoResponse)
@@ -114,13 +119,12 @@ class GradeRepositoryImpl(
 
     override fun getStdNo(): Int = preferenceManager.stdNo
 
-    private suspend fun fetchValidGrades(): List<ValidGrade> {
-        val stdNo = preferenceManager.stdNo
+    private suspend fun fetchValidGrades(stdNo: Int): List<ValidGrade> {
         val validGradesResponse: ValidGradesResponse?
         val validGrades: List<ValidGrade>
 
         try {
-            validGradesResponse = authorizedKuisService.fetchValidGrades(stdNo = stdNo)
+            validGradesResponse = authorizedKuisService.fetchValidGrades(stdNo)
             validGrades = validGradesResponse?.validGrades ?: emptyList()
         } catch (e: Exception) {
             Log.e(MessageUtils.LOG_KEY, "${e.message}")
@@ -130,14 +134,12 @@ class GradeRepositoryImpl(
         return validGrades
     }
 
-    private suspend fun fetchAllGrades(): List<GradeEntity> {
+    private suspend fun fetchAllGrades(username: String, stdNo: Int): List<GradeEntity> {
         val allGrades = mutableListOf<GradeEntity>()
         // 1학기: 1, 여름학기: 2, 2학기: 3, 겨울학기: 4
         val semesterConverter = hashMapOf(1 to 1, 4 to 2, 2 to 3, 5 to 4)
 
         try {
-            val stdNo = preferenceManager.stdNo
-            val username = preferenceManager.username
             val startYear = stdNo.toString().substring(0, 4).toInt()
             val endYear = DateTimeConverter.currentYear().toInt()
             val semesters = intArrayOf(5, 2, 4, 1)
@@ -186,89 +188,155 @@ class GradeRepositoryImpl(
         return allGrades
     }
 
+    private suspend fun getUpdatedGrades(username: String, stdNo: Int) =
+        withContext(Dispatchers.IO) {
+            val deferredAllGrades = async {
+                fetchAllGrades(username, stdNo)
+            }
+            val deferredValidGrades = async {
+                fetchValidGrades(stdNo)
+            }
+
+            val allGrades = deferredAllGrades.await()
+            val validGrades = deferredValidGrades.await()
+
+            for (validGrade in validGrades) {
+                val grade = allGrades.find { grade ->
+                    grade.subjectId == validGrade.subjectId
+                            && grade.year == validGrade.year.toInt()
+                            && GradeUtils.convertToSemesterCode(grade.semester) == validGrade.semesterCode
+                } ?: continue
+                grade.type = GradeContract.Type.VALID.value
+            }
+
+            allGrades.toMutableList()
+        }
+
+    private fun updateSubjectAreaAndClassification(
+        simulMap: Map<String, List<String>>,
+        grades: List<GradeEntity>
+    ) {
+        for ((clf, subjectIdList) in simulMap) {
+            for (subjectId in subjectIdList) {
+                val onlySubjectNumber = subjectId.substring(0, 9)
+                var subjectArea = subjectId.substring(9)
+
+                subjectArea = when (clf) {
+                    "기교" -> GradeUtils.basic(subjectArea)
+                    "심교", "핵교" -> GradeUtils.core(subjectArea)
+                    else -> ""
+                }
+
+                val grade =
+                    grades.find { grade -> grade.subjectNumber == onlySubjectNumber }
+                        ?: continue
+
+                grade.subjectArea = subjectArea
+                grade.classification = clf
+            }
+        }
+    }
+
+    private fun makeSubjectAreaList(
+        username: String,
+        electiveMap: Map<String, Set<String>>
+    ): List<SubjectAreaEntity> {
+        val subjectAreaList = mutableListOf<SubjectAreaEntity>()
+
+        for (item in electiveMap) {
+            for (elective in item.value) {
+                val type = when (item.key) {
+                    "basic" -> 1
+                    "core" -> 2
+                    else -> 0
+                }
+
+                if (type > 0) {
+                    subjectAreaList.add(SubjectAreaEntity(username, type, elective))
+                }
+            }
+        }
+
+        return subjectAreaList
+    }
+
+    @KoinApiExtension
+    private suspend fun getSubjectAreaList(
+        username: String,
+        simulMap: Map<String, List<String>>,
+        electiveMap: Map<String, Set<String>>,
+        grades: List<GradeEntity>
+    ) = withContext(Dispatchers.IO) {
+        updateSubjectAreaAndClassification(simulMap, grades)
+        makeSubjectAreaList(username, electiveMap)
+    }
+
+    @KoinApiExtension
+    private suspend fun makeSimulStream(oz: OzEngine) = withContext(Dispatchers.IO) {
+        val file = oz.makeSimulFile()
+
+        val params = file.readBytes()
+        val requestBody = params.toRequestBody(
+            "application/octet-stream".toMediaTypeOrNull(),
+            0,
+            params.size
+        )
+
+        val responseBody = ozService.postOzBinary(requestBody)
+        val stream = responseBody.byteStream()
+        stream
+    }
+
+    @KoinApiExtension
+    private suspend fun makeGradeStream(oz: OzEngine) = withContext(Dispatchers.IO) {
+        val file = oz.makeGradeFile()
+
+        val params = file.readBytes()
+        val requestBody = params.toRequestBody(
+            "application/octet-stream".toMediaTypeOrNull(),
+            0,
+            params.size
+        )
+
+        val responseBody = ozService.postOzBinary(requestBody)
+        val stream = responseBody.byteStream()
+        stream
+    }
+
     @KoinApiExtension
     override suspend fun makeValidGradesAndUpdateClassification(): UseCase<Unit> {
         val stdNo = preferenceManager.stdNo
         val username = preferenceManager.username
-        val grades: MutableList<GradeEntity>
 
         try {
             withContext(Dispatchers.IO) {
-                // fetch all grades and do grades validation.
-                val deferredAllGrades = async {
-                    fetchAllGrades()
-                }
-                val deferredValidGrades = async {
-                    fetchValidGrades()
+                val deferredGrades = async {
+                    getUpdatedGrades(username, stdNo)
                 }
 
-                val allGrades = deferredAllGrades.await()
-                val validGrades = deferredValidGrades.await()
+                val oz = OzEngine.getInstance(username, stdNo)
+                val simulStream = makeSimulStream(oz)
+                oz.makeSimulContent(simulStream)
 
-                for (validGrade in validGrades) {
-                    val grade = allGrades.find { grade ->
-                        grade.subjectId == validGrade.subjectId
-                                && grade.year == validGrade.year.toInt()
-                                && GradeUtils.convertToSemesterCode(grade.semester) == validGrade.semesterCode
-                    } ?: continue
-                    grade.type = GradeContract.Type.VALID.value
+                val deferredSimulMap = async {
+                    oz.getSimulMap()
+                }
+                val deferredElectiveMap = async {
+                    oz.getElectiveMap()
                 }
 
-                grades = allGrades.toMutableList()
+                val grades = deferredGrades.await()
+                val simulMap = deferredSimulMap.await()
+                val electiveMap = deferredElectiveMap.await()
 
-                // Update classification of graduation simulation.
-                val oz = OzEngine.getInstance(username, stdNo.toString())
-                val file = oz.makeSimulFile()
-
-                val params = file.readBytes()
-                val requestBody = params.toRequestBody(
-                    "application/octet-stream".toMediaTypeOrNull(),
-                    0,
-                    params.size
+                val subjectAreaList = getSubjectAreaList(
+                    username,
+                    simulMap,
+                    electiveMap,
+                    grades
                 )
 
-                val responseBody = ozService.postOzBinary(requestBody)
-                val stream = responseBody.byteStream()
-
-                val (simulMap, electiveMap) = oz.getSimulMap(stream)
-                val subjectAreaList = mutableListOf<SubjectAreaEntity>()
-
-                for (item in electiveMap) {
-                    for (elective in item.value) {
-                        val type = when (item.key) {
-                            "basic" -> 1
-                            "core" -> 2
-                            else -> 0
-                        }
-
-                        if (type > 0) {
-                            subjectAreaList.add(SubjectAreaEntity(username, type, elective))
-                        }
-                    }
-                }
-
                 subjectAreaDao.insert(*subjectAreaList.toTypedArray())
-
-                for ((clf, subjectIdList) in simulMap) {
-                    for (subjectId in subjectIdList) {
-                        val onlySubjectNumber = subjectId.substring(0, 9)
-                        var subjectArea = subjectId.substring(9)
-
-                        subjectArea = when (clf) {
-                            "기교" -> GradeUtils.basic(subjectArea)
-                            "심교", "핵교" -> GradeUtils.core(subjectArea)
-                            else -> ""
-                        }
-
-                        val grade =
-                            grades.find { grade -> grade.subjectNumber == onlySubjectNumber }
-                                ?: continue
-
-                        grade.subjectArea = subjectArea
-                        grade.classification = clf
-                    }
-                }
-
                 gradeDao.insertGrade(*grades.toTypedArray())
                 preferenceManager.hasData = true
             }
@@ -285,7 +353,9 @@ class GradeRepositoryImpl(
 
         val allValidGrades: List<GradeEntity>
         try {
-            allValidGrades = gradeDao.getAllValidGrades(username)
+            withContext(Dispatchers.IO) {
+                allValidGrades = gradeDao.getAllValidGrades(username)
+            }
         } catch (e: Exception) {
             FirebaseCrashlytics.getInstance().log("${e.message}")
             return UseCase.error("${e.message}")
@@ -299,7 +369,9 @@ class GradeRepositoryImpl(
 
         val allGrades: List<GradeEntity>
         try {
-            allGrades = gradeDao.getNotDeletedGrades(username)
+            withContext(Dispatchers.IO) {
+                allGrades = gradeDao.getNotDeletedGrades(username)
+            }
         } catch (e: Exception) {
             FirebaseCrashlytics.getInstance().log("${e.message}")
             return UseCase.error("${e.message}")
@@ -313,7 +385,9 @@ class GradeRepositoryImpl(
 
         val currentGrades: List<GradeEntity>
         try {
-            currentGrades = gradeDao.getCurrentSemesterGradesTransaction(username)
+            withContext(Dispatchers.IO) {
+                currentGrades = gradeDao.getCurrentSemesterGradesTransaction(username)
+            }
         } catch (e: Exception) {
             FirebaseCrashlytics.getInstance().log("${e.message}")
             return UseCase.error("${e.message}")
@@ -329,7 +403,9 @@ class GradeRepositoryImpl(
 
         val gradesByClassification: List<GradeEntity>
         try {
-            gradesByClassification = gradeDao.getNotDeletedGradesByClassification(username, clf)
+            withContext(Dispatchers.IO) {
+                gradesByClassification = gradeDao.getNotDeletedGradesByClassification(username, clf)
+            }
         } catch (e: Exception) {
             FirebaseCrashlytics.getInstance().log("${e.message}")
             return UseCase.error("${e.message}")
@@ -343,7 +419,9 @@ class GradeRepositoryImpl(
 
         val totalRank: RankEntity
         try {
-            totalRank = rankDao.get(username, year, semester)
+            withContext(Dispatchers.IO) {
+                totalRank = rankDao.get(username, year, semester)
+            }
         } catch (e: Exception) {
             FirebaseCrashlytics.getInstance().log("${e.message}")
             return UseCase.error("${e.message}")
@@ -358,35 +436,31 @@ class GradeRepositoryImpl(
         val stdNo = preferenceManager.stdNo
 
         try {
-            val oz = OzEngine.getInstance(username, stdNo.toString())
-            val file = oz.makeGradeFile()
+            withContext(Dispatchers.IO) {
+                val oz = OzEngine.getInstance(username, stdNo.toString())
+                val gradeStream = makeGradeStream(oz)
+                oz.makeGradeContent(gradeStream)
 
-            val params = file.readBytes()
-            val requestBody = params.toRequestBody(
-                "application/octet-stream".toMediaTypeOrNull(),
-                0,
-                params.size
-            )
+                val rankMap = oz.getRankMap()
+                val deletedSubjects = oz.getDeletedSubjects()
 
-            val responseBody = ozService.postOzBinary(requestBody)
-            val (rankMap, deletedSubjects) = oz.getRankMapAndDeletedSubjects(responseBody.byteStream())
+                val ranks = mutableListOf<RankEntity>()
+                for ((key, value) in rankMap) {
+                    ranks += RankEntity(username, key.year, key.semester, value.rank, value.total)
+                }
 
-            val ranks = mutableListOf<RankEntity>()
-            for ((key, value) in rankMap) {
-                ranks += RankEntity(username, key.year, key.semester, value.rank, value.total)
+                for (deletedSubject in deletedSubjects) {
+                    gradeDao.updateType(
+                        username,
+                        deletedSubject.first,
+                        GradeContract.Type.DELETED.value,
+                        deletedSubject.second,
+                        deletedSubject.third
+                    )
+                }
+
+                rankDao.insert(*ranks.toTypedArray())
             }
-
-            for (deletedSubject in deletedSubjects) {
-                gradeDao.updateType(
-                    username,
-                    deletedSubject.first,
-                    GradeContract.Type.DELETED.value,
-                    deletedSubject.second,
-                    deletedSubject.third
-                )
-            }
-
-            rankDao.insert(*ranks.toTypedArray())
         } catch (e: Exception) {
             FirebaseCrashlytics.getInstance().log("${e.message}")
             return UseCase.error("${e.message}")
@@ -415,43 +489,56 @@ class GradeRepositoryImpl(
         val year = stdNo / 100_000
         val basicType = "기교"
         val coreType = if (year > 2015) "심교" else "핵교"
-        val subjectAreas: List<SubjectAreaEntity>
+        val deferredSubjectAreas: Deferred<List<SubjectAreaEntity>>
         val subjectAreaCounts = mutableListOf<SubjectAreaCount>()
-        val basicGrades: List<GradeEntity>
-        val coreGrades: List<GradeEntity>
+        val deferredBasicGrades: Deferred<List<GradeEntity>>
+        val deferredCoreGrades: Deferred<List<GradeEntity>>
 
         try {
-            subjectAreas = subjectAreaDao.getAll(username)
-            for (area in subjectAreas) {
-                subjectAreaCounts += SubjectAreaCount(area)
-            }
-            basicGrades = gradeDao.getNotDeletedGradesByClassification(username, basicType)
-            coreGrades = gradeDao.getNotDeletedGradesByClassification(username, coreType)
+            withContext(Dispatchers.IO) {
+                deferredSubjectAreas = async {
+                    subjectAreaDao.getAll(username)
+                }
+                deferredBasicGrades = async {
+                    gradeDao.getNotDeletedGradesByClassification(username, basicType)
+                }
+                deferredCoreGrades = async {
+                    gradeDao.getNotDeletedGradesByClassification(username, coreType)
+                }
 
-            for (grade in basicGrades) {
-                for (areaWithCount in subjectAreaCounts) {
-                    val area = areaWithCount.area
+                val subjectAreas = deferredSubjectAreas.await()
+                val basicGrades = deferredBasicGrades.await()
+                val coreGrades = deferredCoreGrades.await()
 
-                    if (area.type != 1) {
-                        continue
-                    }
+                for (area in subjectAreas) {
+                    subjectAreaCounts += SubjectAreaCount(area)
+                }
 
-                    if (area.subjectAreaName == grade.subjectArea && grade.type == GradeContract.Type.VALID.value) {
-                        areaWithCount.count += 1
+                for (grade in basicGrades) {
+                    for (areaWithCount in subjectAreaCounts) {
+                        val area = areaWithCount.area
+
+                        if (area.type != 1) {
+                            continue
+                        }
+
+                        if (area.subjectAreaName == grade.subjectArea && grade.type == GradeContract.Type.VALID.value) {
+                            areaWithCount.count += 1
+                        }
                     }
                 }
-            }
 
-            for (grade in coreGrades) {
-                for (areaWithCount in subjectAreaCounts) {
-                    val area = areaWithCount.area
+                for (grade in coreGrades) {
+                    for (areaWithCount in subjectAreaCounts) {
+                        val area = areaWithCount.area
 
-                    if (area.type != 2) {
-                        continue
-                    }
+                        if (area.type != 2) {
+                            continue
+                        }
 
-                    if (area.subjectAreaName == grade.subjectArea && grade.type == GradeContract.Type.VALID.value) {
-                        areaWithCount.count += 1
+                        if (area.subjectAreaName == grade.subjectArea && grade.type == GradeContract.Type.VALID.value) {
+                            areaWithCount.count += 1
+                        }
                     }
                 }
             }

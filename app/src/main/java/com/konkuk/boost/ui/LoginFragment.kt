@@ -2,6 +2,7 @@ package com.konkuk.boost.ui
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,9 +13,9 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.konkuk.boost.R
 import com.konkuk.boost.databinding.FragmentLoginBinding
+import com.konkuk.boost.utils.MessageUtils
 import com.konkuk.boost.utils.UseCase
 import com.konkuk.boost.viewmodels.LoginViewModel
 import com.konkuk.boost.views.DialogUtils
@@ -66,14 +67,61 @@ class LoginFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        observeLoginResource()
+        observeChangePasswordResponse()
+        observeEvent()
+        observeUserInfo()
+    }
+
+    private fun observeEvent() {
+        viewModel.eventBit.observe(viewLifecycleOwner) {
+            if (it == 0b11) {
+                viewModel.clearLoginResource()
+                runBlocking {
+                    // Wait 0.5 second for saving session.
+                    delay(500L)
+                    findNavController().navigate(R.id.action_loginFragment_to_mainFragment)
+                }
+            }
+        }
+    }
+
+    private fun observeUserInfo() {
+        viewModel.userInfoResponse.observe(viewLifecycleOwner) {
+            when (it.status) {
+                UseCase.Status.SUCCESS -> {
+                    viewModel.updateEvent(0b10)
+                    viewModel.loading.postValue(false)
+                }
+                UseCase.Status.ERROR -> {
+                    Log.e(MessageUtils.LOG_KEY, "${it.message}")
+                }
+            }
+        }
+    }
+
+    private fun observeChangePasswordResponse() {
+        viewModel.changePasswordResponse.observe(viewLifecycleOwner) {
+            when (it.status) {
+                UseCase.Status.SUCCESS -> {
+                    val flag = it.data?.response?.flag
+                    if (flag == "PASS") {
+                        viewModel.login()
+                    }
+                }
+                UseCase.Status.ERROR -> {
+                    Snackbar.make(binding.container, "${it.message}", Snackbar.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+    private fun observeLoginResource() {
         viewModel.loginResource.observe(viewLifecycleOwner) {
             when (it.status) {
                 UseCase.Status.SUCCESS -> {
-                    viewModel.clearLoginResource()
-                    runBlocking {
-                        delay(1000L)
-                        findNavController().navigate(R.id.action_loginFragment_to_mainFragment)
-                    }
+                    viewModel.fetchUserInfo()
+                    viewModel.updateEvent(0b01)
                 }
                 UseCase.Status.ERROR -> {
                     if (it.data != null) {
@@ -102,20 +150,7 @@ class LoginFragment : Fragment() {
                             dialog.show()
                         }
                     }
-                    Snackbar.make(binding.container, "${it.message}", Snackbar.LENGTH_SHORT).show()
-                }
-            }
-        }
-
-        viewModel.changePasswordResponse.observe(viewLifecycleOwner) {
-            when (it.status) {
-                UseCase.Status.SUCCESS -> {
-                    val flag = it.data?.response?.flag
-                    if (flag == "PASS") {
-                        viewModel.login()
-                    }
-                }
-                UseCase.Status.ERROR -> {
+                    viewModel.loading.postValue(false)
                     Snackbar.make(binding.container, "${it.message}", Snackbar.LENGTH_SHORT).show()
                 }
             }

@@ -7,9 +7,7 @@ import com.konkuk.boost.data.library.QRResponse
 import com.konkuk.boost.repositories.AuthRepository
 import com.konkuk.boost.repositories.LibraryRepository
 import com.konkuk.boost.utils.UseCase
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class QRCodeViewModel(
     private val libraryRepository: LibraryRepository,
@@ -20,9 +18,7 @@ class QRCodeViewModel(
 
     fun getMobileQRCode() {
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                qrResponse.postValue(libraryRepository.makeMobileQRCodeRequest())
-            }
+            qrResponse.postValue(libraryRepository.makeMobileQRCodeRequest())
         }
     }
 
