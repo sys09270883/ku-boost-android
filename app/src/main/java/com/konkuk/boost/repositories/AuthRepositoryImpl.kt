@@ -38,9 +38,20 @@ class AuthRepositoryImpl(
         username: String,
         password: String
     ): UseCase<LoginResponse> {
-        var loginResponse: Response<LoginResponse>
+        val loginResponse: Response<LoginResponse>
+        val indexResponse: Response<Unit>
+
         try {
             withContext(Dispatchers.IO) {
+                indexResponse = kuisService.indexDo()
+                val headers = indexResponse.headers()
+                for ((type, value) in headers) {
+                    if (type != "Set-Cookie" || !value.contains("JSESSIONID")) {
+                        continue
+                    }
+
+                    Log.d(MessageUtils.LOG_KEY, "Index cookie: $value")
+                }
                 loginResponse = kuisService.login(username, password)
             }
         } catch (e: Exception) {
@@ -50,16 +61,13 @@ class AuthRepositoryImpl(
 
         val cookieBuilder = StringBuilder()
         val headers = loginResponse.headers()
-        for (header in headers) {
-            val type = header.first
-            val value = header.second
-
+        for ((type, value) in headers) {
             if (type != "Set-Cookie" || !value.contains("JSESSIONID")) {
                 continue
             }
 
+            Log.d(MessageUtils.LOG_KEY, "New cookie: $value")
             val cookie = value.split(";").first()
-            Log.d("ku-boost", "New received cookie: $cookie")
             cookieBuilder.append(cookie)
         }
 
@@ -69,8 +77,8 @@ class AuthRepositoryImpl(
 
         return when {
             loginSuccess?.isSucceeded == true -> {
-                preferenceManager.cookie = cookieBuilder.toString()
-                Log.d("ku-boost", "New received cookie is saved.")
+                preferenceManager.loginCookie = cookieBuilder.toString()
+                Log.d(MessageUtils.LOG_KEY, "New received cookie is saved.")
                 preferenceManager.setAuthInfo(username, password)
                 UseCase.success(loginBody)
             }
