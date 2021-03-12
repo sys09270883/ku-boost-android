@@ -27,4 +27,8 @@ data class SubjectAreaEntity(
     override fun hashCode(): Int {
         return Objects.hash(this.username, this.subjectAreaName)
     }
+
+    enum class AreaType {
+        Default, Basic, Core
+    }
 }

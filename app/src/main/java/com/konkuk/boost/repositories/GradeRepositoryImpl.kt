@@ -475,7 +475,9 @@ class GradeRepositoryImpl(
         val subjectAreas: List<SubjectAreaEntity>
 
         try {
-            subjectAreas = subjectAreaDao.getAll(username)
+            withContext(Dispatchers.IO) {
+                subjectAreas = subjectAreaDao.getAll(username)
+            }
         } catch (e: Exception) {
             FirebaseCrashlytics.getInstance().log("${e.message}")
             return UseCase.error("${e.message}")
@@ -491,9 +493,9 @@ class GradeRepositoryImpl(
         val basicType = "기교"
         val coreType = if (year > 2015) "심교" else "핵교"
         val deferredSubjectAreas: Deferred<List<SubjectAreaEntity>>
-        val subjectAreaCounts = mutableListOf<SubjectAreaCount>()
         val deferredBasicGrades: Deferred<List<GradeEntity>>
         val deferredCoreGrades: Deferred<List<GradeEntity>>
+        val subjectAreaCounts = mutableListOf<SubjectAreaCount>()
 
         try {
             withContext(Dispatchers.IO) {
@@ -519,11 +521,14 @@ class GradeRepositoryImpl(
                     for (areaWithCount in subjectAreaCounts) {
                         val area = areaWithCount.area
 
-                        if (area.type != 1) {
+                        if (area.type != SubjectAreaEntity.AreaType.Basic.ordinal) {
                             continue
                         }
 
-                        if (area.subjectAreaName == grade.subjectArea && grade.type == GradeContract.Type.VALID.value) {
+                        if (area.subjectAreaName == grade.subjectArea &&
+                            grade.type == GradeContract.Type.VALID.value &&
+                            grade.grade > 0.0
+                        ) {
                             areaWithCount.count += 1
                         }
                     }
@@ -533,11 +538,14 @@ class GradeRepositoryImpl(
                     for (areaWithCount in subjectAreaCounts) {
                         val area = areaWithCount.area
 
-                        if (area.type != 2) {
+                        if (area.type != SubjectAreaEntity.AreaType.Core.ordinal) {
                             continue
                         }
 
-                        if (area.subjectAreaName == grade.subjectArea && grade.type == GradeContract.Type.VALID.value) {
+                        if (area.subjectAreaName == grade.subjectArea &&
+                            grade.type == GradeContract.Type.VALID.value &&
+                            grade.grade > 0.0
+                        ) {
                             areaWithCount.count += 1
                         }
                     }
