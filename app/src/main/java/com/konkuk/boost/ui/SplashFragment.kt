@@ -94,6 +94,7 @@ class SplashFragment : Fragment() {
                     viewModel.fetchUserInfo()
                 }
                 UseCase.Status.ERROR -> {
+                    findNavController().navigate(R.id.action_splashFragment_to_loginFragment)
                 }
             }
         }
