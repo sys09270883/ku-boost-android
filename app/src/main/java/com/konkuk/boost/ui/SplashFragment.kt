@@ -16,7 +16,9 @@ import com.konkuk.boost.utils.NetworkUtils
 import com.konkuk.boost.utils.UseCase
 import com.konkuk.boost.viewmodels.SplashViewModel
 import com.konkuk.boost.views.DialogUtils
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SplashFragment : Fragment() {
@@ -51,7 +53,6 @@ class SplashFragment : Fragment() {
         val isConnected = checkNetworkConnected()
         if (isConnected) {
             viewModel.autoLogin()
-            viewModel.fetchUserInfo()
         } else {    // 네트워크 미연결시
             val username = viewModel.getUsername()
             val hasLoggedUser = username.isNotBlank()
@@ -80,11 +81,7 @@ class SplashFragment : Fragment() {
         viewModel.eventBit.observe(viewLifecycleOwner) {
             if (it == 0b11) {
                 viewModel.clearLoginResource()
-                runBlocking {
-                    // Wait 0.5 second for saving session.
-                    delay(500L)
-                    findNavController().navigate(R.id.action_splashFragment_to_mainFragment)
-                }
+                findNavController().navigate(R.id.action_splashFragment_to_mainFragment)
             }
         }
     }
@@ -94,6 +91,7 @@ class SplashFragment : Fragment() {
             when (it.status) {
                 UseCase.Status.SUCCESS -> {
                     viewModel.updateEvent(0b01)
+                    viewModel.fetchUserInfo()
                 }
                 UseCase.Status.ERROR -> {
                 }
@@ -109,11 +107,6 @@ class SplashFragment : Fragment() {
                 }
                 UseCase.Status.ERROR -> {
                     Log.e(MessageUtils.LOG_KEY, "${it.message}")
-                    coroutineScope.launch {
-                        delay(1500L)
-                        viewModel.clearLoginResource()
-                        findNavController().navigate(R.id.action_splashFragment_to_loginFragment)
-                    }
                 }
             }
         }
