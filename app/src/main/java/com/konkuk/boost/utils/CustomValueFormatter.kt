@@ -1,4 +1,4 @@
-package com.konkuk.boost.views
+package com.konkuk.boost.utils
 
 import com.github.mikephil.charting.formatter.ValueFormatter
 import java.text.DecimalFormat

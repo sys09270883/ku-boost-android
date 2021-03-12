@@ -18,13 +18,13 @@ import com.konkuk.boost.adapters.GradeAdapter
 import com.konkuk.boost.data.grade.ParcelableGrade
 import com.konkuk.boost.databinding.FragmentGradeBinding
 import com.konkuk.boost.persistence.grade.GradeEntity
+import com.konkuk.boost.utils.CustomValueFormatter
 import com.konkuk.boost.utils.GradeUtils
 import com.konkuk.boost.utils.MessageUtils
 import com.konkuk.boost.utils.UseCase
 import com.konkuk.boost.viewmodels.GradeViewModel
 import com.konkuk.boost.viewmodels.MainFragmentViewModel
 import com.konkuk.boost.views.ChartUtils
-import com.konkuk.boost.views.CustomValueFormatter
 import com.konkuk.boost.views.TableRowUtils
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.getViewModel
