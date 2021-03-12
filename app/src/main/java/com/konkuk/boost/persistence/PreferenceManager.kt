@@ -17,7 +17,8 @@ class PreferenceManager(private val context: Context) {
         private const val KEY_SIZE = 256
         private const val USERNAME = "username"
         private const val PASSWORD = "password"
-        private const val COOKIE = "cookie"
+        private const val INDEX_COOKIE = "index_cookie"
+        private const val LOGIN_COOKIE = "login_cookie"
         private const val NAME = "name"
         private const val STD_NO = "std_no"
         private const val STATE = "state"
@@ -35,7 +36,8 @@ class PreferenceManager(private val context: Context) {
     private val pref: SharedPreferences by lazy { getEncryptedSharedPreference() }
     var username: String by pref.stringPreference(USERNAME)
     var password: String by pref.stringPreference(PASSWORD)
-    var cookie: String by pref.stringPreference(COOKIE)
+    var indexCookie: String by pref.stringPreference(INDEX_COOKIE)
+    var loginCookie: String by pref.stringPreference(LOGIN_COOKIE)
     var name: String by pref.stringPreference(NAME)
     var stdNo: Int by pref.intPreference(STD_NO)
     var state: String by pref.stringPreference(STATE)
@@ -84,7 +86,7 @@ class PreferenceManager(private val context: Context) {
     fun clearAll() {
         setAuthInfo(DEFAULT_STRING, DEFAULT_STRING)
         setUserInfo(DEFAULT_STRING, DEFAULT_INT, DEFAULT_STRING, DEFAULT_STRING, DEFAULT_STRING)
-        cookie = DEFAULT_STRING
+        loginCookie = DEFAULT_STRING
         hasData = DEFAULT_BOOLEAN
     }
 

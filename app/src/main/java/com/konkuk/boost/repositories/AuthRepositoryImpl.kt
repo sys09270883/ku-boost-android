@@ -39,8 +39,19 @@ class AuthRepositoryImpl(
         password: String
     ): UseCase<LoginResponse> {
         val loginResponse: Response<LoginResponse>
+        val indexResponse: Response<Unit>
+
         try {
             withContext(Dispatchers.IO) {
+                indexResponse = kuisService.indexDo()
+                val headers = indexResponse.headers()
+                for ((type, value) in headers) {
+                    if (type != "Set-Cookie" || !value.contains("JSESSIONID")) {
+                        continue
+                    }
+
+                    Log.d(MessageUtils.LOG_KEY, "Index cookie: $value")
+                }
                 loginResponse = kuisService.login(username, password)
             }
         } catch (e: Exception) {
@@ -48,9 +59,17 @@ class AuthRepositoryImpl(
             return UseCase.error(MessageUtils.ERROR_ON_SERVER)
         }
 
-        val cookie = loginResponse.headers()["Set-Cookie"]?.split(";")?.first()
-            ?: return UseCase.error(MessageUtils.LOGIN_AGAIN)
-        preferenceManager.cookie = cookie
+        val cookieBuilder = StringBuilder()
+        val headers = loginResponse.headers()
+        for ((type, value) in headers) {
+            if (type != "Set-Cookie" || !value.contains("JSESSIONID")) {
+                continue
+            }
+
+            Log.d(MessageUtils.LOG_KEY, "New cookie: $value")
+            val cookie = value.split(";").first()
+            cookieBuilder.append(cookie)
+        }
 
         val loginBody = loginResponse.body()
         val loginSuccess = loginBody?.loginSuccess
@@ -58,6 +77,8 @@ class AuthRepositoryImpl(
 
         return when {
             loginSuccess?.isSucceeded == true -> {
+                preferenceManager.loginCookie = cookieBuilder.toString()
+                Log.d(MessageUtils.LOG_KEY, "New received cookie is saved.")
                 preferenceManager.setAuthInfo(username, password)
                 UseCase.success(loginBody)
             }
