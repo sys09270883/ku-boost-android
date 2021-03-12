@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -20,6 +19,7 @@ import com.konkuk.boost.persistence.grade.GradeEntity
 import com.konkuk.boost.utils.GradeUtils
 import com.konkuk.boost.viewmodels.GraduationSimulationDetailViewModel
 import com.konkuk.boost.views.ChartUtils
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class GraduationSimulationDetailFragment : Fragment() {
@@ -27,21 +27,7 @@ class GraduationSimulationDetailFragment : Fragment() {
     private var _binding: FragmentGraduationSimulationDetailBinding? = null
     private val binding get() = _binding!!
     val viewModel: GraduationSimulationDetailViewModel by viewModel()
-    private val colors: List<Int> by lazy {
-        val context = requireContext()
-        listOf(
-            ContextCompat.getColor(context, R.color.pastelRed),
-            ContextCompat.getColor(context, R.color.pastelOrange),
-            ContextCompat.getColor(context, R.color.pastelYellow),
-            ContextCompat.getColor(context, R.color.pastelGreen),
-            ContextCompat.getColor(context, R.color.pastelBlue),
-            ContextCompat.getColor(context, R.color.pastelIndigo),
-            ContextCompat.getColor(context, R.color.pastelPurple),
-            ContextCompat.getColor(context, R.color.pastelDeepPurple),
-            ContextCompat.getColor(context, R.color.pastelBrown),
-            ContextCompat.getColor(context, R.color.pastelLightGray),
-        )
-    }
+    private val colors: List<Int> by inject()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
