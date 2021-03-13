@@ -2,24 +2,27 @@ package com.konkuk.boost.persistence.tuition
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import com.konkuk.boost.persistence.tuition.TuitionContract.TuitionEntry
+import com.konkuk.boost.persistence.AppContract.AppEntry.ENTER_AMOUNT
+import com.konkuk.boost.persistence.AppContract.AppEntry.PAID_DATE
+import com.konkuk.boost.persistence.AppContract.AppEntry.SEMESTER
+import com.konkuk.boost.persistence.AppContract.AppEntry.STATE_CODE
+import com.konkuk.boost.persistence.AppContract.AppEntry.TUITION_AMOUNT
+import com.konkuk.boost.persistence.AppContract.AppEntry.USERNAME
+import com.konkuk.boost.persistence.AppContract.AppEntry.YEAR
 import java.util.*
 
 @Entity(
-    tableName = TuitionEntry.TABLE_NAME,
-    primaryKeys = [
-        TuitionEntry.USERNAME,
-        TuitionEntry.PAID_DATE
-    ]
+    tableName = TuitionContract.TABLE_NAME,
+    primaryKeys = [USERNAME, PAID_DATE]
 )
 data class TuitionEntity(
-    @ColumnInfo(name = TuitionEntry.USERNAME) val username: String,
-    @ColumnInfo(name = TuitionEntry.PAID_DATE) val paidDate: String,
-    @ColumnInfo(name = TuitionEntry.TUITION_AMOUNT) val tuitionAmount: Int,
-    @ColumnInfo(name = TuitionEntry.ENTER_AMOUNT) val enterAmount: Int,
-    @ColumnInfo(name = TuitionEntry.YEAR) val year: Int,
-    @ColumnInfo(name = TuitionEntry.SEMESTER) val semester: String,
-    @ColumnInfo(name = TuitionEntry.STATE_CODE) val stateCode: String,
+    @ColumnInfo(name = USERNAME) val username: String,
+    @ColumnInfo(name = PAID_DATE) val paidDate: String,
+    @ColumnInfo(name = TUITION_AMOUNT) val tuitionAmount: Int,
+    @ColumnInfo(name = ENTER_AMOUNT) val enterAmount: Int,
+    @ColumnInfo(name = YEAR) val year: Int,
+    @ColumnInfo(name = SEMESTER) val semester: String,
+    @ColumnInfo(name = STATE_CODE) val stateCode: String,
 ) {
     override fun equals(other: Any?): Boolean {
         (other as? TuitionEntity)?.let {

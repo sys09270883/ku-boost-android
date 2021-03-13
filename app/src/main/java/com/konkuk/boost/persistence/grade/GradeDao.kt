@@ -1,27 +1,35 @@
 package com.konkuk.boost.persistence.grade
 
 import androidx.room.*
-import com.konkuk.boost.persistence.grade.GradeContract.GradeEntry.CLASSIFICATION
-import com.konkuk.boost.persistence.grade.GradeContract.GradeEntry.SEMESTER
-import com.konkuk.boost.persistence.grade.GradeContract.GradeEntry.SUBJECT_NUMBER
-import com.konkuk.boost.persistence.grade.GradeContract.GradeEntry.TABLE_NAME
-import com.konkuk.boost.persistence.grade.GradeContract.GradeEntry.TYPE
-import com.konkuk.boost.persistence.grade.GradeContract.GradeEntry.USERNAME
-import com.konkuk.boost.persistence.grade.GradeContract.GradeEntry.YEAR
+import com.konkuk.boost.persistence.AppContract.AppEntry.CLASSIFICATION
+import com.konkuk.boost.persistence.AppContract.AppEntry.SEMESTER
+import com.konkuk.boost.persistence.AppContract.AppEntry.SUBJECT_NUMBER
+import com.konkuk.boost.persistence.AppContract.AppEntry.TYPE
+import com.konkuk.boost.persistence.AppContract.AppEntry.USERNAME
+import com.konkuk.boost.persistence.AppContract.AppEntry.YEAR
+import com.konkuk.boost.persistence.grade.GradeContract.TABLE_NAME
 
 @Dao
 interface GradeDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertGrade(vararg gradeEntity: GradeEntity)
 
-    @Query("""
+    @Query(
+        """
         UPDATE $TABLE_NAME SET $TYPE = :type 
         WHERE $USERNAME = :username 
         AND $SUBJECT_NUMBER = :subjectNumber
         AND $YEAR = :year
         AND $SEMESTER = :semester
-    """)
-    suspend fun updateType(username: String, subjectNumber: String, type: Int, year: Int, semester: Int)
+    """
+    )
+    suspend fun updateType(
+        username: String,
+        subjectNumber: String,
+        type: Int,
+        year: Int,
+        semester: Int
+    )
 
     @Query("SELECT * FROM $TABLE_NAME WHERE $USERNAME = :username AND $TYPE = :type ORDER BY $YEAR, $SEMESTER")
     suspend fun getAllValidGrades(username: String, type: Int = 0): List<GradeEntity>

@@ -1,46 +1,29 @@
 package com.konkuk.boost.persistence.grade
 
-import android.provider.BaseColumns
-import com.konkuk.boost.persistence.grade.GradeContract.GradeEntry.CHARACTER_GRADE
-import com.konkuk.boost.persistence.grade.GradeContract.GradeEntry.CLASSIFICATION
-import com.konkuk.boost.persistence.grade.GradeContract.GradeEntry.EVALUATION_METHOD
-import com.konkuk.boost.persistence.grade.GradeContract.GradeEntry.GRADE
-import com.konkuk.boost.persistence.grade.GradeContract.GradeEntry.PRIMARY_KEYS
-import com.konkuk.boost.persistence.grade.GradeContract.GradeEntry.PROFESSOR
-import com.konkuk.boost.persistence.grade.GradeContract.GradeEntry.SEMESTER
-import com.konkuk.boost.persistence.grade.GradeContract.GradeEntry.SUBJECT_AREA
-import com.konkuk.boost.persistence.grade.GradeContract.GradeEntry.SUBJECT_ID
-import com.konkuk.boost.persistence.grade.GradeContract.GradeEntry.SUBJECT_NAME
-import com.konkuk.boost.persistence.grade.GradeContract.GradeEntry.SUBJECT_NUMBER
-import com.konkuk.boost.persistence.grade.GradeContract.GradeEntry.SUBJECT_POINT
-import com.konkuk.boost.persistence.grade.GradeContract.GradeEntry.TABLE_NAME
-import com.konkuk.boost.persistence.grade.GradeContract.GradeEntry.TYPE
-import com.konkuk.boost.persistence.grade.GradeContract.GradeEntry.USERNAME
-import com.konkuk.boost.persistence.grade.GradeContract.GradeEntry.YEAR
+import com.konkuk.boost.persistence.AppContract.AppEntry.CHARACTER_GRADE
+import com.konkuk.boost.persistence.AppContract.AppEntry.CLASSIFICATION
+import com.konkuk.boost.persistence.AppContract.AppEntry.EVALUATION_METHOD
+import com.konkuk.boost.persistence.AppContract.AppEntry.GRADE
+import com.konkuk.boost.persistence.AppContract.AppEntry.PRIMARY_KEYS
+import com.konkuk.boost.persistence.AppContract.AppEntry.PROFESSOR
+import com.konkuk.boost.persistence.AppContract.AppEntry.SEMESTER
+import com.konkuk.boost.persistence.AppContract.AppEntry.SUBJECT_AREA
+import com.konkuk.boost.persistence.AppContract.AppEntry.SUBJECT_ID
+import com.konkuk.boost.persistence.AppContract.AppEntry.SUBJECT_NAME
+import com.konkuk.boost.persistence.AppContract.AppEntry.SUBJECT_NUMBER
+import com.konkuk.boost.persistence.AppContract.AppEntry.SUBJECT_POINT
+import com.konkuk.boost.persistence.AppContract.AppEntry.TYPE
+import com.konkuk.boost.persistence.AppContract.AppEntry.USERNAME
+import com.konkuk.boost.persistence.AppContract.AppEntry.YEAR
 
 object GradeContract {
-    object GradeEntry : BaseColumns {
-        const val TABLE_NAME = "grades"
-        const val USERNAME = "username"
-        const val EVALUATION_METHOD = "evaluationMethod"
-        const val YEAR = "year"
-        const val SEMESTER = "semester"
-        const val CLASSIFICATION = "classification"
-        const val CHARACTER_GRADE = "characterGrade"
-        const val GRADE = "grade"
-        const val PROFESSOR = "professor"
-        const val SUBJECT_ID = "subjectId"
-        const val SUBJECT_NUMBER = "subjectNumber"
-        const val SUBJECT_NAME = "subjectName"
-        const val SUBJECT_POINT = "subjectPoint"
-        const val SUBJECT_AREA = "subjectArea"
-        const val TYPE = "type"
-        const val PRIMARY_KEYS = "primary_keys"
-    }
+    const val TABLE_NAME = "grades"
 
     enum class Type(val value: Int) {
         VALID(0), PENDING(1), DELETED(2)
     }
+
+    const val ADD_COLUMN = "ALTER TABLE $TABLE_NAME ADD COLUMN $SUBJECT_AREA TEXT NOT NULL DEFAULT null"
 
     const val CREATE_NEW_TABLE_WITH_TYPE = """
         CREATE TABLE TMP (

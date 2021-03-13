@@ -2,19 +2,21 @@ package com.konkuk.boost.persistence.area
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import com.konkuk.boost.persistence.area.SubjectAreaContract.SubjectAreaEntry
+import com.konkuk.boost.persistence.AppContract.AppEntry.SUBJECT_AREA_NAME
+import com.konkuk.boost.persistence.AppContract.AppEntry.TYPE
+import com.konkuk.boost.persistence.AppContract.AppEntry.USERNAME
 import java.util.*
 
 @Entity(
-    tableName = SubjectAreaEntry.TABLE_NAME,
-    primaryKeys = [SubjectAreaEntry.USERNAME, SubjectAreaEntry.SUBJECT_AREA_NAME]
+    tableName = SubjectAreaContract.TABLE_NAME,
+    primaryKeys = [USERNAME, SUBJECT_AREA_NAME]
 )
 data class SubjectAreaEntity(
-    @ColumnInfo(name = SubjectAreaEntry.USERNAME)
+    @ColumnInfo(name = USERNAME)
     val username: String,
-    @ColumnInfo(name = SubjectAreaEntry.TYPE)
+    @ColumnInfo(name = TYPE)
     val type: Int,  // 0: Default, 1: 기교, 2: 심교/핵교
-    @ColumnInfo(name = SubjectAreaEntry.SUBJECT_AREA_NAME)
+    @ColumnInfo(name = SUBJECT_AREA_NAME)
     val subjectAreaName: String,
 ) {
     override fun equals(other: Any?): Boolean {

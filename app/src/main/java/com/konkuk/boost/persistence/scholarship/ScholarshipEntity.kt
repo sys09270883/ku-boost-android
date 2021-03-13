@@ -2,19 +2,18 @@ package com.konkuk.boost.persistence.scholarship
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import com.konkuk.boost.persistence.scholarship.ScholarshipContract.ScholarshipEntry.DATE
-import com.konkuk.boost.persistence.scholarship.ScholarshipContract.ScholarshipEntry.ETC_AMOUNT
-import com.konkuk.boost.persistence.scholarship.ScholarshipContract.ScholarshipEntry.SCHOLARSHIP_ENTER_AMOUNT
-import com.konkuk.boost.persistence.scholarship.ScholarshipContract.ScholarshipEntry.SCHOLARSHIP_NAME
-import com.konkuk.boost.persistence.scholarship.ScholarshipContract.ScholarshipEntry.SCHOLARSHIP_TUITION_AMOUNT
-import com.konkuk.boost.persistence.scholarship.ScholarshipContract.ScholarshipEntry.SEMESTER
-import com.konkuk.boost.persistence.scholarship.ScholarshipContract.ScholarshipEntry.TABLE_NAME
-import com.konkuk.boost.persistence.scholarship.ScholarshipContract.ScholarshipEntry.USERNAME
-import com.konkuk.boost.persistence.scholarship.ScholarshipContract.ScholarshipEntry.YEAR
+import com.konkuk.boost.persistence.AppContract.AppEntry.ETC_AMOUNT
+import com.konkuk.boost.persistence.AppContract.AppEntry.SCHOLARSHIP_DATE
+import com.konkuk.boost.persistence.AppContract.AppEntry.SCHOLARSHIP_ENTER_AMOUNT
+import com.konkuk.boost.persistence.AppContract.AppEntry.SCHOLARSHIP_NAME
+import com.konkuk.boost.persistence.AppContract.AppEntry.SCHOLARSHIP_TUITION_AMOUNT
+import com.konkuk.boost.persistence.AppContract.AppEntry.SEMESTER
+import com.konkuk.boost.persistence.AppContract.AppEntry.USERNAME
+import com.konkuk.boost.persistence.AppContract.AppEntry.YEAR
 import java.util.*
 
 @Entity(
-    tableName = TABLE_NAME,
+    tableName = ScholarshipContract.TABLE_NAME,
     primaryKeys = [
         USERNAME,
         SCHOLARSHIP_NAME
@@ -28,7 +27,7 @@ data class ScholarshipEntity(
     @ColumnInfo(name = ETC_AMOUNT) val etcAmount: Int,
     @ColumnInfo(name = YEAR) val year: String,
     @ColumnInfo(name = SEMESTER) val semester: String,
-    @ColumnInfo(name = DATE) val date: String,
+    @ColumnInfo(name = SCHOLARSHIP_DATE) val date: String,
 ) {
     override fun equals(other: Any?): Boolean {
         (other as? ScholarshipEntity)?.let {

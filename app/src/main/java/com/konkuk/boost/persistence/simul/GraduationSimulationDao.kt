@@ -4,10 +4,10 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.konkuk.boost.persistence.simul.GraduationSimulationContract.GraduationSimulationEntry.ACQUIRED
-import com.konkuk.boost.persistence.simul.GraduationSimulationContract.GraduationSimulationEntry.STANDARD
-import com.konkuk.boost.persistence.simul.GraduationSimulationContract.GraduationSimulationEntry.TABLE_NAME
-import com.konkuk.boost.persistence.simul.GraduationSimulationContract.GraduationSimulationEntry.USERNAME
+import com.konkuk.boost.persistence.AppContract.AppEntry.ACQUIRED
+import com.konkuk.boost.persistence.AppContract.AppEntry.STANDARD
+import com.konkuk.boost.persistence.AppContract.AppEntry.USERNAME
+import com.konkuk.boost.persistence.simul.GraduationSimulationContract.TABLE_NAME
 
 @Dao
 interface GraduationSimulationDao {

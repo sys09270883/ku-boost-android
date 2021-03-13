@@ -4,8 +4,8 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.konkuk.boost.persistence.dept.DeptTransferContract.DeptTransferEntry.TABLE_NAME
-import com.konkuk.boost.persistence.dept.DeptTransferContract.DeptTransferEntry.USERNAME
+import com.konkuk.boost.persistence.AppContract.AppEntry.USERNAME
+import com.konkuk.boost.persistence.dept.DeptTransferContract.TABLE_NAME
 
 @Dao
 interface DeptTransferDao {

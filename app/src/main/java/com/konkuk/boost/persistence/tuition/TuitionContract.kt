@@ -1,30 +1,18 @@
 package com.konkuk.boost.persistence.tuition
 
-import android.provider.BaseColumns
-import com.konkuk.boost.persistence.tuition.TuitionContract.TuitionEntry.ENTER_AMOUNT
-import com.konkuk.boost.persistence.tuition.TuitionContract.TuitionEntry.PAID_DATE
-import com.konkuk.boost.persistence.tuition.TuitionContract.TuitionEntry.PRIMARY_KEYS
-import com.konkuk.boost.persistence.tuition.TuitionContract.TuitionEntry.SEMESTER
-import com.konkuk.boost.persistence.tuition.TuitionContract.TuitionEntry.STATE_CODE
-import com.konkuk.boost.persistence.tuition.TuitionContract.TuitionEntry.TABLE_NAME
-import com.konkuk.boost.persistence.tuition.TuitionContract.TuitionEntry.TUITION_AMOUNT
-import com.konkuk.boost.persistence.tuition.TuitionContract.TuitionEntry.USERNAME
-import com.konkuk.boost.persistence.tuition.TuitionContract.TuitionEntry.YEAR
+import com.konkuk.boost.persistence.AppContract.AppEntry.ENTER_AMOUNT
+import com.konkuk.boost.persistence.AppContract.AppEntry.PAID_DATE
+import com.konkuk.boost.persistence.AppContract.AppEntry.PRIMARY_KEYS
+import com.konkuk.boost.persistence.AppContract.AppEntry.SEMESTER
+import com.konkuk.boost.persistence.AppContract.AppEntry.STATE_CODE
+import com.konkuk.boost.persistence.AppContract.AppEntry.TUITION_AMOUNT
+import com.konkuk.boost.persistence.AppContract.AppEntry.USERNAME
+import com.konkuk.boost.persistence.AppContract.AppEntry.YEAR
 
 object TuitionContract {
-    object TuitionEntry : BaseColumns {
-        const val TABLE_NAME = "tuition"
-        const val USERNAME = "username"
-        const val PAID_DATE = "paidDate"
-        const val TUITION_AMOUNT = "tuitionAmount"
-        const val ENTER_AMOUNT = "enterAmount"
-        const val YEAR = "year"
-        const val SEMESTER = "semester"
-        const val STATE_CODE = "stateCode"
-        const val PRIMARY_KEYS = "primary_keys"
-    }
+    const val TABLE_NAME = "tuition"
 
-    const val CREATE_SQL = """
+    const val CREATE_TABLE = """
         CREATE TABLE IF NOT EXISTS $TABLE_NAME (
             $USERNAME TEXT NOT NULL DEFAULT null,
             $PAID_DATE TEXT NOT NULL DEFAULT null,

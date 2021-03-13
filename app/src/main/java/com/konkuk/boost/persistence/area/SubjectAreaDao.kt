@@ -4,8 +4,8 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.konkuk.boost.persistence.area.SubjectAreaContract.SubjectAreaEntry.TABLE_NAME
-import com.konkuk.boost.persistence.area.SubjectAreaContract.SubjectAreaEntry.USERNAME
+import com.konkuk.boost.persistence.AppContract.AppEntry.USERNAME
+import com.konkuk.boost.persistence.area.SubjectAreaContract.TABLE_NAME
 
 @Dao
 interface SubjectAreaDao {
