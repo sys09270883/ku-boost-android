@@ -8,8 +8,6 @@ import com.konkuk.boost.persistence.dept.DeptTransferDao
 import com.konkuk.boost.persistence.dept.DeptTransferEntity
 import com.konkuk.boost.persistence.grade.GradeDao
 import com.konkuk.boost.persistence.grade.GradeEntity
-import com.konkuk.boost.persistence.like.LikeCourseDao
-import com.konkuk.boost.persistence.like.LikeCourseEntity
 import com.konkuk.boost.persistence.personal.PersonalInfoDao
 import com.konkuk.boost.persistence.personal.PersonalInfoEntity
 import com.konkuk.boost.persistence.rank.RankDao
@@ -27,7 +25,6 @@ import com.konkuk.boost.persistence.tuition.TuitionEntity
     entities = [
         GraduationSimulationEntity::class,
         GradeEntity::class,
-        LikeCourseEntity::class,
         RankEntity::class,
         SubjectAreaEntity::class,
         PersonalInfoEntity::class,
@@ -36,15 +33,13 @@ import com.konkuk.boost.persistence.tuition.TuitionEntity
         TuitionEntity::class,
         ScholarshipEntity::class,
     ],
-    version = 11,
+    version = 12,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
     abstract fun graduationSimulationDao(): GraduationSimulationDao
 
     abstract fun gradeDao(): GradeDao
-
-    abstract fun likeCourseDao(): LikeCourseDao
 
     abstract fun rankDao(): RankDao
 

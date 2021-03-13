@@ -1,6 +1,7 @@
 package com.konkuk.boost.persistence.like
 
 import android.provider.BaseColumns
+import com.konkuk.boost.persistence.like.LikeCourseContract.LikeCourseEntry.TABLE_NAME
 
 object LikeCourseContract {
     object LikeCourseEntry : BaseColumns {
@@ -14,4 +15,6 @@ object LikeCourseContract {
         const val LIKE = "_like"
         const val PRIMARY_KEYS = "primary_keys"
     }
+
+    const val DROP_LIKE_COURSE_TABLE = "DROP TABLE IF EXISTS $TABLE_NAME"
 }

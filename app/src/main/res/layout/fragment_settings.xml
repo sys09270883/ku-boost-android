@@ -101,7 +101,7 @@
                         android:layout_marginTop="16dp"
                         android:layout_marginEnd="16dp"
                         android:layout_marginBottom="16dp"
-                        android:src="@drawable/ic_baseline_more_vert_24"
+                        android:src="@drawable/svg_more_vert"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         tools:ignore="ContentDescription" />
@@ -122,7 +122,7 @@
                 android:textAlignment="textStart"
                 android:textColor="@color/primaryTextColor"
                 android:textSize="18sp"
-                app:icon="@drawable/ic_baseline_qr_code_24"
+                app:icon="@drawable/svg_qr_code"
                 app:iconPadding="12dp"
                 app:iconSize="32dp"
                 app:iconTint="@color/settingsIconColor" />
@@ -139,7 +139,7 @@
                 android:textAlignment="textStart"
                 android:textColor="@color/primaryTextColor"
                 android:textSize="18sp"
-                app:icon="@drawable/ic_baseline_share_24"
+                app:icon="@drawable/svg_share"
                 app:iconPadding="12dp"
                 app:iconSize="32dp"
                 app:iconTint="@color/settingsIconColor" />
@@ -156,7 +156,7 @@
                 android:textAlignment="textStart"
                 android:textColor="@color/primaryTextColor"
                 android:textSize="18sp"
-                app:icon="@drawable/ic_outline_password_24"
+                app:icon="@drawable/svg_password"
                 app:iconPadding="8dp"
                 app:iconSize="32dp"
                 app:iconTint="@color/settingsIconColor" />
@@ -190,7 +190,7 @@
                 android:textAlignment="textStart"
                 android:textColor="@color/primaryTextColor"
                 android:textSize="18sp"
-                app:icon="@drawable/ic_baseline_logout_24"
+                app:icon="@drawable/svg_logout"
                 app:iconPadding="12dp"
                 app:iconSize="32dp"
                 app:iconTint="@color/settingsIconColor" />

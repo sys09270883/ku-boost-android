@@ -1,7 +1,10 @@
 package com.konkuk.boost.di
 
 import com.konkuk.boost.BuildConfig
-import com.konkuk.boost.api.*
+import com.konkuk.boost.api.AuthorizedKuisService
+import com.konkuk.boost.api.KuisService
+import com.konkuk.boost.api.LibraryService
+import com.konkuk.boost.api.OzService
 import com.konkuk.boost.persistence.PreferenceManager
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -51,9 +54,6 @@ val apiModule = module {
     fun provideOzService(retrofit: Retrofit): OzService =
         retrofit.create(OzService::class.java)
 
-    fun provideKupisService(retrofit: Retrofit): KupisService =
-        retrofit.create(KupisService::class.java)
-
     single { provideHttpLoggingInterceptor() }
 
     single(named("default")) { provideOkHttpClient(get()) }
@@ -83,17 +83,10 @@ val apiModule = module {
             BuildConfig.OZ_URL
         )
     }
-    single(named("kupis-retrofit")) {
-        provideRetrofit(
-            get(named("default")),
-            BuildConfig.KUPIS_URL
-        )
-    }
 
     single { provideKuisService(get(named("default-retrofit"))) }
     single { provideAuthorizedKuisService(get(named("cookie-retrofit"))) }
     single { provideLibraryService(get(named("library-retrofit"))) }
     single { provideOzService(get(named("oz-retrofit"))) }
-    single { provideKupisService(get(named("kupis-retrofit"))) }
 }
 

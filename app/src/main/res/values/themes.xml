@@ -40,8 +40,7 @@
         <item name="enforceTextAppearance">true</item>
         <item name="android:background">?attr/colorSurface</item>
         <item name="tabIconTint">@color/ku_boost_tab_content_color</item>
-        <item name="tabIndicatorAnimationDuration">@integer/mtrl_tab_indicator_anim_duration_ms
-        </item>
+        <item name="tabIndicatorAnimationDuration">@integer/mtrl_tab_indicator_anim_duration_ms</item>
         <item name="tabIndicatorColor">@color/appPrimaryHighlightColor</item>
         <item name="tabTextAppearance">?attr/textAppearanceButton</item>
         <item name="tabTextColor">@color/ku_boost_tab_content_color</item>
