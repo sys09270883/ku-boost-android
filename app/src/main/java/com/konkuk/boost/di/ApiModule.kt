@@ -18,19 +18,6 @@ val apiModule = module {
         httpLoggingInterceptor: HttpLoggingInterceptor
     ) = OkHttpClient.Builder().addInterceptor(httpLoggingInterceptor).build()
 
-    fun provideIndexCookieClient(
-        httpLoggingInterceptor: HttpLoggingInterceptor,
-        preferenceManager: PreferenceManager
-    ) = OkHttpClient.Builder().addInterceptor(httpLoggingInterceptor).addInterceptor {
-        val original = it.request()
-        val cookie = preferenceManager.indexCookie
-
-        val authorized = original.newBuilder()
-            .addHeader("Cookie", cookie).build()
-
-        it.proceed(authorized)
-    }.build()
-
     fun provideLoginCookieClient(
         httpLoggingInterceptor: HttpLoggingInterceptor,
         preferenceManager: PreferenceManager
@@ -70,12 +57,11 @@ val apiModule = module {
     single { provideHttpLoggingInterceptor() }
 
     single(named("default")) { provideOkHttpClient(get()) }
-    single(named("index")) { provideIndexCookieClient(get(), get()) }
     single(named("cookie")) { provideLoginCookieClient(get(), get()) }
 
     single(named("default-retrofit")) {
         provideCookieRetrofit(
-            get(named("index")),
+            get(named("default")),
             BuildConfig.KUIS_URL
         )
     }

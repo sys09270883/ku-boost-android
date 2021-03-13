@@ -17,7 +17,6 @@ class PreferenceManager(private val context: Context) {
         private const val KEY_SIZE = 256
         private const val USERNAME = "username"
         private const val PASSWORD = "password"
-        private const val INDEX_COOKIE = "index_cookie"
         private const val LOGIN_COOKIE = "login_cookie"
         private const val NAME = "name"
         private const val STD_NO = "std_no"
@@ -36,7 +35,6 @@ class PreferenceManager(private val context: Context) {
     private val pref: SharedPreferences by lazy { getEncryptedSharedPreference() }
     var username: String by pref.stringPreference(USERNAME)
     var password: String by pref.stringPreference(PASSWORD)
-    var indexCookie: String by pref.stringPreference(INDEX_COOKIE)
     var loginCookie: String by pref.stringPreference(LOGIN_COOKIE)
     var name: String by pref.stringPreference(NAME)
     var stdNo: Int by pref.intPreference(STD_NO)
