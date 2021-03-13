@@ -22,6 +22,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.withContext
+import okhttp3.Headers
 import retrofit2.Response
 
 class AuthRepositoryImpl(
@@ -39,6 +40,7 @@ class AuthRepositoryImpl(
         password: String
     ): UseCase<LoginResponse> {
         val loginResponse: Response<LoginResponse>
+
         try {
             withContext(Dispatchers.IO) {
                 loginResponse = kuisService.login(username, password)
@@ -48,16 +50,14 @@ class AuthRepositoryImpl(
             return UseCase.error(MessageUtils.ERROR_ON_SERVER)
         }
 
-        val cookie = loginResponse.headers()["Set-Cookie"]?.split(";")?.first()
-            ?: return UseCase.error(MessageUtils.LOGIN_AGAIN)
-        preferenceManager.cookie = cookie
-
         val loginBody = loginResponse.body()
         val loginSuccess = loginBody?.loginSuccess
         val loginFailure = loginBody?.loginFailure
 
         return when {
             loginSuccess?.isSucceeded == true -> {
+                preferenceManager.loginCookie = makeCookie(loginResponse.headers())
+                Log.d(MessageUtils.LOG_KEY, "New received cookie is saved.")
                 preferenceManager.setAuthInfo(username, password)
                 UseCase.success(loginBody)
             }
@@ -67,6 +67,22 @@ class AuthRepositoryImpl(
             )
             else -> UseCase.error(MessageUtils.ERROR_ON_SERVER)
         }
+    }
+
+    private fun makeCookie(headers: Headers): String {
+        val builder = StringBuilder()
+
+        for ((type, value) in headers) {
+            if (type != "Set-Cookie" || !value.contains("JSESSIONID")) {
+                continue
+            }
+
+            Log.d(MessageUtils.LOG_KEY, "New cookie: $value")
+            val cookie = value.split(";").first()
+            builder.append(cookie)
+        }
+
+        return builder.toString()
     }
 
     override suspend fun makeAutoLoginRequest(): UseCase<LoginResponse> {

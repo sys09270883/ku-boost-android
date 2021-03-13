@@ -18,14 +18,15 @@ import com.konkuk.boost.adapters.GradeAdapter
 import com.konkuk.boost.data.grade.ParcelableGrade
 import com.konkuk.boost.databinding.FragmentGradeBinding
 import com.konkuk.boost.persistence.grade.GradeEntity
+import com.konkuk.boost.utils.CustomValueFormatter
 import com.konkuk.boost.utils.GradeUtils
 import com.konkuk.boost.utils.MessageUtils
 import com.konkuk.boost.utils.UseCase
 import com.konkuk.boost.viewmodels.GradeViewModel
 import com.konkuk.boost.viewmodels.MainFragmentViewModel
 import com.konkuk.boost.views.ChartUtils
-import com.konkuk.boost.views.CustomValueFormatter
 import com.konkuk.boost.views.TableRowUtils
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.getViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
@@ -36,21 +37,7 @@ class GradeFragment : Fragment() {
     private val binding get() = _binding!!
     private val mainViewModel: MainFragmentViewModel by lazy { requireParentFragment().getViewModel() }
     private val gradeViewModel: GradeViewModel by viewModel()
-    private val colors: List<Int> by lazy {
-        val context = requireContext()
-        listOf(
-            ContextCompat.getColor(context, R.color.pastelRed),
-            ContextCompat.getColor(context, R.color.pastelOrange),
-            ContextCompat.getColor(context, R.color.pastelYellow),
-            ContextCompat.getColor(context, R.color.pastelGreen),
-            ContextCompat.getColor(context, R.color.pastelBlue),
-            ContextCompat.getColor(context, R.color.pastelIndigo),
-            ContextCompat.getColor(context, R.color.pastelPurple),
-            ContextCompat.getColor(context, R.color.pastelDeepPurple),
-            ContextCompat.getColor(context, R.color.pastelBrown),
-            ContextCompat.getColor(context, R.color.pastelLightGray),
-        )
-    }
+    private val colors: List<Int> by inject()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
