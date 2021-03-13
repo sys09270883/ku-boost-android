@@ -6,8 +6,8 @@
     <color name="secondaryColor">#880e4f</color>
     <color name="secondaryLightColor">#bc477b</color>
     <color name="secondaryDarkColor">#560027</color>
-    <color name="primaryTextColor">#ffffff</color>
-    <color name="secondaryTextColor">#ffffff</color>
+    <color name="primaryTextColor">@color/white</color>
+    <color name="secondaryTextColor">@color/white</color>
     <color name="pastelRed">#ad1457</color>
     <color name="pastelOrange">#d84315</color>
     <color name="pastelYellow">#d2ce56</color>
@@ -18,8 +18,9 @@
     <color name="pastelDeepPurple">#4527a0</color>
     <color name="pastelBrown">#5d4037</color>
     <color name="pastelLightGray">#757575</color>
-    <color name="themeBackgroundTextColor">#ffffff</color>
     <color name="white">#ffffff</color>
+    <color name="black">#000000</color>
+    <color name="themeBackgroundTextColor">@color/white</color>
     <color name="reverseThemeColor">@color/white</color>
     <color name="appPrimaryHighlightColor">@color/white</color>
     <color name="loginLocoColor">@color/white</color>

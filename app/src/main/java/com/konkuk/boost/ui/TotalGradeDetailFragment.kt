@@ -23,8 +23,6 @@ import com.konkuk.boost.persistence.grade.GradeEntity
 import com.konkuk.boost.utils.GradeUtils
 import com.konkuk.boost.utils.UseCase
 import com.konkuk.boost.viewmodels.TotalGradeViewModel
-import com.konkuk.boost.views.ChartUtils
-import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class TotalGradeDetailFragment : Fragment() {
@@ -32,7 +30,6 @@ class TotalGradeDetailFragment : Fragment() {
     private var _binding: FragmentTotalGradeDetailBinding? = null
     private val binding get() = _binding!!
     private val viewModel: TotalGradeViewModel by viewModel()
-    private val colors: List<Int> by inject()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,11 +39,6 @@ class TotalGradeDetailFragment : Fragment() {
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
         return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        setChartConfig()
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -71,12 +63,6 @@ class TotalGradeDetailFragment : Fragment() {
                 }
             }
         }
-    }
-
-    private fun setChartConfig() {
-        ChartUtils.setGradeConfigWith(binding.totalPieChart, getString(R.string.prompt_total), true)
-        ChartUtils.setGradeConfigWith(binding.majorPieChart, getString(R.string.prompt_major), true)
-        ChartUtils.setSummaryConfig(binding.summaryPieChart, true)
     }
 
     private fun fetchAllGradesFromLocal() {
@@ -134,25 +120,14 @@ class TotalGradeDetailFragment : Fragment() {
                     }
 
                     val (avr, majorAvr) = GradeUtils.totalAverages(selectedGrades)
-                    // 전체평점
-                    ChartUtils.makeGradeChart(
-                        binding.totalPieChart,
-                        getString(R.string.prompt_total),
-                        avr,
-                        colors.first(),
-                        colors.last()
-                    )
 
-                    // 전공평점
-                    ChartUtils.makeGradeChart(
-                        binding.majorPieChart,
-                        getString(R.string.prompt_major),
-                        majorAvr,
-                        colors.first(),
-                        colors.last()
-                    )
+                    // Draw total pie chart.
+                    binding.totalPieChart.makeChart(getString(R.string.prompt_total), avr)
 
-                    // 성적분포
+                    // Draw major pie chart.
+                    binding.majorPieChart.makeChart(getString(R.string.prompt_major), majorAvr)
+
+                    // Draw grade distribution pie chart.
                     val characterGradesMap = GradeUtils.characterGrades(selectedGrades)
                     val characterGrades = mutableListOf<PieEntry>()
 
@@ -160,7 +135,7 @@ class TotalGradeDetailFragment : Fragment() {
                         characterGrades.add(PieEntry(grade.value, grade.key))
                     }
 
-                    ChartUtils.makeSummaryChart(binding.summaryPieChart, colors, characterGrades)
+                    binding.summaryPieChart.makeChart(characterGrades)
 
                     // 학기 업데이트
                     val adapter = binding.gradeRecyclerview.adapter as GradeAdapter

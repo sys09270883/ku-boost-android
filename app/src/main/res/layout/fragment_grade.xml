@@ -71,7 +71,7 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/currentGradesTitleTextView" />
 
-                    <com.github.mikephil.charting.charts.PieChart
+                    <com.konkuk.boost.views.AverageGradePieChart
                         android:id="@+id/currentTotalPieChart"
                         android:layout_width="0dp"
                         android:layout_height="120dp"
@@ -84,7 +84,7 @@
                         app:layout_constraintTop_toBottomOf="@+id/currentGradesTitleTextView"
                         app:layout_constraintWidth_percent="0.33" />
 
-                    <com.github.mikephil.charting.charts.PieChart
+                    <com.konkuk.boost.views.AverageGradePieChart
                         android:id="@+id/currentMajorPieChart"
                         android:layout_width="0dp"
                         android:layout_height="120dp"
@@ -97,7 +97,7 @@
                         app:layout_constraintTop_toBottomOf="@+id/currentGradesTitleTextView"
                         app:layout_constraintWidth_percent="0.33" />
 
-                    <com.github.mikephil.charting.charts.PieChart
+                    <com.konkuk.boost.views.GradeDistributionPieChart
                         android:id="@+id/currentSummaryPieChart"
                         android:layout_width="0dp"
                         android:layout_height="120dp"
@@ -189,7 +189,7 @@
                         app:layout_constraintTop_toTopOf="parent"
                         tools:ignore="ContentDescription" />
 
-                    <com.github.mikephil.charting.charts.PieChart
+                    <com.konkuk.boost.views.AverageGradePieChart
                         android:id="@+id/totalPieChart"
                         android:layout_width="0dp"
                         android:layout_height="120dp"
@@ -202,7 +202,7 @@
                         app:layout_constraintTop_toBottomOf="@+id/allGradesTitleTextView"
                         app:layout_constraintWidth_percent="0.33" />
 
-                    <com.github.mikephil.charting.charts.PieChart
+                    <com.konkuk.boost.views.AverageGradePieChart
                         android:id="@+id/majorPieChart"
                         android:layout_width="0dp"
                         android:layout_height="120dp"
@@ -215,7 +215,7 @@
                         app:layout_constraintTop_toBottomOf="@+id/allGradesTitleTextView"
                         app:layout_constraintWidth_percent="0.33" />
 
-                    <com.github.mikephil.charting.charts.PieChart
+                    <com.konkuk.boost.views.GradeDistributionPieChart
                         android:id="@+id/summaryPieChart"
                         android:layout_width="0dp"
                         android:layout_height="120dp"
@@ -228,7 +228,7 @@
                         app:layout_constraintTop_toBottomOf="@+id/allGradesTitleTextView"
                         app:layout_constraintWidth_percent="0.33" />
 
-                    <com.github.mikephil.charting.charts.LineChart
+                    <com.konkuk.boost.views.AverageGradeLineChart
                         android:id="@+id/totalLineChart"
                         android:layout_width="0dp"
                         android:layout_height="160dp"

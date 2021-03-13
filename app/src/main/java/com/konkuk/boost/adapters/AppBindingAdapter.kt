@@ -13,8 +13,6 @@ import com.github.mikephil.charting.charts.PieChart
 import com.google.android.material.button.MaterialButton
 import com.konkuk.boost.persistence.grade.GradeEntity
 import com.konkuk.boost.persistence.simul.GraduationSimulationEntity
-import com.konkuk.boost.utils.DateTimeConverter
-import com.konkuk.boost.utils.GradeUtils
 import com.konkuk.boost.utils.UseCase
 import de.hdodenhof.circleimageview.CircleImageView
 
@@ -47,9 +45,9 @@ fun TextView.bindGradesVisibility(grades: UseCase<List<GradeEntity>>?) {
 
 @BindingAdapter("bind_visibility")
 fun PieChart.bindGradesVisibility(grades: UseCase<List<GradeEntity>>?) {
-    visibility = if (grades == null)
+    visibility = if (grades == null) {
         View.GONE
-    else {
+    } else {
         val data = grades.data
         if (data.isNullOrEmpty()) View.GONE else View.VISIBLE
     }
@@ -57,9 +55,9 @@ fun PieChart.bindGradesVisibility(grades: UseCase<List<GradeEntity>>?) {
 
 @BindingAdapter("bind_visibility")
 fun LineChart.bindGradesVisibility(grades: UseCase<List<GradeEntity>>?) {
-    visibility = if (grades == null)
+    visibility = if (grades == null) {
         View.GONE
-    else {
+    } else {
         val data = grades.data
         if (data.isNullOrEmpty()) View.GONE else View.VISIBLE
     }

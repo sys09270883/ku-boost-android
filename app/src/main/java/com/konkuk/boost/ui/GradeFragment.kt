@@ -6,7 +6,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -18,15 +17,12 @@ import com.konkuk.boost.adapters.GradeAdapter
 import com.konkuk.boost.data.grade.ParcelableGrade
 import com.konkuk.boost.databinding.FragmentGradeBinding
 import com.konkuk.boost.persistence.grade.GradeEntity
-import com.konkuk.boost.utils.CustomValueFormatter
 import com.konkuk.boost.utils.GradeUtils
 import com.konkuk.boost.utils.MessageUtils
 import com.konkuk.boost.utils.UseCase
 import com.konkuk.boost.viewmodels.GradeViewModel
 import com.konkuk.boost.viewmodels.MainFragmentViewModel
-import com.konkuk.boost.views.ChartUtils
 import com.konkuk.boost.views.TableRowUtils
-import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.getViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
@@ -37,7 +33,6 @@ class GradeFragment : Fragment() {
     private val binding get() = _binding!!
     private val mainViewModel: MainFragmentViewModel by lazy { requireParentFragment().getViewModel() }
     private val gradeViewModel: GradeViewModel by viewModel()
-    private val colors: List<Int> by inject()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,14 +42,11 @@ class GradeFragment : Fragment() {
         binding.lifecycleOwner = this
         binding.gradeViewModel = gradeViewModel
         binding.mainViewModel = mainViewModel
-        val view = binding.root
-        view.postDelayed({ view.requestLayout() }, 0)
-        return view
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setChartConfig()
         setReadMoreClickListener()
         setCurrentGradesRecyclerViewConfig()
         fetchFromLocalDb()
@@ -64,7 +56,6 @@ class GradeFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         observeLogout()
         observeGraduationSimulation()
-        observeStdNo()
         observeAllValidGrades()
         observeCurrentGrades()
         observeFetching()
@@ -162,28 +153,15 @@ class GradeFragment : Fragment() {
 
             val currentGrades = it.data
 
-            // 파이 차트
             val (avr, majorAvr) = GradeUtils.totalAverages(currentGrades)
 
-            // 전체평점
-            ChartUtils.makeGradeChart(
-                binding.currentTotalPieChart,
-                getString(R.string.prompt_total),
-                avr,
-                colors.first(),
-                colors.last()
-            )
+            // Draw current pie chart.
+            binding.currentTotalPieChart.makeChart(getString(R.string.prompt_total), avr)
 
-            // 전공평점
-            ChartUtils.makeGradeChart(
-                binding.currentMajorPieChart,
-                getString(R.string.prompt_major),
-                majorAvr,
-                colors.first(),
-                colors.last()
-            )
+            // Draw current major pie chart.
+            binding.currentMajorPieChart.makeChart(getString(R.string.prompt_major), majorAvr)
 
-            // 성적분포
+            // Draw current grade distribution pie chart.
             val characterGradesMap = GradeUtils.characterGrades(currentGrades)
             val characterGrades = mutableListOf<PieEntry>()
 
@@ -191,9 +169,9 @@ class GradeFragment : Fragment() {
                 characterGrades.add(PieEntry(grade.value, grade.key))
             }
 
-            ChartUtils.makeSummaryChart(binding.currentSummaryPieChart, colors, characterGrades)
+            binding.currentSummaryPieChart.makeChart(characterGrades)
 
-            // 금학기 성적
+            // Update current semester recycler view.
             val recyclerView = binding.currentGradeRecyclerView
             val adapter = recyclerView.adapter as GradeAdapter
             adapter.submitList(currentGrades.toMutableList())
@@ -209,24 +187,6 @@ class GradeFragment : Fragment() {
             readSimulationMoreButton.setOnClickListener {
                 findNavController().navigate(R.id.action_mainFragment_to_totalGraduationSimulationDetailFragment)
             }
-        }
-    }
-
-    private fun setChartConfig() {
-        ChartUtils.setGradeConfigWith(binding.currentTotalPieChart, "전체")
-        ChartUtils.setGradeConfigWith(binding.currentMajorPieChart, "전공")
-        ChartUtils.setSummaryConfig(binding.currentSummaryPieChart)
-        ChartUtils.setGradeConfigWith(binding.totalPieChart, "전체")
-        ChartUtils.setGradeConfigWith(binding.majorPieChart, "전공")
-        ChartUtils.setSummaryConfig(binding.summaryPieChart)
-        ChartUtils.setLineChartConfig(binding.totalLineChart)
-    }
-
-    private fun observeStdNo() {
-        gradeViewModel.stdNo.observe(viewLifecycleOwner) {
-//            gradeViewModel.fetchGraduationSimulationFromServer()
-//            gradeViewModel.fetchAllGradesFromServer()
-//            gradeViewModel.makeTotalRank()
         }
     }
 
@@ -290,32 +250,18 @@ class GradeFragment : Fragment() {
             if (it.data == null)
                 return@observe
 
-            val context = requireContext()
             val allGrades = it.data
             val averages = GradeUtils.average(allGrades)
 
-            // 2. 평점 파이 차트 그리기
-            // 2-1. 전체 평점
             val (avr, majorAvr) = GradeUtils.totalAverages(allGrades)
 
-            ChartUtils.makeGradeChart(
-                binding.totalPieChart,
-                "전체",
-                avr,
-                colors.first(),
-                colors.last()
-            )
+            // Draw total grade pie chart.
+            binding.totalPieChart.makeChart(getString(R.string.prompt_total), avr)
 
-            // 2-2. 전공 평점
-            ChartUtils.makeGradeChart(
-                binding.majorPieChart,
-                "전공",
-                majorAvr,
-                ContextCompat.getColor(context, R.color.pastelRed),
-                ContextCompat.getColor(context, R.color.pastelLightGray)
-            )
+            // Draw total major grade pie chart.
+            binding.majorPieChart.makeChart(getString(R.string.prompt_major), majorAvr)
 
-            // 3. 성적 분포 파이 차트 그리기
+            // Draw grade distribution pie chart.
             val characterGradesMap = GradeUtils.characterGrades(allGrades)
             val characterGrades = mutableListOf<PieEntry>()
 
@@ -323,36 +269,16 @@ class GradeFragment : Fragment() {
                 characterGrades.add(PieEntry(grade.value, grade.key))
             }
 
-            ChartUtils.makeSummaryChart(binding.summaryPieChart, colors, characterGrades)
+            binding.summaryPieChart.makeChart(characterGrades)
 
-            // 4. 라인 차트 그리기
-            val lineChart = binding.totalLineChart
-            lineChart.clear()
-
-            val dataSet = mutableListOf<Entry>()
+            // Draw grade line chart.
+            val entities = mutableListOf<Entry>()
 
             for (i in averages.indices) {
-                dataSet += Entry(i.toFloat(), averages[i].toFloat())
+                entities += Entry(i.toFloat(), averages[i].toFloat())
             }
 
-            val lineDataSet = LineDataSet(dataSet, null)
-            lineDataSet.color =
-                ContextCompat.getColor(context, R.color.pastelRed)
-            lineDataSet.setCircleColor(R.color.pastelRed)
-            lineDataSet.circleHoleRadius = 4f
-            lineDataSet.circleRadius = 6f
-            lineDataSet.setDrawCircleHole(true)
-            lineDataSet.lineWidth = 2f
-            lineDataSet.valueFormatter = CustomValueFormatter()
-            val lineData = LineData()
-            lineData.addDataSet(lineDataSet)
-            lineData.setValueTextColor(
-                ContextCompat.getColor(
-                    context, R.color.secondaryTextColor
-                )
-            )
-            lineData.setValueTextSize(12f)
-            lineChart.data = lineData
+            binding.totalLineChart.makeChart(entities)
         }
     }
 

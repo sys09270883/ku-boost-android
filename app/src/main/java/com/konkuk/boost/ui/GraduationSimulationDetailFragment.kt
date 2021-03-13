@@ -18,8 +18,6 @@ import com.konkuk.boost.persistence.grade.GradeContract
 import com.konkuk.boost.persistence.grade.GradeEntity
 import com.konkuk.boost.utils.GradeUtils
 import com.konkuk.boost.viewmodels.GraduationSimulationDetailViewModel
-import com.konkuk.boost.views.ChartUtils
-import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class GraduationSimulationDetailFragment : Fragment() {
@@ -27,7 +25,6 @@ class GraduationSimulationDetailFragment : Fragment() {
     private var _binding: FragmentGraduationSimulationDetailBinding? = null
     private val binding get() = _binding!!
     val viewModel: GraduationSimulationDetailViewModel by viewModel()
-    private val colors: List<Int> by inject()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,7 +39,6 @@ class GraduationSimulationDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setClassification()
-        setChartConfig()
     }
 
     private fun setClassification() {
@@ -71,16 +67,11 @@ class GraduationSimulationDetailFragment : Fragment() {
                 it.data.filter { grade -> grade.type == GradeContract.Type.VALID.value }
 
             val (avr, _) = GradeUtils.totalAverages(validGradesByClassification)
-            // 전체평점
-            ChartUtils.makeGradeChart(
-                binding.totalPieChart,
-                getString(R.string.prompt_total),
-                avr,
-                colors.first(),
-                colors.last()
-            )
 
-            // 성적분포
+            // Draw total average pie chart.
+            binding.totalPieChart.makeChart(getString(R.string.prompt_total), avr)
+
+            // Draw grade distribution pie chart.
             val characterGradesMap = GradeUtils.characterGrades(validGradesByClassification)
             val characterGrades = mutableListOf<PieEntry>()
 
@@ -88,16 +79,16 @@ class GraduationSimulationDetailFragment : Fragment() {
                 characterGrades.add(PieEntry(grade.value, grade.key))
             }
 
-            ChartUtils.makeSummaryChart(binding.summaryPieChart, colors, characterGrades)
+            binding.summaryPieChart.makeChart(characterGrades)
 
-            // 리사이클러뷰
+            // Update grade recycler view.
             val recyclerView = binding.gradeRecyclerview
             recyclerView.layoutManager = LinearLayoutManager(context)
             val adapter = GradeAdapter()
             adapter.submitList(gradesByClassification.toMutableList())
             adapter.itemClickListener = object : GradeAdapter.OnItemClickListener {
                 override fun onItemClick(gradeEntity: GradeEntity) {
-                    // GradeEntity 정보를 가지고 fragment 전환
+                    // Navigate with grade entity.
                     val grade = ParcelableGrade(
                         evaluationMethod = gradeEntity.evaluationMethod,
                         year = gradeEntity.year,
@@ -125,12 +116,7 @@ class GraduationSimulationDetailFragment : Fragment() {
                     LinearLayoutManager.VERTICAL
                 )
             )
-
         }
     }
 
-    private fun setChartConfig() {
-        ChartUtils.setGradeConfigWith(binding.totalPieChart, getString(R.string.prompt_total), true)
-        ChartUtils.setSummaryConfig(binding.summaryPieChart, true)
-    }
 }
