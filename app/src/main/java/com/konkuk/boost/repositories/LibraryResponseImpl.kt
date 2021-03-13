@@ -26,7 +26,7 @@ class LibraryResponseImpl(
 
             val token = loginResponse.data?.accessToken
                 ?: throw NullPointerException("No data when request library login.")
-            preferenceManager.accessToken = token
+            preferenceManager.libraryToken = token
         } catch (e: Exception) {
             FirebaseCrashlytics.getInstance().log("${e.message}")
             return UseCase.error("${e.message}")
@@ -36,7 +36,7 @@ class LibraryResponseImpl(
     }
 
     override suspend fun makeMobileQRCodeRequest(): UseCase<QRResponse> {
-        val accessToken = preferenceManager.accessToken
+        val accessToken = preferenceManager.libraryToken
 
         val qrResponse: QRResponse
         try {

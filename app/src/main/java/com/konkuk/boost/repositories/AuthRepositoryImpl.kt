@@ -56,7 +56,7 @@ class AuthRepositoryImpl(
 
         return when {
             loginSuccess?.isSucceeded == true -> {
-                preferenceManager.loginCookie = makeCookie(loginResponse.headers())
+                preferenceManager.kuisCookie = makeCookie(loginResponse.headers())
                 Log.d(MessageUtils.LOG_KEY, "New received cookie is saved.")
                 preferenceManager.setAuthInfo(username, password)
                 UseCase.success(loginBody)

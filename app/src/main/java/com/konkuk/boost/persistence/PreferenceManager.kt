@@ -6,8 +6,6 @@ import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
-import kotlin.properties.ReadWriteProperty
-import kotlin.reflect.KProperty
 
 class PreferenceManager(private val context: Context) {
 
@@ -17,33 +15,27 @@ class PreferenceManager(private val context: Context) {
         private const val KEY_SIZE = 256
         private const val USERNAME = "username"
         private const val PASSWORD = "password"
-        private const val LOGIN_COOKIE = "login_cookie"
         private const val NAME = "name"
         private const val STD_NO = "std_no"
         private const val STATE = "state"
         private const val DEPT = "dept"
         private const val CODE = "code"
         private const val HAS_DATA = "has_data"
-        private const val ACCESS_TOKEN = "access_token"
-        private const val SELECTED_SEMESTER = "selected_semester"
-        private const val DEFAULT_STRING = ""
-        private const val DEFAULT_INT = 2021
-        private const val DEFAULT_BOOLEAN = false
-        private const val DEFAULT_SEMESTER = 1
+        private const val KUIS_COOKIE = "kuis_cookie"
+        private const val LIBRARY_TOKEN = "library_token"
     }
 
     private val pref: SharedPreferences by lazy { getEncryptedSharedPreference() }
     var username: String by pref.stringPreference(USERNAME)
     var password: String by pref.stringPreference(PASSWORD)
-    var loginCookie: String by pref.stringPreference(LOGIN_COOKIE)
     var name: String by pref.stringPreference(NAME)
     var stdNo: Int by pref.intPreference(STD_NO)
     var state: String by pref.stringPreference(STATE)
     var dept: String by pref.stringPreference(DEPT)
     var code: String by pref.stringPreference(CODE)
     var hasData: Boolean by pref.booleanPreference(HAS_DATA)
-    var accessToken: String by pref.stringPreference(ACCESS_TOKEN)
-    var selectedSemester: Int by pref.intPreference(SELECTED_SEMESTER, DEFAULT_SEMESTER)
+    var kuisCookie: String by pref.stringPreference(KUIS_COOKIE)
+    var libraryToken: String by pref.stringPreference(LIBRARY_TOKEN)
 
     private fun getEncryptedSharedPreference(): SharedPreferences {
         val keyGenParameterSpec = KeyGenParameterSpec.Builder(
@@ -78,47 +70,20 @@ class PreferenceManager(private val context: Context) {
         this.state = state
         this.dept = dept
         this.code = code
-        this.selectedSemester = DEFAULT_SEMESTER
     }
 
     fun clearAll() {
-        setAuthInfo(DEFAULT_STRING, DEFAULT_STRING)
-        setUserInfo(DEFAULT_STRING, DEFAULT_INT, DEFAULT_STRING, DEFAULT_STRING, DEFAULT_STRING)
-        loginCookie = DEFAULT_STRING
-        hasData = DEFAULT_BOOLEAN
-    }
-
-    private fun SharedPreferences.stringPreference(
-        key: String,
-        defaultValue: String = DEFAULT_STRING
-    ): ReadWriteProperty<Any, String> = object : ReadWriteProperty<Any, String> {
-        override fun getValue(thisRef: Any, property: KProperty<*>): String =
-            getString(key, defaultValue) ?: defaultValue
-
-        override fun setValue(thisRef: Any, property: KProperty<*>, value: String) =
-            edit().putString(key, value).apply()
-    }
-
-    private fun SharedPreferences.intPreference(
-        key: String,
-        defaultValue: Int = DEFAULT_INT
-    ): ReadWriteProperty<Any, Int> = object : ReadWriteProperty<Any, Int> {
-        override fun getValue(thisRef: Any, property: KProperty<*>): Int =
-            getInt(key, defaultValue)
-
-        override fun setValue(thisRef: Any, property: KProperty<*>, value: Int) =
-            edit().putInt(key, value).apply()
-    }
-
-    private fun SharedPreferences.booleanPreference(
-        key: String,
-        defaultValue: Boolean = DEFAULT_BOOLEAN
-    ): ReadWriteProperty<Any, Boolean> = object : ReadWriteProperty<Any, Boolean> {
-        override fun getValue(thisRef: Any, property: KProperty<*>): Boolean =
-            getBoolean(key, defaultValue)
-
-        override fun setValue(thisRef: Any, property: KProperty<*>, value: Boolean) =
-            edit().putBoolean(key, value).apply()
+        setAuthInfo(PREF_DEFAULT_STRING, PREF_DEFAULT_STRING)
+        setUserInfo(
+            PREF_DEFAULT_STRING,
+            PREF_DEFAULT_INT,
+            PREF_DEFAULT_STRING,
+            PREF_DEFAULT_STRING,
+            PREF_DEFAULT_STRING
+        )
+        hasData = PREF_DEFAULT_BOOLEAN
+        kuisCookie = PREF_DEFAULT_STRING
+        libraryToken = PREF_DEFAULT_STRING
     }
 
 }

@@ -26,7 +26,7 @@ val apiModule = module {
         preferenceManager: PreferenceManager
     ) = OkHttpClient.Builder().addInterceptor(httpLoggingInterceptor).addInterceptor {
         val original = it.request()
-        val cookie = preferenceManager.loginCookie
+        val cookie = preferenceManager.kuisCookie
 
         val authorized = original.newBuilder()
             .addHeader("Cookie", cookie).build()
