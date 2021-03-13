@@ -6,6 +6,7 @@ import com.konkuk.boost.persistence.area.SubjectAreaContract.SubjectAreaEntry
 import com.konkuk.boost.persistence.dept.DeptTransferContract
 import com.konkuk.boost.persistence.grade.GradeContract
 import com.konkuk.boost.persistence.grade.GradeContract.GradeEntry
+import com.konkuk.boost.persistence.like.LikeCourseContract
 import com.konkuk.boost.persistence.like.LikeCourseContract.LikeCourseEntry
 import com.konkuk.boost.persistence.personal.PersonalInfoContract
 import com.konkuk.boost.persistence.rank.RankContract.RankEntry
@@ -105,4 +106,9 @@ object AppMigration {
         }
     }
 
+    val MIGRATION_11_12 = object : Migration(11, 12) {
+        override fun migrate(database: SupportSQLiteDatabase) {
+            database.execSQL(LikeCourseContract.DROP_LIKE_COURSE_TABLE)
+        }
+    }
 }

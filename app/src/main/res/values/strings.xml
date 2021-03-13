@@ -60,7 +60,6 @@
     <string name="course_info_with_emoji">❤  수강바구니담은인원\n💛  수강인원\n💚  제한인원</string>
     <string name="prompt_info">도움말</string>
     <string name="prompt_settings">설정</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="prompt_change_password">비밀번호 변경</string>
     <string name="prompt_confirm">확인</string>
     <string name="prompt_belong">소속</string>

@@ -93,20 +93,6 @@
             app:popExitAnim="@anim/close_slide_exit"
             app:popUpTo="@id/mainFragment" />
         <action
-            android:id="@+id/action_mainFragment_to_courseSummaryFragment"
-            app:destination="@id/courseSummaryFragment"
-            app:enterAnim="@anim/open_slide_enter"
-            app:exitAnim="@anim/open_slide_exit"
-            app:popEnterAnim="@anim/close_slide_enter"
-            app:popExitAnim="@anim/close_slide_exit" />
-        <action
-            android:id="@+id/action_mainFragment_to_courseSearchFragment"
-            app:destination="@id/courseSearchFragment"
-            app:enterAnim="@anim/open_slide_enter"
-            app:exitAnim="@anim/open_slide_exit"
-            app:popEnterAnim="@anim/close_slide_enter"
-            app:popExitAnim="@anim/close_slide_exit" />
-        <action
             android:id="@+id/action_mainFragment_to_changePasswordFragment"
             app:destination="@id/changePasswordFragment"
             app:enterAnim="@anim/open_slide_enter"
@@ -168,24 +154,6 @@
             app:popEnterAnim="@anim/close_slide_enter"
             app:popExitAnim="@anim/close_slide_exit"
             app:popUpTo="@id/graduationSimulationDetailFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/courseSummaryFragment"
-        android:name="com.konkuk.boost.ui.CourseSummaryFragment"
-        android:label="fragment_course_summary"
-        tools:layout="@layout/fragment_course_summary" />
-    <fragment
-        android:id="@+id/courseSearchFragment"
-        android:name="com.konkuk.boost.ui.CourseSearchFragment"
-        android:label="fragment_course_search"
-        tools:layout="@layout/fragment_course_search">
-        <action
-            android:id="@+id/action_courseSearchFragment_to_courseSummaryFragment"
-            app:destination="@id/courseSummaryFragment"
-            app:enterAnim="@anim/open_slide_enter"
-            app:exitAnim="@anim/open_slide_exit"
-            app:popEnterAnim="@anim/close_slide_enter"
-            app:popExitAnim="@anim/close_slide_exit" />
     </fragment>
 
     <fragment

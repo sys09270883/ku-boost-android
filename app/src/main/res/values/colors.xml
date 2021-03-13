@@ -20,12 +20,7 @@
     <color name="pastelLightGray">#bdbdbd</color>
     <color name="themeBackgroundTextColor">#ffffff</color>
     <color name="white">#ffffff</color>
-    <color name="emojiRed">#e9111e</color>
-    <color name="emojiYellow">#fceb00</color>
-    <color name="emojiGreen">#17c704</color>
     <color name="infoBackground">#efefef</color>
-    <color name="infoTextColor">#000000</color>
-    <color name="reverseThemeColor">#000000</color>
     <color name="appPrimaryHighlightColor">@color/primaryColor</color>
     <color name="loginLocoColor">@color/primaryColor</color>
     <color name="tabIconColor">@color/primaryColor</color>

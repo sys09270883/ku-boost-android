@@ -95,24 +95,6 @@ fun RecyclerView.bindGradesVisibility(grades: UseCase<List<GradeEntity>>?) {
     }
 }
 
-@BindingAdapter("bind_syllabus_visibility")
-fun RecyclerView.bindSyllabusVisibility(loading: Boolean) {
-    visibility = if (loading) View.GONE else View.VISIBLE
-}
-
-@BindingAdapter("bind_syllabus_search_view_visibility")
-fun androidx.appcompat.widget.SearchView.bindSyllabusVisibility(loading: Boolean) {
-    visibility = if (loading) View.GONE else View.VISIBLE
-}
-
-@SuppressLint("SetTextI18n")
-@BindingAdapter("bind_date_text")
-fun TextView.bindDateText(semester: Int) {
-    val year = DateTimeConverter.currentYear()
-    val sem = GradeUtils.translate(semester)
-    text = "${year}년 ${sem}학기"
-}
-
 @BindingAdapter("bind_img_res")
 fun CircleImageView.bindImageResource(stdNo: Int) {
     val url = "http://kupis.konkuk.ac.kr/ImageFile/schaff/regi/stud/photo/${stdNo}.jpg"

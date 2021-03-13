@@ -24,9 +24,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainFragment : Fragment() {
 
-    private val tabTextList = arrayListOf("성적", "수강", "설정")
-    private val tabIconList =
-        arrayListOf(R.drawable.tab_grade, R.drawable.tab_course, R.drawable.tab_setting)
+    private val tabIconList = listOf(R.drawable.tab_grade, R.drawable.tab_setting)
     private var _binding: FragmentMainBinding? = null
     private val binding get() = _binding!!
     private val viewModel: MainFragmentViewModel by viewModel()
@@ -50,7 +48,6 @@ class MainFragment : Fragment() {
             viewPager.adapter = MainFragmentStateAdapter(this@MainFragment)
             TabLayoutMediator(tabLayout, viewPager) { tab, position ->
                 tab.setIcon(tabIconList[position])
-                tab.text = tabTextList[position]
             }.attach()
         }
 
@@ -72,9 +69,10 @@ class MainFragment : Fragment() {
         viewModel.libraryLoginResponse.observe(viewLifecycleOwner) {
             when (it.status) {
                 UseCase.Status.SUCCESS -> {
+                    Log.d(MessageUtils.LOG_KEY, "Library login successfully.")
                 }
                 UseCase.Status.ERROR -> {
-//                    Snackbar.make(binding.container, "${it.message}", Snackbar.LENGTH_SHORT).show()
+                    Log.e(MessageUtils.LOG_KEY, "${it.message}")
                 }
             }
         }
@@ -110,7 +108,7 @@ class MainFragment : Fragment() {
         }
     }
 
-    private fun setShakeDetector() {
+    private fun attachShakeDetector() {
         val sensorManager =
             requireActivity().getSystemService(AppCompatActivity.SENSOR_SERVICE) as SensorManager
         sensorDetector = ShakeDetector {
@@ -122,11 +120,15 @@ class MainFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        setShakeDetector()
+        attachShakeDetector()
     }
 
     override fun onPause() {
         super.onPause()
+        detachShakeDetector()
+    }
+
+    private fun detachShakeDetector() {
         sensorDetector?.stop()
         sensorDetector = null
     }
