@@ -18,7 +18,8 @@ import com.konkuk.boost.databinding.FragmentMainBinding
 import com.konkuk.boost.utils.MessageUtils
 import com.konkuk.boost.utils.UseCase
 import com.konkuk.boost.viewmodels.MainFragmentViewModel
-import com.konkuk.boost.views.DialogUtils.setProgressBar
+import com.konkuk.boost.views.recolor
+import com.konkuk.boost.views.setProgressBar
 import com.squareup.seismic.ShakeDetector
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -94,7 +95,9 @@ class MainFragment : Fragment() {
                             .setProgressBar(ProgressBar(context))
                             .setCancelable(false)
                             .create()
+                            .recolor()
                         dialog?.show()
+
                     }
                 }
                 false -> {

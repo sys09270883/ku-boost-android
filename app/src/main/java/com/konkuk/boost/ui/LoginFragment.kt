@@ -18,7 +18,7 @@ import com.konkuk.boost.databinding.FragmentLoginBinding
 import com.konkuk.boost.utils.MessageUtils
 import com.konkuk.boost.utils.UseCase
 import com.konkuk.boost.viewmodels.LoginViewModel
-import com.konkuk.boost.views.DialogUtils
+import com.konkuk.boost.views.recolor
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class LoginFragment : Fragment() {
@@ -140,8 +140,9 @@ class LoginFragment : Fragment() {
                                         bundle
                                     )
                                 }
-                            val dialog = DialogUtils.recolor(builder.create())
-                            dialog.show()
+                                .create()
+                                .recolor()
+                                .show()
                         }
                     }
                     viewModel.loading.postValue(false)

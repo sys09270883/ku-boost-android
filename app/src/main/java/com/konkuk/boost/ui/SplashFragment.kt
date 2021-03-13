@@ -15,7 +15,7 @@ import com.konkuk.boost.utils.MessageUtils
 import com.konkuk.boost.utils.NetworkUtils
 import com.konkuk.boost.utils.UseCase
 import com.konkuk.boost.viewmodels.SplashViewModel
-import com.konkuk.boost.views.DialogUtils
+import com.konkuk.boost.views.recolor
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
@@ -64,15 +64,16 @@ class SplashFragment : Fragment() {
                 ).show()
                 findNavController().navigate(R.id.action_splashFragment_to_mainFragment)
             } else {                // 사용자 정보가 저장되어 있지 않을 경우
-                val builder = AlertDialog.Builder(activity)
+                AlertDialog.Builder(activity)
                     .setTitle(getString(R.string.app_name))
                     .setMessage(getString(R.string.prompt_no_network))
                     .setCancelable(false)
                     .setPositiveButton(
                         getString(R.string.prompt_yes)
                     ) { _, _ -> activity.finish() }
-                val dialog = DialogUtils.recolor(builder.create())
-                dialog.show()
+                    .create()
+                    .recolor()
+                    .show()
             }
         }
     }
