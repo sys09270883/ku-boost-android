@@ -16,10 +16,7 @@ import com.konkuk.boost.persistence.rank.RankEntity
 import com.konkuk.boost.persistence.simul.GraduationSimulationDao
 import com.konkuk.boost.persistence.simul.GraduationSimulationEntity
 import com.konkuk.boost.utils.*
-import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.koin.core.component.KoinApiExtension
@@ -42,7 +39,7 @@ class GradeRepositoryImpl(
         val graduationSimulationResponse: GraduationSimulationResponse
 
         try {
-            if (username.isEmpty()) throw Exception("사용자 이름이 없습니다.")
+            if (username.isEmpty()) throw Exception("No username.")
 
             withContext(Dispatchers.IO) {
                 graduationSimulationResponse = authorizedKuisService.fetchGraduationSimulation(
@@ -59,7 +56,7 @@ class GradeRepositoryImpl(
                         username = username,
                         classification = simulation.classification,
                         standard = simulation.standard ?: 0,
-                        acquired = simulation.acquired?.toInt() ?: 0,   // String으로 넘어 옴.
+                        acquired = simulation.acquired?.toInt() ?: 0,
                         remainder = simulation.remainder ?: 0,
                         modifiedAt = System.currentTimeMillis()
                     )
@@ -337,8 +334,11 @@ class GradeRepositoryImpl(
                     grades
                 )
 
-                subjectAreaDao.insert(*subjectAreaList.toTypedArray())
-                gradeDao.insertGrade(*grades.toTypedArray())
+                awaitAll(
+                    async { subjectAreaDao.insert(*subjectAreaList.toTypedArray()) },
+                    async { gradeDao.insertGrade(*grades.toTypedArray()) }
+                )
+
                 preferenceManager.hasData = true
             }
         } catch (e: Exception) {
